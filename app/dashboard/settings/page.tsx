@@ -4,11 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
-  CheckCircle2,
   CreditCard,
   Globe2,
   Loader2,
-  ShieldCheck,
   Store,
 } from "lucide-react";
 import {
@@ -33,43 +31,23 @@ const plans = [
   {
     id: "starter" as MarketVillaPlanId,
     name: "Starter",
-    price: "\u20A610,000/mo",
     description: "For new businesses getting online.",
-    features: [
-      "Business mini website",
-      "Products and services",
-      "Market Villa store URL",
-      "Basic page styling",
-      "Customer inquiry flow",
-    ],
   },
   {
     id: "growth" as MarketVillaPlanId,
     name: "Growth",
-    price: "\u20A620,000/mo",
     description: "More control and growth tools.",
-    features: [
-      "Everything in Starter",
-      "More products and services",
-      "Analytics-ready structure",
-      "Custom domain request access",
-      "Priority support",
-    ],
   },
   {
     id: "pro" as MarketVillaPlanId,
     name: "Pro",
-    price: "\u20A630,000/mo",
     description: "For serious businesses and teams.",
-    features: [
-      "Everything in Growth",
-      "Advanced business profile",
-      "Custom domain setup discount",
-      "Team-ready structure",
-      "Premium support",
-    ],
   },
 ];
+
+function formatNaira(amount: number) {
+  return `\u20A6${amount.toLocaleString()}`;
+}
 
 export default function SettingsPage() {
   const searchParams = useSearchParams();
@@ -119,7 +97,7 @@ export default function SettingsPage() {
         }
       } catch (error) {
         const errorMessage =
-          error instanceof Error ? error.message : "Unable to load settings.";
+          error instanceof Error ? error.message : "Unable to load billing.";
         setMessage(errorMessage);
       } finally {
         if (mounted) {
@@ -248,7 +226,7 @@ export default function SettingsPage() {
         </p>
 
         <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
-          Complete onboarding before managing billing and subscription settings.
+          Complete onboarding before managing billing.
         </p>
 
         <Link
@@ -260,6 +238,8 @@ export default function SettingsPage() {
       </div>
     );
   }
+
+  const currentPlanAmount = MARKET_VILLA_PLANS[currentPlan.id].amount;
 
   return (
     <div className="grid gap-5">
@@ -340,7 +320,7 @@ export default function SettingsPage() {
         </div>
       ) : null}
 
-      <section className="grid gap-5 xl:grid-cols-[1fr_0.75fr]">
+      <section className="grid gap-5 xl:grid-cols-[1fr_0.65fr]">
         <div className="grid content-start gap-4">
           <div className="grid gap-4 lg:grid-cols-3">
             {plans.map((plan) => {
@@ -356,9 +336,10 @@ export default function SettingsPage() {
                       : "border-slate-200 bg-white text-slate-950 hover:-translate-y-0.5 hover:shadow-md"
                   }`}
                 >
-                  <div className="mb-4 flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-lg font-semibold">{plan.name}</p>
+
                       <p
                         className={`mt-1 text-xs leading-5 ${
                           isCurrent ? "text-slate-300" : "text-slate-500"
@@ -375,38 +356,32 @@ export default function SettingsPage() {
                     ) : null}
                   </div>
 
-                  <p className="whitespace-nowrap text-2xl font-semibold tracking-[-0.04em]">
-                    {plan.price}
-                  </p>
-
-                  <p
-                    className={`mt-1 text-xs ${
-                      isCurrent ? "text-slate-400" : "text-slate-500"
+                  <div
+                    className={`mt-5 rounded-[1.25rem] p-4 ${
+                      isCurrent ? "bg-white/10" : "bg-slate-50"
                     }`}
                   >
-                    Paystack: {"\u20A6"}
-                    {planAmount.toLocaleString()}
-                  </p>
+                    <p
+                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${
+                        isCurrent ? "text-slate-400" : "text-slate-500"
+                      }`}
+                    >
+                      Monthly
+                    </p>
 
-                  <div className="mt-5 grid gap-2.5">
-                    {plan.features.map((feature) => (
-                      <div key={feature} className="flex gap-2">
-                        <CheckCircle2
-                          size={15}
-                          className={
-                            isCurrent ? "text-emerald-300" : "text-teal-700"
-                          }
-                        />
+                    <div className="mt-2 flex items-end gap-2">
+                      <span className="text-3xl font-semibold tracking-[-0.06em]">
+                        {formatNaira(planAmount)}
+                      </span>
 
-                        <span
-                          className={`text-xs leading-5 ${
-                            isCurrent ? "text-slate-200" : "text-slate-600"
-                          }`}
-                        >
-                          {feature}
-                        </span>
-                      </div>
-                    ))}
+                      <span
+                        className={`pb-1 text-xs font-medium ${
+                          isCurrent ? "text-slate-400" : "text-slate-500"
+                        }`}
+                      >
+                        per month
+                      </span>
+                    </div>
                   </div>
 
                   <button
@@ -468,9 +443,9 @@ export default function SettingsPage() {
               </div>
 
               <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="text-slate-500">Amount</span>
+                <span className="text-slate-500">Monthly amount</span>
                 <span className="font-semibold text-slate-950">
-                  {currentPlan.price}
+                  {formatNaira(currentPlanAmount)}
                 </span>
               </div>
 
@@ -499,14 +474,14 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
                 <span className="text-slate-500">Setup</span>
                 <span className="font-semibold text-slate-950">
-                  {"\u20A6"}25,000
+                  {formatNaira(25000)}
                 </span>
               </div>
 
               <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
                 <span className="text-slate-500">Managed</span>
                 <span className="font-semibold text-slate-950">
-                  {"\u20A6"}45k - {"\u20A6"}75k
+                  {formatNaira(45000)} - {formatNaira(75000)}
                 </span>
               </div>
             </div>
