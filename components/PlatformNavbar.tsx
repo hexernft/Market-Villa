@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 
 const navItems = [
@@ -56,14 +55,6 @@ export function PlatformNavbar() {
             className="hidden px-4 py-2 text-sm font-semibold text-white/70 hover:text-white sm:inline-flex"
           >
             Login
-          </Link>
-
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 bg-white px-5 py-3 text-sm font-semibold text-black hover:bg-slate-200"
-          >
-            Get Started
-            <ArrowRight size={16} />
           </Link>
         </div>
       </div>

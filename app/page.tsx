@@ -71,13 +71,6 @@ export default function Home() {
                   Create Business Page
                   <ArrowRight size={17} />
                 </Link>
-
-                <Link
-                  href="/login"
-                  className="inline-flex items-center justify-center border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-                >
-                  Login
-                </Link>
               </div>
             </div>
           </div>
