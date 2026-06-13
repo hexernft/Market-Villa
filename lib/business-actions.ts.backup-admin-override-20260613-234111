@@ -1,4 +1,4 @@
-﻿import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 
 export type CreateBusinessInput = {
   name: string;
@@ -839,41 +839,6 @@ export async function updateBusinessPublishStatus({
   return data;
 }
 
-
-export async function updateBusinessAdminOverride({
-  businessId,
-  isActive,
-}: {
-  businessId: string;
-  isActive: boolean;
-}) {
-  await requireSuperAdmin();
-
-  const updatePayload = isActive
-    ? {
-        admin_override_active: true,
-        is_published: true,
-        updated_at: new Date().toISOString(),
-      }
-    : {
-        admin_override_active: false,
-        updated_at: new Date().toISOString(),
-      };
-
-  const { data, error } = await supabase
-    .from("businesses")
-    .update(updatePayload)
-    .eq("id", businessId)
-    .select()
-    .single();
-
-  if (error) {
-    throw error;
-  }
-
-  return data;
-}
-
 export async function getOrdersByBusinessId(businessId: string) {
   const { data, error } = await supabase
     .from("orders")
@@ -1056,4 +1021,3 @@ export function getComputedSubscriptionStatus(business: {
     shouldBePublished: false,
   };
 }
-

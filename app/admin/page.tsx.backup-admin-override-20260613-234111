@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
@@ -19,7 +19,6 @@ import {
   getAllBusinessesForAdmin,
   getAllDomainRequestsForAdmin,
   updateBusinessPublishStatus,
-  updateBusinessAdminOverride,
   updateDomainRequestStatus,
 } from "@/lib/business-actions";
 
@@ -35,7 +34,6 @@ type AdminBusiness = {
   custom_domain_status: string;
   subscription_plan: string;
   subscription_status: string;
-  admin_override_active: boolean | null;
   created_at: string;
 };
 
@@ -79,7 +77,6 @@ export default function AdminPage() {
   const [adminNote, setAdminNote] = useState("");
   const [updatingId, setUpdatingId] = useState("");
   const [updatingBusinessId, setUpdatingBusinessId] = useState("");
-  const [updatingOverrideBusinessId, setUpdatingOverrideBusinessId] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -179,46 +176,10 @@ export default function AdminPage() {
     }
   }
 
-  
-  async function handleToggleAdminOverride(
-    businessId: string,
-    currentStatus: boolean | null
-  ) {
-    setUpdatingOverrideBusinessId(businessId);
-    setMessage("");
-
-    try {
-      await updateBusinessAdminOverride({
-        businessId,
-        isActive: !currentStatus,
-      });
-
-      await loadAdminData();
-
-      setMessage(
-        currentStatus
-          ? "Admin override disabled successfully."
-          : "Admin override enabled successfully."
-      );
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Unable to update admin override.";
-
-      setMessage(errorMessage);
-    } finally {
-      setUpdatingOverrideBusinessId("");
-    }
-  }
-
   const publishedCount = businesses.filter(
     (business) => business.is_published
   ).length;
 
-  const overrideCount = businesses.filter(
-    (business) => business.admin_override_active
-  ).length;
   const pendingDomainCount = domainRequests.filter(
     (request) => request.status === "pending"
   ).length;
@@ -432,7 +393,7 @@ export default function AdminPage() {
             </section>
           ) : (
             <>
-              <section className="grid gap-4 md:grid-cols-5">
+              <section className="grid gap-4 md:grid-cols-4">
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
                   <p className="text-sm text-slate-500">Businesses</p>
                   <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-slate-950">
@@ -578,27 +539,6 @@ export default function AdminPage() {
                               ? "Unpublish"
                               : "Publish"}
                           </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleToggleAdminOverride(
-                                business.id,
-                                business.admin_override_active
-                              )
-                            }
-                            disabled={updatingOverrideBusinessId === business.id}
-                            className={`rounded-full px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${
-                              business.admin_override_active
-                                ? "bg-purple-700 text-white hover:bg-purple-800"
-                                : "bg-purple-50 text-purple-700 ring-1 ring-purple-200 hover:bg-purple-100"
-                            }`}
-                          >
-                            {updatingOverrideBusinessId === business.id
-                              ? "Updating..."
-                              : business.admin_override_active
-                              ? "Disable Override"
-                              : "Enable Override"}
-                          </button>
                         </div>
                       </div>
                     </article>
@@ -730,7 +670,4 @@ export default function AdminPage() {
     </main>
   );
 }
-
-
-
 
