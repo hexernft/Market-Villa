@@ -1,6 +1,22 @@
 import { supabase } from "@/lib/supabase";
 import { MarketVillaPlanId } from "@/lib/plans";
 
+type InitializePlanPaymentResponse = {
+  authorizationUrl: string;
+  reference: string;
+};
+
+type VerifyPlanPaymentResponse = {
+  success: boolean;
+  message?: string;
+  businessId?: string;
+  plan?: MarketVillaPlanId;
+  status?: string;
+  amount?: number;
+  paidAt?: string | null;
+  reference?: string;
+};
+
 async function getAccessToken() {
   const {
     data: { session },
@@ -11,6 +27,14 @@ async function getAccessToken() {
   }
 
   return session.access_token;
+}
+
+async function readResponseJson(response: Response) {
+  try {
+    return await response.json();
+  } catch {
+    return {};
+  }
 }
 
 export async function initializePlanPayment({
@@ -34,20 +58,25 @@ export async function initializePlanPayment({
     }),
   });
 
-  const data = await response.json();
+  const data = await readResponseJson(response);
 
   if (!response.ok) {
     throw new Error(data.error || "Unable to initialize payment.");
   }
 
-  return data as {
-    authorizationUrl: string;
-    reference: string;
-  };
+  if (!data.authorizationUrl || !data.reference) {
+    throw new Error("Payment started, but Paystack did not return a checkout link.");
+  }
+
+  return data as InitializePlanPaymentResponse;
 }
 
 export async function verifyPlanPayment(reference: string) {
   const token = await getAccessToken();
+
+  if (!reference) {
+    throw new Error("Payment reference is missing.");
+  }
 
   const response = await fetch("/api/paystack/verify", {
     method: "POST",
@@ -60,11 +89,11 @@ export async function verifyPlanPayment(reference: string) {
     }),
   });
 
-  const data = await response.json();
+  const data = await readResponseJson(response);
 
   if (!response.ok) {
     throw new Error(data.error || "Unable to verify payment.");
   }
 
-  return data;
+  return data as VerifyPlanPaymentResponse;
 }

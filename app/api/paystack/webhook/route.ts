@@ -1,7 +1,11 @@
 import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { isValidPlanId } from "@/lib/plans";
+import {
+  isValidPlanId,
+  MARKET_VILLA_PLANS,
+  MarketVillaPlanId,
+} from "@/lib/plans";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
@@ -21,7 +25,7 @@ function verifyPaystackSignature(rawBody: string, signature: string) {
 }
 
 function getPlanFromMetadata(data: any) {
-  const plan = String(data?.metadata?.plan || "");
+  const plan = String(data?.metadata?.plan || "") as MarketVillaPlanId;
 
   if (isValidPlanId(plan)) {
     return plan;
@@ -32,6 +36,10 @@ function getPlanFromMetadata(data: any) {
 
 function getBusinessIdFromMetadata(data: any) {
   return String(data?.metadata?.business_id || "");
+}
+
+function getOwnerIdFromMetadata(data: any) {
+  return String(data?.metadata?.owner_id || "");
 }
 
 function getReference(data: any) {
@@ -97,6 +105,7 @@ export async function POST(request: Request) {
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
       auth: {
         persistSession: false,
+        autoRefreshToken: false,
       },
     });
 
@@ -114,8 +123,11 @@ export async function POST(request: Request) {
 
     if (eventName === "charge.success") {
       const businessId = getBusinessIdFromMetadata(data);
+      const ownerId = getOwnerIdFromMetadata(data);
       const plan = getPlanFromMetadata(data);
       const amount = getAmountInNaira(data);
+      const amountInKobo = Number(data?.amount || 0);
+      const currency = String(data?.currency || "");
 
       if (!businessId || !plan) {
         await supabaseAdmin
@@ -134,11 +146,55 @@ export async function POST(request: Request) {
         });
       }
 
+      const expectedPlan = MARKET_VILLA_PLANS[plan];
+
+      if (!expectedPlan?.amountInKobo) {
+        return NextResponse.json({
+          received: true,
+          ignored: true,
+          reason: "Invalid plan amount.",
+        });
+      }
+
+      if (currency !== "NGN") {
+        await supabaseAdmin
+          .from("payments")
+          .update({
+            status: "currency_mismatch",
+            raw_response: event,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("reference", reference);
+
+        return NextResponse.json({
+          received: true,
+          ignored: true,
+          reason: "Currency mismatch.",
+        });
+      }
+
+      if (amountInKobo !== expectedPlan.amountInKobo) {
+        await supabaseAdmin
+          .from("payments")
+          .update({
+            status: "amount_mismatch",
+            raw_response: event,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("reference", reference);
+
+        return NextResponse.json({
+          received: true,
+          ignored: true,
+          reason: "Amount mismatch.",
+        });
+      }
+
       const { now, expiresAt, graceEndsAt } = getSubscriptionDates();
 
       const { data: existingPayment } = await supabaseAdmin
         .from("payments")
-        .select("id, status")
+        .select("id, status, business_id, owner_id, plan")
         .eq("reference", reference)
         .maybeSingle();
 
@@ -147,6 +203,40 @@ export async function POST(request: Request) {
           received: true,
           duplicate: true,
           reference,
+        });
+      }
+
+      if (
+        existingPayment?.business_id &&
+        String(existingPayment.business_id) !== businessId
+      ) {
+        return NextResponse.json({
+          received: true,
+          ignored: true,
+          reason: "Existing payment business does not match.",
+        });
+      }
+
+      if (
+        existingPayment?.owner_id &&
+        ownerId &&
+        String(existingPayment.owner_id) !== ownerId
+      ) {
+        return NextResponse.json({
+          received: true,
+          ignored: true,
+          reason: "Existing payment owner does not match.",
+        });
+      }
+
+      if (
+        existingPayment?.plan &&
+        String(existingPayment.plan) !== String(plan)
+      ) {
+        return NextResponse.json({
+          received: true,
+          ignored: true,
+          reason: "Existing payment plan does not match.",
         });
       }
 
@@ -168,8 +258,6 @@ export async function POST(request: Request) {
           throw paymentUpdateError;
         }
       } else {
-        const ownerId = String(data?.metadata?.owner_id || "");
-
         const { error: paymentInsertError } = await supabaseAdmin
           .from("payments")
           .insert({
