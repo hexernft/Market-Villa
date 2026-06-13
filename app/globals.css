@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #eeeaf8;
+  --foreground: #111827;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(255, 107, 15, 0.12), transparent 26rem),
+    radial-gradient(circle at top right, rgba(36, 29, 79, 0.18), transparent 30rem),
+    var(--background);
+  color: var(--foreground);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: #ff6b0f;
+  color: white;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(22px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.store-pattern {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.12) 1px, transparent 0),
+    linear-gradient(to bottom right, var(--tw-gradient-stops));
+  background-size: 26px 26px, auto;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+.market-villa-logo-float {
+  animation: marketVillaLogoFloat 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes marketVillaLogoFloat {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
