@@ -5,7 +5,7 @@ import { BRAND } from "@/lib/brand";
 
 export function PlatformFooter() {
   return (
-    <footer className="border-t border-white/10 bg-slate-950 px-5 py-10 md:px-8">
+    <footer className="border-t border-white/10 bg-black px-5 py-10 md:px-8">
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-start">
         <div>
           <Link href="/" className="flex items-center gap-3">

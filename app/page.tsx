@@ -225,18 +225,18 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="overflow-hidden border-y border-slate-200 bg-white py-4">
-        <div className="market-villa-marquee flex whitespace-nowrap text-sm font-semibold uppercase tracking-[0.22em] text-slate-950">
-          <span className="mx-8">
+      <section className="overflow-hidden border-y border-slate-200 bg-white py-1.5">
+        <div className="market-villa-marquee flex whitespace-nowrap text-[10px] font-semibold uppercase leading-none tracking-[0.18em] text-slate-950">
+          <span className="mx-5">
             Market Villa helps businesses create clean pages, organize products and services, receive WhatsApp inquiries, and look more trusted online.
           </span>
-          <span className="mx-8">
+          <span className="mx-5">
             Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.
           </span>
-          <span className="mx-8">
+          <span className="mx-5">
             Market Villa helps businesses create clean pages, organize products and services, receive WhatsApp inquiries, and look more trusted online.
           </span>
-          <span className="mx-8">
+          <span className="mx-5">
             Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.
           </span>
         </div>
