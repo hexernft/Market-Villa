@@ -49,12 +49,19 @@ export function PlatformNavbar() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <Link
             href="/login"
             className="hidden px-4 py-2 text-sm font-semibold text-white/70 hover:text-white sm:inline-flex"
           >
             Login
+          </Link>
+
+          <Link
+            href="/signup"
+            className="inline-flex items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.12)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(255,255,255,0.18)]"
+          >
+            Get Started
           </Link>
         </div>
       </div>

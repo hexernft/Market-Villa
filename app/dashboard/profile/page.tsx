@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   Building2,
   CheckCircle2,
   Clock3,
+  Eye,
   Globe2,
   ImageIcon,
   Instagram,
@@ -208,9 +208,10 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <main className="grid min-h-[60vh] place-items-center">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
-          <Loader2 className="mx-auto animate-spin text-slate-950" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
+        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
+          <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
+
+          <p className="mt-3 text-sm text-slate-500">
             Loading business profile...
           </p>
         </div>
@@ -220,18 +221,18 @@ export default function ProfilePage() {
 
   if (businesses.length === 0) {
     return (
-      <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-        <h2 className="text-2xl font-semibold tracking-[-0.04em] text-amber-950">
+      <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-6 text-center">
+        <p className="text-xl font-semibold tracking-[-0.04em] text-amber-950">
           Create your business page first
-        </h2>
+        </p>
 
         <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
-          You need to complete onboarding before editing a business profile.
+          Complete onboarding before editing a business profile.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-6 inline-flex rounded-full bg-amber-300 px-6 py-4 text-sm font-semibold text-amber-950 hover:bg-amber-200"
+          className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
         >
           Start Onboarding
         </Link>
@@ -240,106 +241,105 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="grid gap-8">
-      <section className="rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-7 text-white shadow-soft">
-        <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-200">
-              Business Profile
-            </p>
-
-            <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.05em]">
-              Update the information customers see.
-            </h2>
-
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-              Edit your business identity, contact details, public store link,
-              compressed cover image, and publication status.
-            </p>
-          </div>
-
-          <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-              Current Store URL
-            </p>
-
-            <div className="mt-4 rounded-2xl bg-white p-4 text-slate-950">
-              <p className="break-all text-sm font-semibold">
-                marketvilla.com/store/{slug || selectedBusiness?.slug}
-              </p>
-
-              <p className="mt-2 text-xs leading-5 text-slate-500">
-                Updating the slug changes your public Market Villa link.
-              </p>
-            </div>
+    <div className="grid gap-5">
+      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-center">
+          <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
+            <select
+              value={selectedBusinessId}
+              onChange={(event) => setSelectedBusinessId(event.target.value)}
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100 md:min-w-72"
+            >
+              {businesses.map((business) => (
+                <option key={business.id} value={business.id}>
+                  {business.name} - /store/{business.slug}
+                </option>
+              ))}
+            </select>
 
             <Link
               href={`/store/${slug || selectedBusiness?.slug}`}
-              className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-amber-200"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
             >
+              <Eye size={17} />
               Preview Store
             </Link>
           </div>
-        </div>
-      </section>
 
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-              Active Business
-            </p>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
+              <p className="text-xs text-slate-500">Status</p>
+              <p className="mt-1 text-sm font-semibold text-slate-950">
+                {isPublished ? "Live" : "Draft"}
+              </p>
+            </div>
 
-            <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">
-              Choose which business profile to edit
-            </h3>
+            <div className="rounded-2xl bg-teal-50 px-3 py-2.5">
+              <p className="text-xs text-teal-700">Category</p>
+              <p className="mt-1 truncate text-sm font-semibold text-teal-950">
+                {category}
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-amber-50 px-3 py-2.5">
+              <p className="text-xs text-amber-700">URL</p>
+              <p className="mt-1 truncate text-sm font-semibold text-amber-950">
+                /store/{slug || selectedBusiness?.slug}
+              </p>
+            </div>
           </div>
-
-          <select
-            value={selectedBusinessId}
-            onChange={(event) => setSelectedBusinessId(event.target.value)}
-            className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950 md:min-w-80"
-          >
-            {businesses.map((business) => (
-              <option key={business.id} value={business.id}>
-                {business.name} â€” /store/{business.slug}
-              </option>
-            ))}
-          </select>
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_0.75fr]">
+      {message ? (
+        <div className="rounded-2xl bg-white p-3 text-sm text-slate-700 shadow-sm">
+          {message}
+        </div>
+      ) : null}
+
+      <section className="grid gap-5 xl:grid-cols-[1fr_0.7fr]">
         <form
           onSubmit={handleSave}
-          className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm"
+          className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm"
         >
-          <div className="mb-7">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-              Edit Details
-            </p>
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
+                Profile
+              </p>
 
-            <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-              Business information
-            </h3>
+              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+                Business information
+              </h2>
+            </div>
 
-            <p className="mt-2 text-sm leading-6 text-slate-500">
-              These details are saved to Supabase and reflected on the public
-              business page.
-            </p>
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="hidden items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 md:inline-flex"
+            >
+              {isSaving ? (
+                <Loader2 size={17} className="animate-spin" />
+              ) : (
+                <CheckCircle2 size={17} />
+              )}
+
+              {isSaving ? "Saving..." : "Save Profile"}
+            </button>
           </div>
 
-          <div className="grid gap-5">
-            <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <Building2 size={16} />
                   Business name
                 </span>
+
                 <input
                   value={name}
                   onChange={(event) => handleNameChange(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                   placeholder="Business name"
                   required
                 />
@@ -350,10 +350,11 @@ export default function ProfilePage() {
                   <Store size={16} />
                   Category
                 </span>
+
                 <select
                   value={category}
                   onChange={(event) => setCategory(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                 >
                   {categories.map((item) => (
                     <option key={item}>{item}</option>
@@ -367,38 +368,55 @@ export default function ProfilePage() {
                 <Globe2 size={16} />
                 Store slug
               </span>
+
               <div className="grid gap-3 md:grid-cols-[auto_1fr] md:items-center">
-                <span className="rounded-2xl bg-slate-100 px-4 py-4 text-sm font-medium text-slate-500">
-                  marketvilla.com/store/
+                <span className="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-500">
+                  /store/
                 </span>
 
                 <input
                   value={slug}
                   onChange={(event) => setSlug(slugify(event.target.value))}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                   placeholder="business-slug"
                   required
                 />
               </div>
             </label>
 
-            <label className="grid gap-2">
-              <span className="text-sm font-semibold text-slate-700">
-                Logo text
-              </span>
-              <input
-                value={logoText}
-                onChange={(event) =>
-                  setLogoText(event.target.value.toUpperCase().slice(0, 4))
-                }
-                className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                placeholder="MV"
-              />
-            </label>
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="grid gap-2">
+                <span className="text-sm font-semibold text-slate-700">
+                  Logo text
+                </span>
+
+                <input
+                  value={logoText}
+                  onChange={(event) =>
+                    setLogoText(event.target.value.toUpperCase().slice(0, 4))
+                  }
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  placeholder="MV"
+                />
+              </label>
+
+              <label className="grid gap-2">
+                <span className="text-sm font-semibold text-slate-700">
+                  Tagline
+                </span>
+
+                <input
+                  value={tagline}
+                  onChange={(event) => setTagline(event.target.value)}
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  placeholder="Short line about the business"
+                />
+              </label>
+            </div>
 
             <ImageUploadField
-              label="Upload cover image"
-              helper="Large banner images will be compressed before upload."
+              label="Upload hero image"
+              helper="This image appears at the top of your public store page."
               maxWidth={1800}
               maxHeight={1100}
               onCompressed={(file) => setCompressedCoverFile(file)}
@@ -407,25 +425,14 @@ export default function ProfilePage() {
             <label className="grid gap-2">
               <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                 <ImageIcon size={16} />
-                Or paste cover image URL
+                Or paste hero image URL
               </span>
+
               <input
                 value={coverImageUrl}
                 onChange={(event) => setCoverImageUrl(event.target.value)}
-                className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                 placeholder="https://..."
-              />
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm font-semibold text-slate-700">
-                Tagline
-              </span>
-              <input
-                value={tagline}
-                onChange={(event) => setTagline(event.target.value)}
-                className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                placeholder="Short line about the business"
               />
             </label>
 
@@ -433,25 +440,27 @@ export default function ProfilePage() {
               <span className="text-sm font-semibold text-slate-700">
                 Business description
               </span>
+
               <textarea
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
-                rows={4}
-                className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                placeholder="Describe what your business offers..."
+                rows={3}
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                placeholder="Describe what your business offers."
               />
             </label>
 
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <Phone size={16} />
                   WhatsApp number
                 </span>
+
                 <input
                   value={whatsapp}
                   onChange={(event) => setWhatsapp(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                   placeholder="2348012345678"
                 />
               </label>
@@ -461,26 +470,28 @@ export default function ProfilePage() {
                   <Phone size={16} />
                   Phone number
                 </span>
+
                 <input
                   value={phone}
                   onChange={(event) => setPhone(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                   placeholder="080..."
                 />
               </label>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <Mail size={16} />
                   Email
                 </span>
+
                 <input
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   type="email"
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                   placeholder="business@email.com"
                 />
               </label>
@@ -490,26 +501,28 @@ export default function ProfilePage() {
                   <MapPin size={16} />
                   Location
                 </span>
+
                 <input
                   value={location}
                   onChange={(event) => setLocation(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                   placeholder="Abuja, Nigeria"
                 />
               </label>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2">
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <Clock3 size={16} />
                   Opening hours
                 </span>
+
                 <input
                   value={openingHours}
                   onChange={(event) => setOpeningHours(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="Mon - Sat, 9:00 AM - 6:00 PM"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  placeholder="Mon - Sat, 9 AM - 6 PM"
                 />
               </label>
 
@@ -518,23 +531,24 @@ export default function ProfilePage() {
                   <Instagram size={16} />
                   Instagram link
                 </span>
+
                 <input
                   value={instagramUrl}
                   onChange={(event) => setInstagramUrl(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                   placeholder="https://instagram.com/yourbusiness"
                 />
               </label>
             </div>
 
-            <label className="flex cursor-pointer items-center justify-between rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
+            <label className="flex cursor-pointer items-center justify-between gap-4 rounded-[1.25rem] border border-slate-200 bg-slate-50 p-4">
               <div>
                 <p className="text-sm font-semibold text-slate-800">
-                  Publish business page
+                  Publish store
                 </p>
+
                 <p className="mt-1 text-xs leading-5 text-slate-500">
-                  If disabled, customers will not see this business from the
-                  public store page.
+                  Turn this off to hide the public store page.
                 </p>
               </div>
 
@@ -545,36 +559,31 @@ export default function ProfilePage() {
               />
             </label>
 
-            {message ? (
-              <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
-                {message}
-              </div>
-            ) : null}
-
             <button
               type="submit"
               disabled={isSaving}
-              className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 md:hidden"
             >
               {isSaving ? (
                 <Loader2 size={17} className="animate-spin" />
               ) : (
                 <CheckCircle2 size={17} />
               )}
-              {isSaving ? "Saving profile..." : "Save Profile"}
+
+              {isSaving ? "Saving..." : "Save Profile"}
             </button>
           </div>
         </form>
 
-        <aside className="grid gap-5">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
+        <aside className="grid content-start gap-4">
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
               Preview
             </p>
 
-            <div className="mt-5 overflow-hidden rounded-[1.5rem] border border-slate-200">
+            <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-slate-200">
               <div
-                className="h-40 bg-cover bg-center"
+                className="h-36 bg-cover bg-center"
                 style={{
                   backgroundImage: `url(${
                     coverImageUrl ||
@@ -583,20 +592,20 @@ export default function ProfilePage() {
                 }}
               />
 
-              <div className="p-5">
-                <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-slate-950 text-lg font-semibold text-white">
+              <div className="p-4">
+                <div className="mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-slate-950 text-base font-semibold text-white">
                   {logoText || "MV"}
                 </div>
 
-                <h3 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
+                <p className="text-lg font-semibold tracking-[-0.04em] text-slate-950">
                   {name || "Business Name"}
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  {tagline || description || "Business description preview..."}
                 </p>
 
-                <div className="mt-5 grid gap-2 text-xs text-slate-500">
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  {tagline || description || "Business preview"}
+                </p>
+
+                <div className="mt-4 grid gap-2 text-xs text-slate-500">
                   <span>{location || "Location not added"}</span>
                   <span>{openingHours || "Opening hours not added"}</span>
                   <span>{isPublished ? "Published" : "Draft"}</span>
@@ -605,29 +614,15 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-6">
-            <h3 className="text-lg font-semibold text-amber-950">
-              Slug warning
-            </h3>
+          <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-4">
+            <p className="font-semibold text-amber-950">Store link</p>
 
-            <p className="mt-2 text-sm leading-6 text-amber-900">
-              Changing your slug changes your Market Villa link. If customers
-              already have the old link, they may need the new one.
-            </p>
-          </div>
-
-          <div className="rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-teal-200">
-              Image upload active
+            <p className="mt-2 break-all text-sm leading-6 text-amber-900">
+              /store/{slug || selectedBusiness?.slug}
             </p>
 
-            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
-              Compressed cover images
-            </h3>
-
-            <p className="mt-3 text-sm leading-6 text-slate-300">
-              Cover images now compress in the browser and upload to Supabase
-              Storage before saving to the business profile.
+            <p className="mt-2 text-xs leading-5 text-amber-800">
+              Changing the slug changes the public store link.
             </p>
           </div>
         </aside>

@@ -95,10 +95,6 @@ export default function PrivacyPage() {
             ))}
           </div>
         </section>
-
-        <p className="mt-6 text-center text-xs leading-6 text-slate-500">
-          This is a starter privacy page. Before public launch, review it with a qualified legal professional.
-        </p>
       </div>
     </main>
   );

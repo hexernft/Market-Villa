@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { use, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
@@ -109,7 +108,7 @@ export default function StorePage({ params }: StorePageProps) {
 
   const visibleProducts = useMemo(() => {
     return (business?.products || []).filter((product) => {
-      const search = query.toLowerCase();
+      const search = query.toLowerCase().trim();
 
       return (
         product.is_available &&
@@ -155,17 +154,17 @@ export default function StorePage({ params }: StorePageProps) {
   if (isLoading) {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
-        <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 text-center shadow-soft">
-          <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-slate-950 text-white">
-            <Store size={24} />
+        <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
+          <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-slate-950 text-white">
+            <Store size={22} />
           </div>
 
-          <h1 className="text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+          <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
             Loading store
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-slate-500">
-            Please wait while Market Villa loads this business page.
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            Please wait while this business page loads.
           </p>
         </div>
       </main>
@@ -175,22 +174,22 @@ export default function StorePage({ params }: StorePageProps) {
   if (!business) {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
-        <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 text-center shadow-soft">
-          <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-red-50 text-red-700">
-            <Store size={24} />
+        <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
+          <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-red-50 text-red-700">
+            <Store size={22} />
           </div>
 
-          <h1 className="text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+          <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
             Store not found
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-slate-500">
-            This Market Villa store does not exist or the link may be incorrect.
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            This store does not exist or the link may be incorrect.
           </p>
 
           <Link
             href="/"
-            className="mt-7 inline-flex rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800"
+            className="mt-6 inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
           >
             Back to Market Villa
           </Link>
@@ -202,24 +201,22 @@ export default function StorePage({ params }: StorePageProps) {
   if (!business.is_published) {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
-        <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 text-center shadow-soft">
-          <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-amber-50 text-amber-700">
-            <Store size={24} />
+        <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
+          <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-amber-50 text-amber-700">
+            <Store size={22} />
           </div>
 
-          <h1 className="text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+          <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
             Store currently unavailable
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-slate-500">
-            {business.name} is not currently available to the public. Please
-            check back later or contact the business directly if you already
-            have their contact details.
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            {business.name} is not currently available to the public.
           </p>
 
           <Link
             href="/"
-            className="mt-7 inline-flex rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800"
+            className="mt-6 inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
           >
             Back to Market Villa
           </Link>
@@ -270,7 +267,9 @@ export default function StorePage({ params }: StorePageProps) {
                 {logoText}
               </div>
 
-              <p className={`mb-3 text-xs font-semibold uppercase tracking-[0.22em] ${theme.accentText}`}>
+              <p
+                className={`mb-3 text-xs font-semibold uppercase tracking-[0.22em] ${theme.accentText}`}
+              >
                 {business.location || "Business"}
               </p>
 
@@ -286,14 +285,18 @@ export default function StorePage({ params }: StorePageProps) {
 
               <div className="mt-8 flex flex-wrap gap-3">
                 {business.opening_hours ? (
-                  <span className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm ${theme.chip}`}>
+                  <span
+                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm ${theme.chip}`}
+                  >
                     <Clock size={16} />
                     {business.opening_hours}
                   </span>
                 ) : null}
 
                 {business.location ? (
-                  <span className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm ${theme.chip}`}>
+                  <span
+                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm ${theme.chip}`}
+                  >
                     <MapPin size={16} />
                     {business.location}
                   </span>
@@ -309,13 +312,15 @@ export default function StorePage({ params }: StorePageProps) {
                   View Products
                 </a>
 
-                <a
-                  href="#services"
-                  className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold ${theme.secondaryButton}`}
-                >
-                  <CalendarCheck size={17} />
-                  View Services
-                </a>
+                {visibleServices.length ? (
+                  <a
+                    href="#services"
+                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold ${theme.secondaryButton}`}
+                  >
+                    <CalendarCheck size={17} />
+                    Quick Requests
+                  </a>
+                ) : null}
               </div>
             </div>
 
@@ -329,21 +334,23 @@ export default function StorePage({ params }: StorePageProps) {
         </div>
       </section>
 
-      <section className="px-5 py-10 md:px-8">
-        <div className="mx-auto max-w-7xl">
+      <section className="px-5 py-8 md:px-8">
+        <div className="mx-auto grid max-w-7xl gap-10">
           {business.products?.length ? (
-            <div className={`mb-10 grid gap-4 ${theme.card} rounded-[2rem] p-5 shadow-soft md:grid-cols-[1fr_auto] md:items-center`}>
+            <div
+              className={`${theme.card} grid gap-3 rounded-[1.5rem] p-4 shadow-sm md:grid-cols-[1fr_auto] md:items-center`}
+            >
               <div className="relative">
                 <Search
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                  size={18}
+                  size={17}
                 />
 
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search products or categories"
-                  className="w-full rounded-full border border-slate-200 bg-white px-12 py-4 text-sm text-slate-950 outline-none focus:border-slate-950"
+                  placeholder="Search products"
+                  className="min-h-12 w-full rounded-full border border-slate-200 bg-white px-11 text-sm text-slate-950 outline-none focus:border-slate-950"
                 />
               </div>
 
@@ -351,7 +358,7 @@ export default function StorePage({ params }: StorePageProps) {
                 {categories.map((category) => (
                   <span
                     key={category}
-                    className="whitespace-nowrap rounded-full bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700"
+                    className="whitespace-nowrap rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-700"
                   >
                     {category}
                   </span>
@@ -361,32 +368,34 @@ export default function StorePage({ params }: StorePageProps) {
           ) : null}
 
           <section id="products">
-            <div className="mb-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div className="mb-5 flex items-end justify-between gap-4">
               <div>
-                <p className={`text-sm font-semibold uppercase tracking-[0.28em] ${theme.sectionLabel}`}>
+                <p
+                  className={`text-xs font-semibold uppercase tracking-[0.22em] ${theme.sectionLabel}`}
+                >
                   Catalogue
                 </p>
 
-                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">
+                <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em]">
                   Products
                 </h2>
               </div>
 
-              <p className="text-sm leading-7 opacity-70">
+              <p className="text-sm opacity-60">
                 {visibleProducts.length} item
-                {visibleProducts.length === 1 ? "" : "s"} available
+                {visibleProducts.length === 1 ? "" : "s"}
               </p>
             </div>
 
             {visibleProducts.length ? (
-              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {visibleProducts.map((product) => (
                   <article
                     key={product.id}
-                    className={`${theme.productCard} overflow-hidden transition hover:-translate-y-1 hover:shadow-soft`}
+                    className={`${theme.productCard} overflow-hidden rounded-[1.5rem] transition hover:-translate-y-1 hover:shadow-soft`}
                   >
                     <div
-                      className="h-48 bg-cover bg-center"
+                      className="h-40 bg-cover bg-center"
                       style={{
                         backgroundImage: `url(${
                           product.image_url || fallbackProductImage
@@ -394,32 +403,34 @@ export default function StorePage({ params }: StorePageProps) {
                       }}
                     />
 
-                    <div className="p-5">
-                      <div className="mb-3 flex items-start justify-between gap-4">
+                    <div className="p-4">
+                      <div className="mb-3 flex items-start justify-between gap-3">
                         <div>
-                          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
                             {product.category || "Product"}
                           </p>
 
-                          <h3 className="text-lg font-semibold tracking-[-0.03em]">
+                          <h3 className="text-base font-semibold tracking-[-0.03em]">
                             {product.name}
                           </h3>
                         </div>
 
-                        <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold">
+                        <span className="whitespace-nowrap rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold">
                           {formatCurrency(Number(product.price || 0))}
                         </span>
                       </div>
 
-                      <p className="min-h-12 text-sm leading-6 text-slate-500">
-                        {product.description || "No description added."}
-                      </p>
+                      {product.description ? (
+                        <p className="text-sm leading-6 text-slate-500">
+                          {product.description}
+                        </p>
+                      ) : null}
 
                       <button
                         onClick={() => addToCart(product)}
-                        className={`mt-5 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold ${theme.button}`}
+                        className={`mt-4 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold ${theme.button}`}
                       >
-                        <ShoppingBag size={17} />
+                        <ShoppingBag size={16} />
                         Add to order
                       </button>
                     </div>
@@ -427,7 +438,9 @@ export default function StorePage({ params }: StorePageProps) {
                 ))}
               </div>
             ) : (
-              <div className={`${theme.card} rounded-[2rem] p-8 text-center`}>
+              <div
+                className={`${theme.card} rounded-[1.5rem] p-6 text-center shadow-sm`}
+              >
                 <p className="text-sm opacity-70">
                   No products are available right now.
                 </p>
@@ -436,195 +449,174 @@ export default function StorePage({ params }: StorePageProps) {
           </section>
 
           {visibleServices.length ? (
-            <section id="services" className="mt-20">
-              <div className="mb-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+            <section id="services">
+              <div className="mb-4 flex items-end justify-between gap-4">
                 <div>
-                  <p className={`text-sm font-semibold uppercase tracking-[0.28em] ${theme.sectionLabel}`}>
+                  <p
+                    className={`text-xs font-semibold uppercase tracking-[0.22em] ${theme.sectionLabel}`}
+                  >
                     Services
                   </p>
 
-                  <h2 className="mt-2 max-w-xl text-3xl font-semibold tracking-[-0.04em]">
-                    Bookings, inquiries, and service requests
+                  <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em]">
+                    Quick Requests
                   </h2>
                 </div>
 
-                <p className="text-sm leading-7 opacity-70">
-                  Customers can request bookings, appointments, custom quotes,
-                  reservations, or consultations directly from this page.
-                </p>
-              </div>
-
-              <div className="grid gap-5 md:grid-cols-3">
-                {visibleServices.map((service) => (
-                  <div
-                    key={service.id}
-                    className={`${theme.card} overflow-hidden rounded-[2rem] shadow-sm ring-1 ring-black/5 transition hover:-translate-y-1 hover:shadow-soft`}
-                  >
-                    <div className="p-6">
-                      <div className="mb-8 flex items-center justify-between gap-4">
-                        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-slate-950 text-white">
-                          <CalendarCheck size={21} />
-                        </span>
-
-                        <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                          {service.service_type || "Service"}
-                        </span>
-                      </div>
-
-                      <h3 className="text-xl font-semibold tracking-[-0.03em]">
-                        {service.name}
-                      </h3>
-
-                      <p className="mt-3 min-h-20 text-sm leading-6 opacity-70">
-                        {service.description || "No description added."}
-                      </p>
-
-                      <div className="mt-6 rounded-2xl bg-slate-100 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                          Pricing
-                        </p>
-
-                        <p className="mt-1 text-lg font-semibold text-slate-950">
-                          {service.price_label || "Request quote"}
-                        </p>
-                      </div>
-
-                      {whatsapp ? (
-                        <a
-                          href={buildWhatsAppLink(
-                            whatsapp,
-                            `Hello ${business.name}, I want to ask about ${service.name}.`
-                          )}
-                          target="_blank"
-                          rel="noreferrer"
-                          className={`mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-4 text-sm font-semibold ${theme.button}`}
-                        >
-                          <MessageCircle size={17} />
-                          {service.button_label || "Request Service"}
-                        </a>
-                      ) : null}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          ) : null}
-
-          <section className="mt-20 grid gap-5 lg:grid-cols-[1fr_0.85fr]">
-            <div className={`${theme.mutedCard} rounded-[2rem] p-7 shadow-sm`}>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] opacity-70">
-                Contact
-              </p>
-
-              <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
-                Need help before ordering?
-              </h2>
-
-              <p className="mt-3 max-w-2xl text-sm leading-7 opacity-70">
-                Contact {business.name} directly for product questions,
-                bookings, availability, delivery, custom requests, or service
-                inquiries.
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                {whatsapp ? (
-                  <a
-                    href={buildWhatsAppLink(
-                      whatsapp,
-                      `Hello ${business.name}, I need more information.`
-                    )}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950"
-                  >
-                    <Phone size={17} />
-                    Contact Business
-                  </a>
-                ) : null}
-
-                {business.instagram_url ? (
-                  <a
-                    href={business.instagram_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-3 text-sm font-semibold ring-1 ring-white/10"
-                  >
-                    <Instagram size={17} />
-                    Instagram
-                  </a>
-                ) : null}
-              </div>
-            </div>
-
-            <div className={`${theme.card} rounded-[2rem] p-7 shadow-sm`}>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] opacity-50">
-                Business Details
-              </p>
-
-              <div className="mt-5 grid gap-3">
-                {business.opening_hours ? (
-                  <div className="flex items-center gap-3 rounded-2xl bg-slate-100 p-4">
-                    <Clock size={18} className="text-slate-500" />
-                    <span className="text-sm font-medium">
-                      {business.opening_hours}
-                    </span>
-                  </div>
-                ) : null}
-
-                {business.location ? (
-                  <div className="flex items-center gap-3 rounded-2xl bg-slate-100 p-4">
-                    <MapPin size={18} className="text-slate-500" />
-                    <span className="text-sm font-medium">
-                      {business.location}
-                    </span>
-                  </div>
-                ) : null}
-
-                <div className="flex items-center gap-3 rounded-2xl bg-slate-100 p-4">
-                  <Store size={18} className="text-slate-500" />
-                  <span className="text-sm font-medium">
-                    Powered by Market Villa
-                  </span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <footer className={`${theme.mutedCard} mt-16 rounded-[2rem] p-6`}>
-            <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
-              <div>
-                <h3 className="text-xl font-semibold">{business.name}</h3>
-
-                <p className="mt-2 text-sm opacity-70">
-                  {business.tagline || "Powered by Market Villa"}
+                <p className="text-sm opacity-60">
+                  {visibleServices.length} option
+                  {visibleServices.length === 1 ? "" : "s"}
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-3">
-                {business.instagram_url ? (
-                  <a
-                    href={business.instagram_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-3 text-sm font-semibold ring-1 ring-white/10"
-                  >
-                    <Instagram size={17} />
-                    Instagram
-                  </a>
-                ) : null}
-
-                {whatsapp ? (
-                  <a
-                    href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950"
-                  >
-                    <MessageCircle size={17} />
-                    Contact
-                  </a>
-                ) : null}
+                {visibleServices.map((service) =>
+                  whatsapp ? (
+                    <a
+                      key={service.id}
+                      href={buildWhatsAppLink(
+                        whatsapp,
+                        `Hello ${business.name}, I want to ask about ${service.name}.`
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={service.description || service.service_type || service.name}
+                      className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.button}`}
+                    >
+                      <CalendarCheck size={16} />
+                      {service.button_label || service.name || "Request Service"}
+                    </a>
+                  ) : (
+                    <span
+                      key={service.id}
+                      title={service.description || service.service_type || service.name}
+                      className={`${theme.card} inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold shadow-sm`}
+                    >
+                      <CalendarCheck size={16} />
+                      {service.button_label || service.name || "Request Service"}
+                    </span>
+                  )
+                )}
               </div>
+            </section>
+          ) : null}
+
+          <footer className={`${theme.mutedCard} rounded-[1.5rem] p-5 shadow-sm`}>
+            <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr_0.8fr]">
+              <div>
+                <h3 className="text-lg font-semibold tracking-[-0.03em]">
+                  {business.name}
+                </h3>
+
+                <p className="mt-2 max-w-md text-sm leading-6 opacity-70">
+                  {business.tagline ||
+                    "Browse products, request services, and contact the business directly."}
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  {whatsapp ? (
+                    <a
+                      href={buildWhatsAppLink(
+                        whatsapp,
+                        `Hello ${business.name}, I need more information.`
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-950"
+                    >
+                      <Phone size={16} />
+                      Contact Business
+                    </a>
+                  ) : null}
+
+                  {business.instagram_url ? (
+                    <a
+                      href={business.instagram_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-3 text-sm font-semibold ring-1 ring-white/10"
+                    >
+                      <Instagram size={16} />
+                      Instagram
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] opacity-60">
+                  Business Info
+                </p>
+
+                <div className="mt-4 grid gap-2">
+                  {business.opening_hours ? (
+                    <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                      <Clock size={17} className="opacity-70" />
+                      <span className="text-sm font-medium">
+                        {business.opening_hours}
+                      </span>
+                    </div>
+                  ) : null}
+
+                  {business.location ? (
+                    <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                      <MapPin size={17} className="opacity-70" />
+                      <span className="text-sm font-medium">
+                        {business.location}
+                      </span>
+                    </div>
+                  ) : null}
+
+                  {business.phone ? (
+                    <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                      <Phone size={17} className="opacity-70" />
+                      <span className="text-sm font-medium">
+                        {business.phone}
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] opacity-60">
+                  Store
+                </p>
+
+                <div className="mt-4 grid gap-2">
+                  <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                    <Store size={17} className="opacity-70" />
+                    <span className="text-sm font-medium">
+                      Powered by Market Villa
+                    </span>
+                  </div>
+
+                  <a
+                    href="#products"
+                    className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 text-sm font-semibold ring-1 ring-white/10"
+                  >
+                    <ShoppingBag size={17} className="opacity-70" />
+                    View Products
+                  </a>
+
+                  {visibleServices.length ? (
+                    <a
+                      href="#services"
+                      className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 text-sm font-semibold ring-1 ring-white/10"
+                    >
+                      <CalendarCheck size={17} className="opacity-70" />
+                      Quick Requests
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 border-t border-white/10 pt-4">
+              <p className="text-xs opacity-60">
+                © {new Date().getFullYear()} {business.name}. Powered by Market
+                Villa.
+              </p>
             </div>
           </footer>
         </div>

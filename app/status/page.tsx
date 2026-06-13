@@ -8,8 +8,8 @@ const systems = [
   "Business dashboard",
   "Image uploads",
   "WhatsApp checkout",
-  "Paystack payment foundation",
-  "Subscription enforcement API",
+  "Secure payment checkout",
+  "Subscription management",
 ];
 
 export default function StatusPage() {
@@ -52,7 +52,7 @@ export default function StatusPage() {
               <h2 className="text-xl font-semibold text-slate-950">
                 {BRAND.name} services
               </h2>
-              <p className="text-sm text-slate-500">Last checked manually.</p>
+              <p className="text-sm text-slate-500">Live service overview.</p>
             </div>
           </div>
 

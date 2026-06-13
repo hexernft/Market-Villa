@@ -287,8 +287,8 @@ export default function AnalyticsPage() {
             </h2>
 
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-500">
-              Track orders, revenue, products, services, and recent customer
-              activity from one clean dashboard.
+              Track orders, revenue, products, services and recent customer
+              activity.
             </p>
           </div>
 
@@ -438,11 +438,6 @@ export default function AnalyticsPage() {
               </p>
             </div>
           </div>
-
-          <p className="mt-6 text-sm leading-7 text-white/60">
-            Next analytics upgrade: store views, product clicks, checkout clicks,
-            and WhatsApp conversion rate.
-          </p>
         </aside>
       </section>
     </div>

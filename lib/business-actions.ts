@@ -247,7 +247,7 @@ function getSampleCatalogue(category: string) {
     products: [
       {
         name: "Featured Offer",
-        description: "A sample product or package customers can ask about.",
+        description: "A starter product or package customers can ask about.",
         price: 10000,
         category: "Products",
         image_url:
@@ -257,7 +257,7 @@ function getSampleCatalogue(category: string) {
       },
       {
         name: "Popular Item",
-        description: "Another sample listing to help you understand the storefront layout.",
+        description: "A starter listing you can edit for your storefront.",
         price: 15000,
         category: "Products",
         image_url:

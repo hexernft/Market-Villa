@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
@@ -114,9 +113,10 @@ export default function ThemePage() {
   if (isLoading) {
     return (
       <main className="grid min-h-[60vh] place-items-center">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
-          <Loader2 className="mx-auto animate-spin text-slate-950" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
+        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
+          <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
+
+          <p className="mt-3 text-sm text-slate-500">
             Loading theme settings...
           </p>
         </div>
@@ -126,18 +126,18 @@ export default function ThemePage() {
 
   if (businesses.length === 0) {
     return (
-      <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-        <h2 className="text-2xl font-semibold tracking-[-0.04em] text-amber-950">
+      <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-6 text-center">
+        <p className="text-xl font-semibold tracking-[-0.04em] text-amber-950">
           Create your business page first
-        </h2>
+        </p>
 
         <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
-          You need to complete onboarding before choosing a storefront theme.
+          Complete onboarding before choosing a storefront theme.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-6 inline-flex rounded-full bg-amber-300 px-6 py-4 text-sm font-semibold text-amber-950 hover:bg-amber-200"
+          className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
         >
           Start Onboarding
         </Link>
@@ -146,106 +146,81 @@ export default function ThemePage() {
   }
 
   return (
-    <div className="grid gap-8">
-      <section className="rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-7 text-white shadow-soft">
-        <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-200">
-              Theme Studio
-            </p>
-
-            <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.05em]">
-              Give each business page a unique look.
-            </h2>
-
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-              Choose a professional theme that matches the business category,
-              audience, and brand feeling.
-            </p>
-          </div>
-
-          <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-              Current Selection
-            </p>
-
-            <div className="mt-4 rounded-2xl bg-white p-4 text-slate-950">
-              <div className="flex items-center gap-3">
-                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white">
-                  <Palette size={19} />
-                </span>
-
-                <div>
-                  <p className="text-sm font-semibold">{selectedTheme.name}</p>
-                  <p className="text-xs text-slate-500">
-                    {selectedBusiness?.name}
-                  </p>
-                </div>
-              </div>
-            </div>
+    <div className="grid gap-5">
+      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-center">
+          <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
+            <select
+              value={selectedBusinessId}
+              onChange={(event) => setSelectedBusinessId(event.target.value)}
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100 md:min-w-72"
+            >
+              {businesses.map((business) => (
+                <option key={business.id} value={business.id}>
+                  {business.name} - /store/{business.slug}
+                </option>
+              ))}
+            </select>
 
             <Link
               href={`/store/${selectedBusiness?.slug}`}
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-amber-200"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
             >
               <Eye size={17} />
               Preview Store
             </Link>
           </div>
-        </div>
-      </section>
 
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-              Active Business
-            </p>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
+              <p className="text-xs text-slate-500">Theme</p>
+              <p className="mt-1 truncate text-sm font-semibold text-slate-950">
+                {selectedTheme.name}
+              </p>
+            </div>
 
-            <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">
-              Choose which business theme to edit
-            </h3>
+            <div className="rounded-2xl bg-teal-50 px-3 py-2.5">
+              <p className="text-xs text-teal-700">Business</p>
+              <p className="mt-1 truncate text-sm font-semibold text-teal-950">
+                {selectedBusiness?.name}
+              </p>
+            </div>
           </div>
-
-          <select
-            value={selectedBusinessId}
-            onChange={(event) => setSelectedBusinessId(event.target.value)}
-            className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950 md:min-w-80"
-          >
-            {businesses.map((business) => (
-              <option key={business.id} value={business.id}>
-                {business.name} â€” /store/{business.slug}
-              </option>
-            ))}
-          </select>
         </div>
       </section>
 
       {message ? (
-        <div className="rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
+        <div className="rounded-2xl bg-white p-3 text-sm text-slate-700 shadow-sm">
           {message}
         </div>
       ) : null}
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_0.75fr]">
-        <div>
-          <div className="mb-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-              Storefront Themes
-            </p>
+      <section className="grid gap-5 xl:grid-cols-[1fr_0.65fr]">
+        <div className="grid content-start gap-4">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
+                Storefront Themes
+              </p>
 
-            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-              Select a storefront style
-            </h2>
+              <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+                Select a storefront style
+              </h2>
+            </div>
+
+            <p className="text-sm text-slate-500">
+              {availableThemes.length} theme
+              {availableThemes.length === 1 ? "" : "s"}
+            </p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {availableThemes.map((theme) => (
               <button
                 key={theme.id}
                 type="button"
                 onClick={() => setSelectedThemeId(theme.id)}
-                className="text-left"
+                className="text-left transition hover:-translate-y-0.5"
               >
                 <ThemePreviewCard
                   theme={theme}
@@ -256,38 +231,31 @@ export default function ThemePage() {
           </div>
         </div>
 
-        <aside className="grid gap-5">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-teal-50 text-teal-700">
-                <Sparkles size={20} />
+        <aside className="grid content-start gap-4">
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-teal-50 text-teal-700">
+                <Palette size={19} />
               </span>
 
               <div>
-                <h3 className="font-semibold text-slate-950">
+                <p className="font-semibold text-slate-950">
                   Selected Theme
-                </h3>
+                </p>
                 <p className="text-sm text-slate-500">{selectedTheme.name}</p>
               </div>
             </div>
 
-            <p className="text-sm leading-6 text-slate-500">
-              {selectedTheme.description}
-            </p>
+            <div className="overflow-hidden rounded-[1.25rem] border border-slate-200">
+              <div className={`h-32 bg-gradient-to-br ${selectedTheme.hero}`} />
 
-            <div className="mt-6 overflow-hidden rounded-[1.5rem] border border-slate-200">
-              <div
-                className={`h-40 bg-gradient-to-br ${selectedTheme.hero}`}
-              />
-
-              <div className="bg-white p-5">
+              <div className="bg-white p-4">
                 <p className="text-sm font-semibold text-slate-950">
                   {selectedBusiness?.name}
                 </p>
 
-                <p className="mt-2 text-xs leading-5 text-slate-500">
-                  This is a small preview of how the theme mood will feel on the
-                  public business page.
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  {selectedTheme.description}
                 </p>
               </div>
             </div>
@@ -296,41 +264,46 @@ export default function ThemePage() {
               type="button"
               onClick={handleSaveTheme}
               disabled={isSaving}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSaving ? (
                 <Loader2 size={17} className="animate-spin" />
               ) : (
                 <CheckCircle2 size={17} />
               )}
-              {isSaving ? "Saving theme..." : "Save Theme"}
+
+              {isSaving ? "Saving..." : "Save Theme"}
             </button>
           </div>
 
-          <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-6">
-            <h3 className="text-lg font-semibold text-amber-950">
-              Theme tip
-            </h3>
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-amber-50 text-amber-700">
+                <Sparkles size={19} />
+              </span>
 
-            <p className="mt-2 text-sm leading-6 text-amber-900">
-              Use warm themes for food, luxury themes for fashion or apartments,
-              and navy or emerald themes for corporate businesses.
-            </p>
-          </div>
+              <div>
+                <p className="font-semibold text-slate-950">Theme Use</p>
+                <p className="text-sm text-slate-500">Quick guide</p>
+              </div>
+            </div>
 
-          <div className="rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-teal-200">
-              Later upgrade
-            </p>
+            <div className="grid gap-2">
+              <div className="rounded-2xl bg-slate-50 p-3 text-sm">
+                <span className="font-semibold text-slate-950">Warm:</span>{" "}
+                <span className="text-slate-500">food and lifestyle</span>
+              </div>
 
-            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
-              Custom colors
-            </h3>
+              <div className="rounded-2xl bg-slate-50 p-3 text-sm">
+                <span className="font-semibold text-slate-950">Luxury:</span>{" "}
+                <span className="text-slate-500">fashion and apartments</span>
+              </div>
 
-            <p className="mt-3 text-sm leading-6 text-slate-300">
-              Later, Pro businesses can choose custom colors beyond the default
-              Market Villa themes.
-            </p>
+              <div className="rounded-2xl bg-slate-50 p-3 text-sm">
+                <span className="font-semibold text-slate-950">Navy:</span>{" "}
+                <span className="text-slate-500">corporate businesses</span>
+              </div>
+            </div>
           </div>
         </aside>
       </section>

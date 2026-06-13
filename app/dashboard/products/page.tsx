@@ -6,7 +6,6 @@ import {
   Camera,
   ImagePlus,
   Loader2,
-  PackageCheck,
   Plus,
   Search,
   Star,
@@ -74,22 +73,23 @@ export default function ProductsPage() {
 
   const [editingProductId, setEditingProductId] = useState("");
   const [query, setQuery] = useState("");
+  const [isProductFormOpen, setIsProductFormOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [busyProductId, setBusyProductId] = useState("");
   const [message, setMessage] = useState("");
 
-  const selectedBusiness = businesses.find(
-    (business) => business.id === selectedBusinessId
-  );
-
   const editingProduct = products.find(
     (product) => product.id === editingProductId
   );
 
   const filteredProducts = useMemo(() => {
-    const search = query.toLowerCase();
+    const search = query.toLowerCase().trim();
+
+    if (!search) {
+      return products;
+    }
 
     return products.filter((product) => {
       return (
@@ -99,6 +99,14 @@ export default function ProductsPage() {
       );
     });
   }, [products, query]);
+
+  const availableProductsCount = products.filter(
+    (product) => product.is_available
+  ).length;
+
+  const featuredProductsCount = products.filter(
+    (product) => product.is_featured
+  ).length;
 
   useEffect(() => {
     let mounted = true;
@@ -163,7 +171,7 @@ export default function ProductsPage() {
     };
   }, [selectedBusinessId]);
 
-  function resetForm() {
+  function clearFormFields() {
     setName("");
     setPrice("");
     setCategory(productCategories[0]);
@@ -173,6 +181,17 @@ export default function ProductsPage() {
     setIsAvailable(true);
     setIsFeatured(false);
     setEditingProductId("");
+  }
+
+  function resetForm() {
+    clearFormFields();
+    setIsProductFormOpen(false);
+  }
+
+  function openNewProductForm() {
+    clearFormFields();
+    setMessage("");
+    setIsProductFormOpen(true);
   }
 
   function startEditing(product: DashboardProduct) {
@@ -186,10 +205,12 @@ export default function ProductsPage() {
     setIsAvailable(product.is_available);
     setIsFeatured(product.is_featured);
     setMessage("");
+    setIsProductFormOpen(true);
   }
 
   async function reloadProducts() {
     if (!selectedBusinessId) return;
+
     const updatedProducts = await getProductsByBusinessId(selectedBusinessId);
     setProducts(updatedProducts);
   }
@@ -251,6 +272,7 @@ export default function ProductsPage() {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unable to save product.";
+
       setMessage(errorMessage);
     } finally {
       setIsSaving(false);
@@ -274,6 +296,7 @@ export default function ProductsPage() {
         error instanceof Error
           ? error.message
           : "Unable to update product availability.";
+
       setMessage(errorMessage);
     } finally {
       setBusyProductId("");
@@ -302,6 +325,7 @@ export default function ProductsPage() {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unable to delete product.";
+
       setMessage(errorMessage);
     } finally {
       setBusyProductId("");
@@ -309,423 +333,410 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="grid gap-8">
-      <section className="rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-7 text-white shadow-soft">
-        <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-200">
-              Product Manager
-            </p>
+    <div className="grid gap-6">
+      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-center">
+          <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+            <select
+              value={selectedBusinessId}
+              onChange={(event) => {
+                setSelectedBusinessId(event.target.value);
+                resetForm();
+              }}
+              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100 md:min-w-80"
+            >
+              {businesses.length === 0 ? (
+                <option value="">No business created yet</option>
+              ) : null}
 
-            <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.05em]">
-              Add, edit, hide, and delete products.
-            </h2>
+              {businesses.map((business) => (
+                <option key={business.id} value={business.id}>
+                  {business.name} — /store/{business.slug}
+                </option>
+              ))}
+            </select>
 
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-              Upload compressed product images, save product changes, and manage
-              what customers see on your business page.
-            </p>
+            <div className="relative md:w-80">
+              <Search
+                size={17}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-slate-950 focus:bg-white focus:ring-4 focus:ring-slate-100"
+                placeholder="Search products"
+              />
+            </div>
           </div>
 
-          <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
-            <div className="grid gap-3">
-              <div className="flex items-center justify-between rounded-2xl bg-white p-4 text-slate-950">
-                <div>
-                  <p className="text-sm font-semibold">Active Products</p>
-                  <p className="text-xs text-slate-500">
-                    For selected business
-                  </p>
-                </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-2xl bg-slate-50 px-4 py-3">
+              <p className="text-xs text-slate-500">Total</p>
+              <p className="mt-1 text-xl font-semibold text-slate-950">
+                {products.length}
+              </p>
+            </div>
 
-                <span className="text-2xl font-semibold">
-                  {products.length}
-                </span>
-              </div>
+            <div className="rounded-2xl bg-emerald-50 px-4 py-3">
+              <p className="text-xs text-emerald-700">Live</p>
+              <p className="mt-1 text-xl font-semibold text-emerald-950">
+                {availableProductsCount}
+              </p>
+            </div>
 
-              <div className="flex items-center justify-between rounded-2xl bg-white/10 p-4">
-                <div>
-                  <p className="text-sm font-semibold">Catalogue Status</p>
-                  <p className="text-xs text-slate-300">
-                    {selectedBusiness
-                      ? selectedBusiness.name
-                      : "No business selected"}
-                  </p>
-                </div>
-
-                <PackageCheck className="text-emerald-300" size={24} />
-              </div>
+            <div className="rounded-2xl bg-amber-50 px-4 py-3">
+              <p className="text-xs text-amber-700">Featured</p>
+              <p className="mt-1 text-xl font-semibold text-amber-950">
+                {featuredProductsCount}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-              Business
-            </p>
-            <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">
-              Select business page
-            </h3>
-          </div>
-
-          <select
-            value={selectedBusinessId}
-            onChange={(event) => {
-              setSelectedBusinessId(event.target.value);
-              resetForm();
-            }}
-            className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950 md:min-w-80"
-          >
-            {businesses.length === 0 ? (
-              <option value="">No business created yet</option>
-            ) : null}
-
-            {businesses.map((business) => (
-              <option key={business.id} value={business.id}>
-                {business.name} â€” /store/{business.slug}
-              </option>
-            ))}
-          </select>
+      {message && !isProductFormOpen ? (
+        <div className="rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
+          {message}
         </div>
-      </section>
+      ) : null}
 
       {isLoading ? (
         <section className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
-          Loading your businesses...
+          Loading products...
         </section>
       ) : businesses.length === 0 ? (
         <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-          <h3 className="text-lg font-semibold text-amber-950">
+          <p className="text-lg font-semibold text-amber-950">
             Create a business page first
-          </h3>
+          </p>
+
           <p className="mt-2 text-sm text-amber-900">
-            Go to onboarding and create your first business page before adding
-            products.
+            Add your business profile before adding products.
           </p>
         </section>
       ) : (
-        <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
-            <div className="mb-7 flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-                  {editingProductId ? "Edit Product" : "Add Product"}
-                </p>
+        <section
+          className={`grid gap-6 ${
+            isProductFormOpen
+              ? "xl:grid-cols-[0.9fr_1.1fr]"
+              : "xl:grid-cols-[0.35fr_1fr]"
+          }`}
+        >
+          {!isProductFormOpen ? (
+            <div className="rounded-[2rem] border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
+              <button
+                type="button"
+                onClick={openNewProductForm}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-7 py-4 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
+              >
+                <Plus size={18} />
+                Add Product
+              </button>
 
-                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                  {editingProductId
-                    ? `Editing ${editingProduct?.name || "product"}`
-                    : "Create a new catalogue item"}
-                </h3>
+              <p className="mt-3 text-sm text-slate-500">
+                Add a product, service, or catalogue item.
+              </p>
+            </div>
+          ) : null}
 
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Upload an image or paste an image URL. Uploaded images are
-                  compressed before storage.
-                </p>
+          {isProductFormOpen ? (
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+                  {editingProductId ? "Edit" : "New Item"}
+                </span>
+
+                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-teal-50 text-teal-700">
+                  <ImagePlus size={21} />
+                </span>
               </div>
 
-              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-teal-50 text-teal-700">
-                <ImagePlus size={22} />
-              </span>
-            </div>
-
-            <form onSubmit={handleSubmitProduct} className="grid gap-5">
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Product name
-                </span>
-                <input
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="Example: Meat Pie"
-                  required
-                />
-              </label>
-
-              <div className="grid gap-5 md:grid-cols-2">
+              <form onSubmit={handleSubmitProduct} className="grid gap-5">
                 <label className="grid gap-2">
                   <span className="text-sm font-semibold text-slate-700">
-                    Price
+                    Product name
                   </span>
+
                   <input
-                    value={price}
-                    onChange={(event) => setPrice(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                    placeholder="1500"
-                    type="number"
-                    min="0"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    placeholder="Product name"
                     required
                   />
                 </label>
 
+                <div className="grid gap-5 md:grid-cols-2">
+                  <label className="grid gap-2">
+                    <span className="text-sm font-semibold text-slate-700">
+                      Price
+                    </span>
+
+                    <input
+                      value={price}
+                      onChange={(event) => setPrice(event.target.value)}
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                      placeholder="1500"
+                      type="number"
+                      min="0"
+                      required
+                    />
+                  </label>
+
+                  <label className="grid gap-2">
+                    <span className="text-sm font-semibold text-slate-700">
+                      Category
+                    </span>
+
+                    <select
+                      value={category}
+                      onChange={(event) => setCategory(event.target.value)}
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    >
+                      {productCategories.map((item) => (
+                        <option key={item}>{item}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+
+                <ImageUploadField
+                  label={
+                    editingProductId
+                      ? "Replace product image"
+                      : "Upload product image"
+                  }
+                  helper="Large images will be compressed before upload."
+                  maxWidth={1400}
+                  maxHeight={1400}
+                  onCompressed={(file) => setCompressedImageFile(file)}
+                />
+
                 <label className="grid gap-2">
                   <span className="text-sm font-semibold text-slate-700">
-                    Category
+                    Image URL
                   </span>
-                  <select
-                    value={category}
-                    onChange={(event) => setCategory(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+
+                  <div className="relative">
+                    <Camera
+                      size={17}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+
+                    <input
+                      value={imageUrl}
+                      onChange={(event) => setImageUrl(event.target.value)}
+                      className="w-full rounded-2xl border border-slate-200 px-11 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                      placeholder="https://..."
+                    />
+                  </div>
+                </label>
+
+                <label className="grid gap-2">
+                  <span className="text-sm font-semibold text-slate-700">
+                    Description
+                  </span>
+
+                  <textarea
+                    value={description}
+                    onChange={(event) => setDescription(event.target.value)}
+                    rows={4}
+                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    placeholder="Add important product details."
+                  />
+                </label>
+
+                <div className="grid gap-3 rounded-[1.5rem] bg-slate-50 p-3">
+                  <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">
+                        Available
+                      </p>
+
+                      <p className="mt-1 text-xs text-slate-500">
+                        Show on storefront.
+                      </p>
+                    </div>
+
+                    <input
+                      type="checkbox"
+                      checked={isAvailable}
+                      onChange={(event) => setIsAvailable(event.target.checked)}
+                    />
+                  </label>
+
+                  <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">
+                        Featured
+                      </p>
+
+                      <p className="mt-1 text-xs text-slate-500">
+                        Highlight this item.
+                      </p>
+                    </div>
+
+                    <input
+                      type="checkbox"
+                      checked={isFeatured}
+                      onChange={(event) => setIsFeatured(event.target.checked)}
+                    />
+                  </label>
+                </div>
+
+                {message ? (
+                  <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
+                    {message}
+                  </div>
+                ) : null}
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <button
+                    type="submit"
+                    disabled={isSaving}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {productCategories.map((item) => (
-                      <option key={item}>{item}</option>
-                    ))}
-                  </select>
-                </label>
-              </div>
+                    {isSaving ? (
+                      <Loader2 size={17} className="animate-spin" />
+                    ) : (
+                      <Plus size={17} />
+                    )}
 
-              <ImageUploadField
-                label={
-                  editingProductId
-                    ? "Replace product image"
-                    : "Upload product image"
-                }
-                helper="Large images will be compressed before upload."
-                maxWidth={1400}
-                maxHeight={1400}
-                onCompressed={(file) => setCompressedImageFile(file)}
-              />
+                    {isSaving
+                      ? "Saving..."
+                      : editingProductId
+                      ? "Save Changes"
+                      : "Add Product"}
+                  </button>
 
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Or paste product image URL
-                </span>
-                <div className="relative">
-                  <Camera
-                    size={17}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                  />
-                  <input
-                    value={imageUrl}
-                    onChange={(event) => setImageUrl(event.target.value)}
-                    className="w-full rounded-2xl border border-slate-200 px-11 py-4 text-sm outline-none focus:border-slate-950"
-                    placeholder="https://..."
-                  />
-                </div>
-              </label>
-
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Product description
-                </span>
-                <textarea
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
-                  rows={4}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="Describe the product, size, flavour, fabric, package, or important details."
-                />
-              </label>
-
-              <div className="grid gap-3 rounded-[1.5rem] bg-slate-50 p-4">
-                <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-800">
-                      Available for customers
-                    </p>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Show this product on your business page.
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={isAvailable}
-                    onChange={(event) => setIsAvailable(event.target.checked)}
-                  />
-                </label>
-
-                <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-800">
-                      Mark as featured
-                    </p>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Highlight this product later in featured sections.
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={isFeatured}
-                    onChange={(event) => setIsFeatured(event.target.checked)}
-                  />
-                </label>
-              </div>
-
-              {message ? (
-                <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
-                  {message}
-                </div>
-              ) : null}
-
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {isSaving ? (
-                    <Loader2 size={17} className="animate-spin" />
-                  ) : (
-                    <Plus size={17} />
-                  )}
-                  {isSaving
-                    ? "Saving..."
-                    : editingProductId
-                    ? "Save Changes"
-                    : "Add Product"}
-                </button>
-
-                {editingProductId ? (
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="inline-flex w-fit items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
                   >
                     <X size={17} />
-                    Cancel Edit
+                    Cancel
                   </button>
-                ) : null}
-              </div>
-            </form>
-          </div>
-
-          <div className="grid gap-5">
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-                    Catalogue
-                  </p>
-                  <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                    Current products
-                  </h3>
                 </div>
-
-                <div className="relative md:w-72">
-                  <Search
-                    size={17}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                  />
-                  <input
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    className="w-full rounded-full border border-slate-200 bg-slate-50 px-11 py-3 text-sm outline-none focus:border-slate-950"
-                    placeholder="Search products"
-                  />
-                </div>
-              </div>
+              </form>
             </div>
+          ) : null}
 
-            <div className="grid gap-4">
-              {filteredProducts.length === 0 ? (
-                <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
+          <div className="grid content-start gap-4">
+            {filteredProducts.length === 0 ? (
+              <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-sm">
+                <p className="text-sm font-medium text-slate-600">
                   No products found.
-                </div>
-              ) : null}
+                </p>
 
-              {filteredProducts.map((product) => (
-                <article
-                  key={product.id}
-                  className={`overflow-hidden rounded-[1.75rem] border bg-white shadow-sm ${
-                    editingProductId === product.id
-                      ? "border-slate-950"
-                      : "border-slate-200"
-                  }`}
-                >
-                  <div className="grid md:grid-cols-[13rem_1fr]">
-                    <div
-                      className="min-h-56 bg-cover bg-center md:min-h-full"
-                      style={{
-                        backgroundImage: `url(${
-                          product.image_url ||
-                          "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop"
-                        })`,
-                      }}
-                    />
+                <p className="mt-2 text-xs text-slate-400">
+                  Add a product or adjust your search.
+                </p>
+              </div>
+            ) : null}
 
-                    <div className="p-5">
-                      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-                        <div>
-                          <div className="mb-3 flex flex-wrap items-center gap-2">
-                            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                              {product.category || "Products"}
+            {filteredProducts.map((product) => (
+              <article
+                key={product.id}
+                className={`overflow-hidden rounded-[1.75rem] border bg-white shadow-sm transition ${
+                  editingProductId === product.id
+                    ? "border-slate-950 ring-4 ring-slate-100"
+                    : "border-slate-200 hover:-translate-y-0.5 hover:shadow-md"
+                }`}
+              >
+                <div className="grid md:grid-cols-[12rem_1fr]">
+                  <div
+                    className="min-h-56 bg-cover bg-center md:min-h-full"
+                    style={{
+                      backgroundImage: `url(${
+                        product.image_url ||
+                        "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop"
+                      })`,
+                    }}
+                  />
+
+                  <div className="p-5">
+                    <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
+                      <div>
+                        <div className="mb-3 flex flex-wrap items-center gap-2">
+                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                            {product.category || "Products"}
+                          </span>
+
+                          {product.is_available ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                              <BadgeCheck size={14} />
+                              Available
                             </span>
+                          ) : (
+                            <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+                              Hidden
+                            </span>
+                          )}
 
-                            {product.is_available ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                <BadgeCheck size={14} />
-                                Available
-                              </span>
-                            ) : (
-                              <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
-                                Hidden
-                              </span>
-                            )}
-
-                            {product.is_featured ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-                                <Star size={14} />
-                                Featured
-                              </span>
-                            ) : null}
-                          </div>
-
-                          <h3 className="text-xl font-semibold tracking-[-0.03em] text-slate-950">
-                            {product.name}
-                          </h3>
-
-                          <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
-                            {product.description || "No description added."}
-                          </p>
+                          {product.is_featured ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                              <Star size={14} />
+                              Featured
+                            </span>
+                          ) : null}
                         </div>
 
-                        <p className="text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                          {formatCurrency(Number(product.price || 0))}
+                        <p className="text-xl font-semibold tracking-[-0.03em] text-slate-950">
+                          {product.name}
+                        </p>
+
+                        <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+                          {product.description || "No description added."}
                         </p>
                       </div>
 
-                      <div className="mt-6 flex flex-wrap gap-3">
-                        <button
-                          type="button"
-                          onClick={() => startEditing(product)}
-                          disabled={busyProductId === product.id}
-                          className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
-                        >
-                          Edit
-                        </button>
+                      <p className="whitespace-nowrap text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+                        {formatCurrency(Number(product.price || 0))}
+                      </p>
+                    </div>
 
-                        <button
-                          type="button"
-                          onClick={() => handleToggleAvailability(product)}
-                          disabled={busyProductId === product.id}
-                          className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-200 disabled:opacity-60"
-                        >
-                          {busyProductId === product.id ? (
-                            <Loader2 size={17} className="animate-spin" />
-                          ) : (
-                            <ToggleRight size={17} />
-                          )}
-                          {product.is_available ? "Hide" : "Show"}
-                        </button>
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <button
+                        type="button"
+                        onClick={() => startEditing(product)}
+                        disabled={busyProductId === product.id}
+                        className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:opacity-60"
+                      >
+                        Edit
+                      </button>
 
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteProduct(product.id)}
-                          disabled={busyProductId === product.id}
-                          className="inline-flex items-center gap-2 rounded-full bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:opacity-60"
-                        >
-                          <Trash2 size={17} />
-                          Delete
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleAvailability(product)}
+                        disabled={busyProductId === product.id}
+                        className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-200 disabled:opacity-60"
+                      >
+                        {busyProductId === product.id ? (
+                          <Loader2 size={17} className="animate-spin" />
+                        ) : (
+                          <ToggleRight size={17} />
+                        )}
+
+                        {product.is_available ? "Hide" : "Show"}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteProduct(product.id)}
+                        disabled={busyProductId === product.id}
+                        className="inline-flex items-center gap-2 rounded-full bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 transition hover:-translate-y-0.5 hover:bg-red-100 disabled:opacity-60"
+                      >
+                        <Trash2 size={17} />
+                        Delete
+                      </button>
                     </div>
                   </div>
-                </article>
-              ))}
-            </div>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
       )}

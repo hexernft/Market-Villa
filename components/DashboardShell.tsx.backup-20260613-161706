@@ -17,8 +17,6 @@ import {
   Package,
   Sparkles,
   X,
-  UserRound,
-  Palette,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { BRAND } from "@/lib/brand";
@@ -58,17 +56,7 @@ const navItems = [
     label: "Domain",
     href: "/dashboard/domain",
     icon: Globe2,
-  },  {
-    label: "Profile",
-    href: "/dashboard/profile",
-    icon: UserRound,
   },
-  {
-    label: "Theme",
-    href: "/dashboard/theme",
-    icon: Palette,
-  },
-
   {
     label: "Billing",
     href: "/dashboard/settings",
@@ -235,5 +223,3 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-

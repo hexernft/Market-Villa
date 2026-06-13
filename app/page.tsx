@@ -95,7 +95,7 @@ export default function Home() {
               <div className="mt-8">
                 <Link
                   href="/signup"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-3.5 text-sm font-semibold text-white hover:bg-slate-800"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-slate-950 to-slate-800 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_12px_32px_rgba(2,8,31,0.25)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(2,8,31,0.32)]"
                 >
                   Create Business Page
                   <ArrowRight size={17} />
@@ -184,7 +184,7 @@ export default function Home() {
             {[
               "Customers see your business clearly before messaging.",
               "Products and services stay organized in one place.",
-              "The business owner can update content without a developer.",
+              "Business owners can keep their page updated anytime.",
             ].map((item) => (
               <div key={item} className="flex gap-3 border border-slate-200 bg-white p-5 shadow-sm">
                 <CheckCircle2 size={18} className="mt-1 shrink-0 text-slate-950" />

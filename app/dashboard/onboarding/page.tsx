@@ -114,8 +114,7 @@ export default function OnboardingPage() {
             </h3>
 
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              These details will be saved to Supabase and shown on your public
-              business page.
+              These details will appear on your public business page.
             </p>
           </div>
 
@@ -132,7 +131,7 @@ export default function OnboardingPage() {
                     handleBusinessNameChange(event.target.value)
                   }
                   className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="Example: ZCAS TastyBites"
+                  placeholder="Business name"
                   required
                 />
               </label>
@@ -287,11 +286,11 @@ export default function OnboardingPage() {
             <label className="flex cursor-pointer items-center justify-between rounded-[1.5rem] border border-slate-200 bg-emerald-50 p-5">
               <div>
                 <p className="text-sm font-semibold text-emerald-950">
-                  Add sample products and service
+                  Add starter products and service
                 </p>
                 <p className="mt-1 text-xs leading-5 text-emerald-800">
-                  Useful for testing the store quickly. You can edit or delete
-                  the sample items later from Products and Services.
+                  Adds ready-made catalogue items you can edit from Products
+                  and Services.
                 </p>
               </div>
 

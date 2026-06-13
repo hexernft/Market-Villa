@@ -1,14 +1,16 @@
-"use client";
+﻿"use client";
 
-import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
 import {
   CheckCircle2,
   CreditCard,
   Globe2,
   Info,
   Loader2,
+  Plus,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import {
   createDomainRequest,
@@ -16,44 +18,21 @@ import {
   getMyBusinesses,
 } from "@/lib/business-actions";
 
-const domainSteps = [
-  {
-    title: "Submit request",
-    description:
-      "Tell us the domain name you want or the domain you already own.",
-  },
-  {
-    title: "Availability check",
-    description:
-      "We confirm if the requested domain is available and send setup pricing.",
-  },
-  {
-    title: "Payment and setup",
-    description:
-      "After payment, Market Villa connects the domain to your business page.",
-  },
-  {
-    title: "Go live",
-    description:
-      "Your customers can visit your business directly from your custom domain.",
-  },
-];
-
 const pricing = [
   {
-    title: "Domain Setup",
-    price: "â‚¦25,000",
-    note: "One-time setup fee if you already own the domain.",
+    title: "Setup",
+    price: "\u20A625,000",
+    note: "For domains already owned by the business.",
   },
   {
-    title: "Managed Domain",
-    price: "â‚¦45,000 - â‚¦75,000",
-    note: "Includes domain purchase support, setup, and first-year management.",
+    title: "Managed",
+    price: "\u20A645,000 - \u20A675,000",
+    note: "Purchase support, setup, and first-year management.",
   },
   {
-    title: "Annual Renewal Support",
-    price: "â‚¦15,000 - â‚¦25,000",
-    note: "Optional yearly support for renewal reminders and domain management.",
+    title: "Renewal",
+    price: "\u20A615,000 - \u20A625,000",
+    note: "Optional yearly support and renewal reminders.",
   },
 ];
 
@@ -87,6 +66,7 @@ export default function DomainPage() {
   const [contactPhone, setContactPhone] = useState("");
   const [note, setNote] = useState("");
 
+  const [isDomainFormOpen, setIsDomainFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -94,6 +74,8 @@ export default function DomainPage() {
   const selectedBusiness = businesses.find(
     (business) => business.id === selectedBusinessId
   );
+
+  const latestRequest = requests[0];
 
   useEffect(() => {
     let mounted = true;
@@ -158,6 +140,25 @@ export default function DomainPage() {
     };
   }, [selectedBusinessId]);
 
+  function clearFormFields() {
+    setRequestedDomain("");
+    setAlternativeDomain("");
+    setAlreadyOwned(false);
+    setContactPhone("");
+    setNote("");
+  }
+
+  function closeDomainForm() {
+    clearFormFields();
+    setIsDomainFormOpen(false);
+  }
+
+  function openDomainForm() {
+    clearFormFields();
+    setMessage("");
+    setIsDomainFormOpen(true);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -181,14 +182,9 @@ export default function DomainPage() {
 
       const updatedRequests =
         await getDomainRequestsByBusinessId(selectedBusinessId);
+
       setRequests(updatedRequests);
-
-      setRequestedDomain("");
-      setAlternativeDomain("");
-      setAlreadyOwned(false);
-      setContactPhone("");
-      setNote("");
-
+      closeDomainForm();
       setMessage("Domain request submitted successfully.");
     } catch (error) {
       const errorMessage =
@@ -202,389 +198,362 @@ export default function DomainPage() {
     }
   }
 
-  const latestRequest = requests[0];
+  if (isLoading) {
+    return (
+      <main className="grid min-h-[60vh] place-items-center">
+        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
+          <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
+          <p className="mt-3 text-sm text-slate-500">Loading domain page...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (businesses.length === 0) {
+    return (
+      <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-6 text-center">
+        <p className="text-xl font-semibold tracking-[-0.04em] text-amber-950">
+          Create your business page first
+        </p>
+
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
+          Add your business profile before requesting a custom domain.
+        </p>
+
+        <Link
+          href="/dashboard/onboarding"
+          className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
+        >
+          Start Onboarding
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="grid gap-8">
-      <section className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-7 text-white shadow-soft">
-        <div className="grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-teal-100 ring-1 ring-white/15">
-              <Globe2 size={17} />
-              Paid add-on
-            </div>
+    <div className="grid gap-5">
+      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-center">
+          <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
+            <select
+              value={selectedBusinessId}
+              onChange={(event) => {
+                setSelectedBusinessId(event.target.value);
+                closeDomainForm();
+              }}
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100 md:min-w-72"
+            >
+              {businesses.map((business) => (
+                <option key={business.id} value={business.id}>
+                  {business.name} - /store/{business.slug}
+                </option>
+              ))}
+            </select>
 
-            <h2 className="max-w-3xl text-4xl font-semibold tracking-[-0.05em]">
-              Give your business a custom domain.
-            </h2>
-
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-              Your Market Villa page already works with a platform link. A
-              custom domain gives your business a more professional web address,
-              such as zcastastybites.com or sleekstitchatelier.com.
-            </p>
+            <button
+              type="button"
+              onClick={openDomainForm}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
+            >
+              <Plus size={17} />
+              Request Domain
+            </button>
           </div>
 
-          <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
-              Current Store URL
-            </p>
-
-            <div className="mt-4 rounded-2xl bg-white p-4 text-slate-950">
-              <p className="break-all text-sm font-semibold">
-                {selectedBusiness
-                  ? `marketvilla.com/store/${selectedBusiness.slug}`
-                  : "Create a business page first"}
-              </p>
-
-              <p className="mt-2 text-xs leading-5 text-slate-500">
-                This link is included with your subscription. Custom domains are
-                available as a paid setup request.
+          <div className="grid grid-cols-3 gap-2">
+            <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
+              <p className="text-xs text-slate-500">Requests</p>
+              <p className="mt-1 text-lg font-semibold text-slate-950">
+                {requests.length}
               </p>
             </div>
 
-            <div className="mt-4 rounded-2xl bg-amber-300/15 p-4 text-sm leading-6 text-amber-100 ring-1 ring-amber-200/20">
-              {latestRequest
-                ? `Latest request: ${latestRequest.requested_domain} (${latestRequest.status})`
-                : "Custom domain is not active yet."}
+            <div className="rounded-2xl bg-emerald-50 px-3 py-2.5">
+              <p className="text-xs text-emerald-700">Domain</p>
+              <p className="mt-1 max-w-28 truncate text-sm font-semibold text-emerald-950">
+                {selectedBusiness?.custom_domain || "Inactive"}
+              </p>
+            </div>
+
+            <div className="rounded-2xl bg-amber-50 px-3 py-2.5">
+              <p className="text-xs text-amber-700">Status</p>
+              <p className="mt-1 max-w-28 truncate text-sm font-semibold text-amber-950">
+                {latestRequest?.status ||
+                  selectedBusiness?.custom_domain_status ||
+                  "None"}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-              Business
-            </p>
-
-            <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">
-              Select business page
-            </h3>
-          </div>
-
-          <select
-            value={selectedBusinessId}
-            onChange={(event) => setSelectedBusinessId(event.target.value)}
-            className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950 md:min-w-80"
-          >
-            {businesses.length === 0 ? (
-              <option value="">No business created yet</option>
-            ) : null}
-
-            {businesses.map((business) => (
-              <option key={business.id} value={business.id}>
-                {business.name} â€” /store/{business.slug}
-              </option>
-            ))}
-          </select>
+      {message && !isDomainFormOpen ? (
+        <div className="rounded-2xl bg-white p-3 text-sm text-slate-700 shadow-sm">
+          {message}
         </div>
-      </section>
+      ) : null}
 
-      {isLoading ? (
-        <section className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
-          Loading your businesses...
-        </section>
-      ) : businesses.length === 0 ? (
-        <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-          <h3 className="text-lg font-semibold text-amber-950">
-            Create a business page first
-          </h3>
-          <p className="mt-2 text-sm text-amber-900">
-            Go to onboarding and create your first business page before
-            requesting a custom domain.
-          </p>
-        </section>
-      ) : (
-        <section className="grid gap-5 lg:grid-cols-[1fr_0.85fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
-            <div className="mb-7">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-                Request Domain
-              </p>
+      <section
+        className={`grid gap-5 ${
+          isDomainFormOpen
+            ? "xl:grid-cols-[0.9fr_1.1fr]"
+            : "xl:grid-cols-[1fr]"
+        }`}
+      >
+        {isDomainFormOpen ? (
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-slate-600">
+                New Request
+              </span>
 
-              <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                Submit a custom domain request
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Your request will be saved to Supabase and reviewed later from
-                the admin dashboard.
-              </p>
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-teal-50 text-teal-700">
+                <Globe2 size={20} />
+              </span>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid gap-5">
-              <div className="grid gap-5 md:grid-cols-2">
+            <form onSubmit={handleSubmit} className="grid gap-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <label className="grid gap-2">
                   <span className="text-sm font-semibold text-slate-700">
-                    Business name
+                    Business
                   </span>
+
                   <input
                     value={selectedBusiness?.name || ""}
                     readOnly
-                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm outline-none"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none"
                   />
                 </label>
 
                 <label className="grid gap-2">
                   <span className="text-sm font-semibold text-slate-700">
-                    Contact phone
+                    Phone
                   </span>
+
                   <input
                     value={contactPhone}
                     onChange={(event) => setContactPhone(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
                     placeholder="080..."
                   />
                 </label>
               </div>
 
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Preferred domain name
-                </span>
-                <input
-                  value={requestedDomain}
-                  onChange={(event) => setRequestedDomain(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="example: zcastastybites.com"
-                  required
-                />
-              </label>
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="grid gap-2">
+                  <span className="text-sm font-semibold text-slate-700">
+                    Preferred domain
+                  </span>
 
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Alternative domain name
-                </span>
-                <input
-                  value={alternativeDomain}
-                  onChange={(event) => setAlternativeDomain(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="example: zcastastybites.ng"
-                />
-              </label>
+                  <input
+                    value={requestedDomain}
+                    onChange={(event) => setRequestedDomain(event.target.value)}
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    placeholder="yourbusiness.com"
+                    required
+                  />
+                </label>
 
-              <div className="grid gap-3 rounded-[1.5rem] bg-slate-50 p-4">
+                <label className="grid gap-2">
+                  <span className="text-sm font-semibold text-slate-700">
+                    Alternative domain
+                  </span>
+
+                  <input
+                    value={alternativeDomain}
+                    onChange={(event) =>
+                      setAlternativeDomain(event.target.value)
+                    }
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    placeholder="yourbusiness.ng"
+                  />
+                </label>
+              </div>
+
+              <div className="grid gap-3 rounded-[1.25rem] bg-slate-50 p-3">
                 <p className="text-sm font-semibold text-slate-800">
-                  Do you already own this domain?
+                  Domain ownership
                 </p>
 
-                <div className="grid gap-3 md:grid-cols-2">
-                  <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm font-medium text-slate-700">
+                <div className="grid gap-2 md:grid-cols-2">
+                  <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm font-medium text-slate-700">
                     <input
                       type="radio"
                       name="ownership"
                       checked={alreadyOwned}
                       onChange={() => setAlreadyOwned(true)}
                     />
-                    Yes, I already own it
+                    I own it
                   </label>
 
-                  <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm font-medium text-slate-700">
+                  <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-sm font-medium text-slate-700">
                     <input
                       type="radio"
                       name="ownership"
                       checked={!alreadyOwned}
                       onChange={() => setAlreadyOwned(false)}
                     />
-                    No, I want Market Villa to help
+                    Help me get it
                   </label>
                 </div>
               </div>
 
               <label className="grid gap-2">
                 <span className="text-sm font-semibold text-slate-700">
-                  Extra note
+                  Note
                 </span>
+
                 <textarea
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
-                  rows={4}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="Tell us anything important about your domain request."
+                  rows={3}
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  placeholder="Add anything important."
                 />
               </label>
 
               {message ? (
-                <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
+                <div className="rounded-2xl bg-slate-100 p-3 text-sm text-slate-700">
                   {message}
                 </div>
               ) : null}
 
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {isSaving ? (
-                  <Loader2 size={17} className="animate-spin" />
-                ) : (
-                  <CheckCircle2 size={17} />
-                )}
-                {isSaving ? "Submitting request..." : "Submit Domain Request"}
-              </button>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isSaving ? (
+                    <Loader2 size={17} className="animate-spin" />
+                  ) : (
+                    <CheckCircle2 size={17} />
+                  )}
+
+                  {isSaving ? "Submitting..." : "Submit Request"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={closeDomainForm}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
+                >
+                  <X size={17} />
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
+        ) : null}
 
-          <div className="grid gap-5">
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="mb-5 flex items-center gap-3">
-                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
-                  <ShieldCheck size={20} />
-                </span>
+        <div className="grid content-start gap-4 lg:grid-cols-2">
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-3 flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+                <ShieldCheck size={19} />
+              </span>
 
-                <div>
-                  <h3 className="font-semibold text-slate-950">
-                    Domain Status
-                  </h3>
-                  <p className="text-sm text-slate-500">
-                    {latestRequest ? latestRequest.status : "Not requested yet"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid gap-3">
-                <div className="flex items-center justify-between rounded-2xl bg-slate-50 p-4 text-sm">
-                  <span className="text-slate-500">Custom domain</span>
-                  <span className="font-semibold text-slate-950">
-                    {latestRequest ? latestRequest.requested_domain : "Inactive"}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between rounded-2xl bg-slate-50 p-4 text-sm">
-                  <span className="text-slate-500">Setup payment</span>
-                  <span className="font-semibold text-slate-950">Pending</span>
-                </div>
-
-                <div className="flex items-center justify-between rounded-2xl bg-slate-50 p-4 text-sm">
-                  <span className="text-slate-500">SSL certificate</span>
-                  <span className="font-semibold text-slate-950">Not active</span>
-                </div>
+              <div>
+                <p className="font-semibold text-slate-950">Domain Status</p>
+                <p className="text-sm text-slate-500">
+                  {latestRequest ? latestRequest.status : "Not requested"}
+                </p>
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="mb-5 flex items-center gap-3">
-                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-amber-50 text-amber-700">
-                  <CreditCard size={20} />
+            <div className="grid gap-2">
+              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
+                <span className="text-slate-500">Domain</span>
+                <span className="truncate font-semibold text-slate-950">
+                  {latestRequest ? latestRequest.requested_domain : "Inactive"}
                 </span>
-
-                <div>
-                  <h3 className="font-semibold text-slate-950">
-                    Pricing Guide
-                  </h3>
-                  <p className="text-sm text-slate-500">
-                    Custom domain is a paid add-on
-                  </p>
-                </div>
               </div>
 
-              <div className="grid gap-3">
-                {pricing.map((item) => (
-                  <div
-                    key={item.title}
-                    className="rounded-2xl border border-slate-200 p-4"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="font-semibold text-slate-950">
-                          {item.title}
-                        </p>
-                        <p className="mt-1 text-xs leading-5 text-slate-500">
-                          {item.note}
-                        </p>
-                      </div>
+              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
+                <span className="text-slate-500">Payment</span>
+                <span className="font-semibold text-slate-950">Pending</span>
+              </div>
 
-                      <span className="whitespace-nowrap rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-white">
-                        {item.price}
+              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
+                <span className="text-slate-500">SSL</span>
+                <span className="font-semibold text-slate-950">Not active</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-3 flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-amber-50 text-amber-700">
+                <CreditCard size={19} />
+              </span>
+
+              <div>
+                <p className="font-semibold text-slate-950">Pricing</p>
+                <p className="text-sm text-slate-500">Custom domain add-on</p>
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              {pricing.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl border border-slate-200 p-3"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-950">
+                        {item.title}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                        {item.note}
+                      </p>
+                    </div>
+
+                    <span className="whitespace-nowrap rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-white">
+                      {item.price}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {requests.length ? (
+            <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm lg:col-span-2">
+              <p className="font-semibold text-slate-950">Request History</p>
+
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                {requests.map((request) => (
+                  <div key={request.id} className="rounded-2xl bg-slate-50 p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="truncate text-sm font-semibold text-slate-950">
+                        {request.requested_domain}
+                      </p>
+
+                      <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+                        {request.status}
                       </span>
                     </div>
+
+                    <p className="mt-2 text-xs text-slate-500">
+                      {new Date(request.created_at).toLocaleDateString()}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
+          ) : null}
 
-            {requests.length ? (
-              <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="font-semibold text-slate-950">
-                  Request History
-                </h3>
+          <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-4 lg:col-span-2">
+            <div className="flex gap-3">
+              <Info className="mt-1 shrink-0 text-amber-700" size={18} />
 
-                <div className="mt-4 grid gap-3">
-                  {requests.map((request) => (
-                    <div
-                      key={request.id}
-                      className="rounded-2xl bg-slate-50 p-4"
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="text-sm font-semibold text-slate-950">
-                          {request.requested_domain}
-                        </p>
-
-                        <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-                          {request.status}
-                        </span>
-                      </div>
-
-                      <p className="mt-2 text-xs text-slate-500">
-                        {new Date(request.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </section>
-      )}
-
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
-        <div className="mb-7">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-            Setup Process
-          </p>
-
-          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-            How custom domains work
-          </h3>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-4">
-          {domainSteps.map((step, index) => (
-            <div
-              key={step.title}
-              className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5"
-            >
-              <span className="mb-8 grid h-10 w-10 place-items-center rounded-full bg-slate-950 text-sm font-semibold text-white">
-                {index + 1}
-              </span>
-
-              <h4 className="font-semibold text-slate-950">{step.title}</h4>
-
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                {step.description}
+              <p className="text-sm leading-6 text-amber-900">
+                Domain names depend on availability and yearly renewal. Keep
+                renewal active every year.
               </p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-5">
-        <div className="flex gap-3">
-          <Info className="mt-1 shrink-0 text-amber-700" size={20} />
-
-          <div>
-            <h3 className="font-semibold text-amber-950">
-              Important domain note
-            </h3>
-
-            <p className="mt-2 text-sm leading-6 text-amber-900">
-              Domain names are subject to availability and yearly renewal.
-              Market Villa can help with setup, but the business owner should
-              understand that domain ownership and renewal must be maintained
-              every year.
-            </p>
           </div>
         </div>
       </section>

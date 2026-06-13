@@ -37,7 +37,7 @@ const guides = [
     steps: [
       "Open Custom Domain from the dashboard.",
       "Enter your preferred domain and an alternative option.",
-      "Submit the request for admin review.",
+      "Submit the request for Market Villa review.",
       "Market Villa will guide you through payment and setup.",
     ],
   },
@@ -114,7 +114,7 @@ export default function HelpPage() {
 
             <a
               href={`mailto:${BRAND.supportEmail}`}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-slate-950 to-slate-800 px-6 py-4 text-sm font-semibold text-white shadow-[0_12px_32px_rgba(2,8,31,0.25)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(2,8,31,0.32)]"
             >
               <Store size={17} />
               Contact Support

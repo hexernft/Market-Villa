@@ -349,7 +349,7 @@ export default function AdminPage() {
 
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
                   This admin area gives you a simple view of Market Villa
-                  activity while the product is still in MVP stage.
+                  activity, businesses, and platform requests from one place.
                 </p>
               </div>
 

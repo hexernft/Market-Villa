@@ -69,22 +69,19 @@ export default function ServicesPage() {
 
   const [editingServiceId, setEditingServiceId] = useState("");
   const [query, setQuery] = useState("");
+  const [isServiceFormOpen, setIsServiceFormOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [busyServiceId, setBusyServiceId] = useState("");
   const [message, setMessage] = useState("");
 
-  const selectedBusiness = businesses.find(
-    (business) => business.id === selectedBusinessId
-  );
-
-  const editingService = services.find(
-    (service) => service.id === editingServiceId
-  );
-
   const filteredServices = useMemo(() => {
-    const search = query.toLowerCase();
+    const search = query.toLowerCase().trim();
+
+    if (!search) {
+      return services;
+    }
 
     return services.filter((service) => {
       return (
@@ -95,6 +92,14 @@ export default function ServicesPage() {
       );
     });
   }, [services, query]);
+
+  const visibleServicesCount = services.filter(
+    (service) => service.is_visible
+  ).length;
+
+  const featuredServicesCount = services.filter(
+    (service) => service.is_featured
+  ).length;
 
   useEffect(() => {
     let mounted = true;
@@ -159,7 +164,7 @@ export default function ServicesPage() {
     };
   }, [selectedBusinessId]);
 
-  function resetForm() {
+  function clearFormFields() {
     setName("");
     setServiceType(serviceTypes[0]);
     setPriceLabel("");
@@ -169,6 +174,17 @@ export default function ServicesPage() {
     setIsVisible(true);
     setIsFeatured(false);
     setEditingServiceId("");
+  }
+
+  function resetForm() {
+    clearFormFields();
+    setIsServiceFormOpen(false);
+  }
+
+  function openNewServiceForm() {
+    clearFormFields();
+    setMessage("");
+    setIsServiceFormOpen(true);
   }
 
   function startEditing(service: DashboardService) {
@@ -182,10 +198,12 @@ export default function ServicesPage() {
     setIsVisible(service.is_visible);
     setIsFeatured(service.is_featured);
     setMessage("");
+    setIsServiceFormOpen(true);
   }
 
   async function reloadServices() {
     if (!selectedBusinessId) return;
+
     const updatedServices = await getServicesByBusinessId(selectedBusinessId);
     setServices(updatedServices);
   }
@@ -237,6 +255,7 @@ export default function ServicesPage() {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unable to save service.";
+
       setMessage(errorMessage);
     } finally {
       setIsSaving(false);
@@ -260,6 +279,7 @@ export default function ServicesPage() {
         error instanceof Error
           ? error.message
           : "Unable to update service visibility.";
+
       setMessage(errorMessage);
     } finally {
       setBusyServiceId("");
@@ -288,6 +308,7 @@ export default function ServicesPage() {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unable to delete service.";
+
       setMessage(errorMessage);
     } finally {
       setBusyServiceId("");
@@ -295,424 +316,401 @@ export default function ServicesPage() {
   }
 
   return (
-    <div className="grid gap-8">
-      <section className="rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-7 text-white shadow-soft">
-        <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-200">
-              Services Manager
-            </p>
+    <div className="grid gap-6">
+      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-center">
+          <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+            <select
+              value={selectedBusinessId}
+              onChange={(event) => {
+                setSelectedBusinessId(event.target.value);
+                resetForm();
+              }}
+              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100 md:min-w-80"
+            >
+              {businesses.length === 0 ? (
+                <option value="">No business created yet</option>
+              ) : null}
 
-            <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.05em]">
-              Add, edit, hide, and delete service offers.
-            </h2>
+              {businesses.map((business) => (
+                <option key={business.id} value={business.id}>
+                  {business.name} — /store/{business.slug}
+                </option>
+              ))}
+            </select>
 
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-              Manage bookings, appointment offers, consultations, quotes,
-              reservations, and service requests for your business page.
-            </p>
+            <div className="relative md:w-80">
+              <Search
+                size={17}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-slate-950 focus:bg-white focus:ring-4 focus:ring-slate-100"
+                placeholder="Search services"
+              />
+            </div>
           </div>
 
-          <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
-            <div className="grid gap-3">
-              <div className="flex items-center justify-between rounded-2xl bg-white p-4 text-slate-950">
-                <div>
-                  <p className="text-sm font-semibold">Active Services</p>
-                  <p className="text-xs text-slate-500">
-                    For selected business
-                  </p>
-                </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-2xl bg-slate-50 px-4 py-3">
+              <p className="text-xs text-slate-500">Total</p>
+              <p className="mt-1 text-xl font-semibold text-slate-950">
+                {services.length}
+              </p>
+            </div>
 
-                <span className="text-2xl font-semibold">
-                  {services.length}
-                </span>
-              </div>
+            <div className="rounded-2xl bg-emerald-50 px-4 py-3">
+              <p className="text-xs text-emerald-700">Visible</p>
+              <p className="mt-1 text-xl font-semibold text-emerald-950">
+                {visibleServicesCount}
+              </p>
+            </div>
 
-              <div className="flex items-center justify-between rounded-2xl bg-white/10 p-4">
-                <div>
-                  <p className="text-sm font-semibold">Service Flow</p>
-                  <p className="text-xs text-slate-300">
-                    {selectedBusiness
-                      ? selectedBusiness.name
-                      : "No business selected"}
-                  </p>
-                </div>
-
-                <CalendarCheck className="text-emerald-300" size={24} />
-              </div>
+            <div className="rounded-2xl bg-amber-50 px-4 py-3">
+              <p className="text-xs text-amber-700">Featured</p>
+              <p className="mt-1 text-xl font-semibold text-amber-950">
+                {featuredServicesCount}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-              Business
-            </p>
-
-            <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">
-              Select business page
-            </h3>
-          </div>
-
-          <select
-            value={selectedBusinessId}
-            onChange={(event) => {
-              setSelectedBusinessId(event.target.value);
-              resetForm();
-            }}
-            className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950 md:min-w-80"
-          >
-            {businesses.length === 0 ? (
-              <option value="">No business created yet</option>
-            ) : null}
-
-            {businesses.map((business) => (
-              <option key={business.id} value={business.id}>
-                {business.name} â€” /store/{business.slug}
-              </option>
-            ))}
-          </select>
+      {message && !isServiceFormOpen ? (
+        <div className="rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
+          {message}
         </div>
-      </section>
+      ) : null}
 
       {isLoading ? (
         <section className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
-          Loading your businesses...
+          Loading services...
         </section>
       ) : businesses.length === 0 ? (
         <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-          <h3 className="text-lg font-semibold text-amber-950">
+          <p className="text-lg font-semibold text-amber-950">
             Create a business page first
-          </h3>
+          </p>
+
           <p className="mt-2 text-sm text-amber-900">
-            Go to onboarding and create your first business page before adding
-            services.
+            Add your business profile before adding services.
           </p>
         </section>
       ) : (
-        <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
-            <div className="mb-7 flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-                  {editingServiceId ? "Edit Service" : "Add Service"}
-                </p>
+        <section
+          className={`grid gap-6 ${
+            isServiceFormOpen
+              ? "xl:grid-cols-[0.9fr_1.1fr]"
+              : "xl:grid-cols-[0.35fr_1fr]"
+          }`}
+        >
+          {!isServiceFormOpen ? (
+            <div className="rounded-[2rem] border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
+              <button
+                type="button"
+                onClick={openNewServiceForm}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-7 py-4 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
+              >
+                <Plus size={18} />
+                Add Service
+              </button>
 
-                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                  {editingServiceId
-                    ? `Editing ${editingService?.name || "service"}`
-                    : "Create a service or booking item"}
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  This service will be linked to the selected business page.
-                </p>
-              </div>
-
-              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-teal-50 text-teal-700">
-                <Sparkles size={22} />
-              </span>
+              <p className="mt-3 text-sm text-slate-500">
+                Add a booking, appointment, quote, or service offer.
+              </p>
             </div>
+          ) : null}
 
-            <form onSubmit={handleSubmitService} className="grid gap-5">
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Service name
+          {isServiceFormOpen ? (
+            <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+                  {editingServiceId ? "Edit" : "New Service"}
                 </span>
 
-                <input
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="Example: Measurement Appointment"
-                  required
-                />
-              </label>
-
-              <div className="grid gap-5 md:grid-cols-2">
-                <label className="grid gap-2">
-                  <span className="text-sm font-semibold text-slate-700">
-                    Service type
-                  </span>
-
-                  <select
-                    value={serviceType}
-                    onChange={(event) => setServiceType(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  >
-                    {serviceTypes.map((type) => (
-                      <option key={type}>{type}</option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="grid gap-2">
-                  <span className="text-sm font-semibold text-slate-700">
-                    Price label
-                  </span>
-
-                  <input
-                    value={priceLabel}
-                    onChange={(event) => setPriceLabel(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                    placeholder="Example: Request quote / From â‚¦20,000"
-                  />
-                </label>
-              </div>
-
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Service description
+                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-teal-50 text-teal-700">
+                  <Sparkles size={21} />
                 </span>
+              </div>
 
-                <textarea
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
-                  rows={4}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                  placeholder="Explain what the customer is requesting, booking, or asking about."
-                />
-              </label>
-
-              <div className="grid gap-5 md:grid-cols-2">
+              <form onSubmit={handleSubmitService} className="grid gap-5">
                 <label className="grid gap-2">
-                  <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <Clock3 size={16} />
-                    Availability note
+                  <span className="text-sm font-semibold text-slate-700">
+                    Service name
                   </span>
 
                   <input
-                    value={availabilityNote}
-                    onChange={(event) =>
-                      setAvailabilityNote(event.target.value)
-                    }
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                    placeholder="Example: Mon - Sat, 10 AM - 5 PM"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    placeholder="Service name"
+                    required
                   />
                 </label>
 
-                <label className="grid gap-2">
-                  <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <MessageCircle size={16} />
-                    Button label
-                  </span>
+                <div className="grid gap-5 md:grid-cols-2">
+                  <label className="grid gap-2">
+                    <span className="text-sm font-semibold text-slate-700">
+                      Service type
+                    </span>
 
-                  <input
-                    value={buttonLabel}
-                    onChange={(event) => setButtonLabel(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
-                    placeholder="Example: Book Now / Request Quote"
-                  />
-                </label>
-              </div>
+                    <select
+                      value={serviceType}
+                      onChange={(event) => setServiceType(event.target.value)}
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    >
+                      {serviceTypes.map((type) => (
+                        <option key={type}>{type}</option>
+                      ))}
+                    </select>
+                  </label>
 
-              <div className="grid gap-3 rounded-[1.5rem] bg-slate-50 p-4">
-                <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-800">
-                      Show on business page
-                    </p>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Customers can see and request this service.
-                    </p>
-                  </div>
+                  <label className="grid gap-2">
+                    <span className="text-sm font-semibold text-slate-700">
+                      Price label
+                    </span>
 
-                  <input
-                    type="checkbox"
-                    checked={isVisible}
-                    onChange={(event) => setIsVisible(event.target.checked)}
-                  />
-                </label>
-
-                <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-800">
-                      Highlight as main service
-                    </p>
-                    <p className="mt-1 text-xs text-slate-500">
-                      Useful for businesses that mainly sell services.
-                    </p>
-                  </div>
-
-                  <input
-                    type="checkbox"
-                    checked={isFeatured}
-                    onChange={(event) => setIsFeatured(event.target.checked)}
-                  />
-                </label>
-              </div>
-
-              {message ? (
-                <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
-                  {message}
+                    <input
+                      value={priceLabel}
+                      onChange={(event) => setPriceLabel(event.target.value)}
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                      placeholder="Request quote / From ₦20,000"
+                    />
+                  </label>
                 </div>
-              ) : null}
 
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {isSaving ? (
-                    <Loader2 size={17} className="animate-spin" />
-                  ) : (
-                    <Plus size={17} />
-                  )}
-                  {isSaving
-                    ? "Saving..."
-                    : editingServiceId
-                    ? "Save Changes"
-                    : "Add Service"}
-                </button>
+                <label className="grid gap-2">
+                  <span className="text-sm font-semibold text-slate-700">
+                    Description
+                  </span>
 
-                {editingServiceId ? (
+                  <textarea
+                    value={description}
+                    onChange={(event) => setDescription(event.target.value)}
+                    rows={4}
+                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    placeholder="Add important service details."
+                  />
+                </label>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <label className="grid gap-2">
+                    <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <Clock3 size={16} />
+                      Availability
+                    </span>
+
+                    <input
+                      value={availabilityNote}
+                      onChange={(event) =>
+                        setAvailabilityNote(event.target.value)
+                      }
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                      placeholder="Mon - Sat, 10 AM - 5 PM"
+                    />
+                  </label>
+
+                  <label className="grid gap-2">
+                    <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <MessageCircle size={16} />
+                      Button label
+                    </span>
+
+                    <input
+                      value={buttonLabel}
+                      onChange={(event) => setButtonLabel(event.target.value)}
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                      placeholder="Book Now / Request Quote"
+                    />
+                  </label>
+                </div>
+
+                <div className="grid gap-3 rounded-[1.5rem] bg-slate-50 p-3">
+                  <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">
+                        Visible
+                      </p>
+
+                      <p className="mt-1 text-xs text-slate-500">
+                        Show on storefront.
+                      </p>
+                    </div>
+
+                    <input
+                      type="checkbox"
+                      checked={isVisible}
+                      onChange={(event) => setIsVisible(event.target.checked)}
+                    />
+                  </label>
+
+                  <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">
+                        Featured
+                      </p>
+
+                      <p className="mt-1 text-xs text-slate-500">
+                        Highlight this service.
+                      </p>
+                    </div>
+
+                    <input
+                      type="checkbox"
+                      checked={isFeatured}
+                      onChange={(event) => setIsFeatured(event.target.checked)}
+                    />
+                  </label>
+                </div>
+
+                {message ? (
+                  <div className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
+                    {message}
+                  </div>
+                ) : null}
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <button
+                    type="submit"
+                    disabled={isSaving}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isSaving ? (
+                      <Loader2 size={17} className="animate-spin" />
+                    ) : (
+                      <Plus size={17} />
+                    )}
+
+                    {isSaving
+                      ? "Saving..."
+                      : editingServiceId
+                      ? "Save Changes"
+                      : "Add Service"}
+                  </button>
+
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="inline-flex w-fit items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
                   >
                     <X size={17} />
-                    Cancel Edit
+                    Cancel
                   </button>
-                ) : null}
-              </div>
-            </form>
-          </div>
-
-          <div className="grid gap-5">
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-                    Service List
-                  </p>
-
-                  <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                    Current services
-                  </h3>
                 </div>
-
-                <div className="relative md:w-72">
-                  <Search
-                    size={17}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                  />
-
-                  <input
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    className="w-full rounded-full border border-slate-200 bg-slate-50 px-11 py-3 text-sm outline-none focus:border-slate-950"
-                    placeholder="Search services"
-                  />
-                </div>
-              </div>
+              </form>
             </div>
+          ) : null}
 
-            <div className="grid gap-4">
-              {filteredServices.length === 0 ? (
-                <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
+          <div className="grid content-start gap-4">
+            {filteredServices.length === 0 ? (
+              <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-sm">
+                <p className="text-sm font-medium text-slate-600">
                   No services found.
-                </div>
-              ) : null}
+                </p>
 
-              {filteredServices.map((service) => (
-                <article
-                  key={service.id}
-                  className={`rounded-[1.75rem] border bg-white p-6 shadow-sm ${
-                    editingServiceId === service.id
-                      ? "border-slate-950"
-                      : "border-slate-200"
-                  }`}
-                >
-                  <div className="flex flex-col justify-between gap-5 md:flex-row md:items-start">
-                    <div>
-                      <div className="mb-3 flex flex-wrap gap-2">
-                        <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700">
-                          {service.service_type || "Service"}
+                <p className="mt-2 text-xs text-slate-400">
+                  Add a service or adjust your search.
+                </p>
+              </div>
+            ) : null}
+
+            {filteredServices.map((service) => (
+              <article
+                key={service.id}
+                className={`rounded-[1.75rem] border bg-white p-6 shadow-sm transition ${
+                  editingServiceId === service.id
+                    ? "border-slate-950 ring-4 ring-slate-100"
+                    : "border-slate-200 hover:-translate-y-0.5 hover:shadow-md"
+                }`}
+              >
+                <div className="flex flex-col justify-between gap-5 md:flex-row md:items-start">
+                  <div>
+                    <div className="mb-3 flex flex-wrap gap-2">
+                      <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700">
+                        {service.service_type || "Service"}
+                      </span>
+
+                      {service.is_visible ? (
+                        <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                          Visible
                         </span>
+                      ) : (
+                        <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+                          Hidden
+                        </span>
+                      )}
 
-                        {service.is_visible ? (
-                          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                            Visible
-                          </span>
-                        ) : (
-                          <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
-                            Hidden
-                          </span>
-                        )}
-
-                        {service.is_featured ? (
-                          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-                            Featured
-                          </span>
-                        ) : null}
-                      </div>
-
-                      <h3 className="text-xl font-semibold tracking-[-0.03em] text-slate-950">
-                        {service.name}
-                      </h3>
-
-                      <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
-                        {service.description || "No description added."}
-                      </p>
-
-                      <p className="mt-4 text-sm font-semibold text-slate-950">
-                        {service.price_label || "Request quote"}
-                      </p>
-
-                      {service.availability_note ? (
-                        <p className="mt-2 text-xs text-slate-500">
-                          {service.availability_note}
-                        </p>
+                      {service.is_featured ? (
+                        <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                          Featured
+                        </span>
                       ) : null}
                     </div>
 
-                    <span className="grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-700">
-                      <CalendarCheck size={21} />
-                    </span>
+                    <p className="text-xl font-semibold tracking-[-0.03em] text-slate-950">
+                      {service.name}
+                    </p>
+
+                    <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+                      {service.description || "No description added."}
+                    </p>
+
+                    <p className="mt-4 text-sm font-semibold text-slate-950">
+                      {service.price_label || "Request quote"}
+                    </p>
+
+                    {service.availability_note ? (
+                      <p className="mt-2 text-xs text-slate-500">
+                        {service.availability_note}
+                      </p>
+                    ) : null}
                   </div>
 
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <button
-                      type="button"
-                      onClick={() => startEditing(service)}
-                      disabled={busyServiceId === service.id}
-                      className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60"
-                    >
-                      Edit
-                    </button>
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-700">
+                    <CalendarCheck size={21} />
+                  </span>
+                </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleToggleVisibility(service)}
-                      disabled={busyServiceId === service.id}
-                      className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-200 disabled:opacity-60"
-                    >
-                      {busyServiceId === service.id ? (
-                        <Loader2 size={17} className="animate-spin" />
-                      ) : (
-                        <ToggleRight size={17} />
-                      )}
-                      {service.is_visible ? "Hide" : "Show"}
-                    </button>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => startEditing(service)}
+                    disabled={busyServiceId === service.id}
+                    className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:opacity-60"
+                  >
+                    Edit
+                  </button>
 
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteService(service.id)}
-                      disabled={busyServiceId === service.id}
-                      className="inline-flex items-center gap-2 rounded-full bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:opacity-60"
-                    >
-                      <Trash2 size={17} />
-                      Delete
-                    </button>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleVisibility(service)}
+                    disabled={busyServiceId === service.id}
+                    className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-200 disabled:opacity-60"
+                  >
+                    {busyServiceId === service.id ? (
+                      <Loader2 size={17} className="animate-spin" />
+                    ) : (
+                      <ToggleRight size={17} />
+                    )}
+
+                    {service.is_visible ? "Hide" : "Show"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteService(service.id)}
+                    disabled={busyServiceId === service.id}
+                    className="inline-flex items-center gap-2 rounded-full bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 transition hover:-translate-y-0.5 hover:bg-red-100 disabled:opacity-60"
+                  >
+                    <Trash2 size={17} />
+                    Delete
+                  </button>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
       )}

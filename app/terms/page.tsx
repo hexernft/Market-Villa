@@ -91,10 +91,6 @@ export default function TermsPage() {
             ))}
           </div>
         </section>
-
-        <p className="mt-6 text-center text-xs leading-6 text-slate-500">
-          This is a starter policy page. Before public launch, review it with a qualified legal professional.
-        </p>
       </div>
     </main>
   );

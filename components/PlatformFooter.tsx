@@ -35,10 +35,6 @@ export function PlatformFooter() {
               How it works
             </Link>
 
-            <Link href="/#pricing" className="text-white/60 hover:text-white">
-              Pricing
-            </Link>
-
             <Link href="/#faq" className="text-white/60 hover:text-white">
               FAQ
             </Link>
@@ -71,7 +67,7 @@ export function PlatformFooter() {
       </div>
 
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/40 md:flex-row">
-        <p>Â© 2026 {BRAND.name}. All rights reserved.</p>
+        <p>© 2026 {BRAND.name}. All rights reserved.</p>
         <p>Built for small businesses.</p>
       </div>
     </footer>
