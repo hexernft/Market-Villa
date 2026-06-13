@@ -101,6 +101,44 @@ export default function OnboardingPage() {
 
   return (
     <div className="grid gap-8">
+      <section className="rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-7 text-white shadow-soft">
+        <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-200">
+              Business Setup
+            </p>
+
+            <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.05em]">
+              Set up your Market Villa business page.
+            </h2>
+
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
+              Add your business information, choose a page style, and publish
+              your mini website for customers.
+            </p>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+              Setup Progress
+            </p>
+
+            <div className="mt-5 grid gap-3">
+              {setupSteps.map((step, index) => (
+                <div
+                  key={step}
+                  className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 text-sm"
+                >
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-white text-xs font-semibold text-slate-950">
+                    {index + 1}
+                  </span>
+                  <span>{step}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
