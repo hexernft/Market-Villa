@@ -168,14 +168,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-slate-950 px-5 py-16 text-white md:px-8">
+            <section className="bg-slate-100 px-5 py-16 text-slate-950 md:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
               Why Market Villa
             </p>
 
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] md:text-4xl">
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 md:text-4xl">
               A simple page before the WhatsApp conversation.
             </h2>
           </div>
@@ -186,38 +186,37 @@ export default function Home() {
               "Products and services stay organized in one place.",
               "The business owner can update content without a developer.",
             ].map((item) => (
-              <div key={item} className="flex gap-3 border border-white/10 bg-white/5 p-5">
-                <CheckCircle2 size={18} className="mt-1 shrink-0 text-white" />
-                <p className="text-sm leading-7 text-white/75">{item}</p>
+              <div key={item} className="flex gap-3 border border-slate-200 bg-white p-5 shadow-sm">
+                <CheckCircle2 size={18} className="mt-1 shrink-0 text-slate-950" />
+                <p className="text-sm leading-7 text-slate-600">{item}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      <section id="faq" className="px-5 py-16 md:px-8">
+      <section id="faq" className="bg-slate-950 px-5 py-16 text-white md:px-8">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.75fr_1.25fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/45">
               FAQ
             </p>
 
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 md:text-4xl">
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
               Simple answers before you start.
             </h2>
           </div>
 
-          <div className="overflow-hidden border border-slate-200 bg-white">
-            {faqItems.map((item, index) => (
+          <div className="overflow-hidden border border-white/10 bg-white/5">
+            {faqItems.map((item) => (
               <div
                 key={item.question}
-                className="grid gap-3 border-t border-slate-200 p-6"
+                className="grid gap-3 border-t border-white/10 p-6 first:border-t-0"
               >
-                <h3 className="text-lg font-semibold tracking-[-0.03em] text-slate-950">
+                <h3 className="text-lg font-semibold tracking-[-0.03em] text-white">
                   {item.question}
                 </h3>
 
-                <p className="text-sm leading-7 text-slate-500">
+                <p className="text-sm leading-7 text-white/65">
                   {item.answer}
                 </p>
               </div>
@@ -226,7 +225,23 @@ export default function Home() {
         </div>
       </section>
 
-      <PlatformFooter />
+      <section className="overflow-hidden border-y border-slate-200 bg-white py-4">
+        <div className="market-villa-marquee flex whitespace-nowrap text-sm font-semibold uppercase tracking-[0.22em] text-slate-950">
+          <span className="mx-8">
+            Market Villa helps businesses create clean pages, organize products and services, receive WhatsApp inquiries, and look more trusted online.
+          </span>
+          <span className="mx-8">
+            Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.
+          </span>
+          <span className="mx-8">
+            Market Villa helps businesses create clean pages, organize products and services, receive WhatsApp inquiries, and look more trusted online.
+          </span>
+          <span className="mx-8">
+            Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.
+          </span>
+        </div>
+      </section>
+<PlatformFooter />
     </main>
   );
 }

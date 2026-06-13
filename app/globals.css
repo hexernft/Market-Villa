@@ -74,3 +74,18 @@ select {
     transform: translateY(-5px) scale(1.02);
   }
 }
+
+.market-villa-marquee {
+  width: max-content;
+  animation: marketVillaMarquee 26s linear infinite;
+}
+
+@keyframes marketVillaMarquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
