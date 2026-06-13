@@ -194,7 +194,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section id="faq" className="bg-slate-950 px-5 py-16 text-white md:px-8">
+      <section id="faq" className="bg-black px-5 py-16 text-white md:px-8">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.75fr_1.25fr]">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/45">
