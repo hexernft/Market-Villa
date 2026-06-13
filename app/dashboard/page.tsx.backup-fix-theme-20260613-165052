@@ -278,6 +278,10 @@ export default function DashboardPage() {
       icon: UserRound,
     },
     {
+      label: "Change Theme",
+      href: "/dashboard/theme",
+      icon:    },
+    {
       label: "Billing",
       href: "/dashboard/settings",
       icon: Wallet,
@@ -527,4 +531,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
