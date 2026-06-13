@@ -80,12 +80,11 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
       if (!mounted) return;
 
-      if (!data.session) {
-        setIsCheckingAuth(false);
-        return;
-      }
-
       setIsCheckingAuth(false);
+
+      if (!data.session) {
+        router.push("/login");
+      }
     }
 
     checkAuth();
@@ -93,7 +92,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [router]);
 
   async function handleLogout() {
     try {
@@ -201,31 +200,11 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="border-t border-slate-200 p-4">
-            <p className="text-xs leading-5 text-slate-400">
-              Manage storefront, products, services, orders, billing, and domain
-              settings from one dashboard.
-            </p>
-          </div>
-        </div>
-      </aside>
-
-      <main className="lg:pl-72">
-        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-xl">
-          <div className="flex min-h-[76px] items-center justify-between gap-4 px-5 py-4 md:px-8">
-            <div className="pl-12 lg:pl-0">
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
-                Dashboard
-              </p>
-              <h1 className="mt-1 text-xl font-semibold tracking-[-0.04em] text-slate-950 md:text-2xl">
-                Manage your business
-              </h1>
-            </div>
-
             <button
               type="button"
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoggingOut ? (
                 <Loader2 size={17} className="animate-spin" />
@@ -234,9 +213,15 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               )}
               {isLoggingOut ? "Logging out..." : "Logout"}
             </button>
-          </div>
-        </header>
 
+            <p className="mt-4 text-xs leading-5 text-slate-400">
+              Manage your business page, products, orders, billing, and domain.
+            </p>
+          </div>
+        </div>
+      </aside>
+
+      <main className="min-h-screen lg:pl-72">
         <div className="px-5 py-8 md:px-8">{children}</div>
       </main>
     </div>

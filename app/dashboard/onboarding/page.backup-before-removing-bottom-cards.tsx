@@ -102,7 +102,7 @@ export default function OnboardingPage() {
   return (
     <div className="grid gap-8">
 
-      <section className="grid gap-6">
+      <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm">
           <div className="mb-7">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
@@ -332,6 +332,61 @@ export default function OnboardingPage() {
             </div>
           </form>
         </div>
+
+        <aside className="grid gap-5">
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-950">
+              What happens after setup?
+            </h3>
+
+            <div className="mt-5 grid gap-4">
+              {[
+                "Your business page is saved to Supabase.",
+                "Your page becomes available through your Market Villa link.",
+                "You can add products and services from the dashboard.",
+                "You can request a custom domain when ready.",
+              ].map((item) => (
+                <div key={item} className="flex gap-3">
+                  <CheckCircle2
+                    size={18}
+                    className="mt-0.5 shrink-0 text-emerald-600"
+                  />
+                  <p className="text-sm leading-6 text-slate-600">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-6">
+            <h3 className="text-lg font-semibold text-amber-950">
+              Want a professional domain?
+            </h3>
+
+            <p className="mt-2 text-sm leading-6 text-amber-900">
+              After your business page is ready, you can request a custom domain
+              such as yourbusiness.com as a paid add-on.
+            </p>
+
+            <Link
+              href="/dashboard/domain"
+              className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 hover:bg-amber-200"
+            >
+              View Domain Options
+            </Link>
+          </div>
+
+          <div className="rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-sm">
+
+            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
+              Start simple. Upgrade when the business grows.
+            </h3>
+
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              Use the Market Villa link first, test the page with customers,
+              then add a custom domain when the business is ready.
+            </p>
+          </div>
+        </aside>
       </section>
     </div>
   );
