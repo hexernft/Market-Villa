@@ -1,150 +1,166 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
   Boxes,
   CheckCircle2,
-  ChevronDown,
-  ClipboardList,
+  Clock3,
+  ExternalLink,
   Globe2,
   Loader2,
-  Palette,
-  Settings,
+  Package,
+  ShoppingBag,
   Sparkles,
-  Store,
+  Wallet,
 } from "lucide-react";
 import {
   getMyBusinesses,
   getProductsByBusinessId,
   getServicesByBusinessId,
 } from "@/lib/business-actions";
+import { supabase } from "@/lib/supabase";
+import { formatCurrency } from "@/lib/utils";
 
 type DashboardBusiness = {
   id: string;
   name: string;
   slug: string;
-  category: string | null;
-  location: string | null;
-  theme_id: string;
-  is_published: boolean;
-  custom_domain: string | null;
-  custom_domain_status: string;
-  subscription_plan: string;
-  subscription_status: string;
+  is_published?: boolean | null;
+  subscription_plan?: string | null;
+  subscription_status?: string | null;
+  created_at?: string | null;
 };
 
-type DashboardProduct = {
+type DashboardOrder = {
   id: string;
+  business_id: string;
+  customer_name?: string | null;
+  status?: string | null;
+  total_amount?: number | null;
+  total?: number | null;
+  order_total?: number | null;
+  created_at?: string | null;
 };
 
-type DashboardService = {
-  id: string;
-};
+function getOrderAmount(order: DashboardOrder) {
+  return Number(order.total_amount || order.total || order.order_total || 0);
+}
 
-const plans = [
-  {
-    id: "starter",
-    name: "Starter",
-    price: "â‚¦10,000",
-    note: "monthly",
-  },
-  {
-    id: "growth",
-    name: "Growth",
-    price: "â‚¦20,000",
-    note: "monthly",
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    price: "â‚¦30,000",
-    note: "monthly",
-  },
-];
+function formatDate(value?: string | null) {
+  if (!value) return "No date";
 
-const managementRows = [
-  {
-    title: "Business Profile",
-    description: "Edit business name, slug, contact info, cover image, and location.",
-    href: "/dashboard/profile",
-    icon: Store,
-  },
-  {
-    title: "Products",
-    description: "Add, edit, hide, delete, and upload compressed product images.",
-    href: "/dashboard/products",
-    icon: Boxes,
-  },
-  {
-    title: "Services",
-    description: "Manage bookings, service offers, consultations, and quote requests.",
-    href: "/dashboard/services",
-    icon: Sparkles,
-  },
-  {
-    title: "Theme",
-    description: "Choose the visual style for the public business page.",
-    href: "/dashboard/theme",
-    icon: Palette,
-  },
-  {
-    title: "Orders",
-    description: "View customer orders, order items, totals, and update order status.",
-    href: "/dashboard/orders",
-    icon: ClipboardList,
-  },
-  {
-    title: "Custom Domain",
-    description: "Request a professional domain name for this business.",
-    href: "/dashboard/domain",
-    icon: Globe2,
-  },
-  {
-    title: "Settings",
-    description: "View plan status, domain add-on, and subscription details.",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-];
+  return new Intl.DateTimeFormat("en-NG", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
+function getStatusStyle(status?: string | null) {
+  const cleanStatus = String(status || "pending").toLowerCase();
+
+  if (["completed", "complete", "delivered", "fulfilled"].includes(cleanStatus)) {
+    return "bg-emerald-50 text-emerald-700 ring-emerald-200";
+  }
+
+  if (["cancelled", "failed", "rejected"].includes(cleanStatus)) {
+    return "bg-red-50 text-red-700 ring-red-200";
+  }
+
+  return "bg-amber-50 text-amber-700 ring-amber-200";
+}
 
 export default function DashboardPage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
-  const [products, setProducts] = useState<DashboardProduct[]>([]);
-  const [services, setServices] = useState<DashboardService[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
-  const [openRows, setOpenRows] = useState<Record<string, boolean>>({
-    "Business Profile": true,
-  });
-
+  const [productsCount, setProductsCount] = useState(0);
+  const [servicesCount, setServicesCount] = useState(0);
+  const [orders, setOrders] = useState<DashboardOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMetrics, setIsLoadingMetrics] = useState(false);
   const [message, setMessage] = useState("");
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
 
+  const metrics = useMemo(() => {
+    const revenue = orders.reduce((sum, order) => sum + getOrderAmount(order), 0);
+    const pendingOrders = orders.filter((order) => {
+      const status = String(order.status || "pending").toLowerCase();
+      return ["pending", "new", "started", "processing"].includes(status);
+    }).length;
+
+    return {
+      revenue,
+      orders: orders.length,
+      pendingOrders,
+      products: productsCount,
+      services: servicesCount,
+    };
+  }, [orders, productsCount, servicesCount]);
+
+  async function loadBusinesses() {
+    const items = await getMyBusinesses();
+
+    setBusinesses(items);
+
+    if (items.length > 0) {
+      setSelectedBusinessId((current) => current || items[0].id);
+    }
+  }
+
+  async function loadMetrics(businessId: string) {
+    setIsLoadingMetrics(true);
+    setMessage("");
+
+    try {
+      const [products, services, orderResponse] = await Promise.all([
+        getProductsByBusinessId(businessId),
+        getServicesByBusinessId(businessId),
+        supabase
+          .from("orders")
+          .select("*")
+          .eq("business_id", businessId)
+          .order("created_at", { ascending: false })
+          .limit(6),
+      ]);
+
+      if (orderResponse.error) {
+        throw orderResponse.error;
+      }
+
+      setProductsCount(products.length);
+      setServicesCount(services.length);
+      setOrders((orderResponse.data || []) as DashboardOrder[]);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unable to load dashboard.";
+
+      setMessage(errorMessage);
+    } finally {
+      setIsLoadingMetrics(false);
+    }
+  }
+
   useEffect(() => {
     let mounted = true;
 
-    async function loadDashboard() {
+    async function loadPage() {
       try {
         setIsLoading(true);
-
-        const businessItems = await getMyBusinesses();
-
+        await loadBusinesses();
+      } catch (error) {
         if (!mounted) return;
 
-        setBusinesses(businessItems);
-
-        if (businessItems.length > 0) {
-          setSelectedBusinessId(businessItems[0].id);
-        }
-      } catch (error) {
         const errorMessage =
-          error instanceof Error ? error.message : "Unable to load dashboard.";
+          error instanceof Error
+            ? error.message
+            : "Unable to load your dashboard.";
+
         setMessage(errorMessage);
       } finally {
         if (mounted) {
@@ -153,7 +169,7 @@ export default function DashboardPage() {
       }
     }
 
-    loadDashboard();
+    loadPage();
 
     return () => {
       mounted = false;
@@ -161,94 +177,22 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    let mounted = true;
-
-    async function loadBusinessItems() {
-      if (!selectedBusinessId) {
-        setProducts([]);
-        setServices([]);
-        return;
-      }
-
-      try {
-        const [productItems, serviceItems] = await Promise.all([
-          getProductsByBusinessId(selectedBusinessId),
-          getServicesByBusinessId(selectedBusinessId),
-        ]);
-
-        if (!mounted) return;
-
-        setProducts(productItems);
-        setServices(serviceItems);
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : "Unable to load business items.";
-        setMessage(errorMessage);
-      }
+    if (!selectedBusinessId) {
+      setProductsCount(0);
+      setServicesCount(0);
+      setOrders([]);
+      return;
     }
 
-    loadBusinessItems();
-
-    return () => {
-      mounted = false;
-    };
+    loadMetrics(selectedBusinessId);
   }, [selectedBusinessId]);
-
-  function toggleRow(title: string) {
-    setOpenRows((current) => ({
-      ...current,
-      [title]: !current[title],
-    }));
-  }
-
-  const setupItems = [
-    {
-      label: "Business profile created",
-      description: "Your business information has been saved.",
-      done: Boolean(selectedBusiness),
-      href: "/dashboard/profile",
-    },
-    {
-      label: "Store theme selected",
-      description: "Your business has a storefront style.",
-      done: Boolean(selectedBusiness?.theme_id),
-      href: "/dashboard/theme",
-    },
-    {
-      label: "Products added",
-      description: "Add at least one product customers can order.",
-      done: products.length > 0,
-      href: "/dashboard/products",
-    },
-    {
-      label: "Services added",
-      description: "Optional, but useful for bookings and inquiries.",
-      done: services.length > 0,
-      href: "/dashboard/services",
-    },
-    {
-      label: "Custom domain requested",
-      description: "Optional paid add-on for serious businesses.",
-      done:
-        Boolean(selectedBusiness?.custom_domain) ||
-        selectedBusiness?.custom_domain_status === "pending",
-      href: "/dashboard/domain",
-    },
-  ];
-
-  const completedSetup = setupItems.filter((item) => item.done).length;
-  const setupPercent = Math.round((completedSetup / setupItems.length) * 100);
 
   if (isLoading) {
     return (
       <main className="grid min-h-[60vh] place-items-center">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
-          <Loader2 className="mx-auto animate-spin text-slate-950" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
-            Loading your Market Villa dashboard...
-          </p>
+        <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <Loader2 className="mx-auto animate-spin text-slate-950" size={26} />
+          <p className="mt-4 text-sm text-slate-500">Loading dashboard...</p>
         </div>
       </main>
     );
@@ -256,374 +200,295 @@ export default function DashboardPage() {
 
   if (businesses.length === 0) {
     return (
-      <div className="grid gap-8">
-        <section className="rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-700">
-            Welcome to Market Villa
-          </p>
+      <section className="mx-auto max-w-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <div className="mx-auto grid h-12 w-12 place-items-center bg-slate-950 text-white">
+          <Sparkles size={20} />
+        </div>
 
-          <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.05em] text-slate-950">
-            Create your first business page.
-          </h2>
+        <h2 className="mt-5 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+          Create your first business page
+        </h2>
 
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500">
-            Set up your business details, choose a theme, add products and
-            services, then share your Market Villa page with customers.
-          </p>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-500">
+          Set up your storefront, add products or services, publish your page,
+          and start receiving customer inquiries.
+        </p>
 
-          <div className="mt-7">
-            <Link
-              href="/dashboard/onboarding"
-              className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-500"
-            >
-              Start Onboarding
-              <ArrowRight size={17} />
-            </Link>
-          </div>
-        </section>
-
-        {message ? (
-          <div className="rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
-            {message}
-          </div>
-        ) : null}
-      </div>
+        <Link
+          href="/dashboard/onboarding"
+          className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-3.5 text-sm font-semibold text-white hover:bg-slate-800"
+        >
+          Start setup
+          <ArrowRight size={16} />
+        </Link>
+      </section>
     );
   }
 
-  const currentPlan =
-    plans.find((plan) => plan.id === selectedBusiness?.subscription_plan) ||
-    plans[0];
+  const statCards = [
+    {
+      label: "Revenue",
+      value: formatCurrency(metrics.revenue),
+      icon: Wallet,
+    },
+    {
+      label: "Orders",
+      value: metrics.orders.toString(),
+      icon: ShoppingBag,
+    },
+    {
+      label: "Pending",
+      value: metrics.pendingOrders.toString(),
+      icon: Clock3,
+    },
+    {
+      label: "Products",
+      value: metrics.products.toString(),
+      icon: Package,
+    },
+    {
+      label: "Services",
+      value: metrics.services.toString(),
+      icon: Boxes,
+    },
+  ];
 
   return (
-    <div className="grid gap-6">
-      <section className="grid gap-5 xl:grid-cols-[1fr_0.95fr]">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-start">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
-                Market Villa
+    <div className="grid gap-5">
+      <section className="border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                Overview
               </p>
 
-              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] text-slate-950 md:text-4xl">
-                Mini websites for businesses.
-              </h2>
-
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-500">
-                Manage your storefront, products, services, orders, custom
-                domain, and subscription from one simple dashboard.
-              </p>
+              {isLoadingMetrics ? (
+                <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+                  <Loader2 size={13} className="animate-spin" />
+                  Updating
+                </span>
+              ) : null}
             </div>
 
-            <Link
-              href={
-                selectedBusiness
-                  ? `/store/${selectedBusiness.slug}`
-                  : "/dashboard/onboarding"
-              }
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-500"
-            >
-              Preview Store
-              <ArrowRight size={16} />
-            </Link>
+            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+              Business dashboard
+            </h2>
+
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+              A quick view of your storefront performance, content, and recent
+              customer activity.
+            </p>
           </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {plans.map((plan) => {
-              const active = plan.id === currentPlan.id;
-
-              return (
-                <div
-                  key={plan.id}
-                  className={`rounded-[1.25rem] border p-4 ${
-                    active
-                      ? "border-slate-950 bg-slate-950 text-white"
-                      : "border-slate-200 bg-[#f8fbfc] text-slate-950"
-                  }`}
-                >
-                  <p
-                    className={`text-sm font-semibold ${
-                      active ? "text-white" : "text-slate-600"
-                    }`}
-                  >
-                    {plan.name}
-                  </p>
-
-                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em]">
-                    {plan.price}
-                    <span
-                      className={`ml-1 text-xs font-medium ${
-                        active ? "text-slate-300" : "text-slate-400"
-                      }`}
-                    >
-                      /{plan.note}
-                    </span>
-                  </p>
-
-                  {active ? (
-                    <p className="mt-3 rounded-full bg-emerald-300 px-3 py-1 text-center text-xs font-semibold text-slate-950">
-                      Active plan
-                    </p>
-                  ) : (
-                    <Link
-                      href="/dashboard/settings"
-                      className="mt-3 block rounded-full bg-white px-3 py-1 text-center text-xs font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
-                    >
-                      View upgrade
-                    </Link>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-start justify-between gap-5">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
-                Active Business
-              </p>
-
-              <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                {selectedBusiness?.name}
-              </h3>
-
-              <p className="mt-2 text-sm text-slate-500">
-                /store/{selectedBusiness?.slug}
-              </p>
-            </div>
-
-            <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                selectedBusiness?.is_published
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "bg-amber-50 text-amber-700"
-              }`}
-            >
-              {selectedBusiness?.is_published ? "Live" : "Draft"}
-            </span>
-          </div>
-
-          <div className="mt-5">
-            <select
-              value={selectedBusinessId}
-              onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="w-full rounded-2xl border border-slate-200 bg-[#f8fbfc] px-4 py-4 text-sm outline-none focus:border-slate-950"
-            >
-              {businesses.map((business) => (
-                <option key={business.id} value={business.id}>
-                  {business.name} â€” /store/{business.slug}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mt-5 grid gap-3 md:grid-cols-3">
-            <div className="rounded-[1.25rem] bg-[#f8fbfc] p-4">
-              <p className="text-xs font-medium text-slate-500">Products</p>
-              <p className="mt-2 text-2xl font-semibold text-slate-950">
-                {products.length}
-              </p>
-            </div>
-
-            <div className="rounded-[1.25rem] bg-[#f8fbfc] p-4">
-              <p className="text-xs font-medium text-slate-500">Services</p>
-              <p className="mt-2 text-2xl font-semibold text-slate-950">
-                {services.length}
-              </p>
-            </div>
-
-            <div className="rounded-[1.25rem] bg-[#f8fbfc] p-4">
-              <p className="text-xs font-medium text-slate-500">Domain</p>
-              <p className="mt-2 truncate text-sm font-semibold capitalize text-slate-950">
-                {selectedBusiness?.custom_domain_status || "none"}
-              </p>
-            </div>
-          </div>
-
-          <Link
-            href="/dashboard/profile"
-            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+          <select
+            value={selectedBusinessId}
+            onChange={(event) => setSelectedBusinessId(event.target.value)}
+            className="h-11 min-w-72 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 outline-none focus:border-slate-950"
           >
-            Manage Business
-            <ArrowRight size={16} />
-          </Link>
+            {businesses.map((business) => (
+              <option key={business.id} value={business.id}>
+                {business.name}
+              </option>
+            ))}
+          </select>
         </div>
       </section>
 
       {message ? (
-        <div className="rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
+        <div className="border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {message}
         </div>
       ) : null}
 
-      <section className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="mb-6 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
-                Onboarding
-              </p>
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        {statCards.map((card) => {
+          const Icon = card.icon;
 
-              <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                Business setup
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Complete these steps to make the business page feel ready for
-                customers.
-              </p>
-            </div>
-
-            <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-              {setupPercent}%
-            </span>
-          </div>
-
-          <div className="mb-6 h-3 overflow-hidden rounded-full bg-slate-100">
+          return (
             <div
-              className="h-full rounded-full bg-emerald-600"
-              style={{ width: `${setupPercent}%` }}
-            />
-          </div>
+              key={card.label}
+              className="group border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <div className="flex items-center justify-between">
+                <span className="grid h-9 w-9 place-items-center bg-slate-950 text-white">
+                  <Icon size={16} />
+                </span>
 
-          <div className="grid gap-3">
-            {setupItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="flex items-start justify-between gap-4 rounded-[1.25rem] border border-slate-200 bg-[#f8fbfc] p-4 hover:bg-white"
-              >
-                <div>
-                  <p className="text-sm font-semibold text-slate-950">
-                    {item.label}
-                  </p>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                  {card.label}
+                </span>
+              </div>
 
-                  <p className="mt-1 text-xs leading-5 text-slate-500">
-                    {item.description}
-                  </p>
-                </div>
-
-                {item.done ? (
-                  <CheckCircle2 size={19} className="mt-1 text-emerald-600" />
-                ) : (
-                  <span className="mt-1 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-                    Pending
-                  </span>
-                )}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="mb-6 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
-                Building
-              </p>
-
-              <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                Storefront control center
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Open each module to manage a specific part of the business
-                website.
+              <p className="mt-7 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+                {card.value}
               </p>
             </div>
-          </div>
-
-          <div className="grid gap-3">
-            {managementRows.map((row) => {
-              const Icon = row.icon;
-              const isOpen = Boolean(openRows[row.title]);
-
-              return (
-                <div
-                  key={row.title}
-                  className="overflow-hidden rounded-[1.25rem] border border-slate-200 bg-[#f8fbfc]"
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggleRow(row.title)}
-                    className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left hover:bg-white"
-                  >
-                    <span className="flex items-center gap-3">
-                      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-white text-slate-700 ring-1 ring-slate-200">
-                        <Icon size={18} />
-                      </span>
-
-                      <span>
-                        <span className="block text-sm font-semibold text-slate-950">
-                          {row.title}
-                        </span>
-
-                        <span className="mt-1 block text-xs text-slate-500">
-                          {row.description}
-                        </span>
-                      </span>
-                    </span>
-
-                    <ChevronDown
-                      size={18}
-                      className={`shrink-0 text-slate-400 transition ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {isOpen ? (
-                    <div className="border-t border-slate-200 bg-white px-4 py-4">
-                      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                        <p className="text-sm leading-6 text-slate-500">
-                          Continue managing {row.title.toLowerCase()} for{" "}
-                          {selectedBusiness?.name}.
-                        </p>
-
-                        <Link
-                          href={row.href}
-                          className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-500"
-                        >
-                          Open
-                          <ArrowRight size={16} />
-                        </Link>
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+          );
+        })}
       </section>
 
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="grid items-center gap-5 md:grid-cols-[1fr_auto]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
-              Next recommended step
-            </p>
+      <section className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+        <div className="border border-slate-200 bg-white shadow-sm">
+          <div className="flex items-center justify-between gap-4 border-b border-slate-200 p-5">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                Recent orders
+              </p>
+              <h3 className="mt-1 text-lg font-semibold tracking-[-0.03em] text-slate-950">
+                Customer activity
+              </h3>
+            </div>
 
-            <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-              Add payment and subscription enforcement.
-            </h3>
-
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
-              Market Villa already has businesses, products, services, orders,
-              image uploads, and admin controls. Paystack subscriptions will
-              make the platform ready for real paying businesses.
-            </p>
+            <Link
+              href="/dashboard/orders"
+              className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-800"
+            >
+              Orders
+              <ArrowRight size={14} />
+            </Link>
           </div>
 
-          <Link
-            href="/dashboard/settings"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            View Plans
-            <ArrowRight size={17} />
-          </Link>
+          {orders.length > 0 ? (
+            <div>
+              {orders.map((order, index) => (
+                <div
+                  key={order.id}
+                  className={`grid gap-3 p-5 md:grid-cols-[1fr_auto] md:items-center ${
+                    index === 0 ? "" : "border-t border-slate-100"
+                  }`}
+                >
+                  <div>
+                    <p className="text-sm font-semibold text-slate-950">
+                      {order.customer_name || "Customer"}
+                    </p>
+
+                    <p className="mt-1 text-xs text-slate-400">
+                      {formatDate(order.created_at)}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3 md:justify-end">
+                    <span className="text-sm font-semibold text-slate-950">
+                      {formatCurrency(getOrderAmount(order))}
+                    </span>
+
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${getStatusStyle(
+                        order.status
+                      )}`}
+                    >
+                      {order.status || "pending"}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 text-center">
+              <div className="mx-auto grid h-11 w-11 place-items-center bg-slate-100 text-slate-500">
+                <ShoppingBag size={18} />
+              </div>
+
+              <p className="mt-4 text-sm font-semibold text-slate-950">
+                No orders yet
+              </p>
+
+              <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                New orders and inquiries will appear here once customers start
+                using your page.
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="grid gap-5">
+          <div className="border border-slate-200 bg-slate-950 p-5 text-white shadow-sm">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/40">
+                  Store status
+                </p>
+
+                <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em]">
+                  {selectedBusiness?.name || "Business page"}
+                </h3>
+              </div>
+
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                  selectedBusiness?.is_published
+                    ? "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-300/25"
+                    : "bg-amber-400/15 text-amber-200 ring-1 ring-amber-300/25"
+                }`}
+              >
+                {selectedBusiness?.is_published ? "Published" : "Draft"}
+              </span>
+            </div>
+
+            <div className="mt-6 grid gap-3">
+              <div className="flex items-center justify-between border border-white/10 bg-white/5 p-4">
+                <span className="text-sm text-white/55">Plan</span>
+                <span className="text-sm font-semibold capitalize">
+                  {selectedBusiness?.subscription_plan || "Starter"}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between border border-white/10 bg-white/5 p-4">
+                <span className="text-sm text-white/55">Subscription</span>
+                <span className="text-sm font-semibold capitalize">
+                  {selectedBusiness?.subscription_status || "Trial"}
+                </span>
+              </div>
+            </div>
+
+            {selectedBusiness?.slug ? (
+              <Link
+                href={`/store/${selectedBusiness.slug}`}
+                target="_blank"
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-xs font-semibold text-slate-950 hover:bg-slate-200"
+              >
+                View store
+                <ExternalLink size={14} />
+              </Link>
+            ) : null}
+          </div>
+
+          <div className="border border-slate-200 bg-white p-5 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+              Quick actions
+            </p>
+
+            <div className="mt-4 grid gap-3">
+              {[
+                {
+                  label: "Add products",
+                  href: "/dashboard/products",
+                },
+                {
+                  label: "Add services",
+                  href: "/dashboard/services",
+                },
+                {
+                  label: "Billing settings",
+                  href: "/dashboard/settings",
+                },
+                {
+                  label: "Custom domain",
+                  href: "/dashboard/domain",
+                },
+              ].map((action) => (
+                <Link
+                  key={action.href}
+                  href={action.href}
+                  className="flex items-center justify-between border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
+                >
+                  {action.label}
+                  <ArrowRight size={15} />
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </div>

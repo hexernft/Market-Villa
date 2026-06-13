@@ -91,7 +91,7 @@ export default function OnboardingPage() {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Unable to create business page.";
+          : error instanceof Error ? error.message : JSON.stringify(error);
 
       setMessage(errorMessage);
     } finally {
