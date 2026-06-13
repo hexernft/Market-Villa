@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -263,7 +263,9 @@ export default function SettingsPage() {
               onClick={handleTogglePublishStatus}
               disabled={isUpdatingPublishStatus}
               className={`inline-flex min-h-12 items-center justify-center rounded-full px-5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
-                selectedBusiness?.is_published ? "whitespace-nowrap bg-red-600 text-white hover:bg-red-700" : "whitespace-nowrap bg-emerald-600 text-white hover:bg-emerald-700"
+                selectedBusiness?.is_published
+                  ? "bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100"
+                  : "bg-slate-950 text-white hover:bg-slate-800"
               }`}
             >
               {isUpdatingPublishStatus
@@ -370,6 +372,14 @@ export default function SettingsPage() {
                     <div className="mt-2 flex items-end gap-2">
                       <span className="text-3xl font-semibold tracking-[-0.06em]">
                         {formatNaira(planAmount)}
+                      </span>
+
+                      <span
+                        className={`pb-1 text-xs font-medium ${
+                          isCurrent ? "text-slate-400" : "text-slate-500"
+                        }`}
+                      >
+                        per month
                       </span>
                     </div>
                   </div>
