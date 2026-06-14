@@ -1,4 +1,4 @@
-﻿import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
@@ -17,6 +17,10 @@ const config: Config = {
     "text-[#fbbf24]",
     "bg-[#f59e0b]",
     "border-orange-200",
+    "bg-[var(--mv-orange)]",
+    "hover:bg-[var(--mv-orange-hover)]",
+    "text-[var(--mv-orange)]",
+    "border-[var(--mv-orange)]",
 
     "from-slate-950",
     "via-slate-900",
@@ -36,7 +40,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Space Grotesk", "Arial", "sans-serif"],
+        sans: ["Montserrat", "Arial", "sans-serif"],
       },
       boxShadow: {
         soft: "0 24px 70px rgba(15, 23, 42, 0.12)",

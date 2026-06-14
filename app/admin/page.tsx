@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
@@ -550,7 +550,7 @@ export default function AdminPage() {
                     <input
                       value={query}
                       onChange={(event) => setQuery(event.target.value)}
-                      className="w-full rounded-full border border-slate-200 bg-slate-50 px-11 py-3 text-sm outline-none focus:border-slate-950"
+                      className="w-full rounded-full border border-slate-200 bg-slate-50 px-11 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
                       placeholder="Search businesses"
                     />
                   </div>
@@ -755,7 +755,7 @@ export default function AdminPage() {
                               setAdminNote(event.target.value)
                             }
                             rows={3}
-                            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-950"
+                            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
                             placeholder="Admin note for this update"
                           />
 

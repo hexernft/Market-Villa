@@ -295,7 +295,7 @@ export default function AnalyticsPage() {
           <select
             value={selectedBusinessId}
             onChange={(event) => setSelectedBusinessId(event.target.value)}
-            className="border border-slate-200 bg-white px-4 py-3.5 text-sm outline-none focus:border-slate-950 md:min-w-80"
+            className="border border-slate-200 bg-white px-4 py-3.5 text-sm outline-none focus:border-[var(--mv-orange)] md:min-w-80"
           >
             {businesses.map((business) => (
               <option key={business.id} value={business.id}>

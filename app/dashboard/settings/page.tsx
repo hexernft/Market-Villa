@@ -185,7 +185,7 @@ export default function SettingsPage() {
               <input
                 value={fullName}
                 onChange={(event) => setFullName(event.target.value)}
-                className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-slate-950"
+                className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-orange)]"
                 placeholder="Your full name"
               />
             </label>
@@ -241,7 +241,7 @@ export default function SettingsPage() {
                 <input
                   value={supportEmail}
                   onChange={(event) => setSupportEmail(event.target.value)}
-                  className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-slate-950"
+                  className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-orange)]"
                   placeholder="support@example.com"
                 />
               </label>
@@ -253,7 +253,7 @@ export default function SettingsPage() {
                 <input
                   value={supportPhone}
                   onChange={(event) => setSupportPhone(event.target.value)}
-                  className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-slate-950"
+                  className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-orange)]"
                   placeholder="+234..."
                 />
               </label>

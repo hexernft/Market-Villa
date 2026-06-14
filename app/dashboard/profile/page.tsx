@@ -248,7 +248,7 @@ export default function ProfilePage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100 md:min-w-72"
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -339,7 +339,7 @@ export default function ProfilePage() {
                 <input
                   value={name}
                   onChange={(event) => handleNameChange(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="Business name"
                   required
                 />
@@ -354,7 +354,7 @@ export default function ProfilePage() {
                 <select
                   value={category}
                   onChange={(event) => setCategory(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                 >
                   {categories.map((item) => (
                     <option key={item}>{item}</option>
@@ -377,7 +377,7 @@ export default function ProfilePage() {
                 <input
                   value={slug}
                   onChange={(event) => setSlug(slugify(event.target.value))}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="business-slug"
                   required
                 />
@@ -395,7 +395,7 @@ export default function ProfilePage() {
                   onChange={(event) =>
                     setLogoText(event.target.value.toUpperCase().slice(0, 4))
                   }
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="MV"
                 />
               </label>
@@ -408,7 +408,7 @@ export default function ProfilePage() {
                 <input
                   value={tagline}
                   onChange={(event) => setTagline(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="Short line about the business"
                 />
               </label>
@@ -431,7 +431,7 @@ export default function ProfilePage() {
               <input
                 value={coverImageUrl}
                 onChange={(event) => setCoverImageUrl(event.target.value)}
-                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                 placeholder="https://..."
               />
             </label>
@@ -445,7 +445,7 @@ export default function ProfilePage() {
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
                 rows={3}
-                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                 placeholder="Describe what your business offers."
               />
             </label>
@@ -460,7 +460,7 @@ export default function ProfilePage() {
                 <input
                   value={whatsapp}
                   onChange={(event) => setWhatsapp(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="2348012345678"
                 />
               </label>
@@ -474,7 +474,7 @@ export default function ProfilePage() {
                 <input
                   value={phone}
                   onChange={(event) => setPhone(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="080..."
                 />
               </label>
@@ -491,7 +491,7 @@ export default function ProfilePage() {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   type="email"
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="business@email.com"
                 />
               </label>
@@ -505,7 +505,7 @@ export default function ProfilePage() {
                 <input
                   value={location}
                   onChange={(event) => setLocation(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="Abuja, Nigeria"
                 />
               </label>
@@ -521,7 +521,7 @@ export default function ProfilePage() {
                 <input
                   value={openingHours}
                   onChange={(event) => setOpeningHours(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="Mon - Sat, 9 AM - 6 PM"
                 />
               </label>
@@ -535,7 +535,7 @@ export default function ProfilePage() {
                 <input
                   value={instagramUrl}
                   onChange={(event) => setInstagramUrl(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="https://instagram.com/yourbusiness"
                 />
               </label>

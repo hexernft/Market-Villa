@@ -78,7 +78,7 @@ export default function LoginPage() {
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
               placeholder="Email address"
               type="email"
               required
@@ -87,7 +87,7 @@ export default function LoginPage() {
             <input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
               placeholder="Password"
               type="password"
               required

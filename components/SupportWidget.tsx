@@ -58,7 +58,7 @@ export function SupportWidget() {
         onClick={() => setIsOpen(true)}
         aria-label="Open support chat"
         title="Support"
-        className="group fixed bottom-5 right-5 z-50 inline-flex items-center gap-0 overflow-hidden rounded-full bg-slate-950 p-2.5 text-white shadow-soft ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-0.5 hover:gap-2.5 hover:bg-slate-900 hover:px-3.5"
+        className="group fixed bottom-5 right-5 z-50 inline-flex items-center gap-0 overflow-hidden rounded-full bg-[var(--mv-orange)] p-2.5 text-white shadow-soft ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-0.5 hover:gap-2.5 hover:bg-[var(--mv-orange-hover)] hover:px-3.5"
       >
         <span className="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white">
           <MessageCircle size={16} />

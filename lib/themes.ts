@@ -91,7 +91,7 @@ export const businessThemes: BusinessTheme[] = [
     secondaryButton:
       "bg-white/10 text-white ring-1 ring-white/20 hover:bg-white/15",
     chip: "bg-white/12 text-white ring-1 ring-white/20",
-    border: "border-orange-200",
+    border: "border-[rgba(255,106,0,0.28)]",
     productCard: "rounded-[2rem] bg-white text-[#2a1208] shadow-sm",
     sectionLabel: "text-orange-700",
   },

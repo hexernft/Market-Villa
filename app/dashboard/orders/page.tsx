@@ -251,7 +251,7 @@ export default function OrdersPage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100 md:min-w-80"
+              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -269,7 +269,7 @@ export default function OrdersPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-slate-950 focus:bg-white focus:ring-4 focus:ring-slate-100"
+                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:bg-white focus:ring-4 focus:ring-slate-100"
                 placeholder="Search orders"
               />
             </div>

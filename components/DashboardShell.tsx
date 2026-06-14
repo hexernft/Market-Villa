@@ -39,7 +39,6 @@ const navItems = [
     label: "Onboarding",
     href: "/dashboard/onboarding",
     icon: Sparkles,
-  Settings,
   },
   {
     label: "Products",
@@ -60,7 +59,8 @@ const navItems = [
     label: "Domain",
     href: "/dashboard/domain",
     icon: Globe2,
-  },  {
+  },
+  {
     label: "Profile",
     href: "/dashboard/profile",
     icon: UserRound,
@@ -207,7 +207,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   onClick={() => setIsSidebarOpen(false)}
                   className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition ${
                     isActive
-                      ? "bg-slate-950 text-white"
+                      ? "bg-[var(--mv-orange)] text-white"
                       : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
                   }`}
                 >

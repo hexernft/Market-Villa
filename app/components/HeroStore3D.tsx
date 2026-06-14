@@ -1,4 +1,4 @@
-﻿import {
+import {
   CheckCircle2,
   MessageCircle,
   PackageCheck,
@@ -6,7 +6,7 @@
   Store,
 } from "lucide-react";
 
-const ORANGE = "#ff7a1a";
+const ORANGE = "#ff6a00";
 const NAVY = "#241d4f";
 const CREAM = "#fff7ed";
 
@@ -57,7 +57,7 @@ export function HeroStore3D() {
                   >
                     <p
                       className="text-[11px] font-semibold uppercase tracking-[0.18em]"
-                      style={{ color: "#ffb16a" }}
+                      style={{ color: "#ffb067" }}
                     >
                       Business page
                     </p>
@@ -67,14 +67,14 @@ export function HeroStore3D() {
                     </p>
 
                     <div className="mt-5 flex items-center gap-2 text-xs text-white/70">
-                      <CheckCircle2 size={14} style={{ color: "#ffb16a" }} />
+                      <CheckCircle2 size={14} style={{ color: "#ffb067" }} />
                       WhatsApp orders
                     </div>
                   </div>
 
                   <div className="grid gap-3">
                     <div className="border border-slate-200 bg-white p-3">
-                      <div className="mb-4 grid h-9 w-9 place-items-center bg-orange-50">
+                      <div className="mb-4 grid h-9 w-9 place-items-center bg-[rgba(255,106,0,0.08)]">
                         <ShoppingBag size={16} style={{ color: ORANGE }} />
                       </div>
 
@@ -85,7 +85,7 @@ export function HeroStore3D() {
                     </div>
 
                     <div className="border border-slate-200 bg-white p-3">
-                      <div className="mb-4 grid h-9 w-9 place-items-center bg-orange-50">
+                      <div className="mb-4 grid h-9 w-9 place-items-center bg-[rgba(255,106,0,0.08)]">
                         <PackageCheck size={16} style={{ color: ORANGE }} />
                       </div>
 

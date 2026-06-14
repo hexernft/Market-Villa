@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
@@ -241,7 +241,7 @@ export default function DomainPage() {
                 setSelectedBusinessId(event.target.value);
                 closeDomainForm();
               }}
-              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100 md:min-w-72"
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -334,7 +334,7 @@ export default function DomainPage() {
                   <input
                     value={contactPhone}
                     onChange={(event) => setContactPhone(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                     placeholder="080..."
                   />
                 </label>
@@ -349,7 +349,7 @@ export default function DomainPage() {
                   <input
                     value={requestedDomain}
                     onChange={(event) => setRequestedDomain(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                     placeholder="yourbusiness.com"
                     required
                   />
@@ -365,7 +365,7 @@ export default function DomainPage() {
                     onChange={(event) =>
                       setAlternativeDomain(event.target.value)
                     }
-                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                     placeholder="yourbusiness.ng"
                   />
                 </label>
@@ -408,7 +408,7 @@ export default function DomainPage() {
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
                   rows={3}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-slate-950 focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                   placeholder="Add anything important."
                 />
               </label>

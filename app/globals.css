@@ -1,11 +1,15 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #eeeaf8;
-  --foreground: #111827;
+  --background: #f6f4f1;
+  --foreground: #111111;
+  --mv-orange: #ff6a00;
+  --mv-orange-hover: #ff8126;
+  --mv-black: #050505;
+  --mv-soft: #f6f4f1;
 }
 
 * {
@@ -19,10 +23,12 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(255, 107, 15, 0.12), transparent 26rem),
-    radial-gradient(circle at top right, rgba(36, 29, 79, 0.18), transparent 30rem),
+    radial-gradient(circle at top left, rgba(255, 106, 0, 0.10), transparent 24rem),
+    radial-gradient(circle at top right, rgba(5, 5, 5, 0.05), transparent 28rem),
     var(--background);
   color: var(--foreground);
+  font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
+  letter-spacing: -0.01em;
 }
 
 button,
@@ -33,7 +39,7 @@ select {
 }
 
 ::selection {
-  background: #ff6b0f;
+  background: var(--mv-orange);
   color: white;
 }
 
@@ -91,3 +97,12 @@ select {
   }
 }
 
+
+
+.market-villa-brand-text {
+  color: var(--mv-orange);
+}
+
+.market-villa-brand-bg {
+  background: var(--mv-orange);
+}

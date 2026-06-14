@@ -110,7 +110,7 @@ export default function SignupPage() {
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
               placeholder="Email address"
               type="email"
               required
@@ -120,7 +120,7 @@ export default function SignupPage() {
               <input
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
                 placeholder="First name"
                 required
               />
@@ -128,7 +128,7 @@ export default function SignupPage() {
               <input
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
                 placeholder="Last name"
                 required
               />
@@ -138,7 +138,7 @@ export default function SignupPage() {
               <input
                 value={businessName}
                 onChange={(event) => setBusinessName(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
                 placeholder="Business"
                 required
               />
@@ -146,7 +146,7 @@ export default function SignupPage() {
               <input
                 value={whatsapp}
                 onChange={(event) => setWhatsapp(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
                 placeholder="WhatsApp"
                 required
               />
@@ -156,7 +156,7 @@ export default function SignupPage() {
               <input
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
                 placeholder="Password"
                 type="password"
                 minLength={6}
@@ -166,7 +166,7 @@ export default function SignupPage() {
               <input
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-slate-950 focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
                 placeholder="Confirm password"
                 type="password"
                 minLength={6}

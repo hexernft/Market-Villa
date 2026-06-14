@@ -350,7 +350,7 @@ export default function StorePage({ params }: StorePageProps) {
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search products"
-                  className="min-h-12 w-full rounded-full border border-slate-200 bg-white px-11 text-sm text-slate-950 outline-none focus:border-slate-950"
+                  className="min-h-12 w-full rounded-full border border-slate-200 bg-white px-11 text-sm text-slate-950 outline-none focus:border-[var(--mv-orange)]"
                 />
               </div>
 

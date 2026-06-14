@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
           <input
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="rounded-2xl border border-slate-200 px-4 py-4 outline-none focus:border-slate-950"
+            className="rounded-2xl border border-slate-200 px-4 py-4 outline-none focus:border-[var(--mv-orange)]"
             placeholder="Admin email address"
             type="email"
             required
@@ -83,7 +83,7 @@ export default function AdminLoginPage() {
           <input
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="rounded-2xl border border-slate-200 px-4 py-4 outline-none focus:border-slate-950"
+            className="rounded-2xl border border-slate-200 px-4 py-4 outline-none focus:border-[var(--mv-orange)]"
             placeholder="Admin password"
             type="password"
             required

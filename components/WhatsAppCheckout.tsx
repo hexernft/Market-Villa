@@ -298,14 +298,14 @@ export function WhatsAppCheckout({
                     <input
                       value={customerName}
                       onChange={(event) => setCustomerName(event.target.value)}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-950"
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
                       placeholder="Your name"
                     />
 
                     <input
                       value={customerPhone}
                       onChange={(event) => setCustomerPhone(event.target.value)}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-950"
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
                       placeholder="Your phone number"
                     />
 
@@ -314,7 +314,7 @@ export function WhatsAppCheckout({
                       onChange={(event) =>
                         setCustomerAddress(event.target.value)
                       }
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-950"
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
                       placeholder="Delivery address / location"
                     />
 
@@ -322,7 +322,7 @@ export function WhatsAppCheckout({
                       value={customerNote}
                       onChange={(event) => setCustomerNote(event.target.value)}
                       rows={3}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-950"
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
                       placeholder="Extra note"
                     />
                   </div>
