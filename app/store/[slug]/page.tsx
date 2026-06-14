@@ -4,7 +4,9 @@ import { use, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   CalendarCheck,
+  Check,
   Clock,
+  Copy,
   Instagram,
   MapPin,
   MessageCircle,
@@ -109,6 +111,7 @@ export default function StorePage({ params }: StorePageProps) {
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [query, setQuery] = useState("");
+  const [copiedStoreLink, setCopiedStoreLink] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -267,6 +270,33 @@ export default function StorePage({ params }: StorePageProps) {
         slug: business.slug || "",
       },
     });
+  }
+
+  async function handleCopyStoreLink() {
+    if (!business?.id || !business.slug) return;
+
+    const url = `${window.location.origin}/store/${business.slug}`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+
+      trackStoreEvent({
+        businessId: business.id,
+        eventType: "copy_link",
+        source: "store_page",
+        metadata: {
+          slug: business.slug,
+        },
+      });
+
+      setCopiedStoreLink(true);
+
+      window.setTimeout(() => {
+        setCopiedStoreLink(false);
+      }, 1400);
+    } catch {
+      setCopiedStoreLink(false);
+    }
   }
 
   return (
