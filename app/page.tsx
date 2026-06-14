@@ -56,10 +56,10 @@ const faqItems = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white text-slate-950">
+    <main className="min-h-screen bg-[#f3f4f6] text-slate-950">
       <PlatformNavbar />
 
-      <section className="px-5 pb-14 pt-32 md:px-8 md:pb-16 md:pt-36">
+      <section className="bg-[radial-gradient(circle_at_top_right,rgba(255,106,0,0.20),transparent_34%),linear-gradient(180deg,#f3f4f6_0%,#ffffff_100%)] px-5 pb-14 pt-32 md:px-8 md:pb-16 md:pt-36">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[0.95fr_0.65fr] lg:items-center">
             <div>
@@ -74,18 +74,12 @@ export default function Home() {
               </p>
 
               <div className="mt-8">
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-slate-950 to-slate-800 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_12px_32px_rgba(2,8,31,0.25)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(2,8,31,0.32)]"
-                >
-                  Create Business Page
-                  <ArrowRight size={17} />
-                </Link>
+                <Link href="/signup" className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#ff8126]">Create Business Page<ArrowRight size={17} className="text-white" /></Link>
               </div>
             </div>
 
-            <div className="hidden border border-slate-200 bg-slate-50 p-5 lg:block">
-              <div className="bg-white p-5 shadow-sm">
+            <div className="hidden border border-orange-200 bg-orange-50/70 p-5 shadow-sm lg:block">
+              <div className="border border-orange-100 bg-white p-5 shadow-sm">
                 <div className="mb-8 flex items-center justify-between">
                   <Image src="/market-villa-logo.png" alt="Market Villa" width={64} height={64} className="h-16 w-16 object-contain" priority />
 
@@ -123,13 +117,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how" className="border-y border-orange-100 bg-orange-50/35 px-5 py-14 md:px-8">
+      <section id="how" className="border-y border-orange-200 bg-[#fff3eb] px-5 py-14 md:px-8">
         <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-3">
           {features.map((feature) => {
             const Icon = feature.icon;
 
             return (
-              <div key={feature.title} className="border border-orange-100 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#ff6a00]/40 hover:shadow-md">
+              <div key={feature.title} className="border border-orange-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#ff6a00]/50 hover:shadow-md">
                 <div className="mb-8 grid h-11 w-11 place-items-center rounded-2xl bg-[#ff6a00] text-white shadow-sm">
                   <Icon size={20} />
                 </div>
@@ -147,14 +141,14 @@ export default function Home() {
         </div>
       </section>
 
-            <section className="bg-slate-100 px-5 py-16 text-slate-950 md:px-8">
+            <section className="bg-[#ff6a00] px-5 py-16 text-white md:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
           <div>
             <p className="text-sm font-semibold tracking-[0.18em] text-white">
               Why Market Villa
             </p>
 
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 md:text-4xl">
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
               A simple page before the WhatsApp conversation.
             </h2>
           </div>
@@ -165,9 +159,9 @@ export default function Home() {
               "Products and services stay organized in one place.",
               "Business owners can keep their page updated anytime.",
             ].map((item) => (
-              <div key={item} className="flex gap-3 border border-slate-200 bg-white p-5 shadow-sm">
+              <div key={item} className="flex gap-3 border border-white/25 bg-white/15 p-5 shadow-sm backdrop-blur">
                 <CheckCircle2 size={18} className="mt-1 shrink-0 text-white" />
-                <p className="text-sm leading-7 text-slate-600">{item}</p>
+                <p className="text-sm leading-7 text-white/85">{item}</p>
               </div>
             ))}
           </div>
@@ -203,7 +197,7 @@ export default function Home() {
           </div>
         </div>
       </section>      <section className="relative overflow-hidden border-y border-[#ff8126] bg-[#ff6a00] py-1.5">
-        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-[192px] bg-[#ff8126]" />
+        <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-[192px] bg-[#e85f00]" />
 
         <div className="market-villa-marquee relative z-0 flex whitespace-nowrap text-[11px] font-medium leading-none text-white">
           <span className="mx-5">
