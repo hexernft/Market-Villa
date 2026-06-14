@@ -11,6 +11,7 @@ import {
   CreditCard,
   Globe2,
   LayoutDashboard,
+  Megaphone,
   Loader2,
   LogOut,
   Menu,
@@ -29,11 +30,17 @@ const navItems = [
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+  Megaphone,
   },
   {
     label: "Analytics",
     href: "/dashboard/analytics",
     icon: BarChart3,
+  },
+  {
+    label: "Visibility",
+    href: "/dashboard/visibility",
+    icon: Megaphone,
   },
   {
     label: "Onboarding",
