@@ -2,7 +2,8 @@ export type VisibilityPackageId =
   | "featured_store"
   | "category_boost"
   | "store_of_the_week"
-  | "launch_promotion"
+  | "new_store_boost"
+  | "visibility_pack"
   | "verified_badge";
 
 export type VisibilityPackage = {
@@ -18,7 +19,7 @@ export type VisibilityPackage = {
 export const VISIBILITY_PACKAGES: Record<VisibilityPackageId, VisibilityPackage> = {
   featured_store: {
     id: "featured_store",
-    name: "Featured Store",
+    name: "Homepage Featured",
     priceLabel: "₦5,000/week",
     amount: 5000,
     amountInKobo: 500000,
@@ -27,38 +28,47 @@ export const VISIBILITY_PACKAGES: Record<VisibilityPackageId, VisibilityPackage>
   },
   category_boost: {
     id: "category_boost",
-    name: "Category Boost",
-    priceLabel: "₦7,500/week",
-    amount: 7500,
-    amountInKobo: 750000,
+    name: "Category Top Spot",
+    priceLabel: "₦3,000/week",
+    amount: 3000,
+    amountInKobo: 300000,
     durationDays: 7,
     description: "Get higher visibility inside your business category.",
   },
   store_of_the_week: {
     id: "store_of_the_week",
     name: "Store of the Week",
-    priceLabel: "₦15,000/week",
-    amount: 15000,
-    amountInKobo: 1500000,
+    priceLabel: "₦10,000/week",
+    amount: 10000,
+    amountInKobo: 1000000,
     durationDays: 7,
     description: "Get premium weekly placement as a highlighted store.",
   },
-  launch_promotion: {
-    id: "launch_promotion",
-    name: "Launch Promotion",
-    priceLabel: "₦20,000 one-time",
-    amount: 20000,
-    amountInKobo: 2000000,
-    durationDays: 14,
-    description: "Promote a newly launched store across Market Villa discovery areas.",
+  new_store_boost: {
+    id: "new_store_boost",
+    name: "New Store Boost",
+    priceLabel: "₦1,500/3 days",
+    amount: 1500,
+    amountInKobo: 150000,
+    durationDays: 3,
+    description: "Give a newly launched store a short discovery boost.",
+  },
+  visibility_pack: {
+    id: "visibility_pack",
+    name: "Visibility Pack",
+    priceLabel: "₦15,000/month",
+    amount: 15000,
+    amountInKobo: 1500000,
+    durationDays: 30,
+    description: "Includes featured visibility, category boost, verified badge, and launch promotion support.",
   },
   verified_badge: {
     id: "verified_badge",
     name: "Verified Badge",
-    priceLabel: "₦10,000 one-time",
-    amount: 10000,
-    amountInKobo: 1000000,
-    durationDays: null,
+    priceLabel: "₦2,000/month",
+    amount: 2000,
+    amountInKobo: 200000,
+    durationDays: 30,
     description: "Build trust with a verified business badge on discovery pages.",
   },
 };

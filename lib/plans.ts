@@ -13,22 +13,22 @@ export const MARKET_VILLA_PLANS: Record<
   starter: {
     id: "starter",
     name: "Starter",
-    amount: 10000,
-    amountInKobo: 1000000,
+    amount: 5000,
+    amountInKobo: 500000,
     description: "For new small businesses getting online.",
   },
   growth: {
     id: "growth",
     name: "Growth",
-    amount: 20000,
-    amountInKobo: 2000000,
+    amount: 10000,
+    amountInKobo: 1000000,
     description: "For growing businesses that need more tools.",
   },
   pro: {
     id: "pro",
     name: "Pro",
-    amount: 30000,
-    amountInKobo: 3000000,
+    amount: 20000,
+    amountInKobo: 2000000,
     description: "For serious sellers, teams, and service businesses.",
   },
 };
