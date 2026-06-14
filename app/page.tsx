@@ -63,25 +63,6 @@ export default function Home() {
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[0.95fr_0.65fr] lg:items-center">
             <div>
-              <div className="mb-6 flex items-center gap-2">
-                <Image
-                  src="/market-villa-logo.png"
-                  alt="Market Villa"
-                  width={78}
-                  height={78}
-                  className="market-villa-logo-float h-[68px] w-[68px] object-contain"
-                  priority
-                />
-
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-                    Market Villa
-                  </p>
-                  <p className="mt-1 text-sm text-slate-500">
-                    Simple business pages
-                  </p>
-                </div>
-              </div>
 
               <h1 className="max-w-2xl text-3xl font-semibold leading-[1.12] tracking-[-0.04em] text-slate-950 md:text-4xl">
                 Start simple. Look professional. Sell with confidence.
@@ -106,9 +87,7 @@ export default function Home() {
             <div className="hidden border border-slate-200 bg-slate-50 p-5 lg:block">
               <div className="bg-white p-5 shadow-sm">
                 <div className="mb-8 flex items-center justify-between">
-                  <span className="grid h-11 w-11 place-items-center bg-slate-950 text-white">
-                    <Store size={20} />
-                  </span>
+                  <Image src="/market-villa-logo.png" alt="Market Villa" width={64} height={64} className="h-16 w-16 object-contain" priority />
 
                   <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                     Live
