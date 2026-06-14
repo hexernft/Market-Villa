@@ -63,6 +63,18 @@ function formatDate(value?: string | null) {
   }).format(new Date(value));
 }
 
+function getDaysRemaining(value?: string | null) {
+  if (!value) return null;
+
+  const expiry = new Date(value).getTime();
+  const now = new Date().getTime();
+  const diff = expiry - now;
+
+  if (diff <= 0) return 0;
+
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
 function isFeaturedActive(business: BusinessVisibility) {
   if (!business.is_featured) return false;
   if (!business.featured_until) return true;
@@ -342,6 +354,16 @@ export default function VisibilityPage() {
   const featuredActive = selectedBusiness
     ? isFeaturedActive(selectedBusiness)
     : false;
+
+  function renewVisibilityPackage(packageId?: string | null) {
+    if (!packageId) return;
+
+    setSelectedVisibilityPackage(packageId);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
 
   const statCards = [
     {
@@ -678,11 +700,55 @@ export default function VisibilityPage() {
                   </div>
                 </div>
 
-                <div className="text-xs text-slate-400 md:text-right">
-                  <p className="font-semibold text-slate-500">Reference</p>
-                  <p className="mt-1 max-w-[240px] truncate">
-                    {purchase.payment_reference || "No reference"}
-                  </p>
+                <div className="grid gap-3 text-xs text-slate-400 md:text-right">
+                  {(() => {
+                    const daysRemaining = getDaysRemaining(purchase.expires_at);
+                    const isExpired = daysRemaining === 0;
+                    const isPermanent = daysRemaining === null;
+
+                    return (
+                      <div>
+                        <p className="font-semibold text-slate-500">
+                          {isPermanent ? "Duration" : "Days remaining"}
+                        </p>
+
+                        <p
+                          className={`mt-1 inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+                            isPermanent
+                              ? "bg-slate-100 text-slate-600"
+                              : isExpired
+                              ? "bg-red-50 text-red-700 ring-1 ring-red-200"
+                              : daysRemaining <= 3
+                              ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200"
+                              : "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
+                          }`}
+                        >
+                          {isPermanent
+                            ? "Permanent"
+                            : isExpired
+                            ? "Expired"
+                            : `${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`}
+                        </p>
+                      </div>
+                    );
+                  })()}
+
+                  <div>
+                    <p className="font-semibold text-slate-500">Reference</p>
+                    <p className="mt-1 max-w-[240px] truncate">
+                      {purchase.payment_reference || "No reference"}
+                    </p>
+                  </div>
+
+                  {purchase.request_type && purchase.request_type !== "verified_badge" ? (
+                    <button
+                      type="button"
+                      onClick={() => renewVisibilityPackage(purchase.request_type)}
+                      className="inline-flex items-center justify-center rounded-full bg-[#ff6a00] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#ff8126]"
+                    >
+                      Renew package
+                    </button>
+                  ) : null}
                 </div>
               </article>
             ))}
