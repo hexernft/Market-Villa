@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   BadgeCheck,
@@ -43,12 +44,48 @@ function isFeaturedActive(business: BusinessVisibility) {
   return new Date(business.featured_until) > new Date();
 }
 
+const visibilityPackages = [
+  {
+    id: "featured_store",
+    name: "Featured Store",
+    price: "₦5,000/week",
+    description: "Appear inside the Featured Stores section on the stores page.",
+  },
+  {
+    id: "category_boost",
+    name: "Category Boost",
+    price: "₦7,500/week",
+    description: "Get higher visibility inside your business category.",
+  },
+  {
+    id: "store_of_the_week",
+    name: "Store of the Week",
+    price: "₦15,000/week",
+    description: "Get premium weekly placement as a highlighted store.",
+  },
+  {
+    id: "launch_promotion",
+    name: "Launch Promotion",
+    price: "₦20,000 one-time",
+    description: "Promote a newly launched store across Market Villa discovery areas.",
+  },
+  {
+    id: "verified_badge",
+    name: "Verified Badge",
+    price: "₦10,000 one-time",
+    description: "Build trust with a verified business badge on discovery pages.",
+  },
+];
+
 export default function VisibilityPage() {
+  const searchParams = useSearchParams();
   const [businesses, setBusinesses] = useState<BusinessVisibility[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [isRequestingFeature, setIsRequestingFeature] = useState(false);
+  const [selectedVisibilityPackage, setSelectedVisibilityPackage] =
+    useState("featured_store");
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
@@ -119,56 +156,98 @@ export default function VisibilityPage() {
     setMessage("");
 
     try {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
 
-      if (userError) throw userError;
-      if (!user) throw new Error("No logged-in user found.");
-
-      const { data: existingRequest, error: existingError } = await supabase
-        .from("visibility_requests")
-        .select("id,status")
-        .eq("business_id", selectedBusiness.id)
-        .eq("owner_id", user.id)
-        .eq("status", "pending")
-        .maybeSingle();
-
-      if (existingError) throw existingError;
-
-      if (existingRequest) {
-        setMessage("You already have a pending featured placement request.");
-        return;
+      if (!token) {
+        throw new Error("Please login again to continue.");
       }
 
-      const { error } = await supabase.from("visibility_requests").insert({
-        business_id: selectedBusiness.id,
-        owner_id: user.id,
-        request_type: "featured_placement",
-        status: "pending",
-        requested_days: 7,
-        message: "I want this store to be considered for featured placement.",
+      const response = await fetch("/api/visibility/initialize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          businessId: selectedBusiness.id,
+          packageId: selectedVisibilityPackage,
+        }),
       });
 
-      if (error) throw error;
+      const result = await response.json();
 
-      setMessage("Featured placement request submitted. We will review it soon.");
+      if (!response.ok) {
+        throw new Error(result?.error || "Unable to start visibility payment.");
+      }
+
+      if (!result?.authorizationUrl) {
+        throw new Error("Paystack checkout link was not returned.");
+      }
+
+      window.location.href = result.authorizationUrl;
     } catch (error) {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Unable to submit featured placement request.";
+          : "Unable to start visibility payment.";
 
       setMessage(errorMessage);
-    } finally {
       setIsRequestingFeature(false);
+    }
+  }
+
+  async function verifyVisibilityPayment(reference: string) {
+    setMessage("Confirming visibility payment...");
+
+    try {
+      const response = await fetch("/api/visibility/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reference }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result?.error || "Unable to verify visibility payment.");
+      }
+
+      if (result.success) {
+        setMessage(
+          result.message ||
+            "Payment verified. Visibility package activated automatically."
+        );
+
+        await loadBusinesses();
+
+        window.history.replaceState({}, "", "/dashboard/visibility");
+      } else {
+        setMessage(result.message || "Payment was not successful.");
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unable to verify visibility payment.";
+
+      setMessage(errorMessage);
     }
   }
 
   useEffect(() => {
     loadBusinesses();
   }, []);
+
+  useEffect(() => {
+    const reference = searchParams.get("visibility_reference");
+
+    if (reference) {
+      verifyVisibilityPayment(reference);
+    }
+  }, [searchParams]);
 
   if (isLoading) {
     return (
@@ -402,7 +481,7 @@ export default function VisibilityPage() {
 
         <aside className="border border-slate-200 bg-slate-950 p-5 text-white shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/40">
-            Growth opportunity
+            Visibility products
           </p>
 
           <h3 className="mt-3 text-2xl font-semibold tracking-[-0.05em]">
@@ -410,25 +489,48 @@ export default function VisibilityPage() {
           </h3>
 
           <p className="mt-3 text-sm leading-7 text-white/65">
-            Featured stores appear higher in the discovery page and can be
-            promoted in weekly Market Villa highlights.
+            Choose a visibility package. We will review your store and confirm
+            payment/setup details before placement goes live.
           </p>
 
           <div className="mt-6 grid gap-3">
-            {[
-              "Store of the Week placement",
-              "Verified badge for trust",
-              "Higher category visibility",
-              "Weekly performance insights",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex items-center gap-3 border border-white/10 bg-white/5 p-4"
-              >
-                <Sparkles size={16} className="text-[#ff6a00]" />
-                <span className="text-sm text-white/75">{item}</span>
-              </div>
-            ))}
+            {visibilityPackages.map((item) => {
+              const isSelected = selectedVisibilityPackage === item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSelectedVisibilityPackage(item.id)}
+                  className={`text-left transition ${
+                    isSelected
+                      ? "border-[#ff6a00] bg-[#ff6a00]/15"
+                      : "border-white/10 bg-white/5 hover:border-[#ff6a00]/50 hover:bg-white/10"
+                  } border p-4`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        {item.name}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-white/55">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    <span
+                      className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold ${
+                        isSelected
+                          ? "bg-[#ff6a00] text-white"
+                          : "bg-white/10 text-white/70"
+                      }`}
+                    >
+                      {item.price}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
           <button
@@ -441,9 +543,13 @@ export default function VisibilityPage() {
               <Loader2 size={16} className="animate-spin" />
             ) : null}
             {isRequestingFeature
-              ? "Submitting request..."
-              : "Request featured placement"}
+              ? "Opening Paystack..."
+              : "Pay for selected package"}
           </button>
+
+          <p className="mt-4 text-center text-xs leading-5 text-white/40">
+            After successful Paystack payment, the selected visibility package is activated automatically.
+          </p>
         </aside>
       </section>
     </div>
