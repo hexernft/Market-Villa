@@ -874,65 +874,6 @@ export async function updateBusinessAdminOverride({
   return data;
 }
 
-
-export async function updateBusinessSubscriptionControls({
-  businessId,
-  plan,
-  status,
-  expiresAt,
-  graceEndsAt,
-  adminOverrideActive,
-  isPublished,
-}: {
-  businessId: string;
-  plan: string;
-  status: string;
-  expiresAt: string;
-  graceEndsAt: string;
-  adminOverrideActive: boolean;
-  isPublished: boolean;
-}) {
-  await requireSuperAdmin();
-
-  const allowedPlans = ["starter", "growth", "pro"];
-  const allowedStatuses = [
-    "trial",
-    "active",
-    "grace_period",
-    "expired",
-    "payment_failed",
-  ];
-
-  if (!allowedPlans.includes(plan)) {
-    throw new Error("Invalid subscription plan.");
-  }
-
-  if (!allowedStatuses.includes(status)) {
-    throw new Error("Invalid subscription status.");
-  }
-
-  const { data, error } = await supabase
-    .from("businesses")
-    .update({
-      subscription_plan: plan,
-      subscription_status: status,
-      subscription_expires_at: expiresAt || null,
-      grace_period_ends_at: graceEndsAt || null,
-      admin_override_active: adminOverrideActive,
-      is_published: isPublished,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", businessId)
-    .select()
-    .single();
-
-  if (error) {
-    throw error;
-  }
-
-  return data;
-}
-
 export async function getOrdersByBusinessId(businessId: string) {
   const { data, error } = await supabase
     .from("orders")
@@ -1115,5 +1056,4 @@ export function getComputedSubscriptionStatus(business: {
     shouldBePublished: false,
   };
 }
-
 

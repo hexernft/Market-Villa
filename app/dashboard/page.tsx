@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -279,7 +279,7 @@ export default function DashboardPage() {
     },
     {
       label: "Billing",
-      href: "/dashboard/settings",
+      href: "/dashboard/billing",
       icon: Wallet,
     },
     {

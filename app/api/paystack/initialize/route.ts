@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { isValidPlanId, MARKET_VILLA_PLANS } from "@/lib/plans";
 
@@ -140,7 +140,7 @@ export async function POST(request: Request) {
       businessId,
     });
 
-    const callbackUrl = `${appUrl}/dashboard/settings?payment_reference=${encodeURIComponent(
+    const callbackUrl = `${appUrl}/dashboard/billing?payment_reference=${encodeURIComponent(
       reference
     )}`;
 
