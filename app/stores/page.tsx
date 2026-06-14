@@ -30,6 +30,14 @@ type MarketStore = {
   cover_image_url?: string | null;
   image_url?: string | null;
   is_published?: boolean | null;
+  is_featured?: boolean | null;
+  featured_until?: string | null;
+  is_verified?: boolean | null;
+  weekly_views?: number | null;
+  total_views?: number | null;
+  whatsapp_clicks?: number | null;
+  copy_link_clicks?: number | null;
+  visibility_plan?: string | null;
   created_at?: string | null;
 };
 
@@ -54,15 +62,23 @@ function getWeekNumber() {
 }
 
 function getFeaturedStores(stores: MarketStore[]) {
-  const week = getWeekNumber();
+  const now = new Date();
+
+  const paidFeatured = stores.filter((store) => {
+    if (!store.is_featured) return false;
+    if (!store.featured_until) return true;
+
+    return new Date(store.featured_until) > now;
+  });
+
+  if (paidFeatured.length > 0) {
+    return paidFeatured
+      .sort((a, b) => Number(b.weekly_views || 0) - Number(a.weekly_views || 0))
+      .slice(0, 6);
+  }
 
   return [...stores]
-    .sort((a, b) => {
-      const aSeed = `${a.id}-${week}`;
-      const bSeed = `${b.id}-${week}`;
-
-      return aSeed.localeCompare(bSeed);
-    })
+    .sort((a, b) => Number(b.weekly_views || 0) - Number(a.weekly_views || 0))
     .slice(0, 6);
 }
 
@@ -156,6 +172,23 @@ export default function StoresPage() {
 
     try {
       await navigator.clipboard.writeText(url);
+
+      const store = stores.find((item) => item.slug === slug);
+
+      if (store?.id) {
+        fetch("/api/stores/track", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            business_id: store.id,
+            event_type: "copy_link",
+            source: "stores_page",
+          }),
+        }).catch(() => {});
+      }
+
       setMessage("Store link copied.");
     } catch {
       setMessage(url);
@@ -370,7 +403,7 @@ function StoreCard({
 
         {featured ? (
           <span className="absolute left-4 top-4 rounded-full bg-[#ff6a00] px-3 py-1 text-xs font-semibold text-white">
-            Featured
+            Store of the Week
           </span>
         ) : null}
       </div>
@@ -384,7 +417,7 @@ function StoreCard({
 
           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
             <CheckCircle2 size={13} />
-            Live
+            {store.is_verified ? "Verified" : "Live"}
           </span>
         </div>
 
@@ -399,6 +432,10 @@ function StoreCard({
 
         <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
           {location}
+        </p>
+
+        <p className="mt-2 text-xs text-slate-400">
+          {Number(store.weekly_views || 0).toLocaleString()} weekly views
         </p>
 
         <div className="mt-5 flex gap-2">
