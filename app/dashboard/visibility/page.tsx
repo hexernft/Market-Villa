@@ -48,6 +48,7 @@ export default function VisibilityPage() {
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [isRequestingFeature, setIsRequestingFeature] = useState(false);
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
@@ -105,6 +106,63 @@ export default function VisibilityPage() {
       setMessage("Store link copied.");
     } catch {
       setMessage(url);
+    }
+  }
+
+  async function requestFeaturedPlacement() {
+    if (!selectedBusiness?.id) {
+      setMessage("Select a business first.");
+      return;
+    }
+
+    setIsRequestingFeature(true);
+    setMessage("");
+
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) throw userError;
+      if (!user) throw new Error("No logged-in user found.");
+
+      const { data: existingRequest, error: existingError } = await supabase
+        .from("visibility_requests")
+        .select("id,status")
+        .eq("business_id", selectedBusiness.id)
+        .eq("owner_id", user.id)
+        .eq("status", "pending")
+        .maybeSingle();
+
+      if (existingError) throw existingError;
+
+      if (existingRequest) {
+        setMessage("You already have a pending featured placement request.");
+        return;
+      }
+
+      const { error } = await supabase.from("visibility_requests").insert({
+        business_id: selectedBusiness.id,
+        owner_id: user.id,
+        request_type: "featured_placement",
+        status: "pending",
+        requested_days: 7,
+        message: "I want this store to be considered for featured placement.",
+      });
+
+      if (error) throw error;
+
+      setMessage("Featured placement request submitted. We will review it soon.");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unable to submit featured placement request.";
+
+      setMessage(errorMessage);
+    } finally {
+      setIsRequestingFeature(false);
     }
   }
 
@@ -375,9 +433,16 @@ export default function VisibilityPage() {
 
           <button
             type="button"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-orange-50"
+            onClick={requestFeaturedPlacement}
+            disabled={isRequestingFeature}
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-orange-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Request featured placement
+            {isRequestingFeature ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : null}
+            {isRequestingFeature
+              ? "Submitting request..."
+              : "Request featured placement"}
           </button>
         </aside>
       </section>
