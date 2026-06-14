@@ -16,6 +16,7 @@ import {
   Menu,
   Package,
   Sparkles,
+  Settings,
   X,
   UserRound,
   Palette,
@@ -38,6 +39,7 @@ const navItems = [
     label: "Onboarding",
     href: "/dashboard/onboarding",
     icon: Sparkles,
+  Settings,
   },
   {
     label: "Products",
@@ -73,6 +75,11 @@ const navItems = [
     label: "Billing",
     href: "/dashboard/billing",
     icon: CreditCard,
+  },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: Settings,
   },
 ];
 
