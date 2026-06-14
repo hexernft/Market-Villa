@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Store,
   Megaphone,
+  Banknote,
 } from "lucide-react";
 import {
   getAllBusinessesForAdmin,
@@ -397,6 +398,14 @@ export default function AdminPage() {
           >
             <Megaphone size={18} />
             Visibility Requests
+          </Link>
+
+          <Link
+            href="/admin/revenue"
+            className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <Banknote size={18} />
+            Revenue
           </Link>
 
           <a
