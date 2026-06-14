@@ -177,7 +177,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 <p className="text-lg font-semibold tracking-[-0.04em] text-slate-950">
                   {BRAND.name}
                 </p>
-                <p className="text-xs font-medium text-slate-500">
+                <p className="text-xs font-medium text-[#ff6a00]">
                   Business center
                 </p>
               </div>
@@ -186,7 +186,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
-              className="grid h-9 w-9 place-items-center rounded-full bg-slate-100 text-slate-600 lg:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full bg-orange-50 text-[#ff6a00] lg:hidden"
               aria-label="Close menu"
             >
               <X size={18} />
@@ -205,10 +205,10 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsSidebarOpen(false)}
-                  className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition ${
+                  className={`group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition ${
                     isActive
-                      ? "bg-[var(--mv-orange)] text-white"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+                      ? "bg-[#ff6a00] text-white shadow-sm shadow-orange-500/20"
+                      : "text-slate-600 hover:bg-orange-50 hover:text-[#ff6a00]"
                   }`}
                 >
                   <Icon size={18} />
