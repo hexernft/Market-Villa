@@ -242,7 +242,7 @@ export default function StorePage({ params }: StorePageProps) {
               </span>
 
               <span className="text-sm font-semibold">
-                Powered by Market Villa
+                
               </span>
             </Link>
 
@@ -587,7 +587,7 @@ export default function StorePage({ params }: StorePageProps) {
                   <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
                     <Store size={17} className="opacity-70" />
                     <span className="text-sm font-medium">
-                      Powered by Market Villa
+                      
                     </span>
                   </div>
 
