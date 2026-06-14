@@ -408,7 +408,7 @@ export default function AnalyticsPage() {
         </div>
 
         <aside className="border border-slate-200 bg-slate-950 p-6 text-white shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
             Quick insight
           </p>
 
