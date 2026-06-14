@@ -23,8 +23,16 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(255, 106, 0, 0.10), transparent 24rem),
-    radial-gradient(circle at top right, rgba(5, 5, 5, 0.05), transparent 28rem),
+    radial-gradient(
+      circle at top left,
+      rgba(255, 106, 0, 0.1),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(5, 5, 5, 0.05),
+      transparent 28rem
+    ),
     var(--background);
   color: var(--foreground);
   font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
@@ -51,9 +59,15 @@ select {
 
 .store-pattern {
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.12) 1px, transparent 0),
+    radial-gradient(
+      circle at 1px 1px,
+      rgba(255, 255, 255, 0.12) 1px,
+      transparent 0
+    ),
     linear-gradient(to bottom right, var(--tw-gradient-stops));
-  background-size: 26px 26px, auto;
+  background-size:
+    26px 26px,
+    auto;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -64,7 +78,6 @@ select {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
 
 .market-villa-logo-float {
   animation: marketVillaLogoFloat 4s ease-in-out infinite;
@@ -97,8 +110,6 @@ select {
   }
 }
 
-
-
 .market-villa-brand-text {
   color: var(--mv-orange);
 }
@@ -106,7 +117,6 @@ select {
 .market-villa-brand-bg {
   background: var(--mv-orange);
 }
-
 
 .market-villa-blink-cta {
   animation: marketVillaBlinkCta 1.25s ease-in-out infinite;
@@ -126,5 +136,267 @@ select {
     color: #ff6a00;
     border-color: #ff6a00;
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+  }
+}
+.premium-card-hover {
+  will-change: transform, box-shadow;
+}
+
+.premium-card-hover:hover {
+  box-shadow:
+    0 18px 48px rgba(15, 23, 42, 0.1),
+    0 0 0 1px rgba(255, 106, 0, 0.1);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active,
+a:active {
+  transform: scale(0.985);
+}
+
+.mv-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.mv-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.75),
+    transparent
+  );
+  animation: mvSkeleton 1.35s infinite;
+}
+
+@keyframes mvSkeleton {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.support-typing-dot {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: var(--mv-orange);
+  animation: supportTyping 0.85s ease-in-out infinite;
+}
+
+.animation-delay-150 {
+  animation-delay: 0.15s;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+@keyframes supportTyping {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+
+/* ============================================================
+   Market Villa Premium App-Wide Motion + Interaction System
+   ============================================================ */
+
+.mv-smart-page {
+  min-height: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mv-dashboard-content > * {
+    animation: mvSmartPageIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .mv-dashboard-content > *:nth-child(2) {
+    animation-delay: 0.04s;
+  }
+
+  .mv-dashboard-content > *:nth-child(3) {
+    animation-delay: 0.08s;
+  }
+
+  .mv-dashboard-content > *:nth-child(4) {
+    animation-delay: 0.12s;
+  }
+
+  .mv-smart-page section,
+  .mv-smart-page article {
+    animation: mvSmartSoftIn 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes mvSmartPageIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mvSmartSoftIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.995);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Buttons and clickable CTAs */
+button,
+a[class*="rounded"],
+a[class*="inline-flex"] {
+  transition:
+    transform 180ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease,
+    opacity 220ms ease;
+}
+
+button:not(:disabled):active,
+a[class*="rounded"]:active,
+a[class*="inline-flex"]:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+/* Premium hover depth for page cards without changing structure */
+.mv-dashboard-content section,
+.mv-dashboard-content article,
+.mv-dashboard-content aside > div,
+.mv-smart-page article {
+  transition:
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 240ms ease;
+}
+
+.mv-dashboard-content section:hover,
+.mv-dashboard-content article:hover,
+.mv-dashboard-content aside > div:hover,
+.mv-smart-page article:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
+/* Smarter input focus */
+input,
+select,
+textarea {
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0 0 0 4px rgba(255, 106, 0, 0.10);
+}
+
+/* Skeleton shimmer utility */
+.mv-skeleton,
+.mv-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.mv-skeleton::after,
+.mv-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.72),
+    transparent
+  );
+  animation: mvSkeletonShimmer 1.35s infinite;
+}
+
+@keyframes mvSkeletonShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Premium pending/status shimmer */
+.mv-status-pending {
+  position: relative;
+  overflow: hidden;
+}
+
+.mv-status-pending::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.32),
+    transparent
+  );
+  animation: mvStatusShimmer 1.8s infinite;
+}
+
+@keyframes mvStatusShimmer {
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+/* Support button idle pulse */
+@media (prefers-reduced-motion: no-preference) {
+  button[aria-label="Open support chat"] {
+    animation: mvSupportPulse 2.4s ease-in-out infinite;
+  }
+
+  button[aria-label="Open support chat"]:hover {
+    animation: none;
+  }
+}
+
+@keyframes mvSupportPulse {
+  0%,
+  100% {
+    box-shadow: 0 14px 36px rgba(255, 106, 0, 0.24);
+  }
+
+  50% {
+    box-shadow: 0 18px 54px rgba(255, 106, 0, 0.42);
   }
 }

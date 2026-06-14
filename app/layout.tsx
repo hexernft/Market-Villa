@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SupportWidget } from "@/components/SupportWidget";
+import { AppMotionProvider } from "@/components/AppMotionProvider";
 
 export const metadata: Metadata = {
   title: "Market Villa",
@@ -14,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}<SupportWidget /></body>
+      <body><AppMotionProvider>{children}</AppMotionProvider><SupportWidget /></body>
     </html>
   );
 }

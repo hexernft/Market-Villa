@@ -237,7 +237,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       </aside>
 
       <main className="min-h-screen lg:pl-72">
-        <div className="px-5 py-8 md:px-8">{children}</div>
+        <div className="mv-dashboard-content px-5 py-8 md:px-8">{children}</div>
       </main>
     </div>
   );

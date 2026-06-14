@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
   Copy,
-  Loader2,
   Search,
   Store,
   Tag,
@@ -48,9 +48,7 @@ function getStoreImage(store: MarketStore) {
 function getWeekNumber() {
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), 0, 1);
-  const pastDays = Math.floor(
-    (now.getTime() - firstDay.getTime()) / 86400000
-  );
+  const pastDays = Math.floor((now.getTime() - firstDay.getTime()) / 86400000);
 
   return Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
 }
@@ -249,20 +247,16 @@ export default function StoresPage() {
           </div>
 
           {isLoading ? (
-            <div className="grid min-h-[240px] place-items-center border border-slate-200 bg-white">
-              <div className="text-center">
-                <Loader2 className="mx-auto animate-spin text-[#ff6a00]" size={28} />
-                <p className="mt-4 text-sm text-slate-500">Loading stores...</p>
-              </div>
-            </div>
+            <StoreSkeletonGrid />
           ) : featuredStores.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {featuredStores.map((store) => (
+              {featuredStores.map((store, index) => (
                 <StoreCard
                   key={store.id}
                   store={store}
                   onCopy={() => copyStoreLink(store.slug)}
                   featured
+                  index={index}
                 />
               ))}
             </div>
@@ -292,11 +286,12 @@ export default function StoresPage() {
 
           {filteredStores.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {filteredStores.map((store) => (
+              {filteredStores.map((store, index) => (
                 <StoreCard
                   key={store.id}
                   store={store}
                   onCopy={() => copyStoreLink(store.slug)}
+                  index={index}
                 />
               ))}
             </div>
@@ -337,17 +332,29 @@ function StoreCard({
   store,
   onCopy,
   featured = false,
+  index = 0,
 }: {
   store: MarketStore;
   onCopy: () => void;
   featured?: boolean;
+  index?: number;
 }) {
   const image = getStoreImage(store);
   const category = getStoreCategory(store);
   const location = getStoreLocation(store);
 
   return (
-    <article className="group overflow-hidden border border-orange-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#ff6a00]/40 hover:shadow-md">
+    <motion.article
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{
+        duration: 0.55,
+        delay: Math.min(index * 0.05, 0.25),
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="premium-card-hover group overflow-hidden border border-orange-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#ff6a00]/40 hover:shadow-md"
+    >
       <div className="relative h-44 overflow-hidden bg-slate-100">
         {image ? (
           <img
@@ -415,7 +422,29 @@ function StoreCard({
           </button>
         </div>
       </div>
-    </article>
+    </motion.article>
+  );
+}
+
+function StoreSkeletonGrid() {
+  return (
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div
+          key={index}
+          className="overflow-hidden border border-orange-100 bg-white shadow-sm"
+        >
+          <div className="mv-skeleton h-44" />
+          <div className="space-y-3 p-5">
+            <div className="mv-skeleton h-5 w-28 rounded-full" />
+            <div className="mv-skeleton h-6 w-3/4 rounded" />
+            <div className="mv-skeleton h-4 w-full rounded" />
+            <div className="mv-skeleton h-4 w-2/3 rounded" />
+            <div className="mv-skeleton h-11 w-full rounded-full" />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 

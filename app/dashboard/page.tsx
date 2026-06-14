@@ -9,7 +9,8 @@ import {
   ExternalLink,
   Globe2,
   Loader2,
-  Package,  ShoppingBag,
+  Package,
+  ShoppingBag,
   Sparkles,
   Store,
   UserRound,
@@ -22,6 +23,7 @@ import {
 } from "@/lib/business-actions";
 import { supabase } from "@/lib/supabase";
 import { formatCurrency } from "@/lib/utils";
+import { AnimatedNumber } from "@/components/AnimatedNumber";
 
 type DashboardBusiness = {
   id: string;
@@ -62,7 +64,9 @@ function formatDate(value?: string | null) {
 function getStatusStyle(status?: string | null) {
   const cleanStatus = String(status || "pending").toLowerCase();
 
-  if (["completed", "complete", "delivered", "fulfilled"].includes(cleanStatus)) {
+  if (
+    ["completed", "complete", "delivered", "fulfilled"].includes(cleanStatus)
+  ) {
     return "bg-emerald-50 text-emerald-700 ring-emerald-200";
   }
 
@@ -92,12 +96,15 @@ export default function DashboardPage() {
   }, [businesses, selectedBusinessId]);
 
   const metrics = useMemo(() => {
-    const revenue = orders.reduce((sum, order) => sum + getOrderAmount(order), 0);
+    const revenue = orders.reduce(
+      (sum, order) => sum + getOrderAmount(order),
+      0,
+    );
 
     const pendingOrders = orders.filter((order) => {
       const status = String(order.status || "pending").toLowerCase();
       return ["pending", "new", "started", "processing", "confirmed"].includes(
-        status
+        status,
       );
     }).length;
 
@@ -236,27 +243,28 @@ export default function DashboardPage() {
   const statCards = [
     {
       label: "Revenue",
-      value: formatCurrency(metrics.revenue),
+      value: metrics.revenue,
+      prefix: "₦",
       icon: Wallet,
     },
     {
       label: "Orders",
-      value: metrics.orders.toString(),
+      value: metrics.orders,
       icon: ShoppingBag,
     },
     {
       label: "Pending",
-      value: metrics.pendingOrders.toString(),
+      value: metrics.pendingOrders,
       icon: Clock3,
     },
     {
       label: "Products",
-      value: metrics.products.toString(),
+      value: metrics.products,
       icon: Package,
     },
     {
       label: "Services",
-      value: metrics.services.toString(),
+      value: metrics.services,
       icon: Boxes,
     },
   ];
@@ -363,7 +371,7 @@ export default function DashboardPage() {
           return (
             <div
               key={card.label}
-              className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              className="premium-card-hover rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex items-center justify-between gap-3">
                 <span className="grid h-10 w-10 place-items-center rounded-2xl bg-slate-950 text-white">
@@ -375,9 +383,12 @@ export default function DashboardPage() {
                 </span>
               </div>
 
-              <p className="mt-5 truncate text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                {card.value}
-              </p>
+              <AnimatedNumber
+                value={card.value}
+                prefix={card.prefix || ""}
+                compact={card.label === "Revenue"}
+                className="mt-5 block truncate text-2xl font-semibold tracking-[-0.04em] text-slate-950"
+              />
             </div>
           );
         })}
@@ -433,7 +444,7 @@ export default function DashboardPage() {
 
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${getStatusStyle(
-                        order.status
+                        order.status,
                       )}`}
                     >
                       {formatStatus(order.status)}
@@ -527,4 +538,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
