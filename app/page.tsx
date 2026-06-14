@@ -77,40 +77,15 @@ export default function Home() {
                 <Link href="/signup" className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#ff8126]">Create Business Page<ArrowRight size={17} className="text-white" /></Link>
               </div>
             </div>
-
-            <div className="hidden border border-orange-200 bg-orange-50/70 p-5 shadow-sm lg:block">
-              <div className="border border-orange-100 bg-white p-5 shadow-sm">
-                <div className="mb-8 flex items-center justify-between">
-                  <Image src="/market-villa-logo.png" alt="Market Villa" width={64} height={64} className="h-16 w-16 object-contain" priority />
-
-                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                    Live
-                  </span>
-                </div>
-
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
-                  Your page
-                </p>
-
-                <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                  Business details, products, services, and WhatsApp contact.
-                </h2>
-
-                <div className="mt-7 grid gap-3">
-                  {["Clean profile", "Organized offers", "Simple contact flow"].map(
-                    (item) => (
-                      <div
-                        key={item}
-                        className="flex items-center justify-between border border-slate-200 bg-white p-4"
-                      >
-                        <span className="text-sm font-semibold text-slate-700">
-                          {item}
-                        </span>
-                        <CheckCircle2 size={17} className="text-emerald-600" />
-                      </div>
-                    )
-                  )}
-                </div>
+            <div className="hidden lg:block">
+              <div className="relative min-h-[520px] overflow-hidden border border-orange-200 bg-orange-50 shadow-sm">
+                <Image
+                  src="/hero-main.png"
+                  alt="Market Villa business page preview"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
             </div>
           </div>
