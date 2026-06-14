@@ -141,7 +141,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       <button
         type="button"
         onClick={() => setIsSidebarOpen(true)}
-        className="fixed left-4 top-4 z-50 grid h-11 w-11 place-items-center rounded-full bg-slate-950 text-white shadow-lg lg:hidden"
+        className="fixed left-4 top-4 z-50 grid h-11 w-11 place-items-center rounded-full bg-[#ff6a00] text-white shadow-lg lg:hidden"
         aria-label="Open menu"
       >
         <Menu size={20} />
@@ -223,7 +223,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               type="button"
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-950 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#ff6a00]/40 hover:bg-orange-50 hover:text-[#ff6a00] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoggingOut ? (
                 <Loader2 size={17} className="animate-spin" />

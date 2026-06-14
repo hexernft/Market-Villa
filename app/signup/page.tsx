@@ -110,7 +110,7 @@ export default function SignupPage() {
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(255,106,0,0.12)]"
               placeholder="Email address"
               type="email"
               required
@@ -120,7 +120,7 @@ export default function SignupPage() {
               <input
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(255,106,0,0.12)]"
                 placeholder="First name"
                 required
               />
@@ -128,7 +128,7 @@ export default function SignupPage() {
               <input
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(255,106,0,0.12)]"
                 placeholder="Last name"
                 required
               />
@@ -138,7 +138,7 @@ export default function SignupPage() {
               <input
                 value={businessName}
                 onChange={(event) => setBusinessName(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(255,106,0,0.12)]"
                 placeholder="Business"
                 required
               />
@@ -146,7 +146,7 @@ export default function SignupPage() {
               <input
                 value={whatsapp}
                 onChange={(event) => setWhatsapp(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(255,106,0,0.12)]"
                 placeholder="WhatsApp"
                 required
               />
@@ -156,7 +156,7 @@ export default function SignupPage() {
               <input
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(255,106,0,0.12)]"
                 placeholder="Password"
                 type="password"
                 minLength={6}
@@ -166,7 +166,7 @@ export default function SignupPage() {
               <input
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
-                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(15,23,42,0.06)]"
+                className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-orange)] focus:shadow-[0_0_0_4px_rgba(255,106,0,0.12)]"
                 placeholder="Confirm password"
                 type="password"
                 minLength={6}
@@ -183,7 +183,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-1 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#02081f] px-5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#0a1438] hover:shadow-[0_16px_40px_rgba(2,8,31,0.22)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-1 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#ff8126] hover:shadow-[0_16px_40px_rgba(2,8,31,0.22)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? (
                 <Loader2 size={18} className="animate-spin" />

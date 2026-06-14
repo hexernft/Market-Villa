@@ -15,7 +15,7 @@ const navItems = [
 
 export function PlatformNavbar() {
   return (
-    <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-[#050505] text-white shadow-sm">
+    <header className="fixed left-0 top-0 z-50 w-full border-b border-orange-300/40 bg-[#ff6a00] text-white shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 md:px-8">
         <Link href="/" className="flex items-center gap-1.5">
           <Image
@@ -31,7 +31,7 @@ export function PlatformNavbar() {
             <span className="block text-lg font-semibold leading-none tracking-[-0.04em] text-white">
               {BRAND.name}
             </span>
-            <span className="mt-1 hidden text-xs font-medium text-white/55 sm:block">
+            <span className="mt-1 hidden text-xs font-medium text-white/75 sm:block">
               Mini websites for businesses
             </span>
           </span>
@@ -42,7 +42,7 @@ export function PlatformNavbar() {
             <Link
               key={item.label}
               href={item.href}
-              className="text-sm font-semibold text-white/70 hover:text-white"
+              className="text-sm font-semibold text-white/85 hover:text-white"
             >
               {item.label}
             </Link>
@@ -52,7 +52,7 @@ export function PlatformNavbar() {
         <div className="flex items-center gap-2">
           <Link
             href="/login"
-            className="hidden px-4 py-2 text-sm font-semibold text-white/70 hover:text-white sm:inline-flex"
+            className="hidden px-4 py-2 text-sm font-semibold text-white/85 hover:text-white sm:inline-flex"
           >
             Login
           </Link>

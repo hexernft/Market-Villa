@@ -123,14 +123,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how" className="border-y border-slate-200 bg-slate-50 px-5 py-14 md:px-8">
+      <section id="how" className="border-y border-orange-100 bg-orange-50/35 px-5 py-14 md:px-8">
         <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-3">
           {features.map((feature) => {
             const Icon = feature.icon;
 
             return (
-              <div key={feature.title} className="border border-slate-200 bg-white p-6">
-                <div className="mb-8 grid h-11 w-11 place-items-center bg-slate-950 text-white">
+              <div key={feature.title} className="border border-orange-100 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#ff6a00]/40 hover:shadow-md">
+                <div className="mb-8 grid h-11 w-11 place-items-center rounded-2xl bg-[#ff6a00] text-white shadow-sm">
                   <Icon size={20} />
                 </div>
 
@@ -150,7 +150,7 @@ export default function Home() {
             <section className="bg-slate-100 px-5 py-16 text-slate-950 md:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+            <p className="text-sm font-semibold tracking-[0.18em] text-[#ff6a00]">
               Why Market Villa
             </p>
 
@@ -166,7 +166,7 @@ export default function Home() {
               "Business owners can keep their page updated anytime.",
             ].map((item) => (
               <div key={item} className="flex gap-3 border border-slate-200 bg-white p-5 shadow-sm">
-                <CheckCircle2 size={18} className="mt-1 shrink-0 text-slate-950" />
+                <CheckCircle2 size={18} className="mt-1 shrink-0 text-[#ff6a00]" />
                 <p className="text-sm leading-7 text-slate-600">{item}</p>
               </div>
             ))}
@@ -176,7 +176,7 @@ export default function Home() {
       <section id="faq" className="bg-black px-5 py-16 text-white md:px-8">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.75fr_1.25fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/45">
+            <p className="text-sm font-semibold tracking-[0.18em] text-[#ff6a00]">
               FAQ
             </p>
 
@@ -185,11 +185,11 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="overflow-hidden border border-white/10 bg-white/5">
+          <div className="overflow-hidden border border-[#ff6a00]/25 bg-white/5">
             {faqItems.map((item) => (
               <div
                 key={item.question}
-                className="grid gap-3 border-t border-white/10 p-6 first:border-t-0"
+                className="grid gap-3 border-t border-white/10 p-6 first:border-t-0 hover:bg-[#ff6a00]/5"
               >
                 <h3 className="text-lg font-semibold tracking-[-0.03em] text-white">
                   {item.question}
@@ -202,10 +202,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section>      <section className="relative overflow-hidden border-y border-slate-200 bg-white py-1.5">
+        <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-[288px] bg-[#ff6a00]" />
 
-      <section className="overflow-hidden border-y border-slate-200 bg-white py-1.5">
-        <div className="market-villa-marquee flex whitespace-nowrap text-[10px] font-semibold uppercase leading-none tracking-[0.18em] text-slate-950">
+        <div className="market-villa-marquee relative z-0 flex whitespace-nowrap text-[11px] font-medium leading-none text-[#ff6a00]">
           <span className="mx-5">
             Market Villa helps businesses create clean pages, organize products and services, receive WhatsApp inquiries, and look more trusted online.
           </span>
@@ -220,6 +220,7 @@ export default function Home() {
           </span>
         </div>
       </section>
+
 <PlatformFooter />
     </main>
   );
