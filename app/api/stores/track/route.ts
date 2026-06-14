@@ -69,6 +69,12 @@ export async function POST(request: Request) {
       });
     }
 
+    if (eventType === "share_click") {
+      await supabaseAdmin.rpc("increment_share_clicks", {
+        target_business_id: businessId,
+      });
+    }
+
     return NextResponse.json({
       success: true,
     });
