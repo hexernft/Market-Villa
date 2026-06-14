@@ -10,6 +10,7 @@ import {
   Search,
   Store,
   Tag,
+  Check,
 } from "lucide-react";
 import { PlatformFooter } from "@/components/PlatformFooter";
 import { PlatformNavbar } from "@/components/PlatformNavbar";
@@ -86,6 +87,7 @@ export default function StoresPage() {
   const [stores, setStores] = useState<MarketStore[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [copiedSlug, setCopiedSlug] = useState("");
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -189,7 +191,12 @@ export default function StoresPage() {
         }).catch(() => {});
       }
 
+      setCopiedSlug(slug);
       setMessage("Store link copied.");
+
+      window.setTimeout(() => {
+        setCopiedSlug((current) => (current === slug ? "" : current));
+      }, 1400);
     } catch {
       setMessage(url);
     }
@@ -288,6 +295,7 @@ export default function StoresPage() {
                   key={store.id}
                   store={store}
                   onCopy={() => copyStoreLink(store.slug)}
+                  isCopied={copiedSlug === store.slug}
                   featured
                   index={index}
                 />
@@ -324,6 +332,7 @@ export default function StoresPage() {
                   key={store.id}
                   store={store}
                   onCopy={() => copyStoreLink(store.slug)}
+                  isCopied={copiedSlug === store.slug}
                   index={index}
                 />
               ))}
@@ -364,11 +373,13 @@ export default function StoresPage() {
 function StoreCard({
   store,
   onCopy,
+  isCopied = false,
   featured = false,
   index = 0,
 }: {
   store: MarketStore;
   onCopy: () => void;
+  isCopied?: boolean;
   featured?: boolean;
   index?: number;
 }) {
@@ -452,10 +463,15 @@ function StoreCard({
           <button
             type="button"
             onClick={onCopy}
-            className="grid h-11 w-11 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:border-[#ff6a00]/40 hover:text-[#ff6a00]"
-            aria-label="Copy store link"
+            className={`grid h-11 w-11 place-items-center rounded-full border transition ${
+              isCopied
+                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                : "border-slate-200 bg-white text-slate-600 hover:border-[#ff6a00]/40 hover:text-[#ff6a00]"
+            }`}
+            aria-label={isCopied ? "Store link copied" : "Copy store link"}
+            title={isCopied ? "Copied" : "Copy store link"}
           >
-            <Copy size={16} />
+            {isCopied ? <Check size={16} /> : <Copy size={16} />}
           </button>
         </div>
       </div>
