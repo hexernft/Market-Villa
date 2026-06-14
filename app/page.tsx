@@ -78,7 +78,18 @@ export default function Home() {
               </div>
             </div>
             <div className="hidden lg:block">
-              <div className="relative min-h-[520px] overflow-hidden border border-orange-200 bg-orange-50 shadow-sm">
+              <div className="relative border border-orange-200 bg-white p-3 shadow-[0_24px_70px_rgba(15,23,42,0.12)]">
+                <div className="absolute -right-4 -top-4 h-24 w-24 bg-[#ff6a00]/10 blur-2xl" />
+                <div className="absolute -bottom-4 -left-4 h-24 w-24 bg-slate-950/5 blur-2xl" />
+                <div className="relative border border-slate-200 bg-slate-50 p-2">
+                  <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-3 py-2">
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#ff6a00]" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-orange-200" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+                    <span className="ml-3 h-2 w-32 rounded-full bg-slate-100" />
+                  </div>
+
+                  <div className="relative min-h-[500px] overflow-hidden bg-orange-50">
                 <Image
                   src="/hero-main.png"
                   alt="Market Villa business page preview"
@@ -86,6 +97,8 @@ export default function Home() {
                   className="object-cover"
                   priority
                 />
+              </div>
+                </div>
               </div>
             </div>
           </div>
