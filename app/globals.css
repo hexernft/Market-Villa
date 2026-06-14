@@ -106,3 +106,25 @@ select {
 .market-villa-brand-bg {
   background: var(--mv-orange);
 }
+
+
+.market-villa-blink-cta {
+  animation: marketVillaBlinkCta 1.25s ease-in-out infinite;
+}
+
+@keyframes marketVillaBlinkCta {
+  0%,
+  100% {
+    background: #ff6a00;
+    color: #ffffff;
+    border-color: #ff6a00;
+    box-shadow: 0 10px 28px rgba(255, 106, 0, 0.24);
+  }
+
+  50% {
+    background: #ffffff;
+    color: #ff6a00;
+    border-color: #ff6a00;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+  }
+}

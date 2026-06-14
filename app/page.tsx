@@ -78,7 +78,7 @@ export default function Home() {
                 <Link href="/signup" className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#ff8126]">Create Business Page<ArrowRight size={17} className="text-white" /></Link>
                 <Link
                   href="/stores"
-                  className="ml-3 inline-flex items-center justify-center rounded-full border border-orange-200 bg-white px-6 py-3.5 text-sm font-semibold text-[#ff6a00] shadow-sm transition hover:bg-orange-50"
+                  className="market-villa-blink-cta ml-3 inline-flex items-center justify-center rounded-full border border-[#ff6a00] px-6 py-3.5 text-sm font-semibold shadow-sm transition"
                 >
                   Explore Stores
                 </Link>
