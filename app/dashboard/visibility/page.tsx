@@ -16,6 +16,7 @@ import {
   Star,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { getVisibilityPackageList } from "@/lib/visibility-packages";
 
 type BusinessVisibility = {
   id: string;
@@ -82,38 +83,7 @@ function isFeaturedActive(business: BusinessVisibility) {
   return new Date(business.featured_until) > new Date();
 }
 
-const visibilityPackages = [
-  {
-    id: "featured_store",
-    name: "Featured Store",
-    price: "₦5,000/week",
-    description: "Appear inside the Featured Stores section on the stores page.",
-  },
-  {
-    id: "category_boost",
-    name: "Category Boost",
-    price: "₦7,500/week",
-    description: "Get higher visibility inside your business category.",
-  },
-  {
-    id: "store_of_the_week",
-    name: "Store of the Week",
-    price: "₦15,000/week",
-    description: "Get premium weekly placement as a highlighted store.",
-  },
-  {
-    id: "launch_promotion",
-    name: "Launch Promotion",
-    price: "₦20,000 one-time",
-    description: "Promote a newly launched store across Market Villa discovery areas.",
-  },
-  {
-    id: "verified_badge",
-    name: "Verified Badge",
-    price: "₦10,000 one-time",
-    description: "Build trust with a verified business badge on discovery pages.",
-  },
-];
+const visibilityPackages = getVisibilityPackageList();
 
 export default function VisibilityPage() {
   const searchParams = useSearchParams();
@@ -598,7 +568,7 @@ export default function VisibilityPage() {
                           : "bg-white/10 text-white/70"
                       }`}
                     >
-                      {item.price}
+                      {item.priceLabel}
                     </span>
                   </div>
                 </button>
