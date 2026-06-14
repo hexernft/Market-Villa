@@ -12,6 +12,7 @@ import {
   MessageCircle,
   Phone,
   Search,
+  Share2,
   ShoppingBag,
   Store,
 } from "lucide-react";
@@ -297,6 +298,25 @@ export default function StorePage({ params }: StorePageProps) {
     } catch {
       setCopiedStoreLink(false);
     }
+  }
+
+  function handleShareStore() {
+    if (!business?.id || !business.slug) return;
+
+    const storeUrl = `${window.location.origin}/store/${business.slug}`;
+    const shareText = `Check out ${business.name} on Market Villa: ${storeUrl}`;
+    const shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+
+    trackStoreEvent({
+      businessId: business.id,
+      eventType: "share_click",
+      source: "store_page_whatsapp_share",
+      metadata: {
+        slug: business.slug,
+      },
+    });
+
+    window.open(shareUrl, "_blank", "noopener,noreferrer");
   }
 
   return (
