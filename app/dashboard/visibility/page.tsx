@@ -33,8 +33,34 @@ type BusinessVisibility = {
   created_at?: string | null;
 };
 
+type VisibilityPurchase = {
+  id: string;
+  business_id: string;
+  request_type?: string | null;
+  status?: string | null;
+  payment_reference?: string | null;
+  amount?: number | null;
+  currency?: string | null;
+  paid_at?: string | null;
+  activated_at?: string | null;
+  expires_at?: string | null;
+  package_name?: string | null;
+  package_price_label?: string | null;
+  created_at?: string | null;
+};
+
 function formatNumber(value?: number | null) {
   return Number(value || 0).toLocaleString();
+}
+
+function formatDate(value?: string | null) {
+  if (!value) return "Not available";
+
+  return new Intl.DateTimeFormat("en-NG", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(value));
 }
 
 function isFeaturedActive(business: BusinessVisibility) {
@@ -80,6 +106,9 @@ const visibilityPackages = [
 export default function VisibilityPage() {
   const searchParams = useSearchParams();
   const [businesses, setBusinesses] = useState<BusinessVisibility[]>([]);
+  const [visibilityPurchases, setVisibilityPurchases] = useState<
+    VisibilityPurchase[]
+  >([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -90,6 +119,12 @@ export default function VisibilityPage() {
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
+
+  const selectedBusinessPurchases = useMemo(() => {
+    return visibilityPurchases.filter(
+      (purchase) => purchase.business_id === selectedBusinessId
+    );
+  }, [visibilityPurchases, selectedBusinessId]);
 
   async function loadBusinesses() {
     setIsLoading(true);
@@ -120,6 +155,22 @@ export default function VisibilityPage() {
 
       if (items.length > 0) {
         setSelectedBusinessId((current) => current || items[0].id);
+
+        const businessIds = items.map((business) => business.id);
+
+        const { data: purchaseItems, error: purchaseError } = await supabase
+          .from("visibility_requests")
+          .select(
+            "id,business_id,request_type,status,payment_reference,amount,currency,paid_at,activated_at,expires_at,package_name,package_price_label,created_at"
+          )
+          .in("business_id", businessIds)
+          .order("created_at", { ascending: false });
+
+        if (purchaseError) throw purchaseError;
+
+        setVisibilityPurchases((purchaseItems || []) as VisibilityPurchase[]);
+      } else {
+        setVisibilityPurchases([]);
       }
     } catch (error) {
       const errorMessage =
@@ -551,6 +602,101 @@ export default function VisibilityPage() {
             After successful Paystack payment, the selected visibility package is activated automatically.
           </p>
         </aside>
+      </section>
+
+      <section className="border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#ff6a00]">
+              Purchase history
+            </p>
+
+            <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">
+              Visibility package history
+            </h3>
+
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Track paid visibility packages, activation status, and expiry dates.
+            </p>
+          </div>
+
+          <span className="rounded-full bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-500 ring-1 ring-slate-200">
+            {selectedBusinessPurchases.length} records
+          </span>
+        </div>
+
+        {selectedBusinessPurchases.length > 0 ? (
+          <div className="grid gap-3">
+            {selectedBusinessPurchases.map((purchase) => (
+              <article
+                key={purchase.id}
+                className="grid gap-4 border border-slate-200 bg-slate-50 p-4 md:grid-cols-[1fr_auto] md:items-center"
+              >
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+                      {purchase.package_name || purchase.request_type || "Visibility package"}
+                    </span>
+
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${
+                        purchase.status === "approved"
+                          ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+                          : purchase.status === "pending_payment"
+                          ? "bg-amber-50 text-amber-700 ring-amber-200"
+                          : purchase.status === "rejected"
+                          ? "bg-red-50 text-red-700 ring-red-200"
+                          : "bg-slate-100 text-slate-600 ring-slate-200"
+                      }`}
+                    >
+                      {purchase.status || "pending"}
+                    </span>
+
+                    <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#ff6a00] ring-1 ring-orange-100">
+                      {purchase.package_price_label ||
+                        `₦${Number(purchase.amount || 0).toLocaleString()}`}
+                    </span>
+                  </div>
+
+                  <div className="mt-3 grid gap-2 text-xs text-slate-500 md:grid-cols-3">
+                    <p>
+                      <span className="font-semibold text-slate-700">Paid:</span>{" "}
+                      {formatDate(purchase.paid_at)}
+                    </p>
+
+                    <p>
+                      <span className="font-semibold text-slate-700">
+                        Activated:
+                      </span>{" "}
+                      {formatDate(purchase.activated_at)}
+                    </p>
+
+                    <p>
+                      <span className="font-semibold text-slate-700">Expires:</span>{" "}
+                      {formatDate(purchase.expires_at)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-xs text-slate-400 md:text-right">
+                  <p className="font-semibold text-slate-500">Reference</p>
+                  <p className="mt-1 max-w-[240px] truncate">
+                    {purchase.payment_reference || "No reference"}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+            <p className="text-sm font-semibold text-slate-700">
+              No visibility purchases yet
+            </p>
+            <p className="mt-2 text-sm text-slate-500">
+              Paid visibility packages will appear here after payment.
+            </p>
+          </div>
+        )}
       </section>
     </div>
   );
