@@ -71,6 +71,33 @@ type PublicBusiness = {
 const fallbackCover =
   "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1600&auto=format&fit=crop";
 
+function trackStoreEvent({
+  businessId,
+  eventType,
+  source,
+  metadata = {},
+}: {
+  businessId: string;
+  eventType: "store_view" | "whatsapp_click" | "copy_link" | "share_click";
+  source: string;
+  metadata?: Record<string, string>;
+}) {
+  if (!businessId) return;
+
+  fetch("/api/stores/track", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      business_id: businessId,
+      event_type: eventType,
+      source,
+      metadata,
+    }),
+  }).catch(() => {});
+}
+
 const fallbackProductImage =
   "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop";
 
@@ -229,6 +256,19 @@ export default function StorePage({ params }: StorePageProps) {
   const logoText = business.logo_text || business.name.slice(0, 2).toUpperCase();
   const coverImage = business.cover_image_url || fallbackCover;
 
+  function handleWhatsAppClick(source: string) {
+    if (!business?.id) return;
+
+    trackStoreEvent({
+      businessId: business.id,
+      eventType: "whatsapp_click",
+      source,
+      metadata: {
+        slug: business.slug || "",
+      },
+    });
+  }
+
   return (
     <main className={`min-h-screen ${theme.page}`}>
       <section
@@ -254,6 +294,7 @@ export default function StorePage({ params }: StorePageProps) {
                 )}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => handleWhatsAppClick("store_whatsapp_link")}
                 className={`hidden rounded-full px-5 py-3 text-sm font-semibold md:inline-flex ${theme.button}`}
               >
                 Contact Business
@@ -480,6 +521,7 @@ export default function StorePage({ params }: StorePageProps) {
                       )}
                       target="_blank"
                       rel="noreferrer"
+                onClick={() => handleWhatsAppClick("store_whatsapp_link")}
                       title={service.description || service.service_type || service.name}
                       className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.button}`}
                     >
@@ -522,6 +564,7 @@ export default function StorePage({ params }: StorePageProps) {
                       )}
                       target="_blank"
                       rel="noreferrer"
+                onClick={() => handleWhatsAppClick("store_whatsapp_link")}
                       className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-950"
                     >
                       <Phone size={16} />
