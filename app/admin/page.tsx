@@ -362,7 +362,7 @@ export default function AdminPage() {
 
   return (
     <main className="min-h-screen bg-slate-100">
-      <aside className="fixed left-0 top-0 hidden h-screen w-72 border-r border-white/10 bg-slate-950 p-5 text-white lg:block">
+      <aside className="fixed z-50 left-0 top-0 hidden h-screen w-72 border-r border-white/10 bg-slate-950 p-5 text-white lg:block">
         <Link href="/" className="mb-8 flex items-center gap-3">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
             <ShieldCheck size={20} />
@@ -387,7 +387,7 @@ export default function AdminPage() {
 
           <a
             href="#businesses"
-            className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Building2 size={18} />
             Businesses
@@ -395,7 +395,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/visibility-requests"
-            className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Megaphone size={18} />
             Visibility Requests
@@ -403,7 +403,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/revenue"
-            className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Banknote size={18} />
             Revenue
@@ -411,7 +411,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/pricing"
-            className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <BadgeDollarSign size={18} />
             Pricing
@@ -419,7 +419,7 @@ export default function AdminPage() {
 
           <a
             href="#domains"
-            className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Globe2 size={18} />
             Domain Requests
@@ -427,7 +427,7 @@ export default function AdminPage() {
 
           <Link
             href="/dashboard"
-            className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Store size={18} />
             Business Dashboard
@@ -443,7 +443,7 @@ export default function AdminPage() {
       </aside>
 
       <section className="lg:pl-72">
-        <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur-xl">
+        <header className="sticky z-50 top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur-xl">
           <div className="flex items-center justify-between px-5 py-4 md:px-8">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
