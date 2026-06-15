@@ -6,7 +6,7 @@ import {
   Store,
 } from "lucide-react";
 
-const ORANGE = "#ff6a00";
+const PURPLE = "#8b4dff";
 const NAVY = "#241d4f";
 const CREAM = "#fff7ed";
 
@@ -42,11 +42,11 @@ export function HeroStore3D() {
 
             <div className="overflow-hidden border border-slate-200">
               <div className="grid grid-cols-5">
-                <div className="h-9" style={{ backgroundColor: ORANGE }} />
+                <div className="h-9" style={{ backgroundColor: PURPLE }} />
                 <div className="h-9" style={{ backgroundColor: CREAM }} />
-                <div className="h-9" style={{ backgroundColor: ORANGE }} />
+                <div className="h-9" style={{ backgroundColor: PURPLE }} />
                 <div className="h-9" style={{ backgroundColor: CREAM }} />
-                <div className="h-9" style={{ backgroundColor: ORANGE }} />
+                <div className="h-9" style={{ backgroundColor: PURPLE }} />
               </div>
 
               <div className="grid gap-3 bg-[#fffaf4] p-4">
@@ -74,8 +74,8 @@ export function HeroStore3D() {
 
                   <div className="grid gap-3">
                     <div className="border border-slate-200 bg-white p-3">
-                      <div className="mb-4 grid h-9 w-9 place-items-center bg-[rgba(255,106,0,0.08)]">
-                        <ShoppingBag size={16} style={{ color: ORANGE }} />
+                      <div className="mb-4 grid h-9 w-9 place-items-center bg-[rgba(139,77,255,0.08)]">
+                        <ShoppingBag size={16} style={{ color: PURPLE }} />
                       </div>
 
                       <p className="text-sm font-semibold text-slate-950">
@@ -85,8 +85,8 @@ export function HeroStore3D() {
                     </div>
 
                     <div className="border border-slate-200 bg-white p-3">
-                      <div className="mb-4 grid h-9 w-9 place-items-center bg-[rgba(255,106,0,0.08)]">
-                        <PackageCheck size={16} style={{ color: ORANGE }} />
+                      <div className="mb-4 grid h-9 w-9 place-items-center bg-[rgba(139,77,255,0.08)]">
+                        <PackageCheck size={16} style={{ color: PURPLE }} />
                       </div>
 
                       <p className="text-sm font-semibold text-slate-950">
@@ -109,7 +109,7 @@ export function HeroStore3D() {
 
                   <span
                     className="grid h-10 w-10 place-items-center text-white"
-                    style={{ backgroundColor: ORANGE }}
+                    style={{ backgroundColor: PURPLE }}
                   >
                     <MessageCircle size={17} />
                   </span>
@@ -120,7 +120,7 @@ export function HeroStore3D() {
 
           <div
             className="absolute -right-4 top-7 px-4 py-3 text-xs font-semibold text-white shadow-xl"
-            style={{ backgroundColor: ORANGE }}
+            style={{ backgroundColor: PURPLE }}
           >
             New order
           </div>

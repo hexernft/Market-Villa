@@ -136,9 +136,9 @@ export default function AdminPricingPage() {
 
   if (isLoading) {
     return (
-      <main className="grid min-h-screen place-items-center bg-[#eef5f8] px-5">
+      <main className="grid min-h-screen place-items-center bg-[#07070b] px-5">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
-          <Loader2 className="mx-auto animate-spin text-[#ff6a00]" size={28} />
+          <Loader2 className="mx-auto animate-spin text-[#8b4dff]" size={28} />
           <p className="mt-4 text-sm text-slate-500">Loading pricing...</p>
         </div>
       </main>
@@ -146,12 +146,12 @@ export default function AdminPricingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#eef5f8] px-5 py-8 text-slate-950 md:px-8">
+    <main className="min-h-screen bg-[#07070b] px-5 py-8 text-slate-950 md:px-8">
       <section className="mx-auto max-w-7xl">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <Link
             href="/admin"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-[#ff6a00]/40 hover:text-[#ff6a00]"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-[#8b4dff]/40 hover:text-[#8b4dff]"
           >
             <ArrowLeft size={16} />
             Back to Admin
@@ -160,7 +160,7 @@ export default function AdminPricingPage() {
           <button
             type="button"
             onClick={loadPricing}
-            className="inline-flex items-center gap-2 rounded-full bg-[#ff6a00] px-5 py-3 text-sm font-semibold text-white hover:bg-[#ff8126]"
+            className="inline-flex items-center gap-2 rounded-full bg-[#8b4dff] px-5 py-3 text-sm font-semibold text-white hover:bg-[#a36cff]"
           >
             <RefreshCcw size={16} />
             Refresh
@@ -168,7 +168,7 @@ export default function AdminPricingPage() {
         </div>
 
         <section className="border border-slate-200 bg-slate-950 p-6 text-white shadow-sm md:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#ff6a00]">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8b4dff]">
             Admin Pricing
           </p>
 
@@ -183,7 +183,7 @@ export default function AdminPricingPage() {
         </section>
 
         {message ? (
-          <div className="mt-5 border border-orange-200 bg-orange-50 p-4 text-sm text-slate-700">
+          <div className="mt-5 border border-purple-200 bg-purple-50 p-4 text-sm text-slate-700">
             {message}
           </div>
         ) : null}
@@ -194,11 +194,11 @@ export default function AdminPricingPage() {
             onClick={() => setActiveType("subscription")}
             className={`border p-5 text-left shadow-sm transition ${
               activeType === "subscription"
-                ? "border-[#ff6a00] bg-white"
+                ? "border-[#8b4dff] bg-white"
                 : "border-slate-200 bg-white/70 hover:bg-white"
             }`}
           >
-            <span className="grid h-10 w-10 place-items-center bg-[#ff6a00] text-white">
+            <span className="grid h-10 w-10 place-items-center bg-[#8b4dff] text-white">
               <Package size={18} />
             </span>
 
@@ -216,11 +216,11 @@ export default function AdminPricingPage() {
             onClick={() => setActiveType("visibility")}
             className={`border p-5 text-left shadow-sm transition ${
               activeType === "visibility"
-                ? "border-[#ff6a00] bg-white"
+                ? "border-[#8b4dff] bg-white"
                 : "border-slate-200 bg-white/70 hover:bg-white"
             }`}
           >
-            <span className="grid h-10 w-10 place-items-center bg-[#ff6a00] text-white">
+            <span className="grid h-10 w-10 place-items-center bg-[#8b4dff] text-white">
               <Eye size={18} />
             </span>
 
@@ -259,7 +259,7 @@ export default function AdminPricingPage() {
               <div className="grid gap-5 xl:grid-cols-[1fr_0.8fr]">
                 <div>
                   <div className="mb-4 flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#ff6a00] ring-1 ring-orange-100">
+                    <span className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-[#8b4dff] ring-1 ring-purple-200">
                       {item.pricing_key}
                     </span>
 
@@ -284,7 +284,7 @@ export default function AdminPricingPage() {
                       <input
                         name="name"
                         defaultValue={item.name}
-                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#ff6a00]"
+                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#8b4dff]"
                         required
                       />
                     </label>
@@ -294,7 +294,7 @@ export default function AdminPricingPage() {
                       <input
                         name="priceLabel"
                         defaultValue={item.price_label || ""}
-                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#ff6a00]"
+                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#8b4dff]"
                         required
                       />
                     </label>
@@ -306,7 +306,7 @@ export default function AdminPricingPage() {
                       name="description"
                       defaultValue={item.description || ""}
                       rows={3}
-                      className="border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 outline-none focus:border-[#ff6a00]"
+                      className="border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 outline-none focus:border-[#8b4dff]"
                     />
                   </label>
                 </div>
@@ -320,7 +320,7 @@ export default function AdminPricingPage() {
                         type="number"
                         min="0"
                         defaultValue={item.amount}
-                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#ff6a00]"
+                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#8b4dff]"
                         required
                       />
                     </label>
@@ -332,7 +332,7 @@ export default function AdminPricingPage() {
                         type="number"
                         min="0"
                         defaultValue={item.duration_days || ""}
-                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#ff6a00]"
+                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#8b4dff]"
                         placeholder="Empty for permanent"
                       />
                     </label>
@@ -346,7 +346,7 @@ export default function AdminPricingPage() {
                         type="number"
                         min="0"
                         defaultValue={item.product_limit || ""}
-                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#ff6a00]"
+                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#8b4dff]"
                         placeholder="Unlimited"
                       />
                     </label>
@@ -358,7 +358,7 @@ export default function AdminPricingPage() {
                         type="number"
                         min="0"
                         defaultValue={item.store_limit || ""}
-                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#ff6a00]"
+                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#8b4dff]"
                         placeholder="Unlimited"
                       />
                     </label>
@@ -369,7 +369,7 @@ export default function AdminPricingPage() {
                         name="sortOrder"
                         type="number"
                         defaultValue={item.sort_order || 0}
-                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#ff6a00]"
+                        className="min-h-12 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#8b4dff]"
                       />
                     </label>
                   </div>
@@ -380,7 +380,7 @@ export default function AdminPricingPage() {
                         name="isActive"
                         type="checkbox"
                         defaultChecked={Boolean(item.is_active)}
-                        className="h-4 w-4 accent-[#ff6a00]"
+                        className="h-4 w-4 accent-[#8b4dff]"
                       />
                       Active pricing item
                     </label>
@@ -388,7 +388,7 @@ export default function AdminPricingPage() {
                     <button
                       type="submit"
                       disabled={savingId === item.id}
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-5 py-3 text-sm font-semibold text-white hover:bg-[#ff8126] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#8b4dff] px-5 py-3 text-sm font-semibold text-white hover:bg-[#a36cff] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {savingId === item.id ? (
                         <Loader2 size={16} className="animate-spin" />

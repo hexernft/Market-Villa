@@ -55,7 +55,7 @@ function getStatusClass(status?: string | null) {
     return "bg-red-50 text-red-700 ring-red-200";
   }
 
-  return "bg-amber-50 text-amber-700 ring-amber-200";
+  return "bg-purple-50 text-purple-700 ring-purple-200";
 }
 
 export default function AdminVisibilityRequestsPage() {
@@ -194,9 +194,9 @@ export default function AdminVisibilityRequestsPage() {
 
   if (isLoading) {
     return (
-      <main className="grid min-h-[60vh] place-items-center bg-[#eef5f8] px-5 py-12">
+      <main className="grid min-h-[60vh] place-items-center bg-[#07070b] px-5 py-12">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
-          <Loader2 className="mx-auto animate-spin text-[#ff6a00]" size={28} />
+          <Loader2 className="mx-auto animate-spin text-[#8b4dff]" size={28} />
           <p className="mt-4 text-sm text-slate-500">
             Loading visibility requests...
           </p>
@@ -206,12 +206,12 @@ export default function AdminVisibilityRequestsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#eef5f8] px-5 py-8 text-slate-950 md:px-8">
+    <main className="min-h-screen bg-[#07070b] px-5 py-8 text-slate-950 md:px-8">
       <section className="mx-auto max-w-7xl">
         <div className="border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#ff6a00]">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8b4dff]">
                 Admin
               </p>
 
@@ -228,7 +228,7 @@ export default function AdminVisibilityRequestsPage() {
             <button
               type="button"
               onClick={loadRequests}
-              className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[#ff6a00]/40 hover:text-[#ff6a00]"
+              className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[#8b4dff]/40 hover:text-[#8b4dff]"
             >
               Refresh
             </button>
@@ -236,7 +236,7 @@ export default function AdminVisibilityRequestsPage() {
         </div>
 
         {message ? (
-          <div className="mt-5 border border-orange-200 bg-orange-50 p-4 text-sm text-slate-700">
+          <div className="mt-5 border border-purple-200 bg-purple-50 p-4 text-sm text-slate-700">
             {message}
           </div>
         ) : null}
@@ -265,7 +265,7 @@ export default function AdminVisibilityRequestsPage() {
                           {status}
                         </span>
 
-                        <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#ff6a00] ring-1 ring-orange-100">
+                        <span className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-[#8b4dff] ring-1 ring-purple-200">
                           {request.requested_days || 7} days requested
                         </span>
 
@@ -328,7 +328,7 @@ export default function AdminVisibilityRequestsPage() {
                         type="button"
                         onClick={() => approveRequest(request)}
                         disabled={!isPending || isProcessing}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-5 py-3 text-sm font-semibold text-white hover:bg-[#ff8126] disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[#8b4dff] px-5 py-3 text-sm font-semibold text-white hover:bg-[#a36cff] disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {isProcessing ? (
                           <Loader2 size={16} className="animate-spin" />

@@ -326,7 +326,7 @@ export default function ServicesPage() {
                 setSelectedBusinessId(event.target.value);
                 resetForm();
               }}
-              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
+              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-80"
             >
               {businesses.length === 0 ? (
                 <option value="">No business created yet</option>
@@ -348,7 +348,7 @@ export default function ServicesPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:bg-white focus:ring-4 focus:ring-slate-100"
+                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[#8b4dff] focus:bg-white focus:ring-4 focus:ring-slate-100"
                 placeholder="Search services"
               />
             </div>
@@ -369,9 +369,9 @@ export default function ServicesPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-amber-50 px-4 py-3">
-              <p className="text-xs text-amber-700">Featured</p>
-              <p className="mt-1 text-xl font-semibold text-amber-950">
+            <div className="rounded-2xl bg-purple-50 px-4 py-3">
+              <p className="text-xs text-purple-700">Featured</p>
+              <p className="mt-1 text-xl font-semibold text-white">
                 {featuredServicesCount}
               </p>
             </div>
@@ -390,12 +390,12 @@ export default function ServicesPage() {
           Loading services...
         </section>
       ) : businesses.length === 0 ? (
-        <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-          <p className="text-lg font-semibold text-amber-950">
+        <section className="rounded-[2rem] border border-purple-200 bg-purple-50 p-8 text-center">
+          <p className="text-lg font-semibold text-white">
             Create a business page first
           </p>
 
-          <p className="mt-2 text-sm text-amber-900">
+          <p className="mt-2 text-sm text-purple-100">
             Add your business profile before adding services.
           </p>
         </section>
@@ -445,7 +445,7 @@ export default function ServicesPage() {
                   <input
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                     placeholder="Service name"
                     required
                   />
@@ -460,7 +460,7 @@ export default function ServicesPage() {
                     <select
                       value={serviceType}
                       onChange={(event) => setServiceType(event.target.value)}
-                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                     >
                       {serviceTypes.map((type) => (
                         <option key={type}>{type}</option>
@@ -476,7 +476,7 @@ export default function ServicesPage() {
                     <input
                       value={priceLabel}
                       onChange={(event) => setPriceLabel(event.target.value)}
-                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                       placeholder="Request quote / From ₦20,000"
                     />
                   </label>
@@ -491,7 +491,7 @@ export default function ServicesPage() {
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
                     rows={4}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                     placeholder="Add important service details."
                   />
                 </label>
@@ -508,7 +508,7 @@ export default function ServicesPage() {
                       onChange={(event) =>
                         setAvailabilityNote(event.target.value)
                       }
-                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                       placeholder="Mon - Sat, 10 AM - 5 PM"
                     />
                   </label>
@@ -522,7 +522,7 @@ export default function ServicesPage() {
                     <input
                       value={buttonLabel}
                       onChange={(event) => setButtonLabel(event.target.value)}
-                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                       placeholder="Book Now / Request Quote"
                     />
                   </label>
@@ -644,7 +644,7 @@ export default function ServicesPage() {
                       )}
 
                       {service.is_featured ? (
-                        <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                        <span className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-700">
                           Featured
                         </span>
                       ) : null}

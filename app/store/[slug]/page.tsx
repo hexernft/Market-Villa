@@ -233,7 +233,7 @@ export default function StorePage({ params }: StorePageProps) {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
         <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
-          <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-amber-50 text-amber-700">
+          <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-purple-50 text-purple-700">
             <Store size={22} />
           </div>
 
@@ -441,7 +441,7 @@ export default function StorePage({ params }: StorePageProps) {
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search products"
-                  className="min-h-12 w-full rounded-full border border-slate-200 bg-white px-11 text-sm text-slate-950 outline-none focus:border-[var(--mv-orange)]"
+                  className="min-h-12 w-full rounded-full border border-slate-200 bg-white px-11 text-sm text-slate-950 outline-none focus:border-[#8b4dff]"
                 />
               </div>
 

@@ -211,18 +211,18 @@ export default function DomainPage() {
 
   if (businesses.length === 0) {
     return (
-      <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-6 text-center">
-        <p className="text-xl font-semibold tracking-[-0.04em] text-amber-950">
+      <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-6 text-center">
+        <p className="text-xl font-semibold tracking-[-0.04em] text-white">
           Create your business page first
         </p>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-100">
           Add your business profile before requesting a custom domain.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
+          className="mt-5 inline-flex rounded-full bg-[#8b4dff] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#7c3aed]"
         >
           Start Onboarding
         </Link>
@@ -241,7 +241,7 @@ export default function DomainPage() {
                 setSelectedBusinessId(event.target.value);
                 closeDomainForm();
               }}
-              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-72"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -275,9 +275,9 @@ export default function DomainPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-amber-50 px-3 py-2.5">
-              <p className="text-xs text-amber-700">Status</p>
-              <p className="mt-1 max-w-28 truncate text-sm font-semibold text-amber-950">
+            <div className="rounded-2xl bg-purple-50 px-3 py-2.5">
+              <p className="text-xs text-purple-700">Status</p>
+              <p className="mt-1 max-w-28 truncate text-sm font-semibold text-white">
                 {latestRequest?.status ||
                   selectedBusiness?.custom_domain_status ||
                   "None"}
@@ -334,7 +334,7 @@ export default function DomainPage() {
                   <input
                     value={contactPhone}
                     onChange={(event) => setContactPhone(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                     placeholder="080..."
                   />
                 </label>
@@ -349,7 +349,7 @@ export default function DomainPage() {
                   <input
                     value={requestedDomain}
                     onChange={(event) => setRequestedDomain(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                     placeholder="yourbusiness.com"
                     required
                   />
@@ -365,7 +365,7 @@ export default function DomainPage() {
                     onChange={(event) =>
                       setAlternativeDomain(event.target.value)
                     }
-                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                     placeholder="yourbusiness.ng"
                   />
                 </label>
@@ -408,7 +408,7 @@ export default function DomainPage() {
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
                   rows={3}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
                   placeholder="Add anything important."
                 />
               </label>
@@ -484,7 +484,7 @@ export default function DomainPage() {
 
           <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
             <div className="mb-3 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-amber-50 text-amber-700">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-purple-50 text-purple-700">
                 <CreditCard size={19} />
               </span>
 
@@ -531,7 +531,7 @@ export default function DomainPage() {
                         {request.requested_domain}
                       </p>
 
-                      <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+                      <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700">
                         {request.status}
                       </span>
                     </div>
@@ -545,11 +545,11 @@ export default function DomainPage() {
             </div>
           ) : null}
 
-          <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-4 lg:col-span-2">
+          <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-4 lg:col-span-2">
             <div className="flex gap-3">
-              <Info className="mt-1 shrink-0 text-amber-700" size={18} />
+              <Info className="mt-1 shrink-0 text-purple-700" size={18} />
 
-              <p className="text-sm leading-6 text-amber-900">
+              <p className="text-sm leading-6 text-purple-100">
                 Domain names depend on availability and yearly renewal. Keep
                 renewal active every year.
               </p>

@@ -16,7 +16,7 @@ const config: Config = {
     "hover:bg-[#441908]",
     "text-[#fbbf24]",
     "bg-[#f59e0b]",
-    "border-orange-200",
+    "border-purple-200",
     "bg-[var(--mv-orange)]",
     "hover:bg-[var(--mv-orange-hover)]",
     "text-[var(--mv-orange)]",

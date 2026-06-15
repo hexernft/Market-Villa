@@ -223,19 +223,19 @@ export default function OrdersPage() {
 
   if (businesses.length === 0) {
     return (
-      <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-        <p className="text-2xl font-semibold tracking-[-0.04em] text-amber-950">
+      <div className="rounded-[2rem] border border-purple-200 bg-purple-50 p-8 text-center">
+        <p className="text-2xl font-semibold tracking-[-0.04em] text-white">
           Create your business page first
         </p>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-100">
           Orders will appear here after customers place orders from your
           business page.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-6 inline-flex rounded-full bg-amber-300 px-6 py-4 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
+          className="mt-6 inline-flex rounded-full bg-[#8b4dff] px-6 py-4 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#7c3aed]"
         >
           Start Onboarding
         </Link>
@@ -251,7 +251,7 @@ export default function OrdersPage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
+              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-80"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -269,7 +269,7 @@ export default function OrdersPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:bg-white focus:ring-4 focus:ring-slate-100"
+                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[#8b4dff] focus:bg-white focus:ring-4 focus:ring-slate-100"
                 placeholder="Search orders"
               />
             </div>
@@ -283,9 +283,9 @@ export default function OrdersPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-amber-50 px-4 py-3">
-              <p className="text-xs text-amber-700">Pending</p>
-              <p className="mt-1 text-xl font-semibold text-amber-950">
+            <div className="rounded-2xl bg-purple-50 px-4 py-3">
+              <p className="text-xs text-purple-700">Pending</p>
+              <p className="mt-1 text-xl font-semibold text-white">
                 {pendingOrders}
               </p>
             </div>
