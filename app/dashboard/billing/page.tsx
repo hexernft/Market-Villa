@@ -14,7 +14,8 @@ import {
   updateBusinessPublishStatus,
 } from "@/lib/business-actions";
 import { initializePlanPayment, verifyPlanPayment } from "@/lib/payment-actions";
-import { MARKET_VILLA_PLANS, MarketVillaPlanId } from "@/lib/plans";
+import { supabase } from "@/lib/supabase";
+
 
 type DashboardBusiness = {
   id: string;
@@ -27,23 +28,17 @@ type DashboardBusiness = {
   subscription_status: string;
 };
 
-const plans = [
-  {
-    id: "starter" as MarketVillaPlanId,
-    name: "Starter",
-    description: "For new businesses getting online.",
-  },
-  {
-    id: "growth" as MarketVillaPlanId,
-    name: "Growth",
-    description: "More control and growth tools.",
-  },
-  {
-    id: "pro" as MarketVillaPlanId,
-    name: "Pro",
-    description: "For serious businesses and teams.",
-  },
-];
+type BillingPlan = {
+  id: string;
+  name: string;
+  description: string;
+  amount: number;
+  amountInKobo: number;
+  priceLabel: string;
+  productLimit?: number | null;
+  storeLimit?: number | null;
+  sortOrder?: number | null;
+};
 
 function formatNaira(amount: number) {
   return `\u20A6${amount.toLocaleString()}`;
@@ -53,6 +48,7 @@ export default function SettingsPage() {
   const searchParams = useSearchParams();
 
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
+  const [plans, setPlans] = useState<BillingPlan[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdatingPublishStatus, setIsUpdatingPublishStatus] = useState(false);
@@ -67,16 +63,44 @@ export default function SettingsPage() {
 
   const currentPlan =
     plans.find((plan) => plan.id === selectedBusiness?.subscription_plan) ||
-    plans[0];
+    plans[0] ||
+    null;
 
   async function loadBusinesses() {
     const items = await getMyBusinesses();
 
     setBusinesses(items);
 
-    if (items.length > 0 && !selectedBusinessId) {
-      setSelectedBusinessId(items[0].id);
+    if (items.length > 0) {
+      setSelectedBusinessId((current) => current || items[0].id);
     }
+
+    const { data: pricingItems, error: pricingError } = await supabase
+      .from("pricing_items")
+      .select(
+        "pricing_key,name,description,price_label,amount,amount_in_kobo,product_limit,store_limit,sort_order"
+      )
+      .eq("pricing_type", "subscription")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true });
+
+    if (pricingError) {
+      throw pricingError;
+    }
+
+    setPlans(
+      (pricingItems || []).map((item: any) => ({
+        id: String(item.pricing_key),
+        name: String(item.name),
+        description: String(item.description || ""),
+        amount: Number(item.amount || 0),
+        amountInKobo: Number(item.amount_in_kobo || 0),
+        priceLabel: String(item.price_label || ""),
+        productLimit: item.product_limit,
+        storeLimit: item.store_limit,
+        sortOrder: item.sort_order,
+      }))
+    );
   }
 
   useEffect(() => {
@@ -181,7 +205,7 @@ export default function SettingsPage() {
     }
   }
 
-  async function handlePayForPlan(planId: MarketVillaPlanId) {
+  async function handlePayForPlan(planId: string) {
     if (!selectedBusiness) {
       setMessage("Select a business before paying for a plan.");
       return;
@@ -193,7 +217,7 @@ export default function SettingsPage() {
     try {
       const payment = await initializePlanPayment({
         businessId: selectedBusiness.id,
-        plan: planId,
+        plan: planId as any,
       });
 
       window.location.href = payment.authorizationUrl;
@@ -239,7 +263,7 @@ export default function SettingsPage() {
     );
   }
 
-  const currentPlanAmount = MARKET_VILLA_PLANS[currentPlan.id].amount;
+  const currentPlanAmount = currentPlan?.amount || 0;
 
   return (
     <div className="grid gap-5">
@@ -278,7 +302,7 @@ export default function SettingsPage() {
             <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
               <p className="text-xs text-slate-500">Plan</p>
               <p className="mt-1 truncate text-sm font-semibold text-slate-950">
-                {currentPlan.name}
+                {currentPlan?.name || "No plan"}
               </p>
             </div>
 
@@ -322,8 +346,8 @@ export default function SettingsPage() {
         <div className="grid content-start gap-4">
           <div className="grid gap-4 lg:grid-cols-3">
             {plans.map((plan) => {
-              const isCurrent = plan.id === currentPlan.id;
-              const planAmount = MARKET_VILLA_PLANS[plan.id].amount;
+              const isCurrent = plan.id === currentPlan?.id;
+              const planAmount = plan.amount;
 
               return (
                 <div
@@ -428,7 +452,7 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
                 <span className="text-slate-500">Current plan</span>
                 <span className="font-semibold text-slate-950">
-                  {currentPlan.name}
+                  {currentPlan?.name || "No plan"}
                 </span>
               </div>
 
