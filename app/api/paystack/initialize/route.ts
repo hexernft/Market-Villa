@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { isValidPlanId, MARKET_VILLA_PLANS } from "@/lib/plans";
+
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
@@ -99,16 +99,37 @@ export async function POST(request: Request) {
     const businessId = String(body.businessId || "").trim();
     const planId = String(body.plan || "").trim();
 
-    if (!businessId || !isValidPlanId(planId)) {
+    if (!businessId || !planId) {
       return NextResponse.json(
         { error: "Invalid business or plan." },
         { status: 400 }
       );
     }
 
-    const plan = MARKET_VILLA_PLANS[planId];
+    const { data: pricingItem, error: pricingError } = await supabase
+      .from("pricing_items")
+      .select("pricing_key,name,amount,amount_in_kobo,price_label,is_active")
+      .eq("pricing_type", "subscription")
+      .eq("pricing_key", planId)
+      .eq("is_active", true)
+      .single();
 
-    if (!plan?.amountInKobo || plan.amountInKobo < 100) {
+    if (pricingError || !pricingItem) {
+      return NextResponse.json(
+        { error: "Selected subscription plan is not available." },
+        { status: 400 }
+      );
+    }
+
+    const plan = {
+      id: String(pricingItem.pricing_key),
+      name: String(pricingItem.name),
+      amount: Number(pricingItem.amount || 0),
+      amountInKobo: Number(pricingItem.amount_in_kobo || 0),
+      priceLabel: String(pricingItem.price_label || ""),
+    };
+
+    if (!plan.amountInKobo || plan.amountInKobo < 100) {
       return NextResponse.json(
         { error: "Selected plan has an invalid payment amount." },
         { status: 400 }
@@ -161,7 +182,7 @@ export async function POST(request: Request) {
           metadata: {
             business_id: businessId,
             owner_id: user.id,
-            plan: planId,
+            plan: plan.id,
             business_name: business.name,
             source: "market_villa_subscription",
           },
@@ -195,7 +216,7 @@ export async function POST(request: Request) {
     const { error: paymentError } = await supabase.from("payments").insert({
       business_id: businessId,
       owner_id: user.id,
-      plan: planId,
+      plan: plan.id,
       amount: plan.amount,
       currency: "NGN",
       reference: returnedReference,
