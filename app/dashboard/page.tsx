@@ -402,7 +402,7 @@ export default function DashboardPage() {
                 Recent Orders
               </p>
 
-              <h3 className="mt-1 text-base font-semibold tracking-[-0.03em] text-slate-950">
+              <h3 className="mt-1 text-sm font-semibold tracking-[-0.03em] text-slate-950">
                 Customer Activity
               </h3>
             </div>

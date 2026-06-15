@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
             <span className="block text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
               Market Villa
             </span>
-            <span className="text-base font-semibold text-slate-950">
+            <span className="text-sm font-semibold text-slate-950">
               Admin Login
             </span>
           </span>

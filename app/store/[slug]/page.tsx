@@ -596,7 +596,7 @@ export default function StorePage({ params }: StorePageProps) {
           <footer className={`${theme.mutedCard} rounded-[1.5rem] p-5 shadow-sm`}>
             <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr_0.8fr]">
               <div>
-                <h3 className="text-base font-semibold tracking-[-0.03em]">
+                <h3 className="text-sm font-semibold tracking-[-0.03em]">
                   {business.name}
                 </h3>
 

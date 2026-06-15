@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
+﻿import Link from "next/link";
 import { ArrowRight, CheckCircle2, Globe2, MessageCircle, Store } from "lucide-react";
 import { PlatformNavbar } from "@/components/PlatformNavbar";
 import { PlatformFooter } from "@/components/PlatformFooter";
@@ -23,7 +24,7 @@ export default function Home() {
     <main className="mv-page-shell min-h-screen text-[#241436]">
       <PlatformNavbar />
 
-      <section className="mv-lavender-hero px-4 pb-10 pt-28 md:px-6 md:pb-14 md:pt-32">
+      <section className="mv-lavender-hero px-4 pb-10 pt-28 md:px-4 md:pb-14 md:pt-32">
         <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.3rem] border border-white/65 bg-white/38 p-5 shadow-[0_28px_90px_rgba(55,31,83,0.13)] backdrop-blur-2xl md:p-7 lg:p-8">
           <div className="grid gap-10 lg:grid-cols-[0.92fr_0.78fr] lg:items-center">
             <MotionReveal>
@@ -51,10 +52,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how" className="px-4 py-10 md:px-6">
+      <section id="how" className="px-4 py-10 md:px-4">
         <div className="mx-auto max-w-7xl">
           <MotionReveal>
-            <h2 className="text-center text-2xl font-semibold text-[#241436] md:text-3xl">Powerful tools. Beautiful results.</h2>
+            <h2 className="text-center text-2xl font-semibold text-[#241436] md:text-2xl">Powerful tools. Beautiful results.</h2>
           </MotionReveal>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {features.map((feature, index) => {
@@ -62,10 +63,10 @@ export default function Home() {
               return (
                 <MotionReveal key={feature.title} delay={index * 0.08}>
                   <div className="mv-soft-panel premium-card-hover rounded-[1.6rem] p-5">
-                    <div className="mb-5 grid h-12 w-12 place-items-center rounded-[1.15rem] bg-[#f0e7ff] text-[#7c3aed] ring-1 ring-[#7c3aed]/12">
+                    <div className="mb-5 grid h-10 w-12 place-items-center rounded-[1.15rem] bg-[#f0e7ff] text-[#7c3aed] ring-1 ring-[#7c3aed]/12">
                       <Icon size={19} />
                     </div>
-                    <h3 className="text-base font-semibold text-[#241436]">{feature.title}</h3>
+                    <h3 className="text-sm font-semibold text-[#241436]">{feature.title}</h3>
                     <p className="mt-2 text-sm leading-6 text-[#241436]/62">{feature.description}</p>
                   </div>
                 </MotionReveal>
@@ -75,11 +76,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-4 py-8 md:px-6">
+      <section className="px-4 py-8 md:px-4">
         <div className="mx-auto grid max-w-7xl gap-5 rounded-[2rem] bg-[linear-gradient(160deg,#241436,#321b4d_70%,#412064)] p-6 text-white shadow-[0_28px_70px_rgba(36,20,54,0.22)] lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">Why Market Villa</p>
-            <h2 className="mt-3 text-2xl font-semibold text-white md:text-3xl">A simple page before the WhatsApp conversation.</h2>
+            <h2 className="mt-3 text-2xl font-semibold text-white md:text-2xl">A simple page before the WhatsApp conversation.</h2>
           </div>
           <div className="grid gap-3">
             {[
@@ -98,17 +99,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="faq" className="px-4 py-10 md:px-6">
+      <section id="faq" className="px-4 py-10 md:px-4">
         <div className="mx-auto grid max-w-7xl gap-7 lg:grid-cols-[0.75fr_1.25fr]">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#7c3aed]">FAQ</p>
-            <h2 className="mt-3 text-2xl font-semibold text-[#241436] md:text-3xl">Simple answers before you start.</h2>
+            <h2 className="mt-3 text-2xl font-semibold text-[#241436] md:text-2xl">Simple answers before you start.</h2>
           </div>
           <div className="mv-soft-panel overflow-hidden rounded-[1.8rem]">
             {faqItems.map((item, index) => (
               <MotionReveal key={item.question} delay={index * 0.06}>
                 <div className="grid gap-2 border-t border-[#7c3aed]/10 p-5 first:border-t-0 hover:bg-white/30">
-                  <h3 className="text-base font-semibold text-[#241436]">{item.question}</h3>
+                  <h3 className="text-sm font-semibold text-[#241436]">{item.question}</h3>
                   <p className="text-sm leading-6 text-[#241436]/62">{item.answer}</p>
                 </div>
               </MotionReveal>
@@ -125,7 +126,10 @@ export default function Home() {
           <span className="mx-5">Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.</span>
         </div>
       </section>
+      <TestimonialsSection />
       <PlatformFooter />
     </main>
   );
 }
+
+

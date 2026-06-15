@@ -263,7 +263,7 @@ export default function DomainPage() {
           <div className="grid grid-cols-3 gap-2">
             <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
               <p className="text-xs text-slate-500">Requests</p>
-              <p className="mt-1 text-base font-semibold text-slate-950">
+              <p className="mt-1 text-sm font-semibold text-slate-950">
                 {requests.length}
               </p>
             </div>

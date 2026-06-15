@@ -408,7 +408,7 @@ export default function ProductsPage() {
         </section>
       ) : businesses.length === 0 ? (
         <section className="rounded-[2rem] border border-purple-200 bg-purple-50 p-8 text-center">
-          <p className="text-base font-semibold text-purple-950">
+          <p className="text-sm font-semibold text-purple-950">
             Create a business page first
           </p>
 

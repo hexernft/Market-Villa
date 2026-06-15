@@ -96,7 +96,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             <Link href="/dashboard" className="flex items-center gap-3">
               <Image src="/market-villa-logo.png" alt="Market Villa" width={54} height={54} className="market-villa-logo-float h-10 w-10 object-contain brightness-0 invert" priority />
               <div>
-                <p className="text-base font-semibold tracking-[-0.04em] text-white">{BRAND.name}</p>
+                <p className="text-sm font-semibold tracking-[-0.04em] text-white">{BRAND.name}</p>
                 <p className="text-xs font-medium text-white/50">Brand studio</p>
               </div>
             </Link>
@@ -106,7 +106,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             </button>
           </div>
 
-          <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-4">
+          <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-2.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
@@ -134,7 +134,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       </aside>
 
       <main className="min-h-screen lg:pl-72">
-        <div className="mv-dashboard-content px-4 py-5 md:px-6 lg:px-7">{children}</div>
+        <div className="mv-dashboard-content px-4 py-5 md:px-4 lg:px-5">{children}</div>
       </main>
     </div>
   );

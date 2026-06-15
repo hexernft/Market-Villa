@@ -12,7 +12,7 @@ const navLinks = [
 
 export function PlatformNavbar() {
   return (
-    <header className="fixed left-0 top-0 z-50 w-full px-3 py-3 md:px-5">
+    <header className="fixed left-0 top-0 z-50 w-full px-3 py-2.5 md:px-5">
       <div className="mx-auto flex max-w-7xl items-center justify-between rounded-[1.4rem] border border-white/70 bg-white/58 px-4 py-2 shadow-[0_18px_50px_rgba(55,31,83,0.10)] backdrop-blur-2xl md:px-5">
         <Link href="/" className="flex items-center gap-2.5">
           <Image
@@ -23,7 +23,7 @@ export function PlatformNavbar() {
             className="market-villa-logo-float h-10 w-10 object-contain"
             priority
           />
-          <span className="text-base font-semibold tracking-[-0.04em] text-[#241436]">
+          <span className="text-sm font-semibold tracking-[-0.04em] text-[#241436]">
             {BRAND.name}
           </span>
         </Link>

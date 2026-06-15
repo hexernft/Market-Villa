@@ -597,7 +597,7 @@ export default function ProfilePage() {
                   {logoText || "MV"}
                 </div>
 
-                <p className="text-base font-semibold tracking-[-0.04em] text-slate-950">
+                <p className="text-sm font-semibold tracking-[-0.04em] text-slate-950">
                   {name || "Business Name"}
                 </p>
 

@@ -372,7 +372,7 @@ export default function AdminPage() {
             <span className="block text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
               MARKET VILLA
             </span>
-            <span className="block text-base font-semibold">Admin Center</span>
+            <span className="block text-sm font-semibold">Admin Center</span>
           </span>
         </Link>
 

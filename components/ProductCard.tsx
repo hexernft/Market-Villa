@@ -22,7 +22,7 @@ export function ProductCard({ product, onAdd }: Props) {
             <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
               {product.category}
             </p>
-            <h3 className="text-base font-semibold tracking-tight">{product.name}</h3>
+            <h3 className="text-sm font-semibold tracking-tight">{product.name}</h3>
           </div>
           <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold">
             {formatCurrency(product.price)}

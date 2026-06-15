@@ -106,7 +106,7 @@ button:not(:disabled):active, a[class*="rounded"]:active, a[class*="inline-flex"
 button:disabled, a[aria-disabled="true"] { cursor: not-allowed !important; opacity: .58 !important; }
 
 /* Primary CTA feel from selected concept */
-a[href="/login"].inline-flex, a[href="/signup"].inline-flex,
+a[href="/login"].inline-flex, a[href="/login"].inline-flex,
 .market-primary-button,
 button[type="submit"] {
   background: linear-gradient(135deg, #8b5cf6, #7c3aed 62%, #6d28d9) !important;
@@ -114,7 +114,7 @@ button[type="submit"] {
   border: 1px solid rgba(255,255,255,.18) !important;
   box-shadow: 0 14px 30px rgba(124,58,237,.22), inset 0 1px 0 rgba(255,255,255,.24) !important;
 }
-a[href="/login"].inline-flex:hover, a[href="/signup"].inline-flex:hover, .market-primary-button:hover, button[type="submit"]:hover { transform: translateY(-1px); }
+a[href="/login"].inline-flex:hover, a[href="/login"].inline-flex:hover, .market-primary-button:hover, button[type="submit"]:hover { transform: translateY(-1px); }
 
 input, select, textarea {
   min-height: 2.55rem;
@@ -169,9 +169,91 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(124,58,23
 .text-white\/45 { color: rgba(255,255,255,.52) !important; }
 
 /* Compact readable scale */
-.text-7xl { font-size: 3.75rem !important; }
-.text-6xl { font-size: 3.35rem !important; }
-.text-5xl { font-size: 2.85rem !important; }
-.text-4xl { font-size: 2.25rem !important; }
-.text-3xl { font-size: 1.85rem !important; }
+.text-2xl { font-size: 3.75rem !important; }
+.text-2xl { font-size: 3.35rem !important; }
+.text-2xl { font-size: 2.85rem !important; }
+.text-2xl { font-size: 2.25rem !important; }
+.text-2xl { font-size: 1.85rem !important; }
 .text-2xl { font-size: 1.45rem !important; }
+
+
+/* Compact UI + purple/black dark surfaces. Orange stays for logo/accent only. */
+:root {
+  --mv-orange: #ff6b2c;
+  --mv-orange-hover: #ea580c;
+  --mv-purple-dark: #09030f;
+  --mv-purple-panel: #13061f;
+  --mv-purple-glow: #2a0f45;
+  --mv-compact-button-height: 2.5rem;
+  --mv-compact-button-radius: 0.95rem;
+}
+
+body {
+  font-size: 14px;
+}
+
+h1 {
+  letter-spacing: -0.065em;
+}
+
+h2,
+h3 {
+  letter-spacing: -0.05em;
+}
+
+button,
+a[class*="inline-flex"],
+a[class*="rounded"],
+[role="button"] {
+  min-height: var(--mv-compact-button-height);
+  border-radius: var(--mv-compact-button-radius) !important;
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+
+button,
+a {
+  transition-duration: 180ms;
+}
+
+.bg-\[\#13061f\],
+.bg-\[\#09030f\],
+.dark-gradient,
+.dashboard-dark,
+footer,
+section[class*="bg-[#13061f]"],
+section[class*="bg-[#09030f]"] {
+  background:
+    radial-gradient(circle at top left, rgba(255, 107, 44, 0.13), transparent 28%),
+    radial-gradient(circle at top right, rgba(139, 77, 255, 0.22), transparent 34%),
+    linear-gradient(135deg, #09030f 0%, #13061f 48%, #2a0f45 100%) !important;
+}
+
+.logo-on-dark,
+.logo-on-purple,
+header .logo,
+nav .logo {
+  color: #ffffff !important;
+}
+
+.logo-on-light {
+  color: var(--mv-orange) !important;
+}
+
+.logo-badge,
+.logo-mark,
+.brand-mark {
+  background: linear-gradient(135deg, var(--mv-orange), #ff8a4c) !important;
+  color: #ffffff !important;
+}
+
+input,
+select,
+textarea {
+  font-size: 0.88rem !important;
+}
+
+p {
+  line-height: 1.65;
+}

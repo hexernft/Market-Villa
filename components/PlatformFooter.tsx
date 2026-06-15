@@ -12,7 +12,7 @@ export function PlatformFooter() {
             <span className="grid h-11 w-11 place-items-center overflow-hidden bg-white/8"><Image src="/market-villa-logo.png" alt="Market Villa" width={40} height={40} className="h-10 w-10 object-contain" /></span>
 
             <span>
-              <span className="block text-base font-semibold leading-none tracking-[-0.04em] text-white">
+              <span className="block text-sm font-semibold leading-none tracking-[-0.04em] text-white">
                 {BRAND.name}
               </span>
               <span className="mt-1 block text-xs font-medium text-white/60">

@@ -168,7 +168,7 @@ export default function SettingsPage() {
             </span>
 
             <div>
-              <h3 className="text-base font-semibold tracking-[-0.03em] text-slate-950">
+              <h3 className="text-sm font-semibold tracking-[-0.03em] text-slate-950">
                 Profile
               </h3>
               <p className="text-sm text-slate-500">
@@ -224,7 +224,7 @@ export default function SettingsPage() {
               </span>
 
               <div>
-                <h3 className="text-base font-semibold tracking-[-0.03em] text-slate-950">
+                <h3 className="text-sm font-semibold tracking-[-0.03em] text-slate-950">
                   Business support
                 </h3>
                 <p className="text-sm text-slate-500">
@@ -267,7 +267,7 @@ export default function SettingsPage() {
               </span>
 
               <div>
-                <h3 className="text-base font-semibold tracking-[-0.03em]">
+                <h3 className="text-sm font-semibold tracking-[-0.03em]">
                   Security
                 </h3>
                 <p className="text-sm text-white/55">

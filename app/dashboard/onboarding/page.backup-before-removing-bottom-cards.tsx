@@ -335,7 +335,7 @@ export default function OnboardingPage() {
 
         <aside className="grid gap-5">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="text-base font-semibold text-slate-950">
+            <h3 className="text-sm font-semibold text-slate-950">
               What happens after setup?
             </h3>
 
@@ -358,7 +358,7 @@ export default function OnboardingPage() {
           </div>
 
           <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-6">
-            <h3 className="text-base font-semibold text-amber-950">
+            <h3 className="text-sm font-semibold text-amber-950">
               Want a professional domain?
             </h3>
 
