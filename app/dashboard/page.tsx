@@ -74,7 +74,7 @@ function getStatusStyle(status?: string | null) {
     return "bg-red-50 text-red-700 ring-red-200";
   }
 
-  return "bg-amber-50 text-amber-700 ring-amber-200";
+  return "bg-purple-50 text-purple-700 ring-purple-200";
 }
 
 function formatStatus(status?: string | null) {
@@ -216,7 +216,7 @@ export default function DashboardPage() {
   if (businesses.length === 0) {
     return (
       <section className="mx-auto max-w-3xl rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
-        <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-slate-950 text-white">
+        <div className="mx-auto grid h-10 w-12 place-items-center rounded-2xl bg-[#26143d] text-white">
           <Sparkles size={20} />
         </div>
 
@@ -231,7 +231,7 @@ export default function DashboardPage() {
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+          className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
         >
           Start Setup
           <ArrowRight size={16} />
@@ -305,7 +305,7 @@ export default function DashboardPage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
+              className="min-h-10 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -318,7 +318,7 @@ export default function DashboardPage() {
               <Link
                 href={`/store/${selectedBusiness.slug}`}
                 target="_blank"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
+                className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
               >
                 View Store
                 <ExternalLink size={16} />
@@ -341,9 +341,9 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-amber-50 px-3 py-2.5">
-              <p className="text-xs text-amber-700">Status</p>
-              <p className="mt-1 truncate text-sm font-semibold text-amber-950">
+            <div className="rounded-2xl bg-purple-50 px-3 py-2.5">
+              <p className="text-xs text-purple-700">Status</p>
+              <p className="mt-1 truncate text-sm font-semibold text-purple-950">
                 {selectedBusiness?.subscription_status || "Trial"}
               </p>
             </div>
@@ -374,7 +374,7 @@ export default function DashboardPage() {
               className="premium-card-hover rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex items-center justify-between gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-slate-950 text-white">
+                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#26143d] text-white">
                   <Icon size={17} />
                 </span>
 
@@ -402,14 +402,14 @@ export default function DashboardPage() {
                 Recent Orders
               </p>
 
-              <h3 className="mt-1 text-lg font-semibold tracking-[-0.03em] text-slate-950">
+              <h3 className="mt-1 text-base font-semibold tracking-[-0.03em] text-slate-950">
                 Customer Activity
               </h3>
             </div>
 
             <Link
               href="/dashboard/orders"
-              className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2.5 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+              className="inline-flex items-center gap-2 rounded-full bg-[#26143d] px-4 py-2.5 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
             >
               Orders
               <ArrowRight size={14} />
@@ -467,7 +467,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid content-start gap-5">
-          <div className="rounded-[1.5rem] border border-slate-200 bg-slate-950 p-4 text-white shadow-sm">
+          <div className="rounded-[1.5rem] border border-slate-200 bg-[#26143d] p-4 text-white shadow-sm">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/40">
@@ -483,7 +483,7 @@ export default function DashboardPage() {
                 className={`rounded-full px-3 py-1 text-xs font-semibold ${
                   selectedBusiness?.is_published
                     ? "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-300/25"
-                    : "bg-amber-400/15 text-amber-200 ring-1 ring-amber-300/25"
+                    : "bg-purple-400/15 text-purple-200 ring-1 ring-purple-300/25"
                 }`}
               >
                 {selectedBusiness?.is_published ? "Published" : "Draft"}
@@ -520,7 +520,7 @@ export default function DashboardPage() {
                   <Link
                     key={action.href}
                     href={action.href}
-                    className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
+                    className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
                   >
                     <span className="inline-flex items-center gap-2">
                       <Icon size={16} />

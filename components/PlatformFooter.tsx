@@ -5,14 +5,14 @@ import { BRAND } from "@/lib/brand";
 
 export function PlatformFooter() {
   return (
-    <footer className="border-t border-white/10 bg-black px-5 py-10 md:px-8">
+    <footer className="border-t border-white/10 bg-[linear-gradient(160deg,#241436,#321b4d_70%,#412064)] px-5 py-10 md:px-5">
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-start">
         <div>
           <Link href="/" className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center overflow-hidden bg-white/10"><Image src="/market-villa-logo.png" alt="Market Villa" width={40} height={40} className="h-10 w-10 object-contain" /></span>
+            <span className="grid h-11 w-11 place-items-center overflow-hidden bg-white/8"><Image src="/market-villa-logo.png" alt="Market Villa" width={40} height={40} className="h-10 w-10 object-contain" /></span>
 
             <span>
-              <span className="block text-lg font-semibold leading-none tracking-[-0.04em] text-white">
+              <span className="block text-base font-semibold leading-none tracking-[-0.04em] text-white">
                 {BRAND.name}
               </span>
               <span className="mt-1 block text-xs font-medium text-white/60">

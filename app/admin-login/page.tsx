@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
     <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
       <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 shadow-soft">
         <Link href="/" className="mb-8 flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white">
+          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#26143d] text-white">
             <ShieldCheck size={20} />
           </span>
 
@@ -56,13 +56,13 @@ export default function AdminLoginPage() {
             <span className="block text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
               Market Villa
             </span>
-            <span className="text-lg font-semibold text-slate-950">
+            <span className="text-base font-semibold text-slate-950">
               Admin Login
             </span>
           </span>
         </Link>
 
-        <h1 className="text-3xl font-semibold tracking-[-0.05em] text-slate-950">
+        <h1 className="text-2xl font-semibold tracking-[-0.05em] text-slate-950">
           Platform admin access
         </h1>
 
@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
           <input
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="rounded-2xl border border-slate-200 px-4 py-4 outline-none focus:border-[var(--mv-orange)]"
+            className="rounded-2xl border border-slate-200 px-4 py-2.5 outline-none focus:border-[var(--mv-violet)]"
             placeholder="Admin email address"
             type="email"
             required
@@ -83,7 +83,7 @@ export default function AdminLoginPage() {
           <input
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="rounded-2xl border border-slate-200 px-4 py-4 outline-none focus:border-[var(--mv-orange)]"
+            className="rounded-2xl border border-slate-200 px-4 py-2.5 outline-none focus:border-[var(--mv-violet)]"
             placeholder="Admin password"
             type="password"
             required
@@ -98,7 +98,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-4 text-center text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-center text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? (
               <Loader2 size={18} className="animate-spin" />

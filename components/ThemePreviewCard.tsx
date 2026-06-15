@@ -60,9 +60,9 @@ export function ThemePreviewCard({ theme, selected }: Props) {
           </div>
         ) : theme.layout === "service-pro" ? (
           <div className="grid gap-2">
-            <div className="h-12 rounded-2xl bg-white/20" />
-            <div className="h-12 rounded-2xl bg-white/15" />
-            <div className="h-12 rounded-2xl bg-white/10" />
+            <div className="h-10 rounded-2xl bg-white/20" />
+            <div className="h-10 rounded-2xl bg-white/15" />
+            <div className="h-10 rounded-2xl bg-white/10" />
           </div>
         ) : theme.layout === "apartment-stay" ? (
           <div className="overflow-hidden rounded-2xl bg-white/15 p-2">

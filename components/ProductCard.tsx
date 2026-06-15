@@ -22,16 +22,16 @@ export function ProductCard({ product, onAdd }: Props) {
             <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
               {product.category}
             </p>
-            <h3 className="text-lg font-semibold tracking-tight">{product.name}</h3>
+            <h3 className="text-base font-semibold tracking-tight">{product.name}</h3>
           </div>
           <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold">
             {formatCurrency(product.price)}
           </span>
         </div>
-        <p className="min-h-12 text-sm leading-6 text-slate-500">{product.description}</p>
+        <p className="min-h-10 text-sm leading-6 text-slate-500">{product.description}</p>
         <button
           onClick={() => onAdd?.(product)}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-[#26143d] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
         >
           <Plus size={17} />
           Add to order

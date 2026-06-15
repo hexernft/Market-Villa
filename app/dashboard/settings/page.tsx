@@ -163,12 +163,12 @@ export default function SettingsPage() {
       <section className="grid gap-5 xl:grid-cols-[1fr_0.8fr]">
         <div className="border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center bg-slate-950 text-white">
+            <span className="grid h-10 w-10 place-items-center bg-[#26143d] text-white">
               <User size={18} />
             </span>
 
             <div>
-              <h3 className="text-lg font-semibold tracking-[-0.03em] text-slate-950">
+              <h3 className="text-base font-semibold tracking-[-0.03em] text-slate-950">
                 Profile
               </h3>
               <p className="text-sm text-slate-500">
@@ -185,7 +185,7 @@ export default function SettingsPage() {
               <input
                 value={fullName}
                 onChange={(event) => setFullName(event.target.value)}
-                className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-orange)]"
+                className="h-10 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-violet)]"
                 placeholder="Your full name"
               />
             </label>
@@ -194,7 +194,7 @@ export default function SettingsPage() {
               <span className="text-sm font-semibold text-slate-700">
                 Email address
               </span>
-              <div className="flex h-12 items-center gap-3 border border-slate-200 bg-slate-50 px-4 text-sm text-slate-500">
+              <div className="flex h-10 items-center gap-3 border border-slate-200 bg-slate-50 px-4 text-sm text-slate-500">
                 <Mail size={16} />
                 {profile?.email || "No email"}
               </div>
@@ -204,7 +204,7 @@ export default function SettingsPage() {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-slate-950 px-5 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSaving ? (
                 <Loader2 size={17} className="animate-spin" />
@@ -219,12 +219,12 @@ export default function SettingsPage() {
         <aside className="grid gap-5">
           <div className="border border-slate-200 bg-white p-5 shadow-sm">
             <div className="mb-5 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center bg-slate-950 text-white">
+              <span className="grid h-10 w-10 place-items-center bg-[#26143d] text-white">
                 <Building2 size={18} />
               </span>
 
               <div>
-                <h3 className="text-lg font-semibold tracking-[-0.03em] text-slate-950">
+                <h3 className="text-base font-semibold tracking-[-0.03em] text-slate-950">
                   Business support
                 </h3>
                 <p className="text-sm text-slate-500">
@@ -241,7 +241,7 @@ export default function SettingsPage() {
                 <input
                   value={supportEmail}
                   onChange={(event) => setSupportEmail(event.target.value)}
-                  className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-orange)]"
+                  className="h-10 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-violet)]"
                   placeholder="support@example.com"
                 />
               </label>
@@ -253,21 +253,21 @@ export default function SettingsPage() {
                 <input
                   value={supportPhone}
                   onChange={(event) => setSupportPhone(event.target.value)}
-                  className="h-12 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-orange)]"
+                  className="h-10 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-violet)]"
                   placeholder="+234..."
                 />
               </label>
             </div>
           </div>
 
-          <div className="border border-slate-200 bg-slate-950 p-5 text-white shadow-sm">
+          <div className="border border-slate-200 bg-[#26143d] p-5 text-white shadow-sm">
             <div className="flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center bg-white text-slate-950">
                 <ShieldCheck size={18} />
               </span>
 
               <div>
-                <h3 className="text-lg font-semibold tracking-[-0.03em]">
+                <h3 className="text-base font-semibold tracking-[-0.03em]">
                   Security
                 </h3>
                 <p className="text-sm text-white/55">

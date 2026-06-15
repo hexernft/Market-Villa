@@ -220,19 +220,19 @@ export default function AnalyticsPage() {
 
   if (businesses.length === 0) {
     return (
-      <section className="border border-amber-200 bg-amber-50 p-8 text-center">
-        <h2 className="text-2xl font-semibold tracking-[-0.04em] text-amber-950">
+      <section className="border border-purple-200 bg-purple-50 p-8 text-center">
+        <h2 className="text-2xl font-semibold tracking-[-0.04em] text-purple-950">
           Create your business page first
         </h2>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
           Analytics will become available once you create and publish a business
           page.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-6 inline-flex bg-amber-300 px-6 py-4 text-sm font-semibold text-amber-950 hover:bg-amber-200"
+          className="mt-6 inline-flex bg-purple-300 px-4 py-2.5 text-sm font-semibold text-purple-950 hover:bg-purple-200"
         >
           Start Onboarding
         </Link>
@@ -282,7 +282,7 @@ export default function AnalyticsPage() {
               Analytics
             </p>
 
-            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
+            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Business performance
             </h2>
 
@@ -295,7 +295,7 @@ export default function AnalyticsPage() {
           <select
             value={selectedBusinessId}
             onChange={(event) => setSelectedBusinessId(event.target.value)}
-            className="border border-slate-200 bg-white px-4 py-3.5 text-sm outline-none focus:border-[var(--mv-orange)] md:min-w-80"
+            className="border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] md:min-w-80"
           >
             {businesses.map((business) => (
               <option key={business.id} value={business.id}>
@@ -322,7 +322,7 @@ export default function AnalyticsPage() {
               className="border border-slate-200 bg-white p-5 shadow-sm"
             >
               <div className="mb-8 flex items-center justify-between">
-                <span className="grid h-11 w-11 place-items-center bg-slate-950 text-white">
+                <span className="grid h-11 w-11 place-items-center bg-[#26143d] text-white">
                   <Icon size={19} />
                 </span>
 
@@ -333,7 +333,7 @@ export default function AnalyticsPage() {
 
               <p className="text-sm text-slate-500">{card.label}</p>
 
-              <p className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
+              <p className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
                 {card.value}
               </p>
             </div>
@@ -356,7 +356,7 @@ export default function AnalyticsPage() {
 
             <Link
               href="/dashboard/orders"
-              className="inline-flex items-center gap-2 bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+              className="inline-flex items-center gap-2 bg-[#26143d] px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
             >
               View orders
               <ArrowRight size={16} />
@@ -407,7 +407,7 @@ export default function AnalyticsPage() {
           )}
         </div>
 
-        <aside className="border border-slate-200 bg-slate-950 p-6 text-white shadow-sm">
+        <aside className="border border-slate-200 bg-[#26143d] p-6 text-white shadow-sm">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
             Quick insight
           </p>

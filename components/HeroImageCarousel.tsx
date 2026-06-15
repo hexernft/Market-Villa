@@ -26,7 +26,7 @@ export function HeroImageCarousel() {
       initial={{ opacity: 0, y: 24, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="hidden w-[350px] justify-self-end lg:block"
+      className="hidden w-[390px] justify-self-end lg:block"
     >
       <motion.div
         animate={{ y: [0, -8, 0] }}
@@ -35,29 +35,29 @@ export function HeroImageCarousel() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="relative overflow-hidden border border-orange-200 bg-white p-2.5 shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+        className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/42 p-2.5 shadow-[0_24px_70px_rgba(55,31,83,0.15)] backdrop-blur-2xl"
       >
         <motion.div
           animate={{ opacity: [0.35, 0.7, 0.35], scale: [1, 1.08, 1] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -right-4 -top-4 h-24 w-24 bg-[var(--mv-orange)]/20 blur-2xl"
+          className="absolute -right-4 -top-4 h-24 w-24 bg-[#c4b5fd]/35 blur-2xl"
         />
 
         <motion.div
           animate={{ opacity: [0.25, 0.5, 0.25], scale: [1, 1.06, 1] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -bottom-4 -left-4 h-24 w-24 bg-slate-950/10 blur-2xl"
+          className="absolute -bottom-4 -left-4 h-24 w-24 bg-[#26143d]/10 blur-2xl"
         />
 
-        <div className="relative overflow-hidden border border-slate-200 bg-slate-50 p-1.5">
-          <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-3 py-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-[var(--mv-orange)]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-orange-200" />
+        <div className="relative overflow-hidden rounded-[1.55rem] border border-white/70 bg-white/55 p-1.5">
+          <div className="flex items-center gap-2 border-b border-[#7c3aed]/10 bg-white/50 px-3 py-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#7c3aed]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#eadcff]" />
             <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
             <span className="ml-3 h-2 w-32 rounded-full bg-slate-100" />
           </div>
 
-          <div className="relative h-[350px] w-full overflow-hidden bg-white">
+          <div className="relative h-[350px] w-full overflow-hidden bg-white/55">
             <AnimatePresence mode="wait">
               <motion.div
                 key={heroImages[activeIndex]}
@@ -74,7 +74,7 @@ export function HeroImageCarousel() {
                   className="absolute inset-0 h-full w-full scale-110 object-cover blur-xl"
                 />
 
-                <div className="absolute inset-0 bg-black/10" />
+                <div className="absolute inset-0 bg-[#ffe4d6]/60" />
 
                 <div className="absolute inset-0 grid place-items-center overflow-hidden">
                   <motion.img
@@ -99,7 +99,7 @@ export function HeroImageCarousel() {
                   onClick={() => setActiveIndex(index)}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     activeIndex === index
-                      ? "w-7 bg-[var(--mv-orange)]"
+                      ? "w-7 bg-[#7c3aed]"
                       : "w-2 bg-white/80"
                   }`}
                   aria-label={`Show hero image ${index + 1}`}

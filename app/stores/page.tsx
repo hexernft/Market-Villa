@@ -203,28 +203,28 @@ export default function StoresPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f3f4f6] text-slate-950">
+    <main className="min-h-screen bg-[#f7f1ff] text-slate-950">
       <PlatformNavbar />
 
-      <section className="bg-[radial-gradient(circle_at_top_right,rgba(255,106,0,0.18),transparent_34%),linear-gradient(180deg,#f3f4f6_0%,#ffffff_100%)] px-5 pb-12 pt-32 md:px-8 md:pt-36">
+      <section className="bg-[radial-gradient(circle_at_top_right,rgba(124,58,237,0.18),transparent_34%),linear-gradient(180deg,#f7f1ff_0%,#ffffff_100%)] px-5 pb-12 pt-32 md:px-5 md:pt-36">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
-              <p className="text-sm font-semibold tracking-[0.18em] text-[#ff6a00]">
+              <p className="text-sm font-semibold tracking-[0.18em] text-[#7c3aed]">
                 Market Villa stores
               </p>
 
-              <h1 className="mt-3 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-[-0.05em] text-slate-950 md:text-5xl">
+              <h1 className="mt-3 max-w-3xl text-2xl font-semibold leading-[1.05] tracking-[-0.05em] text-slate-950 md:text-2xl">
                 Discover businesses built on Market Villa.
               </h1>
 
-              <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
+              <p className="mt-5 max-w-2xl text-sm leading-8 text-slate-600">
                 Explore featured stores, find businesses by category, and see
                 how sellers are using simple pages to look professional online.
               </p>
             </div>
 
-            <div className="border border-orange-200 bg-white p-5 shadow-sm">
+            <div className="border border-purple-200 bg-white p-5 shadow-sm">
               <div className="relative">
                 <Search
                   size={18}
@@ -234,7 +234,7 @@ export default function StoresPage() {
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  className="h-14 w-full border border-slate-200 bg-white pl-12 pr-4 text-sm outline-none transition focus:border-[#ff6a00]"
+                  className="h-11 w-full border border-slate-200 bg-white pl-12 pr-4 text-sm outline-none transition focus:border-[#7c3aed]"
                   placeholder="Search stores, categories, locations..."
                 />
               </div>
@@ -247,8 +247,8 @@ export default function StoresPage() {
                     onClick={() => setActiveCategory(category)}
                     className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
                       activeCategory === category
-                        ? "bg-[#ff6a00] text-white"
-                        : "bg-orange-50 text-slate-700 hover:bg-orange-100"
+                        ? "bg-[#7c3aed] text-white"
+                        : "bg-purple-50 text-slate-700 hover:bg-purple-100"
                     }`}
                   >
                     {category}
@@ -261,18 +261,18 @@ export default function StoresPage() {
       </section>
 
       {message ? (
-        <section className="px-5 pt-5 md:px-8">
-          <div className="mx-auto max-w-7xl border border-orange-200 bg-orange-50 p-4 text-sm text-slate-700">
+        <section className="px-5 pt-5 md:px-5">
+          <div className="mx-auto max-w-7xl border border-purple-200 bg-purple-50 p-4 text-sm text-slate-700">
             {message}
           </div>
         </section>
       ) : null}
 
-      <section className="px-5 py-12 md:px-8">
+      <section className="px-5 py-12 md:px-5">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold tracking-[0.18em] text-[#ff6a00]">
+              <p className="text-sm font-semibold tracking-[0.18em] text-[#7c3aed]">
                 Featured this week
               </p>
 
@@ -307,11 +307,11 @@ export default function StoresPage() {
         </div>
       </section>
 
-      <section className="border-t border-orange-100 bg-[#fff3eb] px-5 py-12 md:px-8">
+      <section className="border-t border-purple-100 bg-[#f6efff] px-5 py-12 md:px-5">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold tracking-[0.18em] text-[#ff6a00]">
+              <p className="text-sm font-semibold tracking-[0.18em] text-[#7c3aed]">
                 Store directory
               </p>
 
@@ -343,7 +343,7 @@ export default function StoresPage() {
         </div>
       </section>
 
-      <section className="bg-[#ff6a00] px-5 py-10 text-white md:px-8">
+      <section className="bg-[#7c3aed] px-5 py-10 text-white md:px-5">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-2xl font-semibold tracking-[-0.04em]">
@@ -356,8 +356,8 @@ export default function StoresPage() {
           </div>
 
           <Link
-            href="/signup"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-[#ff6a00] shadow-sm transition hover:bg-orange-50"
+            href="/login"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-[#7c3aed] shadow-sm transition hover:bg-purple-50"
           >
             Create Business Page
             <ArrowRight size={17} />
@@ -397,7 +397,7 @@ function StoreCard({
         delay: Math.min(index * 0.05, 0.25),
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="premium-card-hover group overflow-hidden border border-orange-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#ff6a00]/40 hover:shadow-md"
+      className="premium-card-hover group overflow-hidden border border-purple-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#7c3aed]/40 hover:shadow-md"
     >
       <div className="relative h-44 overflow-hidden bg-slate-100">
         {image ? (
@@ -407,13 +407,13 @@ function StoreCard({
             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="grid h-full place-items-center bg-orange-50">
-            <Store size={34} className="text-[#ff6a00]" />
+          <div className="grid h-full place-items-center bg-purple-50">
+            <Store size={34} className="text-[#7c3aed]" />
           </div>
         )}
 
         {featured ? (
-          <span className="absolute left-4 top-4 rounded-full bg-[#ff6a00] px-3 py-1 text-xs font-semibold text-white">
+          <span className="absolute left-4 top-4 rounded-full bg-[#7c3aed] px-3 py-1 text-xs font-semibold text-white">
             Store of the Week
           </span>
         ) : null}
@@ -421,7 +421,7 @@ function StoreCard({
 
       <div className="p-5">
         <div className="mb-4 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#ff6a00]">
+          <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-[#7c3aed]">
             <Tag size={13} />
             {category}
           </span>
@@ -453,7 +453,7 @@ function StoreCard({
           {store.slug ? (
             <Link
               href={`/store/${store.slug}`}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#ff8126]"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#7c3aed] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#8b5cf6]"
             >
               View store
               <ArrowRight size={15} />
@@ -466,7 +466,7 @@ function StoreCard({
             className={`grid h-11 w-11 place-items-center rounded-full border transition ${
               isCopied
                 ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-slate-200 bg-white text-slate-600 hover:border-[#ff6a00]/40 hover:text-[#ff6a00]"
+                : "border-slate-200 bg-white text-slate-600 hover:border-[#7c3aed]/40 hover:text-[#7c3aed]"
             }`}
             aria-label={isCopied ? "Store link copied" : "Copy store link"}
             title={isCopied ? "Copied" : "Copy store link"}
@@ -485,7 +485,7 @@ function StoreSkeletonGrid() {
       {Array.from({ length: 6 }).map((_, index) => (
         <div
           key={index}
-          className="overflow-hidden border border-orange-100 bg-white shadow-sm"
+          className="overflow-hidden border border-purple-100 bg-white shadow-sm"
         >
           <div className="mv-skeleton h-44" />
           <div className="space-y-3 p-5">
@@ -503,8 +503,8 @@ function StoreSkeletonGrid() {
 
 function EmptyStores() {
   return (
-    <div className="border border-dashed border-orange-200 bg-white p-10 text-center">
-      <Store className="mx-auto text-[#ff6a00]" size={34} />
+    <div className="border border-dashed border-purple-200 bg-white p-10 text-center">
+      <Store className="mx-auto text-[#7c3aed]" size={34} />
 
       <h3 className="mt-4 text-xl font-semibold tracking-[-0.04em] text-slate-950">
         No stores found

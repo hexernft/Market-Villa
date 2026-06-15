@@ -343,7 +343,7 @@ export default function ProductsPage() {
                 setSelectedBusinessId(event.target.value);
                 resetForm();
               }}
-              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
+              className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
             >
               {businesses.length === 0 ? (
                 <option value="">No business created yet</option>
@@ -365,30 +365,30 @@ export default function ProductsPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:bg-white focus:ring-4 focus:ring-slate-100"
+                className="min-h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:bg-white focus:ring-4 focus:ring-slate-100"
                 placeholder="Search products"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-2xl bg-slate-50 px-4 py-3">
+            <div className="rounded-2xl bg-slate-50 px-4 py-2.5">
               <p className="text-xs text-slate-500">Total</p>
               <p className="mt-1 text-xl font-semibold text-slate-950">
                 {products.length}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-emerald-50 px-4 py-3">
+            <div className="rounded-2xl bg-emerald-50 px-4 py-2.5">
               <p className="text-xs text-emerald-700">Live</p>
               <p className="mt-1 text-xl font-semibold text-emerald-950">
                 {availableProductsCount}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-amber-50 px-4 py-3">
-              <p className="text-xs text-amber-700">Featured</p>
-              <p className="mt-1 text-xl font-semibold text-amber-950">
+            <div className="rounded-2xl bg-purple-50 px-4 py-2.5">
+              <p className="text-xs text-purple-700">Featured</p>
+              <p className="mt-1 text-xl font-semibold text-purple-950">
                 {featuredProductsCount}
               </p>
             </div>
@@ -407,12 +407,12 @@ export default function ProductsPage() {
           Loading products...
         </section>
       ) : businesses.length === 0 ? (
-        <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-          <p className="text-lg font-semibold text-amber-950">
+        <section className="rounded-[2rem] border border-purple-200 bg-purple-50 p-8 text-center">
+          <p className="text-base font-semibold text-purple-950">
             Create a business page first
           </p>
 
-          <p className="mt-2 text-sm text-amber-900">
+          <p className="mt-2 text-sm text-purple-900">
             Add your business profile before adding products.
           </p>
         </section>
@@ -429,7 +429,7 @@ export default function ProductsPage() {
               <button
                 type="button"
                 onClick={openNewProductForm}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-7 py-4 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
               >
                 <Plus size={18} />
                 Add Product
@@ -462,7 +462,7 @@ export default function ProductsPage() {
                   <input
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                     placeholder="Product name"
                     required
                   />
@@ -477,7 +477,7 @@ export default function ProductsPage() {
                     <input
                       value={price}
                       onChange={(event) => setPrice(event.target.value)}
-                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                      className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                       placeholder="1500"
                       type="number"
                       min="0"
@@ -493,7 +493,7 @@ export default function ProductsPage() {
                     <select
                       value={category}
                       onChange={(event) => setCategory(event.target.value)}
-                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                      className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                     >
                       {productCategories.map((item) => (
                         <option key={item}>{item}</option>
@@ -528,7 +528,7 @@ export default function ProductsPage() {
                     <input
                       value={imageUrl}
                       onChange={(event) => setImageUrl(event.target.value)}
-                      className="w-full rounded-2xl border border-slate-200 px-11 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                      className="w-full rounded-2xl border border-slate-200 px-11 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                       placeholder="https://..."
                     />
                   </div>
@@ -543,7 +543,7 @@ export default function ProductsPage() {
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
                     rows={4}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                     placeholder="Add important product details."
                   />
                 </label>
@@ -596,7 +596,7 @@ export default function ProductsPage() {
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSaving ? (
                       <Loader2 size={17} className="animate-spin" />
@@ -614,7 +614,7 @@ export default function ProductsPage() {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
                   >
                     <X size={17} />
                     Cancel
@@ -677,7 +677,7 @@ export default function ProductsPage() {
                           )}
 
                           {product.is_featured ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-700">
                               <Star size={14} />
                               Featured
                             </span>
@@ -703,7 +703,7 @@ export default function ProductsPage() {
                         type="button"
                         onClick={() => startEditing(product)}
                         disabled={busyProductId === product.id}
-                        className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:opacity-60"
+                        className="rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:opacity-60"
                       >
                         Edit
                       </button>
@@ -712,7 +712,7 @@ export default function ProductsPage() {
                         type="button"
                         onClick={() => handleToggleAvailability(product)}
                         disabled={busyProductId === product.id}
-                        className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-200 disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-200 disabled:opacity-60"
                       >
                         {busyProductId === product.id ? (
                           <Loader2 size={17} className="animate-spin" />
@@ -727,7 +727,7 @@ export default function ProductsPage() {
                         type="button"
                         onClick={() => handleDeleteProduct(product.id)}
                         disabled={busyProductId === product.id}
-                        className="inline-flex items-center gap-2 rounded-full bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 transition hover:-translate-y-0.5 hover:bg-red-100 disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-full bg-red-50 px-5 py-2.5 text-sm font-semibold text-red-700 transition hover:-translate-y-0.5 hover:bg-red-100 disabled:opacity-60"
                       >
                         <Trash2 size={17} />
                         Delete

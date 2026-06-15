@@ -223,19 +223,19 @@ export default function OrdersPage() {
 
   if (businesses.length === 0) {
     return (
-      <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
-        <p className="text-2xl font-semibold tracking-[-0.04em] text-amber-950">
+      <div className="rounded-[2rem] border border-purple-200 bg-purple-50 p-8 text-center">
+        <p className="text-2xl font-semibold tracking-[-0.04em] text-purple-950">
           Create your business page first
         </p>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
           Orders will appear here after customers place orders from your
           business page.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-6 inline-flex rounded-full bg-amber-300 px-6 py-4 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
+          className="mt-6 inline-flex rounded-full bg-purple-300 px-4 py-2.5 text-sm font-semibold text-purple-950 transition hover:-translate-y-0.5 hover:bg-purple-200"
         >
           Start Onboarding
         </Link>
@@ -251,7 +251,7 @@ export default function OrdersPage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
+              className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -269,37 +269,37 @@ export default function OrdersPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:bg-white focus:ring-4 focus:ring-slate-100"
+                className="min-h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:bg-white focus:ring-4 focus:ring-slate-100"
                 placeholder="Search orders"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-4 gap-3">
-            <div className="rounded-2xl bg-slate-50 px-4 py-3">
+            <div className="rounded-2xl bg-slate-50 px-4 py-2.5">
               <p className="text-xs text-slate-500">Orders</p>
               <p className="mt-1 text-xl font-semibold text-slate-950">
                 {orders.length}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-amber-50 px-4 py-3">
-              <p className="text-xs text-amber-700">Pending</p>
-              <p className="mt-1 text-xl font-semibold text-amber-950">
+            <div className="rounded-2xl bg-purple-50 px-4 py-2.5">
+              <p className="text-xs text-purple-700">Pending</p>
+              <p className="mt-1 text-xl font-semibold text-purple-950">
                 {pendingOrders}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-emerald-50 px-4 py-3">
+            <div className="rounded-2xl bg-emerald-50 px-4 py-2.5">
               <p className="text-xs text-emerald-700">Delivered</p>
               <p className="mt-1 text-xl font-semibold text-emerald-950">
                 {deliveredOrders}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-slate-950 px-4 py-3">
+            <div className="rounded-2xl bg-[#26143d] px-4 py-2.5">
               <p className="text-xs text-slate-300">Revenue</p>
-              <p className="mt-1 text-sm font-semibold text-white md:text-base">
+              <p className="mt-1 text-sm font-semibold text-white md:text-sm">
                 {formatCurrency(totalRevenue)}
               </p>
             </div>
@@ -316,7 +316,7 @@ export default function OrdersPage() {
       <section className="grid gap-4">
         {filteredOrders.length === 0 ? (
           <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-sm">
-            <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-slate-50 text-slate-500">
+            <div className="mx-auto mb-5 grid h-11 w-14 place-items-center rounded-2xl bg-slate-50 text-slate-500">
               <ClipboardList size={24} />
             </div>
 
@@ -432,8 +432,8 @@ export default function OrdersPage() {
                             disabled={updatingOrderId === order.id}
                             className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
                               isActive
-                                ? "bg-slate-950 text-white"
-                                : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-950 hover:text-white"
+                                ? "bg-[#26143d] text-white"
+                                : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-[#26143d] hover:text-white"
                             } disabled:opacity-60`}
                           >
                             {updatingOrderId === order.id ? (
@@ -457,7 +457,7 @@ export default function OrdersPage() {
                       )}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
                     >
                       <MessageCircle size={17} />
                       Follow Up

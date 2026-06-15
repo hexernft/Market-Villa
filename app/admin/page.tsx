@@ -296,7 +296,7 @@ export default function AdminPage() {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
         <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 text-center shadow-soft">
-          <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-slate-950 text-white">
+          <div className="mx-auto mb-6 grid h-11 w-14 place-items-center rounded-2xl bg-[#26143d] text-white">
             <Loader2 size={24} className="animate-spin" />
           </div>
 
@@ -317,7 +317,7 @@ export default function AdminPage() {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
         <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 text-center shadow-soft">
-          <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-red-50 text-red-700">
+          <div className="mx-auto mb-6 grid h-11 w-14 place-items-center rounded-2xl bg-red-50 text-red-700">
             <ShieldCheck size={24} />
           </div>
 
@@ -339,14 +339,14 @@ export default function AdminPage() {
           <div className="mt-7 grid gap-3">
             <Link
               href="/admin-login"
-              className="rounded-full bg-slate-950 px-5 py-4 text-sm font-semibold text-white hover:bg-slate-800"
+              className="rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
             >
               Login as Admin
             </Link>
 
             <Link
               href="/dashboard"
-              className="rounded-full border border-slate-200 px-5 py-4 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              className="rounded-full border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
             >
               Go to Business Dashboard
             </Link>
@@ -362,7 +362,7 @@ export default function AdminPage() {
 
   return (
     <main className="min-h-screen bg-slate-100">
-      <aside className="fixed z-50 left-0 top-0 hidden h-screen w-72 border-r border-white/10 bg-slate-950 p-5 text-white lg:block">
+      <aside className="fixed z-50 left-0 top-0 hidden h-screen w-72 border-r border-white/10 bg-[#26143d] p-5 text-white lg:block">
         <Link href="/" className="mb-8 flex items-center gap-3">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
             <ShieldCheck size={20} />
@@ -372,14 +372,14 @@ export default function AdminPage() {
             <span className="block text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
               MARKET VILLA
             </span>
-            <span className="block text-lg font-semibold">Admin Center</span>
+            <span className="block text-base font-semibold">Admin Center</span>
           </span>
         </Link>
 
         <nav className="grid gap-2">
           <a
             href="#overview"
-            className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-3 text-sm font-medium text-white"
+            className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-2.5 text-sm font-medium text-white"
           >
             <LayoutDashboard size={18} />
             Overview
@@ -387,7 +387,7 @@ export default function AdminPage() {
 
           <a
             href="#businesses"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Building2 size={18} />
             Businesses
@@ -395,7 +395,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/visibility-requests"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Megaphone size={18} />
             Visibility Requests
@@ -403,7 +403,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/revenue"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Banknote size={18} />
             Revenue
@@ -411,7 +411,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/pricing"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <BadgeDollarSign size={18} />
             Pricing
@@ -419,7 +419,7 @@ export default function AdminPage() {
 
           <a
             href="#domains"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Globe2 size={18} />
             Domain Requests
@@ -427,7 +427,7 @@ export default function AdminPage() {
 
           <Link
             href="/dashboard"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Store size={18} />
             Business Dashboard
@@ -444,7 +444,7 @@ export default function AdminPage() {
 
       <section className="lg:pl-72">
         <header className="sticky z-50 top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur-xl">
-          <div className="flex items-center justify-between px-5 py-4 md:px-8">
+          <div className="flex items-center justify-between px-5 py-2.5 md:px-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
                 Admin Center
@@ -457,17 +457,17 @@ export default function AdminPage() {
 
             <Link
               href="/"
-              className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+              className="rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
             >
               View Website
             </Link>
           </div>
         </header>
 
-        <div className="grid gap-8 px-5 py-8 md:px-8">
+        <div className="grid gap-8 px-5 py-8 md:px-5">
           <section
             id="overview"
-            className="rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-7 text-white shadow-soft"
+            className="rounded-[2rem] bg-gradient-to-br from-[#241436] via-[#26143d] to-teal-950 p-7 text-white shadow-soft"
           >
             <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
               <div>
@@ -475,7 +475,7 @@ export default function AdminPage() {
                   Platform Overview
                 </p>
 
-                <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.05em]">
+                <h2 className="mt-3 max-w-3xl text-2xl font-semibold tracking-[-0.05em]">
                   Track businesses, subscriptions, and custom domain requests.
                 </h2>
 
@@ -528,28 +528,28 @@ export default function AdminPage() {
               <section className="grid gap-4 md:grid-cols-5">
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
                   <p className="text-sm text-slate-500">Businesses</p>
-                  <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-slate-950">
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {businesses.length}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
                   <p className="text-sm text-slate-500">Published</p>
-                  <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-slate-950">
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {publishedCount}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
                   <p className="text-sm text-slate-500">Domain Requests</p>
-                  <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-slate-950">
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {domainRequests.length}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
                   <p className="text-sm text-slate-500">Pending Domains</p>
-                  <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-slate-950">
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {pendingDomainCount}
                   </p>
                 </div>
@@ -577,7 +577,7 @@ export default function AdminPage() {
                     <input
                       value={query}
                       onChange={(event) => setQuery(event.target.value)}
-                      className="w-full rounded-full border border-slate-200 bg-slate-50 px-11 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
+                      className="w-full rounded-full border border-slate-200 bg-slate-50 px-11 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
                       placeholder="Search businesses"
                     />
                   </div>
@@ -606,7 +606,7 @@ export default function AdminPage() {
                               className={`rounded-full px-3 py-1 text-xs font-semibold ${
                                 business.is_published
                                   ? "bg-emerald-50 text-emerald-700"
-                                  : "bg-amber-50 text-amber-700"
+                                  : "bg-purple-50 text-purple-700"
                               }`}
                             >
                               {business.is_published ? "Published" : "Draft"}
@@ -616,7 +616,7 @@ export default function AdminPage() {
                               {business.subscription_plan}
                             </span>
 
-                            <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-white">
+                            <span className="rounded-full bg-[#26143d] px-3 py-1 text-xs font-semibold text-white">
                               {business.subscription_status}
                             </span>
                           </div>
@@ -644,7 +644,7 @@ export default function AdminPage() {
                         <div className="flex flex-wrap gap-3">
                           <Link
                             href={`/store/${business.slug}`}
-                            className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                            className="inline-flex items-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
                           >
                             View Store
                             <ArrowRight size={16} />
@@ -659,7 +659,7 @@ export default function AdminPage() {
                               )
                             }
                             disabled={updatingBusinessId === business.id}
-                            className={`rounded-full px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${
+                            className={`rounded-full px-5 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${
                               business.is_published
                                 ? "bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100"
                                 : "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 hover:bg-emerald-100"
@@ -680,7 +680,7 @@ export default function AdminPage() {
                               )
                             }
                             disabled={updatingOverrideBusinessId === business.id}
-                            className={`rounded-full px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${
+                            className={`rounded-full px-5 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${
                               business.admin_override_active
                                 ? "bg-purple-700 text-white hover:bg-purple-800"
                                 : "bg-purple-50 text-purple-700 ring-1 ring-purple-200 hover:bg-purple-100"
@@ -731,7 +731,7 @@ export default function AdminPage() {
                               {request.businesses?.name || "Unknown business"}
                             </span>
 
-                            <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                            <span className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-700">
                               {request.status}
                             </span>
 
@@ -782,7 +782,7 @@ export default function AdminPage() {
                               setAdminNote(event.target.value)
                             }
                             rows={3}
-                            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
+                            className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
                             placeholder="Admin note for this update"
                           />
 
@@ -794,7 +794,7 @@ export default function AdminPage() {
                                   handleStatusChange(request.id, status)
                                 }
                                 disabled={updatingId === request.id}
-                                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-950 hover:text-white disabled:opacity-60"
+                                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-[#26143d] hover:text-white disabled:opacity-60"
                               >
                                 {updatingId === request.id ? (
                                   <Loader2

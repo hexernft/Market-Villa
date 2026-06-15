@@ -101,14 +101,14 @@ export default function OnboardingPage() {
 
   return (
     <div className="grid gap-8">
-      <section className="rounded-[2rem] bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-7 text-white shadow-soft">
+      <section className="rounded-[2rem] bg-gradient-to-br from-[#09030f] via-[#13061f] to-teal-950 p-7 text-white shadow-soft">
         <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-200">
               Business Setup
             </p>
 
-            <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.05em]">
+            <h2 className="mt-3 max-w-3xl text-2xl font-semibold tracking-[-0.05em]">
               Set up your Market Villa business page.
             </h2>
 
@@ -169,7 +169,7 @@ export default function OnboardingPage() {
                   onChange={(event) =>
                     handleBusinessNameChange(event.target.value)
                   }
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-slate-950"
                   placeholder="Example: ZCAS TastyBites"
                   required
                 />
@@ -183,7 +183,7 @@ export default function OnboardingPage() {
                 <select
                   value={category}
                   onChange={(event) => setCategory(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-slate-950"
                 >
                   {categories.map((item) => (
                     <option key={item}>{item}</option>
@@ -198,14 +198,14 @@ export default function OnboardingPage() {
                 Business URL slug
               </span>
               <div className="grid gap-3 md:grid-cols-[auto_1fr] md:items-center">
-                <span className="rounded-2xl bg-slate-100 px-4 py-4 text-sm font-medium text-slate-500">
+                <span className="rounded-2xl bg-slate-100 px-4 py-2.5 text-sm font-medium text-slate-500">
                   marketvilla.com/store/
                 </span>
 
                 <input
                   value={slug}
                   onChange={(event) => setSlug(slugify(event.target.value))}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-slate-950"
                   placeholder="zcas-tastybites"
                   required
                 />
@@ -220,7 +220,7 @@ export default function OnboardingPage() {
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
                 rows={4}
-                className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-slate-950"
                 placeholder="Describe what your business offers..."
                 required
               />
@@ -235,7 +235,7 @@ export default function OnboardingPage() {
                 <input
                   value={whatsapp}
                   onChange={(event) => setWhatsapp(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-slate-950"
                   placeholder="2348012345678"
                   required
                 />
@@ -249,7 +249,7 @@ export default function OnboardingPage() {
                 <input
                   value={location}
                   onChange={(event) => setLocation(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-slate-950"
                   placeholder="Abuja, Nigeria"
                   required
                 />
@@ -265,7 +265,7 @@ export default function OnboardingPage() {
                 <input
                   value={openingHours}
                   onChange={(event) => setOpeningHours(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-slate-950"
                   placeholder="Mon - Sat, 9:00 AM - 6:00 PM"
                 />
               </label>
@@ -278,7 +278,7 @@ export default function OnboardingPage() {
                 <input
                   value={instagramUrl}
                   onChange={(event) => setInstagramUrl(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none focus:border-slate-950"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-slate-950"
                   placeholder="https://instagram.com/yourbusiness"
                 />
               </label>
@@ -350,7 +350,7 @@ export default function OnboardingPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#13061f] px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting ? (
                   <Loader2 size={17} className="animate-spin" />
@@ -362,7 +362,7 @@ export default function OnboardingPage() {
 
               <Link
                 href="/dashboard"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50"
               >
                 Back to Dashboard
                 <ArrowRight size={17} />
@@ -373,7 +373,7 @@ export default function OnboardingPage() {
 
         <aside className="grid gap-5">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-slate-950">
+            <h3 className="text-base font-semibold text-slate-950">
               What happens after setup?
             </h3>
 
@@ -396,7 +396,7 @@ export default function OnboardingPage() {
           </div>
 
           <div className="rounded-[2rem] border border-amber-200 bg-amber-50 p-6">
-            <h3 className="text-lg font-semibold text-amber-950">
+            <h3 className="text-base font-semibold text-amber-950">
               Want a professional domain?
             </h3>
 
@@ -407,13 +407,13 @@ export default function OnboardingPage() {
 
             <Link
               href="/dashboard/domain"
-              className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 hover:bg-amber-200"
+              className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-2.5 text-sm font-semibold text-amber-950 hover:bg-amber-200"
             >
               View Domain Options
             </Link>
           </div>
 
-          <div className="rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-sm">
+          <div className="rounded-[2rem] border border-slate-200 bg-[#13061f] p-6 text-white shadow-sm">
 
             <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
               Start simple. Upgrade when the business grows.

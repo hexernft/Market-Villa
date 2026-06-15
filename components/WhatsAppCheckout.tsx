@@ -209,7 +209,7 @@ export function WhatsAppCheckout({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-full bg-slate-950 px-5 py-4 text-sm font-semibold text-white shadow-soft hover:bg-slate-800"
+        className="fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white shadow-soft hover:bg-slate-800"
       >
         <ShoppingBag size={18} />
         Checkout
@@ -219,7 +219,7 @@ export function WhatsAppCheckout({
       </button>
 
       {isOpen ? (
-        <div className="fixed inset-0 z-50 bg-slate-950/50 px-4 py-6 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 bg-[#26143d]/50 px-4 py-6 backdrop-blur-sm">
           <div className="ml-auto flex h-full max-w-2xl flex-col overflow-hidden rounded-[2rem] bg-white shadow-soft">
             <div className="flex items-center justify-between border-b border-slate-200 p-5">
               <div>
@@ -281,7 +281,7 @@ export function WhatsAppCheckout({
                             onClick={() =>
                               updateQuantity(item.id, item.quantity + 1)
                             }
-                            className="grid h-9 w-9 place-items-center rounded-full bg-slate-950 text-white"
+                            className="grid h-9 w-9 place-items-center rounded-full bg-[#26143d] text-white"
                           >
                             <Plus size={15} />
                           </button>
@@ -298,14 +298,14 @@ export function WhatsAppCheckout({
                     <input
                       value={customerName}
                       onChange={(event) => setCustomerName(event.target.value)}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
                       placeholder="Your name"
                     />
 
                     <input
                       value={customerPhone}
                       onChange={(event) => setCustomerPhone(event.target.value)}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
                       placeholder="Your phone number"
                     />
 
@@ -314,7 +314,7 @@ export function WhatsAppCheckout({
                       onChange={(event) =>
                         setCustomerAddress(event.target.value)
                       }
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
                       placeholder="Delivery address / location"
                     />
 
@@ -322,7 +322,7 @@ export function WhatsAppCheckout({
                       value={customerNote}
                       onChange={(event) => setCustomerNote(event.target.value)}
                       rows={3}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
+                      className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
                       placeholder="Extra note"
                     />
                   </div>
@@ -337,9 +337,9 @@ export function WhatsAppCheckout({
                 <aside>
                   <div
                     ref={summaryRef}
-                    className="sticky top-4 overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-950 text-white shadow-sm"
+                    className="sticky top-4 overflow-hidden rounded-[1.75rem] border border-slate-200 bg-[#26143d] text-white shadow-sm"
                   >
-                    <div className="store-pattern bg-gradient-to-br from-slate-950 via-teal-950 to-slate-900 p-5">
+                    <div className="store-pattern bg-gradient-to-br from-[#241436] via-teal-950 to-slate-900 p-5">
                       <div className="mb-8 flex items-center justify-between">
                         <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
                           <ReceiptText size={20} />
@@ -399,7 +399,7 @@ export function WhatsAppCheckout({
                         ))}
                       </div>
 
-                      <div className="mt-5 rounded-2xl bg-slate-950 p-4 text-white">
+                      <div className="mt-5 rounded-2xl bg-[#26143d] p-4 text-white">
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-slate-300">Total</span>
                           <span className="text-2xl font-semibold tracking-[-0.04em]">
@@ -441,7 +441,7 @@ export function WhatsAppCheckout({
                 <button
                   onClick={downloadOrderSummaryImage}
                   disabled={isGeneratingImage || isSavingOrder}
-                  className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-800 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isGeneratingImage ? (
                     <Loader2 size={18} className="animate-spin" />
@@ -454,7 +454,7 @@ export function WhatsAppCheckout({
                 <button
                   onClick={handleCheckout}
                   disabled={isSavingOrder || isGeneratingImage}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-4 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isSavingOrder ? (
                     <Loader2 size={18} className="animate-spin" />

@@ -102,15 +102,15 @@ export function SupportWidget() {
           title="Support"
           animate={{
             boxShadow: [
-              "0 10px 26px rgba(255,106,0,0.24)",
-              "0 18px 46px rgba(255,106,0,0.38)",
-              "0 10px 26px rgba(255,106,0,0.24)",
+              "0 10px 26px rgba(124,58,237,0.24)",
+              "0 18px 46px rgba(124,58,237,0.38)",
+              "0 10px 26px rgba(124,58,237,0.24)",
             ],
           }}
           transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
           whileHover={{ y: -3, scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
-          className="group fixed bottom-5 right-5 z-50 inline-flex items-center gap-0 overflow-hidden rounded-full bg-[var(--mv-orange)] p-2.5 text-white ring-1 ring-white/10 transition-all duration-300 hover:gap-2.5 hover:bg-[var(--mv-orange-hover)] hover:px-3.5"
+          className="group fixed bottom-5 right-5 z-50 inline-flex items-center gap-0 overflow-hidden rounded-full bg-[var(--mv-violet)] p-2.5 text-white ring-1 ring-white/10 transition-all duration-300 hover:gap-2.5 hover:bg-[var(--mv-purple-hover)] hover:px-3.5"
         >
           <span className="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white">
             <MessageCircle size={20} />
@@ -135,7 +135,7 @@ export function SupportWidget() {
               type="button"
               aria-label="Close support chat"
               onClick={() => setIsOpen(false)}
-              className="absolute inset-0 bg-slate-950/45 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#26143d]/45 backdrop-blur-sm"
             />
 
             <motion.aside
@@ -145,10 +145,10 @@ export function SupportWidget() {
               transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
               className="absolute bottom-5 right-5 flex h-[min(620px,calc(100vh-2.5rem))] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[2rem] bg-white shadow-2xl ring-1 ring-slate-200"
             >
-              <div className="bg-slate-950 px-5 py-4 text-white">
+              <div className="bg-[#26143d] px-5 py-2.5 text-white">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--mv-orange)] text-white">
+                    <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--mv-violet)] text-white">
                       <Bot size={20} />
                     </span>
 
@@ -173,7 +173,7 @@ export function SupportWidget() {
                 </div>
               </div>
 
-              <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-4 py-4">
+              <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-4 py-2.5">
                 {messages.map((chatMessage, index) => {
                   const isUser = chatMessage.role === "user";
 
@@ -186,9 +186,9 @@ export function SupportWidget() {
                       className={`flex ${isUser ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-6 ${
+                        className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-6 ${
                           isUser
-                            ? "bg-[var(--mv-orange)] text-white"
+                            ? "bg-[var(--mv-violet)] text-white"
                             : "bg-white text-slate-700 shadow-sm ring-1 ring-slate-200"
                         }`}
                       >
@@ -204,7 +204,7 @@ export function SupportWidget() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex justify-start"
                   >
-                    <div className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm text-slate-500 shadow-sm ring-1 ring-slate-200">
+                    <div className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-sm text-slate-500 shadow-sm ring-1 ring-slate-200">
                       <span className="support-typing-dot" />
                       <span className="support-typing-dot animation-delay-150" />
                       <span className="support-typing-dot animation-delay-300" />
@@ -221,7 +221,7 @@ export function SupportWidget() {
                       type="button"
                       onClick={() => sendSupportMessage(suggestion)}
                       disabled={isSending}
-                      className="shrink-0 rounded-full border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-semibold text-[var(--mv-orange)] transition hover:bg-orange-100 disabled:opacity-50"
+                      className="shrink-0 rounded-full border border-purple-200 bg-purple-50 px-3 py-2 text-xs font-semibold text-[var(--mv-violet)] transition hover:bg-purple-100 disabled:opacity-50"
                     >
                       {suggestion}
                     </button>
@@ -230,7 +230,7 @@ export function SupportWidget() {
               </div>
 
               <form onSubmit={handleSubmit} className="bg-white p-4 pt-0">
-                <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-2 shadow-sm focus-within:border-[var(--mv-orange)]">
+                <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-2 shadow-sm focus-within:border-[var(--mv-violet)]">
                   <input
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
@@ -243,7 +243,7 @@ export function SupportWidget() {
                     type="submit"
                     disabled={isSending || !message.trim()}
                     whileTap={{ scale: 0.94 }}
-                    className="grid h-10 w-10 place-items-center rounded-full bg-[var(--mv-orange)] text-white transition hover:bg-[var(--mv-orange-hover)] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="grid h-10 w-10 place-items-center rounded-full bg-[var(--mv-violet)] text-white transition hover:bg-[var(--mv-purple-hover)] disabled:cursor-not-allowed disabled:opacity-50"
                     aria-label="Send support message"
                   >
                     <Send size={16} />

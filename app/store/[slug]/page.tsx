@@ -186,7 +186,7 @@ export default function StorePage({ params }: StorePageProps) {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
         <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
-          <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-slate-950 text-white">
+          <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-[#26143d] text-white">
             <Store size={22} />
           </div>
 
@@ -206,7 +206,7 @@ export default function StorePage({ params }: StorePageProps) {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
         <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
-          <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-red-50 text-red-700">
+          <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-red-50 text-red-700">
             <Store size={22} />
           </div>
 
@@ -220,7 +220,7 @@ export default function StorePage({ params }: StorePageProps) {
 
           <Link
             href="/"
-            className="mt-6 inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+            className="mt-6 inline-flex rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
           >
             Back to Market Villa
           </Link>
@@ -233,7 +233,7 @@ export default function StorePage({ params }: StorePageProps) {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
         <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
-          <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-amber-50 text-amber-700">
+          <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-purple-50 text-purple-700">
             <Store size={22} />
           </div>
 
@@ -247,7 +247,7 @@ export default function StorePage({ params }: StorePageProps) {
 
           <Link
             href="/"
-            className="mt-6 inline-flex rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+            className="mt-6 inline-flex rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
           >
             Back to Market Villa
           </Link>
@@ -322,7 +322,7 @@ export default function StorePage({ params }: StorePageProps) {
   return (
     <main className={`min-h-screen ${theme.page}`}>
       <section
-        className={`store-pattern bg-gradient-to-br ${theme.hero} px-5 py-8 md:px-8`}
+        className={`store-pattern bg-gradient-to-br ${theme.hero} px-5 py-8 md:px-5`}
       >
         <div className="mx-auto max-w-7xl">
           <header className="mb-12 flex items-center justify-between">
@@ -345,7 +345,7 @@ export default function StorePage({ params }: StorePageProps) {
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => handleWhatsAppClick("store_whatsapp_link")}
-                className={`hidden rounded-full px-5 py-3 text-sm font-semibold md:inline-flex ${theme.button}`}
+                className={`hidden rounded-full px-5 py-2.5 text-sm font-semibold md:inline-flex ${theme.button}`}
               >
                 Contact Business
               </a>
@@ -364,11 +364,11 @@ export default function StorePage({ params }: StorePageProps) {
                 {business.location || "Business"}
               </p>
 
-              <h1 className="max-w-4xl text-4xl font-semibold leading-tight tracking-[-0.05em] text-white md:text-5xl">
+              <h1 className="max-w-4xl text-2xl font-semibold leading-tight tracking-[-0.05em] text-white md:text-2xl">
                 {business.name}
               </h1>
 
-              <p className="mt-5 max-w-2xl text-base leading-7 text-white/80">
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/80">
                 {business.description ||
                   business.tagline ||
                   "Welcome to our Market Villa business page."}
@@ -397,7 +397,7 @@ export default function StorePage({ params }: StorePageProps) {
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <a
                   href="#products"
-                  className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold ${theme.button}`}
+                  className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold ${theme.button}`}
                 >
                   <ShoppingBag size={17} />
                   View Products
@@ -406,7 +406,7 @@ export default function StorePage({ params }: StorePageProps) {
                 {visibleServices.length ? (
                   <a
                     href="#services"
-                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold ${theme.secondaryButton}`}
+                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold ${theme.secondaryButton}`}
                   >
                     <CalendarCheck size={17} />
                     Quick Requests
@@ -425,7 +425,7 @@ export default function StorePage({ params }: StorePageProps) {
         </div>
       </section>
 
-      <section className="px-5 py-8 md:px-8">
+      <section className="px-5 py-8 md:px-5">
         <div className="mx-auto grid max-w-7xl gap-10">
           {business.products?.length ? (
             <div
@@ -441,7 +441,7 @@ export default function StorePage({ params }: StorePageProps) {
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search products"
-                  className="min-h-12 w-full rounded-full border border-slate-200 bg-white px-11 text-sm text-slate-950 outline-none focus:border-[var(--mv-orange)]"
+                  className="min-h-10 w-full rounded-full border border-slate-200 bg-white px-11 text-sm text-slate-950 outline-none focus:border-[var(--mv-violet)]"
                 />
               </div>
 
@@ -501,7 +501,7 @@ export default function StorePage({ params }: StorePageProps) {
                             {product.category || "Product"}
                           </p>
 
-                          <h3 className="text-base font-semibold tracking-[-0.03em]">
+                          <h3 className="text-sm font-semibold tracking-[-0.03em]">
                             {product.name}
                           </h3>
                         </div>
@@ -519,7 +519,7 @@ export default function StorePage({ params }: StorePageProps) {
 
                       <button
                         onClick={() => addToCart(product)}
-                        className={`mt-4 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold ${theme.button}`}
+                        className={`mt-4 flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold ${theme.button}`}
                       >
                         <ShoppingBag size={16} />
                         Add to order
@@ -573,7 +573,7 @@ export default function StorePage({ params }: StorePageProps) {
                       rel="noreferrer"
                 onClick={() => handleWhatsAppClick("store_whatsapp_link")}
                       title={service.description || service.service_type || service.name}
-                      className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.button}`}
+                      className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.button}`}
                     >
                       <CalendarCheck size={16} />
                       {service.button_label || service.name || "Request Service"}
@@ -582,7 +582,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <span
                       key={service.id}
                       title={service.description || service.service_type || service.name}
-                      className={`${theme.card} inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold shadow-sm`}
+                      className={`${theme.card} inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm`}
                     >
                       <CalendarCheck size={16} />
                       {service.button_label || service.name || "Request Service"}
@@ -596,7 +596,7 @@ export default function StorePage({ params }: StorePageProps) {
           <footer className={`${theme.mutedCard} rounded-[1.5rem] p-5 shadow-sm`}>
             <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr_0.8fr]">
               <div>
-                <h3 className="text-lg font-semibold tracking-[-0.03em]">
+                <h3 className="text-base font-semibold tracking-[-0.03em]">
                   {business.name}
                 </h3>
 
@@ -615,7 +615,7 @@ export default function StorePage({ params }: StorePageProps) {
                       target="_blank"
                       rel="noreferrer"
                 onClick={() => handleWhatsAppClick("store_whatsapp_link")}
-                      className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-950"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-slate-950"
                     >
                       <Phone size={16} />
                       Contact Business
@@ -627,7 +627,7 @@ export default function StorePage({ params }: StorePageProps) {
                       href={business.instagram_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-3 text-sm font-semibold ring-1 ring-white/10"
+                      className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2.5 text-sm font-semibold ring-1 ring-white/10"
                     >
                       <Instagram size={16} />
                       Instagram

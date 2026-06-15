@@ -45,18 +45,18 @@ const guides = [
 
 export default function HelpPage() {
   return (
-    <main className="min-h-screen bg-slate-100 px-5 py-10 md:px-8">
+    <main className="min-h-screen bg-slate-100 px-5 py-10 md:px-5">
       <div className="mx-auto max-w-5xl">
         <Link
           href="/"
-          className="mb-8 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
+          className="mb-8 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
         >
           <ArrowLeft size={17} />
           Back to Market Villa
         </Link>
 
-        <section className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-soft md:p-10">
-          <div className="mb-8 grid h-14 w-14 place-items-center rounded-2xl bg-white text-slate-950">
+        <section className="rounded-[2rem] bg-[#26143d] p-8 text-white shadow-soft md:p-10">
+          <div className="mb-8 grid h-11 w-14 place-items-center rounded-2xl bg-white text-slate-950">
             <BookOpen size={24} />
           </div>
 
@@ -64,7 +64,7 @@ export default function HelpPage() {
             Help Center
           </p>
 
-          <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] md:text-5xl">
+          <h1 className="mt-3 text-2xl font-semibold tracking-[-0.05em] md:text-2xl">
             Learn how to use {BRAND.name}.
           </h1>
 
@@ -114,7 +114,7 @@ export default function HelpPage() {
 
             <a
               href={`mailto:${BRAND.supportEmail}`}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-slate-950 to-slate-800 px-6 py-4 text-sm font-semibold text-white shadow-[0_12px_32px_rgba(2,8,31,0.25)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(2,8,31,0.32)]"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#241436] to-slate-800 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_32px_rgba(2,8,31,0.25)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(2,8,31,0.32)]"
             >
               <Store size={17} />
               Contact Support

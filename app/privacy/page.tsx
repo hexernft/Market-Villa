@@ -48,18 +48,18 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-slate-100 px-5 py-10 md:px-8">
+    <main className="min-h-screen bg-slate-100 px-5 py-10 md:px-5">
       <div className="mx-auto max-w-4xl">
         <Link
           href="/"
-          className="mb-8 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
+          className="mb-8 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50"
         >
           <ArrowLeft size={17} />
           Back to Market Villa
         </Link>
 
-        <section className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-soft md:p-10">
-          <div className="mb-8 grid h-14 w-14 place-items-center rounded-2xl bg-white text-slate-950">
+        <section className="rounded-[2rem] bg-[#26143d] p-8 text-white shadow-soft md:p-10">
+          <div className="mb-8 grid h-11 w-14 place-items-center rounded-2xl bg-white text-slate-950">
             <LockKeyhole size={24} />
           </div>
 
@@ -67,7 +67,7 @@ export default function PrivacyPage() {
             Privacy
           </p>
 
-          <h1 className="mt-3 text-4xl font-semibold tracking-[-0.05em] md:text-5xl">
+          <h1 className="mt-3 text-2xl font-semibold tracking-[-0.05em] md:text-2xl">
             Privacy Policy
           </h1>
 

@@ -23,11 +23,11 @@ export const BRAND = {
 };
 
 export const PLATFORM_COLORS = {
-  black: "#050505",
-  orange: "#ff6a00",
+  black: "#241436",
+  violet: "#7c3aed",
   emerald: "#10B981",
-  orangeSoft: "#fff1e8",
-  soft: "#f6f4f1",
-  charcoal: "#111111",
+  violetSoft: "#f6efff",
+  soft: "#f7f1ff",
+  charcoal: "#241436",
 };
 

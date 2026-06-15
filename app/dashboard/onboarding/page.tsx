@@ -106,7 +106,7 @@ export default function OnboardingPage() {
 
           <Link
             href="/dashboard"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
           >
             Back to Dashboard
             <ArrowRight size={16} />
@@ -133,7 +133,7 @@ export default function OnboardingPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="hidden items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 md:inline-flex"
+              className="hidden items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 md:inline-flex"
             >
               {isSubmitting ? (
                 <Loader2 size={17} className="animate-spin" />
@@ -158,7 +158,7 @@ export default function OnboardingPage() {
                   onChange={(event) =>
                     handleBusinessNameChange(event.target.value)
                   }
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                   required
                 />
               </label>
@@ -172,7 +172,7 @@ export default function OnboardingPage() {
                 <select
                   value={category}
                   onChange={(event) => setCategory(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                 >
                   {categories.map((item) => (
                     <option key={item}>{item}</option>
@@ -188,14 +188,14 @@ export default function OnboardingPage() {
               </span>
 
               <div className="grid gap-3 md:grid-cols-[auto_1fr] md:items-center">
-                <span className="rounded-2xl bg-slate-100 px-4 py-3 text-sm font-medium text-slate-500">
+                <span className="rounded-2xl bg-slate-100 px-4 py-2.5 text-sm font-medium text-slate-500">
                   /store/
                 </span>
 
                 <input
                   value={slug}
                   onChange={(event) => setSlug(slugify(event.target.value))}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                   required
                 />
               </div>
@@ -210,7 +210,7 @@ export default function OnboardingPage() {
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
                 rows={3}
-                className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                 required
               />
             </label>
@@ -225,7 +225,7 @@ export default function OnboardingPage() {
                 <input
                   value={whatsapp}
                   onChange={(event) => setWhatsapp(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                   required
                 />
               </label>
@@ -239,7 +239,7 @@ export default function OnboardingPage() {
                 <input
                   value={location}
                   onChange={(event) => setLocation(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                   required
                 />
               </label>
@@ -255,7 +255,7 @@ export default function OnboardingPage() {
                 <input
                   value={openingHours}
                   onChange={(event) => setOpeningHours(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                 />
               </label>
 
@@ -268,7 +268,7 @@ export default function OnboardingPage() {
                 <input
                   value={instagramUrl}
                   onChange={(event) => setInstagramUrl(event.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
+                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                 />
               </label>
             </div>
@@ -300,7 +300,7 @@ export default function OnboardingPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 md:hidden"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 md:hidden"
             >
               {isSubmitting ? (
                 <Loader2 size={17} className="animate-spin" />
