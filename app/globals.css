@@ -1,58 +1,15 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
- :root {
-  --background: #07070b;
-  --foreground: #f7f5ff;
-
-  --page-bg:
-    radial-gradient(circle at 13% 12%, rgba(126, 76, 255, 0.20), transparent 17rem),
-    radial-gradient(circle at 82% 8%, rgba(176, 65, 255, 0.13), transparent 19rem),
-    radial-gradient(circle at 52% 92%, rgba(36, 30, 76, 0.28), transparent 22rem),
-    linear-gradient(180deg, #07070b 0%, #09090f 48%, #07070b 100%);
-
-  --surface: #0b0b11;
-  --surface-soft: #101018;
-  --surface-muted: #151521;
-  --surface-glass: rgba(11, 11, 17, 0.86);
-  --surface-glass-strong: rgba(9, 9, 15, 0.96);
-  --surface-purple: #151026;
-  --surface-accent: #12101d;
-
-  --text-main: #f7f5ff;
-  --text-soft: #c4bdd7;
-  --text-muted: #8d88a3;
-  --text-faint: #5e5870;
-
-  --primary: #8b4dff;
-  --primary-strong: #7c3aed;
-  --primary-soft: rgba(139, 77, 255, 0.15);
-  --purple: #8b4dff;
-  --purple-strong: #7c3aed;
-  --purple-soft: rgba(180, 76, 255, 0.14);
-  --pink: #dc4fff;
-  --pink-soft: rgba(220, 79, 255, 0.12);
-
-  --green: #45e6ad;
-  --green-soft: rgba(69, 230, 173, 0.10);
-  --danger: #ff5d7f;
-  --danger-soft: rgba(255, 93, 127, 0.13);
-
-  --border-soft: rgba(255, 255, 255, 0.075);
-  --border-strong: rgba(255, 255, 255, 0.14);
-  --ring-purple: rgba(139, 77, 255, 0.23);
-
-  --shadow-soft: 0 14px 32px rgba(0, 0, 0, 0.28);
-  --shadow-card: 0 18px 46px rgba(0, 0, 0, 0.40);
-  --shadow-float: 0 30px 82px rgba(0, 0, 0, 0.50);
-  --shadow-purple: 0 16px 40px rgba(139, 77, 255, 0.26);
-
-  --mv-purple: var(--primary);
-  --mv-purple-hover: var(--primary-strong);
-  --mv-black: #050507;
-  --mv-soft: var(--surface-soft);
+:root {
+  --background: #f6f4f1;
+  --foreground: #111111;
+  --mv-orange: #ff6a00;
+  --mv-orange-hover: #ff8126;
+  --mv-black: #050505;
+  --mv-soft: #f6f4f1;
 }
 
 * {
@@ -65,13 +22,21 @@ html {
 
 body {
   margin: 0;
-  min-height: 100vh;
-  background: var(--page-bg);
-  color: var(--text-main);
-  font-family: "Montserrat", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(255, 106, 0, 0.1),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(5, 5, 5, 0.05),
+      transparent 28rem
+    ),
+    var(--background);
+  color: var(--foreground);
+  font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
   letter-spacing: -0.01em;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 button,
@@ -82,7 +47,7 @@ select {
 }
 
 ::selection {
-  background: var(--mv-purple);
+  background: var(--mv-orange);
   color: white;
 }
 
@@ -146,11 +111,11 @@ select {
 }
 
 .market-villa-brand-text {
-  color: var(--mv-purple);
+  color: var(--mv-orange);
 }
 
 .market-villa-brand-bg {
-  background: var(--mv-purple);
+  background: var(--mv-orange);
 }
 
 .market-villa-blink-cta {
@@ -160,16 +125,16 @@ select {
 @keyframes marketVillaBlinkCta {
   0%,
   100% {
-    background: #8b4dff;
+    background: #ff6a00;
     color: #ffffff;
-    border-color: #8b4dff;
-    box-shadow: 0 10px 28px rgba(139, 77, 255, 0.24);
+    border-color: #ff6a00;
+    box-shadow: 0 10px 28px rgba(255, 106, 0, 0.24);
   }
 
   50% {
     background: #ffffff;
-    color: #8b4dff;
-    border-color: #8b4dff;
+    color: #ff6a00;
+    border-color: #ff6a00;
     box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
   }
 }
@@ -180,7 +145,7 @@ select {
 .premium-card-hover:hover {
   box-shadow:
     0 18px 48px rgba(15, 23, 42, 0.1),
-    0 0 0 1px rgba(139, 77, 255, 0.1);
+    0 0 0 1px rgba(255, 106, 0, 0.1);
 }
 
 button,
@@ -224,7 +189,7 @@ a:active {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 9999px;
-  background: var(--mv-purple);
+  background: var(--mv-orange);
   animation: supportTyping 0.85s ease-in-out infinite;
 }
 
@@ -356,7 +321,7 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  box-shadow: 0 0 0 4px rgba(139, 77, 255, 0.10);
+  box-shadow: 0 0 0 4px rgba(255, 106, 0, 0.10);
 }
 
 /* Skeleton shimmer utility */
@@ -428,186 +393,10 @@ textarea:focus {
 @keyframes mvSupportPulse {
   0%,
   100% {
-    box-shadow: 0 14px 36px rgba(139, 77, 255, 0.24);
+    box-shadow: 0 14px 36px rgba(255, 106, 0, 0.24);
   }
 
   50% {
-    box-shadow: 0 18px 54px rgba(139, 77, 255, 0.42);
+    box-shadow: 0 18px 54px rgba(255, 106, 0, 0.42);
   }
-}
-
-/* WhatsApp AI-inspired dark purple system for Market Villa */
-html { color-scheme: dark; }
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 12% 16%, rgba(125, 92, 255, 0.13), transparent 15rem),
-    radial-gradient(circle at 87% 14%, rgba(226, 75, 255, 0.08), transparent 17rem),
-    radial-gradient(circle at 72% 84%, rgba(85, 179, 255, 0.04), transparent 19rem);
-}
-
-.glass-card {
-  background: var(--surface-glass);
-  backdrop-filter: blur(22px) saturate(135%);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-card);
-}
-
-.market-villa-brand-text { color: var(--primary-strong); }
-.market-villa-brand-bg { background: linear-gradient(135deg, var(--primary), var(--purple)); }
-.support-typing-dot { background: var(--primary); }
-
-.bg-white, .bg-slate-50, .bg-slate-100, .bg-purple-50, .bg-purple-50 {
-  background-color: var(--surface) !important;
-}
-.bg-white\/85 { background-color: rgba(11, 11, 17, 0.85) !important; }
-.bg-white\/80 { background-color: rgba(11, 11, 17, 0.80) !important; }
-.bg-white\/70 { background-color: rgba(11, 11, 17, 0.70) !important; }
-.bg-white\/10 { background-color: rgba(255, 255, 255, 0.08) !important; }
-.bg-slate-950, .bg-black { background-color: #07070b !important; }
-.bg-\[\#07070b\], .bg-\[\#07070b\], .bg-\[\#07070b\] { background: var(--page-bg) !important; }
-.bg-\[\#151026\] { background-color: var(--surface-purple) !important; }
-.bg-\[\#07070b\] { background-color: #07070b !important; }
-.bg-\[\#151026\] { background-color: #151026 !important; }
-.bg-\[\#8b4dff\], .bg-\[var\(--mv-purple\)\] { background: linear-gradient(135deg, var(--primary), var(--purple)) !important; }
-.hover\:bg-\[\#a36cff\]:hover, .hover\:bg-\[var\(--mv-purple-hover\)\]:hover { background: linear-gradient(135deg, var(--primary-strong), var(--purple-strong)) !important; }
-
-.text-slate-950, .text-slate-900, .text-slate-800 { color: var(--text-main) !important; }
-.text-slate-700, .text-slate-600 { color: var(--text-soft) !important; }
-.text-slate-500, .text-slate-400, .text-purple-700, .text-purple-100, .text-purple-700 { color: var(--text-muted) !important; }
-.text-white, .text-white { color: var(--text-main) !important; }
-.text-\[\#8b4dff\], .text-\[var\(--mv-purple\)\] { color: var(--primary-strong) !important; }
-.text-\[\#a36cff\] { color: var(--primary-strong) !important; }
-
-.border-slate-200, .border-slate-300, .border-purple-200, .border-purple-200, .border-purple-300\/40 {
-  border-color: var(--border-soft) !important;
-}
-.border-\[\#8b4dff\], .border-\[var\(--mv-purple\)\] { border-color: var(--primary) !important; }
-.ring-slate-200 { --tw-ring-color: var(--border-soft) !important; }
-.focus\:border-\[var\(--mv-purple\)\]:focus { border-color: var(--primary) !important; }
-.focus\:ring-slate-100:focus { --tw-ring-color: var(--ring-purple) !important; }
-
-.shadow-soft { box-shadow: var(--shadow-card) !important; }
-.premium-card-hover:hover {
-  box-shadow: var(--shadow-purple), inset 0 0 0 1px rgba(139, 77, 255, 0.18);
-}
-.mv-skeleton { background: var(--surface-muted); }
-.mv-skeleton::after { background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent); }
-
-input, select, textarea {
-  background-color: var(--surface-soft) !important;
-  color: var(--text-main) !important;
-  border-color: var(--border-soft) !important;
-}
-input::placeholder, textarea::placeholder { color: var(--text-faint) !important; }
-option { background: var(--surface-soft); color: var(--text-main); }
-
-/* Final Market Villa purple theme sweep */
-.mv-purple-navbar,
-header,
-nav {
-  --mv-purple: #8b4dff;
-  --mv-purple-hover: #7c3aed;
-}
-
-.mv-landing-hero {
-  background:
-    radial-gradient(circle at 20% 20%, rgba(139, 77, 255, 0.10), transparent 34%),
-    linear-gradient(135deg, #f8fafc 0%, #f1f5f9 45%, #ffffff 100%) !important;
-  color: #0f172a !important;
-}
-
-.mv-purple-logo-on-dark {
-  color: #ffffff !important;
-  fill: #ffffff !important;
-}
-
-.mv-purple-logo-on-light {
-  color: #8b4dff !important;
-  fill: #8b4dff !important;
-}
-
-
-/* WhatsApp AI inspired button system for Market Villa */
-:root {
-  --mv-purple: #8b4dff;
-  --mv-purple-hover: #7c3aed;
-  --mv-button-radius: 1rem;
-  --mv-button-height: 2.45rem;
-  --mv-button-font-size: 0.82rem;
-  --mv-button-font-weight: 750;
-  --mv-button-shadow: 0 12px 28px rgba(139, 77, 255, 0.18), inset 0 1px 0 rgba(255,255,255,.14);
-  --mv-button-glass: rgba(255,255,255,.06);
-  --mv-button-glass-border: rgba(255,255,255,.12);
-}
-
-button,
-[role="button"],
-a[class*="rounded"],
-input[type="button"],
-input[type="submit"],
-input[type="reset"] {
-  border-radius: var(--mv-button-radius) !important;
-}
-
-button:not(.sidebar-link):not(.mobile-nav-chip):not(.store-cart-dot),
-a.action-link-primary,
-a.action-link-secondary,
-.topbar-button,
-.topbar-button-danger,
-.theme-toggle-btn {
-  min-height: var(--mv-button-height) !important;
-  padding-top: 0.58rem !important;
-  padding-bottom: 0.58rem !important;
-  font-size: var(--mv-button-font-size) !important;
-  font-weight: var(--mv-button-font-weight) !important;
-  letter-spacing: -0.01em !important;
-  line-height: 1 !important;
-}
-
-button[type="submit"],
-.action-link-primary,
-.bg-\[\#8b4dff\],
-.bg-purple-500,
-.bg-purple-600,
-.bg-indigo-500,
-.bg-indigo-600 {
-  background: linear-gradient(135deg, var(--mv-purple), #7c3aed 72%, #b452ff) !important;
-  border-color: rgba(255,255,255,.12) !important;
-  color: white !important;
-  box-shadow: var(--mv-button-shadow) !important;
-}
-
-button[type="submit"]:hover,
-.action-link-primary:hover,
-.hover\:bg-\[\#7c3aed\]:hover,
-.hover\:bg-purple-700:hover,
-.hover\:bg-purple-600:hover {
-  background: linear-gradient(135deg, #9d6cff, var(--mv-purple-hover) 74%, #c084fc) !important;
-  transform: translateY(-1px);
-}
-
-.action-link-secondary,
-button[class*="border"],
-a[class*="border"] {
-  backdrop-filter: blur(14px);
-}
-
-button:disabled,
-a[aria-disabled="true"] {
-  cursor: not-allowed !important;
-  opacity: .58 !important;
-  transform: none !important;
-}
-
-button svg,
-a[role="button"] svg,
-.action-link-primary svg,
-.action-link-secondary svg {
-  width: 1rem;
-  height: 1rem;
 }

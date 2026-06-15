@@ -74,7 +74,7 @@ function getStatusStyle(status?: string | null) {
     return "bg-red-50 text-red-700 ring-red-200";
   }
 
-  return "bg-purple-50 text-purple-700 ring-purple-200";
+  return "bg-amber-50 text-amber-700 ring-amber-200";
 }
 
 function formatStatus(status?: string | null) {
@@ -305,7 +305,7 @@ export default function DashboardPage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-72"
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -341,9 +341,9 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-purple-50 px-3 py-2.5">
-              <p className="text-xs text-purple-700">Status</p>
-              <p className="mt-1 truncate text-sm font-semibold text-white">
+            <div className="rounded-2xl bg-amber-50 px-3 py-2.5">
+              <p className="text-xs text-amber-700">Status</p>
+              <p className="mt-1 truncate text-sm font-semibold text-amber-950">
                 {selectedBusiness?.subscription_status || "Trial"}
               </p>
             </div>
@@ -483,7 +483,7 @@ export default function DashboardPage() {
                 className={`rounded-full px-3 py-1 text-xs font-semibold ${
                   selectedBusiness?.is_published
                     ? "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-300/25"
-                    : "bg-purple-400/15 text-purple-200 ring-1 ring-purple-300/25"
+                    : "bg-amber-400/15 text-amber-200 ring-1 ring-amber-300/25"
                 }`}
               >
                 {selectedBusiness?.is_published ? "Published" : "Draft"}

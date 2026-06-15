@@ -239,9 +239,9 @@ export default function AdminRevenuePage() {
 
   if (isLoading) {
     return (
-      <main className="grid min-h-screen place-items-center bg-[#07070b] px-5">
+      <main className="grid min-h-screen place-items-center bg-[#eef5f8] px-5">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
-          <Loader2 className="mx-auto animate-spin text-[#8b4dff]" size={28} />
+          <Loader2 className="mx-auto animate-spin text-[#ff6a00]" size={28} />
           <p className="mt-4 text-sm text-slate-500">
             Loading revenue dashboard...
           </p>
@@ -251,12 +251,12 @@ export default function AdminRevenuePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#07070b] px-5 py-8 text-slate-950 md:px-8">
+    <main className="min-h-screen bg-[#eef5f8] px-5 py-8 text-slate-950 md:px-8">
       <section className="mx-auto max-w-7xl">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <Link
             href="/admin"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-[#8b4dff]/40 hover:text-[#8b4dff]"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-[#ff6a00]/40 hover:text-[#ff6a00]"
           >
             <ArrowLeft size={16} />
             Back to Admin
@@ -265,14 +265,14 @@ export default function AdminRevenuePage() {
           <button
             type="button"
             onClick={loadRevenueData}
-            className="inline-flex items-center rounded-full bg-[#8b4dff] px-5 py-3 text-sm font-semibold text-white hover:bg-[#a36cff]"
+            className="inline-flex items-center rounded-full bg-[#ff6a00] px-5 py-3 text-sm font-semibold text-white hover:bg-[#ff8126]"
           >
             Refresh data
           </button>
         </div>
 
         <section className="border border-slate-200 bg-slate-950 p-6 text-white shadow-sm md:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8b4dff]">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#ff6a00]">
             Admin Revenue
           </p>
 
@@ -302,7 +302,7 @@ export default function AdminRevenuePage() {
                 className="border border-slate-200 bg-white p-5 shadow-sm"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="grid h-10 w-10 place-items-center bg-[#8b4dff] text-white">
+                  <span className="grid h-10 w-10 place-items-center bg-[#ff6a00] text-white">
                     <Icon size={18} />
                   </span>
 
@@ -327,7 +327,7 @@ export default function AdminRevenuePage() {
           <div className="border border-slate-200 bg-white p-5 shadow-sm">
             <div className="mb-5 flex items-end justify-between gap-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8b4dff]">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#ff6a00]">
                   Visibility sales
                 </p>
 
@@ -364,7 +364,7 @@ export default function AdminRevenuePage() {
                               purchase.status === "approved"
                                 ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
                                 : purchase.status === "pending_payment"
-                                ? "bg-purple-50 text-purple-700 ring-purple-200"
+                                ? "bg-amber-50 text-amber-700 ring-amber-200"
                                 : purchase.status === "expired"
                                 ? "bg-slate-100 text-slate-600 ring-slate-200"
                                 : "bg-red-50 text-red-700 ring-red-200"
@@ -427,7 +427,7 @@ export default function AdminRevenuePage() {
             <div className="border border-slate-200 bg-white p-5 shadow-sm">
               <div className="mb-5 flex items-end justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8b4dff]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#ff6a00]">
                     Subscription payments
                   </p>
 
@@ -463,7 +463,7 @@ export default function AdminRevenuePage() {
                           payment.status === "success"
                             ? "text-emerald-600"
                             : payment.status === "pending"
-                            ? "text-purple-600"
+                            ? "text-amber-600"
                             : "text-red-600"
                         }`}
                       >
@@ -484,7 +484,7 @@ export default function AdminRevenuePage() {
             <div className="border border-slate-200 bg-white p-5 shadow-sm">
               <div className="mb-5 flex items-end justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8b4dff]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#ff6a00]">
                     Active placements
                   </p>
 
@@ -515,7 +515,7 @@ export default function AdminRevenuePage() {
 
                       <div className="flex flex-col items-end gap-2">
                         {business.is_featured ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-[#8b4dff] ring-1 ring-purple-200">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#ff6a00] ring-1 ring-orange-100">
                             <Flame size={13} />
                             {daysRemaining === null
                               ? "Featured"

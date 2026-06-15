@@ -30,6 +30,7 @@ const navItems = [
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+  Megaphone,
   },
   {
     label: "Analytics",
@@ -131,7 +132,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   if (isCheckingAuth) {
     return (
-      <main className="grid min-h-screen place-items-center bg-[var(--page-bg)] px-5 py-12">
+      <main className="grid min-h-screen place-items-center bg-[#eef5f8] px-5 py-12">
         <div className="rounded-[2rem] bg-white p-8 text-center shadow-sm ring-1 ring-slate-200">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={30} />
           <p className="mt-4 text-sm text-slate-500">
@@ -143,11 +144,11 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--page-bg)] text-[var(--text-main)]">
+    <div className="min-h-screen bg-[#eef5f8] text-slate-950">
       <button
         type="button"
         onClick={() => setIsSidebarOpen(true)}
-        className="fixed left-4 top-4 z-50 grid h-11 w-11 place-items-center rounded-full bg-[var(--primary)] text-white shadow-[var(--shadow-purple)] lg:hidden"
+        className="fixed left-4 top-4 z-50 grid h-11 w-11 place-items-center rounded-full bg-[#ff6a00] text-white shadow-lg lg:hidden"
         aria-label="Open menu"
       >
         <Menu size={20} />
@@ -163,12 +164,12 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       ) : null}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-white/10 bg-[#09090f]/95 backdrop-blur-xl transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 border-r border-slate-200 bg-white transition-transform duration-300 lg:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
+          <div className="flex items-center justify-between border-b border-slate-200 px-5 py-5">
             <Link href="/dashboard" className="flex items-center gap-2">
               <Image
                 src="/market-villa-logo.png"
@@ -183,7 +184,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 <p className="text-lg font-semibold tracking-[-0.04em] text-slate-950">
                   {BRAND.name}
                 </p>
-                <p className="text-xs font-medium text-[var(--primary-strong)]">
+                <p className="text-xs font-medium text-[#ff6a00]">
                   Business center
                 </p>
               </div>
@@ -192,7 +193,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             <button
               type="button"
               onClick={() => setIsSidebarOpen(false)}
-              className="grid h-9 w-9 place-items-center rounded-full bg-purple-50 text-[var(--primary-strong)] lg:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full bg-orange-50 text-[#ff6a00] lg:hidden"
               aria-label="Close menu"
             >
               <X size={18} />
@@ -213,8 +214,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   onClick={() => setIsSidebarOpen(false)}
                   className={`group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition ${
                     isActive
-                      ? "bg-[linear-gradient(135deg,var(--primary),var(--purple))] text-white shadow-[var(--shadow-purple)]"
-                      : "text-slate-600 hover:bg-purple-50 hover:text-[var(--primary-strong)]"
+                      ? "bg-[#ff6a00] text-white shadow-sm shadow-orange-500/20"
+                      : "text-slate-600 hover:bg-orange-50 hover:text-[#ff6a00]"
                   }`}
                 >
                   <Icon size={18} />
@@ -224,12 +225,12 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             })}
           </nav>
 
-          <div className="border-t border-white/10 p-4">
+          <div className="border-t border-slate-200 p-4">
             <button
               type="button"
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#8b4dff]/40 hover:bg-purple-50 hover:text-[var(--primary-strong)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-[#ff6a00]/40 hover:bg-orange-50 hover:text-[#ff6a00] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoggingOut ? (
                 <Loader2 size={17} className="animate-spin" />

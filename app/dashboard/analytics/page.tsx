@@ -220,19 +220,19 @@ export default function AnalyticsPage() {
 
   if (businesses.length === 0) {
     return (
-      <section className="border border-purple-200 bg-purple-50 p-8 text-center">
-        <h2 className="text-2xl font-semibold tracking-[-0.04em] text-white">
+      <section className="border border-amber-200 bg-amber-50 p-8 text-center">
+        <h2 className="text-2xl font-semibold tracking-[-0.04em] text-amber-950">
           Create your business page first
         </h2>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-100">
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
           Analytics will become available once you create and publish a business
           page.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-6 inline-flex bg-[#8b4dff] px-6 py-4 text-sm font-semibold text-white hover:bg-[#7c3aed]"
+          className="mt-6 inline-flex bg-amber-300 px-6 py-4 text-sm font-semibold text-amber-950 hover:bg-amber-200"
         >
           Start Onboarding
         </Link>
@@ -295,7 +295,7 @@ export default function AnalyticsPage() {
           <select
             value={selectedBusinessId}
             onChange={(event) => setSelectedBusinessId(event.target.value)}
-            className="border border-slate-200 bg-white px-4 py-3.5 text-sm outline-none focus:border-[#8b4dff] md:min-w-80"
+            className="border border-slate-200 bg-white px-4 py-3.5 text-sm outline-none focus:border-[var(--mv-orange)] md:min-w-80"
           >
             {businesses.map((business) => (
               <option key={business.id} value={business.id}>

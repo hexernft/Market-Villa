@@ -332,7 +332,7 @@ export default function VisibilityPage() {
   if (businesses.length === 0) {
     return (
       <section className="mx-auto max-w-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
-        <div className="mx-auto grid h-12 w-12 place-items-center bg-[#8b4dff] text-white">
+        <div className="mx-auto grid h-12 w-12 place-items-center bg-[#ff6a00] text-white">
           <Sparkles size={20} />
         </div>
 
@@ -346,7 +346,7 @@ export default function VisibilityPage() {
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[#8b4dff] px-6 py-3.5 text-sm font-semibold text-white hover:bg-[#a36cff]"
+          className="mt-7 inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-6 py-3.5 text-sm font-semibold text-white hover:bg-[#ff8126]"
         >
           Start setup
           <ArrowRight size={16} />
@@ -397,7 +397,7 @@ export default function VisibilityPage() {
       <section className="border border-slate-200 bg-white p-5 shadow-sm">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8b4dff]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#ff6a00]">
               Visibility
             </p>
 
@@ -414,7 +414,7 @@ export default function VisibilityPage() {
           <select
             value={selectedBusinessId}
             onChange={(event) => setSelectedBusinessId(event.target.value)}
-            className="h-11 min-w-72 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 outline-none focus:border-[#8b4dff]"
+            className="h-11 min-w-72 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 outline-none focus:border-[#ff6a00]"
           >
             {businesses.map((business) => (
               <option key={business.id} value={business.id}>
@@ -426,7 +426,7 @@ export default function VisibilityPage() {
       </section>
 
       {message ? (
-        <div className="border border-purple-200 bg-purple-50 p-4 text-sm text-slate-700">
+        <div className="border border-orange-200 bg-orange-50 p-4 text-sm text-slate-700">
           {message}
         </div>
       ) : null}
@@ -441,7 +441,7 @@ export default function VisibilityPage() {
               className="border border-slate-200 bg-white p-5 shadow-sm"
             >
               <div className="flex items-center justify-between">
-                <span className="grid h-10 w-10 place-items-center bg-[#8b4dff] text-white">
+                <span className="grid h-10 w-10 place-items-center bg-[#ff6a00] text-white">
                   <Icon size={17} />
                 </span>
 
@@ -462,7 +462,7 @@ export default function VisibilityPage() {
         <div className="border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8b4dff]">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#ff6a00]">
                 Discovery status
               </p>
 
@@ -476,7 +476,7 @@ export default function VisibilityPage() {
                 Published
               </span>
             ) : (
-              <span className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
+              <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200">
                 Draft
               </span>
             )}
@@ -507,7 +507,7 @@ export default function VisibilityPage() {
               <div className="flex items-center gap-3">
                 <Star
                   size={18}
-                  className={featuredActive ? "text-[#8b4dff]" : "text-slate-400"}
+                  className={featuredActive ? "text-[#ff6a00]" : "text-slate-400"}
                 />
                 <span className="text-sm font-semibold text-slate-700">
                   Featured placement
@@ -521,7 +521,7 @@ export default function VisibilityPage() {
 
             <div className="flex items-center justify-between border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center gap-3">
-                <Flame size={18} className="text-[#8b4dff]" />
+                <Flame size={18} className="text-[#ff6a00]" />
                 <span className="text-sm font-semibold text-slate-700">
                   Visibility plan
                 </span>
@@ -538,7 +538,7 @@ export default function VisibilityPage() {
               <Link
                 href={`/store/${selectedBusiness.slug}`}
                 target="_blank"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#8b4dff] px-5 py-3 text-sm font-semibold text-white hover:bg-[#a36cff]"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-5 py-3 text-sm font-semibold text-white hover:bg-[#ff8126]"
               >
                 View store
                 <ArrowRight size={16} />
@@ -548,7 +548,7 @@ export default function VisibilityPage() {
             <button
               type="button"
               onClick={copyStoreLink}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[#8b4dff]/40 hover:text-[#8b4dff]"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:border-[#ff6a00]/40 hover:text-[#ff6a00]"
             >
               <Copy size={16} />
               Copy link
@@ -581,8 +581,8 @@ export default function VisibilityPage() {
                   onClick={() => setSelectedVisibilityPackage(item.pricing_key)}
                   className={`text-left transition ${
                     isSelected
-                      ? "border-[#8b4dff] bg-[#8b4dff]/15"
-                      : "border-white/10 bg-white/5 hover:border-[#8b4dff]/50 hover:bg-white/10"
+                      ? "border-[#ff6a00] bg-[#ff6a00]/15"
+                      : "border-white/10 bg-white/5 hover:border-[#ff6a00]/50 hover:bg-white/10"
                   } border p-4`}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -598,7 +598,7 @@ export default function VisibilityPage() {
                     <span
                       className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold ${
                         isSelected
-                          ? "bg-[#8b4dff] text-white"
+                          ? "bg-[#ff6a00] text-white"
                           : "bg-white/10 text-white/70"
                       }`}
                     >
@@ -614,7 +614,7 @@ export default function VisibilityPage() {
             type="button"
             onClick={requestFeaturedPlacement}
             disabled={isRequestingFeature}
-            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-purple-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-orange-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isRequestingFeature ? (
               <Loader2 size={16} className="animate-spin" />
@@ -633,7 +633,7 @@ export default function VisibilityPage() {
       <section className="border border-slate-200 bg-white p-5 shadow-sm">
         <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8b4dff]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#ff6a00]">
               Purchase history
             </p>
 
@@ -669,7 +669,7 @@ export default function VisibilityPage() {
                         purchase.status === "approved"
                           ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
                           : purchase.status === "pending_payment"
-                          ? "bg-purple-50 text-purple-700 ring-purple-200"
+                          ? "bg-amber-50 text-amber-700 ring-amber-200"
                           : purchase.status === "rejected"
                           ? "bg-red-50 text-red-700 ring-red-200"
                           : "bg-slate-100 text-slate-600 ring-slate-200"
@@ -678,7 +678,7 @@ export default function VisibilityPage() {
                       {purchase.status || "pending"}
                     </span>
 
-                    <span className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-[#8b4dff] ring-1 ring-purple-200">
+                    <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-[#ff6a00] ring-1 ring-orange-100">
                       {purchase.package_price_label ||
                         `₦${Number(purchase.amount || 0).toLocaleString()}`}
                     </span>
@@ -723,7 +723,7 @@ export default function VisibilityPage() {
                               : isExpired
                               ? "bg-red-50 text-red-700 ring-1 ring-red-200"
                               : daysRemaining <= 3
-                              ? "bg-purple-50 text-purple-700 ring-1 ring-purple-200"
+                              ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200"
                               : "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
                           }`}
                         >
@@ -748,7 +748,7 @@ export default function VisibilityPage() {
                     <button
                       type="button"
                       onClick={() => renewVisibilityPackage(purchase.request_type)}
-                      className="inline-flex items-center justify-center rounded-full bg-[#8b4dff] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#a36cff]"
+                      className="inline-flex items-center justify-center rounded-full bg-[#ff6a00] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#ff8126]"
                     >
                       Renew package
                     </button>

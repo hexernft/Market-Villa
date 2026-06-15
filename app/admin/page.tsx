@@ -577,7 +577,7 @@ export default function AdminPage() {
                     <input
                       value={query}
                       onChange={(event) => setQuery(event.target.value)}
-                      className="w-full rounded-full border border-slate-200 bg-slate-50 px-11 py-3 text-sm outline-none focus:border-[#8b4dff]"
+                      className="w-full rounded-full border border-slate-200 bg-slate-50 px-11 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
                       placeholder="Search businesses"
                     />
                   </div>
@@ -606,7 +606,7 @@ export default function AdminPage() {
                               className={`rounded-full px-3 py-1 text-xs font-semibold ${
                                 business.is_published
                                   ? "bg-emerald-50 text-emerald-700"
-                                  : "bg-purple-50 text-purple-700"
+                                  : "bg-amber-50 text-amber-700"
                               }`}
                             >
                               {business.is_published ? "Published" : "Draft"}
@@ -731,7 +731,7 @@ export default function AdminPage() {
                               {request.businesses?.name || "Unknown business"}
                             </span>
 
-                            <span className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-700">
+                            <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
                               {request.status}
                             </span>
 
@@ -782,7 +782,7 @@ export default function AdminPage() {
                               setAdminNote(event.target.value)
                             }
                             rows={3}
-                            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[#8b4dff]"
+                            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-[var(--mv-orange)]"
                             placeholder="Admin note for this update"
                           />
 

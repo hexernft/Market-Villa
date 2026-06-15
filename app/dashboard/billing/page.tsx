@@ -297,18 +297,18 @@ export default function BillingPage() {
 
   if (businesses.length === 0) {
     return (
-      <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-6 text-center">
-        <p className="text-xl font-semibold tracking-[-0.04em] text-white">
+      <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-6 text-center">
+        <p className="text-xl font-semibold tracking-[-0.04em] text-amber-950">
           Create your business page first
         </p>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-100">
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
           Complete onboarding before managing billing.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-5 inline-flex rounded-2xl bg-[#8b4dff] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#7c3aed]"
+          className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
         >
           Start Onboarding
         </Link>
@@ -326,7 +326,7 @@ export default function BillingPage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-10 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-72"
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -339,7 +339,7 @@ export default function BillingPage() {
               type="button"
               onClick={handleTogglePublishStatus}
               disabled={isUpdatingPublishStatus}
-              className={`inline-flex min-h-10 items-center justify-center rounded-2xl px-5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
+              className={`inline-flex min-h-12 items-center justify-center rounded-full px-5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
                 selectedBusiness?.is_published
                   ? "whitespace-nowrap bg-red-600 text-white hover:bg-red-700"
                   : "whitespace-nowrap bg-emerald-600 text-white hover:bg-emerald-700"
@@ -368,9 +368,9 @@ export default function BillingPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-purple-50 px-3 py-2.5">
-              <p className="text-xs text-purple-700">Domain</p>
-              <p className="mt-1 truncate text-sm font-semibold text-white">
+            <div className="rounded-2xl bg-amber-50 px-3 py-2.5">
+              <p className="text-xs text-amber-700">Domain</p>
+              <p className="mt-1 truncate text-sm font-semibold text-amber-950">
                 {selectedBusiness?.custom_domain_status || "None"}
               </p>
             </div>
@@ -397,12 +397,12 @@ export default function BillingPage() {
         </div>
       ) : null}
 
-      <section className="overflow-hidden rounded-[1.75rem] bg-[#07070b] p-4 text-white shadow-sm md:p-6">
+      <section className="overflow-hidden rounded-[1.75rem] bg-[#06110f] p-4 text-white shadow-sm md:p-6">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <button
             type="button"
             onClick={() => setIsYearly((value) => !value)}
-            className="flex w-fit items-center gap-3 rounded-2xl transition"
+            className="flex w-fit items-center gap-3 rounded-full transition"
           >
             <span
               className={`relative inline-flex h-7 w-12 items-center rounded-xl border border-white/10 p-1 transition ${
@@ -411,7 +411,7 @@ export default function BillingPage() {
             >
               <span
                 className={`h-5 w-5 rounded-lg transition ${
-                  isYearly ? "translate-x-5 bg-[#a36cff]" : "translate-x-0 bg-white/45"
+                  isYearly ? "translate-x-5 bg-[#95bf47]" : "translate-x-0 bg-white/45"
                 }`}
               />
             </span>
@@ -421,7 +421,7 @@ export default function BillingPage() {
             </span>
 
             {isYearly ? (
-              <span className="rounded-2xl bg-[#a36cff]/15 px-2.5 py-1 text-xs font-semibold text-[#a36cff]">
+              <span className="rounded-full bg-[#95bf47]/15 px-2.5 py-1 text-xs font-semibold text-[#95bf47]">
                 Save 20%
               </span>
             ) : null}
@@ -429,7 +429,7 @@ export default function BillingPage() {
 
           <a
             href="#plan-features"
-            className="text-sm font-semibold text-white underline underline-offset-4 transition hover:text-[#a36cff]"
+            className="text-sm font-semibold text-white underline underline-offset-4 transition hover:text-[#95bf47]"
           >
             Compare all features
           </a>
@@ -487,7 +487,7 @@ export default function BillingPage() {
             return (
               <div
                 key={plan.id}
-                className="flex min-h-[470px] flex-col rounded-[1.65rem] bg-[#151026] px-5 py-6 text-white ring-1 ring-white/5 transition hover:-translate-y-1 hover:ring-white/15"
+                className="flex min-h-[470px] flex-col rounded-[1.65rem] bg-[#151b18] px-5 py-6 text-white ring-1 ring-white/5 transition hover:-translate-y-1 hover:ring-white/15"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -495,7 +495,7 @@ export default function BillingPage() {
                       {plan.name}
                     </p>
 
-                    <p className="mt-1.5 text-[14px] font-medium leading-5 text-[#a36cff]">
+                    <p className="mt-1.5 text-[14px] font-medium leading-5 text-[#95bf47]">
                       {subtitle}
                     </p>
                   </div>
@@ -527,7 +527,7 @@ export default function BillingPage() {
                   disabled={
                     isCurrent || Boolean(payingPlanId) || isVerifyingPayment
                   }
-                  className="mt-6 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-2xl border border-white/20 px-5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-[#07070b] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-[#06110f] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {payingPlanId === plan.id ? (
                     <Loader2 size={16} className="animate-spin" />
@@ -549,7 +549,7 @@ export default function BillingPage() {
                   {features.map((feature) => (
                     <div
                       key={feature}
-                      className="border-t border-white/10 py-2.5 first:border-t-0"
+                      className="border-t border-white/10 py-3.5 first:border-t-0"
                     >
                       {feature}
                     </div>

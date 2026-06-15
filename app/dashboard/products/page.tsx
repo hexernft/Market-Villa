@@ -343,7 +343,7 @@ export default function ProductsPage() {
                 setSelectedBusinessId(event.target.value);
                 resetForm();
               }}
-              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-80"
+              className="min-h-14 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
             >
               {businesses.length === 0 ? (
                 <option value="">No business created yet</option>
@@ -365,7 +365,7 @@ export default function ProductsPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[#8b4dff] focus:bg-white focus:ring-4 focus:ring-slate-100"
+                className="min-h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:bg-white focus:ring-4 focus:ring-slate-100"
                 placeholder="Search products"
               />
             </div>
@@ -386,9 +386,9 @@ export default function ProductsPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-purple-50 px-4 py-3">
-              <p className="text-xs text-purple-700">Featured</p>
-              <p className="mt-1 text-xl font-semibold text-white">
+            <div className="rounded-2xl bg-amber-50 px-4 py-3">
+              <p className="text-xs text-amber-700">Featured</p>
+              <p className="mt-1 text-xl font-semibold text-amber-950">
                 {featuredProductsCount}
               </p>
             </div>
@@ -407,12 +407,12 @@ export default function ProductsPage() {
           Loading products...
         </section>
       ) : businesses.length === 0 ? (
-        <section className="rounded-[2rem] border border-purple-200 bg-purple-50 p-8 text-center">
-          <p className="text-lg font-semibold text-white">
+        <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center">
+          <p className="text-lg font-semibold text-amber-950">
             Create a business page first
           </p>
 
-          <p className="mt-2 text-sm text-purple-100">
+          <p className="mt-2 text-sm text-amber-900">
             Add your business profile before adding products.
           </p>
         </section>
@@ -462,7 +462,7 @@ export default function ProductsPage() {
                   <input
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                     placeholder="Product name"
                     required
                   />
@@ -477,7 +477,7 @@ export default function ProductsPage() {
                     <input
                       value={price}
                       onChange={(event) => setPrice(event.target.value)}
-                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                       placeholder="1500"
                       type="number"
                       min="0"
@@ -493,7 +493,7 @@ export default function ProductsPage() {
                     <select
                       value={category}
                       onChange={(event) => setCategory(event.target.value)}
-                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
+                      className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                     >
                       {productCategories.map((item) => (
                         <option key={item}>{item}</option>
@@ -528,7 +528,7 @@ export default function ProductsPage() {
                     <input
                       value={imageUrl}
                       onChange={(event) => setImageUrl(event.target.value)}
-                      className="w-full rounded-2xl border border-slate-200 px-11 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
+                      className="w-full rounded-2xl border border-slate-200 px-11 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                       placeholder="https://..."
                     />
                   </div>
@@ -543,7 +543,7 @@ export default function ProductsPage() {
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
                     rows={4}
-                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100"
+                    className="rounded-2xl border border-slate-200 px-4 py-4 text-sm outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100"
                     placeholder="Add important product details."
                   />
                 </label>
@@ -677,7 +677,7 @@ export default function ProductsPage() {
                           )}
 
                           {product.is_featured ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-700">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
                               <Star size={14} />
                               Featured
                             </span>

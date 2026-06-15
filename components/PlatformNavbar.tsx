@@ -4,7 +4,7 @@ import { BRAND } from "@/lib/brand";
 
 export function PlatformNavbar() {
   return (
-    <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-[#09090f]/88 text-white shadow-[0_14px_36px_rgba(0,0,0,0.20)] backdrop-blur-xl">
+    <header className="fixed left-0 top-0 z-50 w-full border-b border-orange-300/40 bg-[#ff6a00] text-white shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-center px-5 py-3 md:px-8">
         <Link href="/" className="flex items-center justify-center gap-2">
           <Image
@@ -12,7 +12,7 @@ export function PlatformNavbar() {
             alt="Market Villa"
             width={72}
             height={72}
-            className="market-villa-logo-float h-16 w-16 object-contain"
+            className="market-villa-logo-float h-16 w-16 object-contain brightness-0 invert"
             priority
           />
 

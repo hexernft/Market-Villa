@@ -126,18 +126,18 @@ export default function ThemePage() {
 
   if (businesses.length === 0) {
     return (
-      <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-6 text-center">
-        <p className="text-xl font-semibold tracking-[-0.04em] text-white">
+      <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-6 text-center">
+        <p className="text-xl font-semibold tracking-[-0.04em] text-amber-950">
           Create your business page first
         </p>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-100">
+        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
           Complete onboarding before choosing a storefront theme.
         </p>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-5 inline-flex rounded-full bg-[#8b4dff] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#7c3aed]"
+          className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
         >
           Start Onboarding
         </Link>
@@ -153,7 +153,7 @@ export default function ThemePage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-72"
+              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-orange)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -278,7 +278,7 @@ export default function ThemePage() {
 
           <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
             <div className="mb-4 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-purple-50 text-purple-700">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-amber-50 text-amber-700">
                 <Sparkles size={19} />
               </span>
 

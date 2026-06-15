@@ -35,12 +35,12 @@ export function HeroImageCarousel() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="relative overflow-hidden border border-purple-200 bg-white p-2.5 shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
+        className="relative overflow-hidden border border-orange-200 bg-white p-2.5 shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
       >
         <motion.div
           animate={{ opacity: [0.35, 0.7, 0.35], scale: [1, 1.08, 1] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -right-4 -top-4 h-24 w-24 bg-[#8b4dff]/20 blur-2xl"
+          className="absolute -right-4 -top-4 h-24 w-24 bg-[var(--mv-orange)]/20 blur-2xl"
         />
 
         <motion.div
@@ -51,8 +51,8 @@ export function HeroImageCarousel() {
 
         <div className="relative overflow-hidden border border-slate-200 bg-slate-50 p-1.5">
           <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-3 py-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#8b4dff]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-purple-200" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[var(--mv-orange)]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-orange-200" />
             <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
             <span className="ml-3 h-2 w-32 rounded-full bg-slate-100" />
           </div>
@@ -99,7 +99,7 @@ export function HeroImageCarousel() {
                   onClick={() => setActiveIndex(index)}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     activeIndex === index
-                      ? "w-7 bg-[#8b4dff]"
+                      ? "w-7 bg-[var(--mv-orange)]"
                       : "w-2 bg-white/80"
                   }`}
                   aria-label={`Show hero image ${index + 1}`}

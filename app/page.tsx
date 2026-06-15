@@ -58,9 +58,9 @@ const faqItems = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#07070b] text-slate-950">
+    <main className="min-h-screen bg-[#f3f4f6] text-slate-950">
       <PlatformNavbar />
-      <section className="bg-[radial-gradient(circle_at_top_right,rgba(139,77,255,0.20),transparent_34%),linear-gradient(180deg,#07070b_0%,#ffffff_100%)] px-5 pb-14 pt-32 md:px-8 md:pb-16 md:pt-36">
+      <section className="bg-[radial-gradient(circle_at_top_right,rgba(255,106,0,0.20),transparent_34%),linear-gradient(180deg,#f3f4f6_0%,#ffffff_100%)] px-5 pb-14 pt-32 md:px-8 md:pb-16 md:pt-36">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[0.95fr_0.65fr] lg:items-center">
             <MotionReveal>
@@ -76,14 +76,14 @@ export default function Home() {
               <div className="mt-8">
                 <Link
                   href="/signup"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#8b4dff] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#a36cff]"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6a00] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#ff8126]"
                 >
                   Create Business Page
                   <ArrowRight size={17} className="text-white" />
                 </Link>
                 <Link
                   href="/stores"
-                  className="market-villa-blink-cta ml-3 inline-flex items-center justify-center rounded-full border border-[#8b4dff] px-6 py-3.5 text-sm font-semibold shadow-sm transition"
+                  className="market-villa-blink-cta ml-3 inline-flex items-center justify-center rounded-full border border-[#ff6a00] px-6 py-3.5 text-sm font-semibold shadow-sm transition"
                 >
                   Explore Stores
                 </Link>
@@ -95,7 +95,7 @@ export default function Home() {
       </section>
       <section
         id="how"
-        className="border-y border-purple-200 bg-[#151026] px-5 py-14 md:px-8"
+        className="border-y border-orange-200 bg-[#fff3eb] px-5 py-14 md:px-8"
       >
         <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-3">
           {features.map((feature, index) => {
@@ -103,8 +103,8 @@ export default function Home() {
 
             return (
               <MotionReveal key={feature.title} delay={index * 0.08}>
-                <div className="premium-card-hover border border-purple-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#8b4dff]/50 hover:shadow-md">
-                  <div className="mb-8 grid h-11 w-11 place-items-center rounded-2xl bg-[#8b4dff] text-white shadow-sm">
+                <div className="premium-card-hover border border-orange-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#ff6a00]/50 hover:shadow-md">
+                  <div className="mb-8 grid h-11 w-11 place-items-center rounded-2xl bg-[#ff6a00] text-white shadow-sm">
                     <Icon size={20} />
                   </div>
 
@@ -121,7 +121,7 @@ export default function Home() {
           })}
         </div>
       </section>
-      <section className="bg-[#8b4dff] px-5 py-16 text-white md:px-8">
+      <section className="bg-[#ff6a00] px-5 py-16 text-white md:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
           <div>
             <p className="text-sm font-semibold tracking-[0.18em] text-white">
@@ -164,10 +164,10 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="overflow-hidden border border-[#8b4dff]/25 bg-white/5">
+          <div className="overflow-hidden border border-[#ff6a00]/25 bg-white/5">
             {faqItems.map((item, index) => (
               <MotionReveal key={item.question} delay={index * 0.06}>
-                <div className="grid gap-3 border-t border-white/10 p-6 first:border-t-0 hover:bg-[#8b4dff]/5">
+                <div className="grid gap-3 border-t border-white/10 p-6 first:border-t-0 hover:bg-[#ff6a00]/5">
                   <h3 className="text-lg font-semibold tracking-[-0.03em] text-white">
                     {item.question}
                   </h3>
@@ -181,7 +181,7 @@ export default function Home() {
           </div>
         </div>
       </section>{" "}
-      <section className="relative overflow-hidden border-y border-[#a36cff] bg-[#8b4dff] py-1.5">
+      <section className="relative overflow-hidden border-y border-[#ff8126] bg-[#ff6a00] py-1.5">
         <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-[192px] bg-[#e85f00]" />
 
         <div className="market-villa-marquee relative z-0 flex whitespace-nowrap text-[11px] font-medium leading-none text-white">
