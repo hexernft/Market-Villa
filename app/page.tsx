@@ -70,22 +70,40 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how" className="px-4 py-10 md:px-4">
+                  <section id="how" className="px-4 py-10 md:px-4">
         <div className="mx-auto max-w-7xl">
-          <MotionReveal>
-            <h2 className="text-center text-2xl font-semibold text-[#241436] md:text-2xl">Powerful tools. Beautiful results.</h2>
-          </MotionReveal>
+          <h2 className="text-center text-2xl font-semibold text-white md:text-2xl">
+            Powerful tools. Beautiful results.
+          </h2>
+
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {features.map((feature, index) => {
               const Icon = feature.icon;
+              const glowClass =
+                index === 0
+                  ? "mv-empty-feature-card-1"
+                  : index === 1
+                  ? "mv-empty-feature-card-2"
+                  : "mv-empty-feature-card-3";
+
               return (
                 <MotionReveal key={feature.title} delay={index * 0.08}>
-                  <div className="mv-soft-panel premium-card-hover rounded-[1.6rem] p-5">
-                    <div className="mb-5 grid h-10 w-12 place-items-center rounded-[1.15rem] bg-[#f0e7ff] text-[#7c3aed] ring-1 ring-[#7c3aed]/12">
-                      <Icon size={19} />
+                  <div className={`mv-empty-feature-card ${glowClass} flex flex-col items-center justify-center p-7 text-center`}>
+                    <span className="mv-empty-feature-light" />
+
+                    <div className="relative z-10 mb-6 grid h-14 w-14 place-items-center rounded-[1.25rem] border border-[#c4b5fd]/24 bg-white/10 text-[#c4b5fd] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+                      <Icon size={24} />
                     </div>
-                    <h3 className="text-sm font-semibold text-[#241436]">{feature.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-[#241436]/62">{feature.description}</p>
+
+                    <div className="relative z-10">
+                      <h3 className="text-lg font-semibold leading-tight text-white">
+                        {feature.title}
+                      </h3>
+
+                      <p className="mt-3 max-w-[19rem] text-base leading-7 text-white/74">
+                        {feature.description}
+                      </p>
+                    </div>
                   </div>
                 </MotionReveal>
               );
@@ -94,7 +112,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-4 py-8 md:px-4">
+<section className="px-4 py-8 md:px-4">
         <div className="mx-auto grid max-w-7xl gap-5 rounded-[2rem] bg-[linear-gradient(160deg,#241436,#321b4d_70%,#412064)] p-6 text-white shadow-[0_28px_70px_rgba(36,20,54,0.22)] lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">Why Market Villa</p>

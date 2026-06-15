@@ -511,3 +511,664 @@ p {
   display: none !important;
   content: none !important;
 }
+
+/* App page background: brand purple */
+html,
+body {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 16% 10%, rgba(255, 255, 255, 0.14), transparent 26%),
+    radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.10), transparent 30%),
+    radial-gradient(circle at 50% 95%, rgba(36, 20, 54, 0.26), transparent 34%),
+    linear-gradient(135deg, #7c3aed 0%, #6d28d9 42%, #4c1d95 100%) !important;
+  background-attachment: fixed;
+}
+
+.mv-page-shell,
+main {
+  background: transparent !important;
+}
+
+/* Navbar: solid grey-white-purple translucent */
+header,
+nav {
+  color: #241436 !important;
+}
+
+header > div,
+nav > div,
+.platform-navbar,
+.mv-navbar {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.88),
+      rgba(248, 244, 255, 0.82),
+      rgba(236, 225, 255, 0.76)
+    ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+  box-shadow: 0 22px 70px rgba(55, 31, 83, 0.16) !important;
+  backdrop-filter: blur(22px) saturate(145%) !important;
+}
+
+header a,
+nav a,
+header button,
+nav button,
+header span,
+nav span,
+header p,
+nav p {
+  color: #241436 !important;
+}
+
+/* Hero text card under carousel: same soft translucent surface */
+.hero-carousel-copy-card {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.90),
+      rgba(248, 244, 255, 0.84),
+      rgba(236, 225, 255, 0.78)
+    ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.78) !important;
+  box-shadow:
+    0 28px 85px rgba(36, 20, 54, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+}
+
+.hero-carousel-copy-card::before {
+  display: none !important;
+  content: none !important;
+}
+
+.hero-carousel-copy-card h1,
+.hero-carousel-copy-card h2,
+.hero-carousel-copy-card h3 {
+  color: #241436 !important;
+}
+
+.hero-carousel-copy-card p {
+  color: rgba(36, 20, 54, 0.68) !important;
+}
+
+.hero-carousel-copy-card .text-\[\#7c3aed\] {
+  color: #7c3aed !important;
+}
+
+/* Keep regular white/purple sections readable on purple app background */
+section > div[class*="bg-white"],
+section > div[class*="bg-white/"],
+.mv-soft-panel,
+.premium-card-hover {
+  border-color: rgba(255, 255, 255, 0.70) !important;
+  box-shadow: 0 24px 80px rgba(36, 20, 54, 0.18) !important;
+}
+
+/* Market Villa final soft black-purple surface theme */
+
+/* App page background: closer to black than purple */
+html,
+body {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 16% 10%, rgba(124, 58, 237, 0.20), transparent 26%),
+    radial-gradient(circle at 88% 18%, rgba(168, 85, 247, 0.14), transparent 30%),
+    radial-gradient(circle at 50% 95%, rgba(76, 29, 149, 0.20), transparent 34%),
+    linear-gradient(135deg, #030008 0%, #07020d 38%, #12051f 72%, #050009 100%) !important;
+  background-attachment: fixed;
+}
+
+.mv-page-shell,
+main {
+  background: transparent !important;
+}
+
+/* Navbar: soft translucent grey-white-purple */
+header,
+nav {
+  color: #241436 !important;
+}
+
+header > div,
+nav > div,
+.platform-navbar,
+.mv-navbar {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.88),
+      rgba(248, 244, 255, 0.82),
+      rgba(236, 225, 255, 0.76)
+    ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.72) !important;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(22px) saturate(145%) !important;
+}
+
+header a,
+nav a,
+header button,
+nav button,
+header span,
+nav span,
+header p,
+nav p {
+  color: #241436 !important;
+}
+
+/* Hero card under carousel: soft translucent surface */
+.hero-carousel-copy-card {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.90),
+      rgba(248, 244, 255, 0.84),
+      rgba(236, 225, 255, 0.78)
+    ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.78) !important;
+  box-shadow:
+    0 28px 85px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+}
+
+.hero-carousel-copy-card::before {
+  display: none !important;
+  content: none !important;
+}
+
+.hero-carousel-copy-card h1,
+.hero-carousel-copy-card h2,
+.hero-carousel-copy-card h3 {
+  color: #241436 !important;
+}
+
+.hero-carousel-copy-card p {
+  color: rgba(36, 20, 54, 0.68) !important;
+}
+
+/* Keep light cards readable on dark background */
+section > div[class*="bg-white"],
+section > div[class*="bg-white/"],
+.mv-soft-panel,
+.premium-card-hover {
+  border-color: rgba(255, 255, 255, 0.70) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24) !important;
+}
+
+/* Text readability fix only */
+
+/* Text sitting directly on the dark page background */
+.mv-page-shell > section > div > h1,
+.mv-page-shell > section > div > h2,
+.mv-page-shell > section > div > h3,
+.mv-page-shell > section > div > p,
+main > section > div > h1,
+main > section > div > h2,
+main > section > div > h3,
+main > section > div > p {
+  color: rgba(255, 255, 255, 0.94) !important;
+}
+
+.mv-page-shell > section > div > p,
+main > section > div > p {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Small labels directly on dark background */
+.mv-page-shell > section > div > p[class*="uppercase"],
+main > section > div > p[class*="uppercase"] {
+  color: #c4b5fd !important;
+}
+
+/* Text inside light/grey cards should stay dark and readable */
+section div[class*="bg-white"] h1,
+section div[class*="bg-white"] h2,
+section div[class*="bg-white"] h3,
+section div[class*="bg-white"] p,
+section div[class*="bg-white/"] h1,
+section div[class*="bg-white/"] h2,
+section div[class*="bg-white/"] h3,
+section div[class*="bg-white/"] p,
+.mv-soft-panel h1,
+.mv-soft-panel h2,
+.mv-soft-panel h3,
+.mv-soft-panel p,
+.premium-card-hover h1,
+.premium-card-hover h2,
+.premium-card-hover h3,
+.premium-card-hover p {
+  color: #241436 !important;
+}
+
+section div[class*="bg-white"] p,
+section div[class*="bg-white/"] p,
+.mv-soft-panel p,
+.premium-card-hover p {
+  color: rgba(36, 20, 54, 0.72) !important;
+}
+
+/* Testimonial cards and FAQ card text */
+article h1,
+article h2,
+article h3,
+article p {
+  color: #241436 !important;
+}
+
+article p {
+  color: rgba(36, 20, 54, 0.72) !important;
+}
+
+/* Footer readability */
+footer h1,
+footer h2,
+footer h3,
+footer p,
+footer a,
+footer span {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
+footer h1,
+footer h2,
+footer h3 {
+  color: #ffffff !important;
+}
+
+/* Strong homepage text readability fix only */
+
+/* Section headings sitting directly on dark background */
+#how h2,
+#faq > div > div:first-child h2,
+#faq > div > div:first-child p,
+.mv-page-shell section > div > div > h2,
+.mv-page-shell section > div > div > p[class*="uppercase"] {
+  color: #ffffff !important;
+}
+
+#faq > div > div:first-child p,
+.mv-page-shell section > div > div > p[class*="uppercase"] {
+  color: #c4b5fd !important;
+}
+
+/* Feature cards, FAQ cards, testimonial cards: make text darker and sharper */
+.mv-soft-panel h1,
+.mv-soft-panel h2,
+.mv-soft-panel h3,
+.premium-card-hover h1,
+.premium-card-hover h2,
+.premium-card-hover h3,
+article h1,
+article h2,
+article h3,
+section div[class*="bg-white"] h1,
+section div[class*="bg-white"] h2,
+section div[class*="bg-white"] h3,
+section div[class*="bg-white/"] h1,
+section div[class*="bg-white/"] h2,
+section div[class*="bg-white/"] h3 {
+  color: #160b24 !important;
+}
+
+.mv-soft-panel p,
+.premium-card-hover p,
+article p,
+section div[class*="bg-white"] p,
+section div[class*="bg-white/"] p {
+  color: rgba(22, 11, 36, 0.82) !important;
+}
+
+/* Small labels inside light cards */
+section div[class*="bg-white"] p[class*="uppercase"],
+section div[class*="bg-white/"] p[class*="uppercase"],
+.mv-soft-panel p[class*="uppercase"],
+article p[class*="uppercase"] {
+  color: #7c3aed !important;
+}
+
+/* Why Market Villa dark card text should stay bright */
+section div[class*="bg-[linear-gradient"] h1,
+section div[class*="bg-[linear-gradient"] h2,
+section div[class*="bg-[linear-gradient"] h3 {
+  color: #ffffff !important;
+}
+
+section div[class*="bg-[linear-gradient"] p {
+  color: rgba(255, 255, 255, 0.76) !important;
+}
+
+/* Marquee text */
+.market-villa-marquee,
+.market-villa-marquee span {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+/* Footer */
+footer h1,
+footer h2,
+footer h3 {
+  color: #ffffff !important;
+}
+
+footer p,
+footer a,
+footer span {
+  color: rgba(255, 255, 255, 0.76) !important;
+}
+
+/* Three equal purple black feature cards */
+#how .grid > div,
+#how .mv-soft-panel,
+#how .premium-card-hover {
+  height: 100% !important;
+}
+
+#how .mv-soft-panel {
+  min-height: 220px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(124, 58, 237, 0.38), transparent 32%),
+    radial-gradient(circle at 86% 18%, rgba(168, 85, 247, 0.22), transparent 34%),
+    linear-gradient(145deg, #050008 0%, #12051f 48%, #241436 100%) !important;
+  border: 1px solid rgba(196, 181, 253, 0.22) !important;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+#how .mv-soft-panel h3 {
+  color: #ffffff !important;
+}
+
+#how .mv-soft-panel p {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+#how .mv-soft-panel > div:first-child {
+  background: rgba(124, 58, 237, 0.18) !important;
+  color: #c4b5fd !important;
+  border: 1px solid rgba(196, 181, 253, 0.24) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+
+
+
+
+
+
+
+/* Sequential glow for empty feature cards */
+.mv-empty-feature-card {
+  position: relative !important;
+  min-height: 300px !important;
+  overflow: hidden !important;
+  border-radius: 1.8rem !important;
+  border: 1px solid rgba(196, 181, 253, 0.28) !important;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(124, 58, 237, 0.38), transparent 32%),
+    radial-gradient(circle at 86% 18%, rgba(168, 85, 247, 0.22), transparent 34%),
+    linear-gradient(145deg, #050008 0%, #12051f 48%, #241436 100%) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32) !important;
+}
+
+.mv-empty-feature-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 0 22px rgba(255, 255, 255, 0.72),
+    0 0 44px rgba(196, 181, 253, 0.60),
+    0 0 80px rgba(124, 58, 237, 0.45);
+  animation: mvCardSequentialPulse 4.8s ease-in-out infinite;
+}
+
+.mv-empty-feature-light {
+  position: absolute;
+  inset: -20%;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 32%,
+      rgba(255, 255, 255, 0.85) 45%,
+      rgba(196, 181, 253, 0.50) 52%,
+      transparent 66%,
+      transparent 100%
+    );
+  transform: translateX(-70%);
+  animation: mvCardLightSweep 4.8s ease-in-out infinite;
+}
+
+.mv-empty-feature-card-1::before,
+.mv-empty-feature-card-1 .mv-empty-feature-light {
+  animation-delay: 0s;
+}
+
+.mv-empty-feature-card-2::before,
+.mv-empty-feature-card-2 .mv-empty-feature-light {
+  animation-delay: 1.6s;
+}
+
+.mv-empty-feature-card-3::before,
+.mv-empty-feature-card-3 .mv-empty-feature-light {
+  animation-delay: 3.2s;
+}
+
+@keyframes mvCardSequentialPulse {
+  0%,
+  33%,
+  100% {
+    opacity: 0;
+  }
+
+  8%,
+  22% {
+    opacity: 1;
+  }
+}
+
+@keyframes mvCardLightSweep {
+  0%,
+  33%,
+  100% {
+    opacity: 0;
+    transform: translateX(-70%);
+  }
+
+  8% {
+    opacity: 1;
+    transform: translateX(-35%);
+  }
+
+  22% {
+    opacity: 1;
+    transform: translateX(55%);
+  }
+
+  28% {
+    opacity: 0;
+    transform: translateX(80%);
+  }
+}
+
+
+
+/* Feature card sizing and hover pause refinement */
+.mv-empty-feature-card {
+  min-height: 400px !important;
+}
+
+/* Pause light only on the card being hovered */
+.mv-empty-feature-card:hover::before,
+.mv-empty-feature-card:hover .mv-empty-feature-light {
+  animation-play-state: paused !important;
+}
+
+/* Keep hovered card visibly active while paused */
+.mv-empty-feature-card:hover::before {
+  opacity: 1 !important;
+  border-color: rgba(255, 255, 255, 0.92) !important;
+  box-shadow:
+    0 0 22px rgba(255, 255, 255, 0.58),
+    0 0 44px rgba(196, 181, 253, 0.48),
+    0 0 80px rgba(124, 58, 237, 0.34) !important;
+}
+
+.mv-empty-feature-card:hover .mv-empty-feature-light {
+  opacity: 0.72 !important;
+}
+
+/* Slight lift on active card, without affecting the others */
+.mv-empty-feature-card:hover {
+  transform: translateY(-4px);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+/* Bigger, clearer text inside the 3 feature cards */
+#how .mv-empty-feature-card h3 {
+  color: #ffffff !important;
+  font-size: 1.25rem !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+}
+
+#how .mv-empty-feature-card p {
+  color: rgba(255, 255, 255, 0.76) !important;
+  font-size: 1rem !important;
+  line-height: 1.8 !important;
+}
+
+#how .mv-empty-feature-card svg {
+  width: 1.65rem !important;
+  height: 1.65rem !important;
+}
+
+#how .mv-empty-feature-card > div:first-of-type {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Strong visible edge glow for feature cards */
+.mv-empty-feature-light {
+  display: none !important;
+}
+
+.mv-empty-feature-card {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  min-height: 400px !important;
+}
+
+.mv-empty-feature-card::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 4 !important;
+  border-radius: inherit !important;
+  padding: 3px !important;
+  opacity: 0 !important;
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 55deg,
+      rgba(255, 255, 255, 1) 82deg,
+      rgba(216, 180, 254, 1) 110deg,
+      rgba(124, 58, 237, 1) 145deg,
+      rgba(255, 255, 255, 0.9) 175deg,
+      transparent 220deg,
+      transparent 360deg
+    ) !important;
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important;
+
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0) !important;
+  mask-composite: exclude !important;
+
+  animation: mvStrongEdgeGlow 4.8s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+.mv-empty-feature-card-1::after {
+  animation-delay: 0s !important;
+}
+
+.mv-empty-feature-card-2::after {
+  animation-delay: 1.6s !important;
+}
+
+.mv-empty-feature-card-3::after {
+  animation-delay: 3.2s !important;
+}
+
+.mv-empty-feature-card:hover::after {
+  animation-play-state: paused !important;
+  opacity: 1 !important;
+}
+
+@keyframes mvStrongEdgeGlow {
+  0%,
+  34%,
+  100% {
+    opacity: 0;
+    transform: rotate(0deg);
+    filter: drop-shadow(0 0 0 rgba(216, 180, 254, 0));
+  }
+
+  8% {
+    opacity: 1;
+    transform: rotate(80deg);
+    filter:
+      drop-shadow(0 0 10px rgba(255, 255, 255, 0.85))
+      drop-shadow(0 0 22px rgba(216, 180, 254, 0.75))
+      drop-shadow(0 0 34px rgba(124, 58, 237, 0.65));
+  }
+
+  22% {
+    opacity: 1;
+    transform: rotate(250deg);
+    filter:
+      drop-shadow(0 0 10px rgba(255, 255, 255, 0.85))
+      drop-shadow(0 0 22px rgba(216, 180, 254, 0.75))
+      drop-shadow(0 0 34px rgba(124, 58, 237, 0.65));
+  }
+
+  30% {
+    opacity: 0;
+    transform: rotate(360deg);
+    filter: drop-shadow(0 0 0 rgba(216, 180, 254, 0));
+  }
+}
+
+/* Bigger readable feature card text */
+#how .mv-empty-feature-card h3 {
+  color: #ffffff !important;
+  font-size: 1.35rem !important;
+  line-height: 1.2 !important;
+  font-weight: 750 !important;
+}
+
+#how .mv-empty-feature-card p {
+  color: rgba(255, 255, 255, 0.78) !important;
+  font-size: 1.05rem !important;
+  line-height: 1.75 !important;
+}
