@@ -1,4 +1,4 @@
-export type StoreLayout =
+﻿export type StoreLayout =
   | "classic-commerce"
   | "editorial-luxury"
   | "food-market"

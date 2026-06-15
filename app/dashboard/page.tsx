@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -244,7 +244,7 @@ export default function DashboardPage() {
     {
       label: "Revenue",
       value: metrics.revenue,
-      prefix: "₦",
+      prefix: "â‚¦",
       icon: Wallet,
     },
     {
@@ -538,3 +538,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ChangeEvent, useState } from "react";
 import { ImagePlus, Loader2 } from "lucide-react";
@@ -130,3 +130,4 @@ export function ImageUploadField({
     </div>
   );
 }
+

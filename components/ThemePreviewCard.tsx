@@ -1,4 +1,4 @@
-import { BusinessTheme } from "@/lib/themes";
+﻿import { BusinessTheme } from "@/lib/themes";
 import { CheckCircle2, LayoutTemplate } from "lucide-react";
 
 type Props = {
@@ -113,3 +113,4 @@ export function ThemePreviewCard({ theme, selected }: Props) {
     </div>
   );
 }
+

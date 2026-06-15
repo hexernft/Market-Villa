@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -262,3 +262,5 @@ export function SupportWidget() {
     </>
   );
 }
+
+

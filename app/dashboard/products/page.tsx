@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
@@ -351,7 +351,7 @@ export default function ProductsPage() {
 
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} — /store/{business.slug}
+                  {business.name} â€” /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -743,3 +743,4 @@ export default function ProductsPage() {
     </div>
   );
 }
+

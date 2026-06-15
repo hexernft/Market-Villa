@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { Store } from "lucide-react";
 import { BRAND } from "@/lib/brand";
@@ -9,7 +9,7 @@ export function PlatformFooter() {
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-start">
         <div>
           <Link href="/" className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center overflow-hidden bg-white/8"><Image src="/market-villa-logo.png" alt="Market Villa" width={40} height={40} className="h-10 w-10 object-contain" /></span>
+            <span className="grid h-16 w-16 place-items-center overflow-hidden bg-white/8"><Image src="/market-villa-logo.png" alt="Market Villa" width={64} height={64} className="h-16 w-16 object-contain" /></span>
 
             <span>
               <span className="block text-sm font-semibold leading-none tracking-[-0.04em] text-white">
@@ -67,10 +67,12 @@ export function PlatformFooter() {
       </div>
 
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/40 md:flex-row">
-        <p>© 2026 {BRAND.name}. All rights reserved.</p>
+        <p>Â© 2026 {BRAND.name}. All rights reserved.</p>
         <p>Built for small businesses.</p>
       </div>
     </footer>
   );
 }
+
+
 

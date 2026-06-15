@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -255,7 +255,7 @@ export default function OrdersPage() {
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} — /store/{business.slug}
+                  {business.name} â€” /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -393,7 +393,7 @@ export default function OrdersPage() {
                             </p>
 
                             <p className="mt-1 text-xs text-slate-500">
-                              {formatCurrency(Number(item.unit_price || 0))} ×{" "}
+                              {formatCurrency(Number(item.unit_price || 0))} Ã—{" "}
                               {item.quantity}
                             </p>
                           </div>
@@ -472,3 +472,4 @@ export default function OrdersPage() {
     </div>
   );
 }
+

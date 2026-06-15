@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import "./globals.css";
 import { SupportWidget } from "@/components/SupportWidget";
 import { AppMotionProvider } from "@/components/AppMotionProvider";
@@ -19,5 +19,7 @@ export default function RootLayout({
     </html>
   );
 }
+
+
 
 

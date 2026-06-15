@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { BRAND } from "@/lib/brand";
@@ -20,7 +20,7 @@ export function PlatformNavbar() {
             alt="Market Villa"
             width={52}
             height={52}
-            className="market-villa-logo-float h-10 w-10 object-contain"
+            className=" h-16 w-16 object-contain"
             priority
           />
           <span className="text-sm font-semibold tracking-[-0.04em] text-[#241436]">
@@ -49,3 +49,5 @@ export function PlatformNavbar() {
     </header>
   );
 }
+
+

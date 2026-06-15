@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { BRAND } from "@/lib/brand";
@@ -95,3 +95,5 @@ export default function TermsPage() {
     </main>
   );
 }
+
+

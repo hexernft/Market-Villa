@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -630,3 +630,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+

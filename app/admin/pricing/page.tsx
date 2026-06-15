@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -33,7 +33,7 @@ type PricingItem = {
 };
 
 function formatNaira(value?: number | null) {
-  return `₦${Number(value || 0).toLocaleString()}`;
+  return `â‚¦${Number(value || 0).toLocaleString()}`;
 }
 
 export default function AdminPricingPage() {
@@ -413,3 +413,4 @@ export default function AdminPricingPage() {
     </main>
   );
 }
+

@@ -1,4 +1,4 @@
-export type MarketVillaPlanId = "starter" | "growth" | "pro";
+﻿export type MarketVillaPlanId = "starter" | "growth" | "pro";
 
 export const MARKET_VILLA_PLANS: Record<
   MarketVillaPlanId,

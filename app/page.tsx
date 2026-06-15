@@ -1,9 +1,8 @@
 import { TestimonialsSection } from "@/components/TestimonialsSection";
-﻿import Link from "next/link";
+import Link from "next/link";
 import { ArrowRight, CheckCircle2, Globe2, MessageCircle, Store } from "lucide-react";
 import { PlatformNavbar } from "@/components/PlatformNavbar";
 import { PlatformFooter } from "@/components/PlatformFooter";
-import { HeroImageCarousel } from "@/components/HeroImageCarousel";
 import { MotionReveal } from "@/components/MotionReveal";
 
 const features = [
@@ -24,30 +23,49 @@ export default function Home() {
     <main className="mv-page-shell min-h-screen text-[#241436]">
       <PlatformNavbar />
 
-      <section className="mv-lavender-hero px-4 pb-10 pt-28 md:px-4 md:pb-14 md:pt-32">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.3rem] border border-white/65 bg-white/38 p-5 shadow-[0_28px_90px_rgba(55,31,83,0.13)] backdrop-blur-2xl md:p-7 lg:p-8">
-          <div className="grid gap-10 lg:grid-cols-[0.92fr_0.78fr] lg:items-center">
-            <MotionReveal>
-              <div className="mb-6 inline-flex rounded-full border border-[#7c3aed]/12 bg-white/55 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#7c3aed]">
-                Designed to delight. Built to sell.
-              </div>
-              <h1 className="max-w-2xl text-[2.85rem] font-semibold leading-[1.03] text-[#241436] md:text-[4.2rem]">
+      <section className="mv-lavender-hero px-4 pb-20 pt-28 md:px-4 md:pb-24 md:pt-32">
+        <div className="mx-auto max-w-7xl">
+          <div className="market-hero-carousel relative min-h-[520px] overflow-hidden rounded-[2.5rem] border border-white/65 shadow-[0_30px_100px_rgba(55,31,83,0.18)] md:min-h-[640px]">
+            <div
+              className="market-hero-carousel-slide"
+              style={{ backgroundImage: 'url("/main-hero.png")', animationDelay: "0s" }}
+            />
+            <div
+              className="market-hero-carousel-slide"
+              style={{ backgroundImage: 'url("/phone-shop.png")', animationDelay: "5s" }}
+            />
+            <div
+              className="market-hero-carousel-slide"
+              style={{ backgroundImage: 'url("/phone-hub.png")', animationDelay: "10s" }}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.10),transparent_30%)]" />
+          </div>
+
+          <div className="hero-carousel-copy-card relative z-10 mx-auto -mt-20 max-w-5xl rounded-[2.1rem] border border-white/75 bg-white/86 p-5 shadow-[0_28px_85px_rgba(55,31,83,0.18)] backdrop-blur-2xl md:-mt-24 md:p-7 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-8 lg:p-8">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#7c3aed]">
+                Business hosting made beautiful
+              </p>
+
+              <h1 className="mt-3 max-w-3xl text-[2.55rem] font-semibold leading-[1.03] text-[#241436] md:text-[4rem]">
                 Start simple. Look professional. Sell with confidence.
               </h1>
-              <p className="mt-5 max-w-md text-sm leading-7 text-[#241436]/68">
+
+              <p className="mt-5 max-w-xl text-sm leading-7 text-[#241436]/68">
                 Create a clean business page in minutes, add your details, and share your link with customers.
               </p>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <Link href="/login" className="market-primary-button inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold text-white">
-                  Create Business Page
-                  <ArrowRight size={16} />
-                </Link>
-                <Link href="/stores" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#7c3aed]/15 bg-white/55 px-4 py-2.5 text-sm font-semibold text-[#241436] shadow-sm hover:bg-white/80">
-                  Explore Stores
-                </Link>
-              </div>
-            </MotionReveal>
-            <HeroImageCarousel />
+            </div>
+
+            <div className="mt-7 flex flex-wrap items-center gap-3 lg:mt-0 lg:justify-end">
+              <Link href="/login" className="market-primary-button inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold text-white">
+                Create Business Page
+                <ArrowRight size={16} />
+              </Link>
+
+              <Link href="/stores" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#7c3aed]/15 bg-white/70 px-4 py-2.5 text-sm font-semibold text-[#241436] shadow-sm hover:bg-white/90">
+                Explore Stores
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -131,5 +149,6 @@ export default function Home() {
     </main>
   );
 }
+
 
 

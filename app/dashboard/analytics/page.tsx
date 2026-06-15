@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -299,7 +299,7 @@ export default function AnalyticsPage() {
           >
             {businesses.map((business) => (
               <option key={business.id} value={business.id}>
-                {business.name} — /store/{business.slug}
+                {business.name} â€” /store/{business.slug}
               </option>
             ))}
           </select>
@@ -443,3 +443,4 @@ export default function AnalyticsPage() {
     </div>
   );
 }
+

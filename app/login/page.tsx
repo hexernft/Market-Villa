@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -48,7 +48,7 @@ export default function LoginPage() {
       <div className="relative mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl items-center justify-center">
         <div className="auth-card w-full max-w-sm rounded-[26px] bg-white px-5 py-6 shadow-[0_18px_50px_rgba(15,23,42,0.10)] sm:px-4 sm:py-7">
           <div className="mb-3 flex flex-col items-center text-center">
-            <div className="logo-float mb-2">
+            <div className=" mb-2">
               <Image
                 src="/market-villa-logo.png"
                 alt="Market Villa"
@@ -140,7 +140,7 @@ export default function LoginPage() {
           animation: cardIn 0.55s ease-out;
         }
 
-        .logo-float {
+        . {
           animation: floatLogo 4s ease-in-out infinite;
         }
 
@@ -212,3 +212,4 @@ export default function LoginPage() {
     </main>
   );
 }
+

@@ -1,4 +1,4 @@
-export const BRAND = {
+﻿export const BRAND = {
   name: "Market Villa",
   shortName: "MV",
   domain: "marketvilla.com",
@@ -30,4 +30,5 @@ export const PLATFORM_COLORS = {
   soft: "#f7f1ff",
   charcoal: "#241436",
 };
+
 

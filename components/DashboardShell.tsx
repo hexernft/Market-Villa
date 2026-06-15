@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -82,7 +82,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="mv-page-shell min-h-screen text-[#241436]">
-      <button type="button" onClick={() => setIsSidebarOpen(true)} className="fixed left-4 top-4 z-50 grid h-10 w-10 place-items-center rounded-2xl bg-[#7c3aed] text-white shadow-lg lg:hidden" aria-label="Open menu">
+      <button type="button" onClick={() => setIsSidebarOpen(true)} className="fixed left-4 top-4 z-50 grid h-16 w-16 place-items-center rounded-2xl bg-[#7c3aed] text-white shadow-lg lg:hidden" aria-label="Open menu">
         <Menu size={19} />
       </button>
 
@@ -94,7 +94,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-[linear-gradient(160deg,#241436_0%,#2f174b_70%,#412064_100%)] text-white shadow-[0_26px_70px_rgba(36,20,54,0.22)]">
           <div className="flex items-center justify-between px-5 py-5">
             <Link href="/dashboard" className="flex items-center gap-3">
-              <Image src="/market-villa-logo.png" alt="Market Villa" width={54} height={54} className="market-villa-logo-float h-10 w-10 object-contain brightness-0 invert" priority />
+              <Image src="/market-villa-logo.png" alt="Market Villa" width={72} height={72} className=" h-16 w-16 object-contain" priority />
               <div>
                 <p className="text-sm font-semibold tracking-[-0.04em] text-white">{BRAND.name}</p>
                 <p className="text-xs font-medium text-white/50">Brand studio</p>
@@ -139,3 +139,5 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
+

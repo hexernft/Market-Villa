@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -58,7 +58,7 @@ type FeaturedBusiness = {
 };
 
 function formatNaira(value?: number | null) {
-  return `₦${Number(value || 0).toLocaleString()}`;
+  return `â‚¦${Number(value || 0).toLocaleString()}`;
 }
 
 function formatDate(value?: string | null) {
@@ -549,3 +549,4 @@ export default function AdminRevenuePage() {
     </main>
   );
 }
+

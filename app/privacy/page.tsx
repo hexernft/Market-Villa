@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, LockKeyhole } from "lucide-react";
 import { BRAND } from "@/lib/brand";
@@ -99,3 +99,5 @@ export default function PrivacyPage() {
     </main>
   );
 }
+
+

@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import {
   Store, ArrowLeft, BookOpen, CheckCircle2, HelpCircle } from "lucide-react";
@@ -125,4 +125,6 @@ export default function HelpPage() {
     </main>
   );
 }
+
+
 

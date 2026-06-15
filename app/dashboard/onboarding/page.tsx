@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
@@ -352,3 +352,4 @@ export default function OnboardingPage() {
     </div>
   );
 }
+

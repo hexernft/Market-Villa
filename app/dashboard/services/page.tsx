@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
@@ -334,7 +334,7 @@ export default function ServicesPage() {
 
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} — /store/{business.slug}
+                  {business.name} â€” /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -477,7 +477,7 @@ export default function ServicesPage() {
                       value={priceLabel}
                       onChange={(event) => setPriceLabel(event.target.value)}
                       className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
-                      placeholder="Request quote / From ₦20,000"
+                      placeholder="Request quote / From â‚¦20,000"
                     />
                   </label>
                 </div>
@@ -717,3 +717,4 @@ export default function ServicesPage() {
     </div>
   );
 }
+

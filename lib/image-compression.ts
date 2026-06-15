@@ -1,4 +1,4 @@
-export type CompressImageOptions = {
+﻿export type CompressImageOptions = {
   maxWidth?: number;
   maxHeight?: number;
   quality?: number;

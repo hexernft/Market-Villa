@@ -1,4 +1,4 @@
-import { businessThemes } from "@/lib/themes";
+﻿import { businessThemes } from "@/lib/themes";
 
 export type Product = {
   id: string;
@@ -189,5 +189,6 @@ export const dashboardStats = [
 ];
 
 export const availableThemes = businessThemes;
+
 
 

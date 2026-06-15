@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Product } from "@/lib/mock-data";
 import { formatCurrency } from "@/lib/utils";
@@ -40,5 +40,7 @@ export function ProductCard({ product, onAdd }: Props) {
     </article>
   );
 }
+
+
 
 

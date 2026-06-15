@@ -1,4 +1,4 @@
-export function formatCurrency(value: number) {
+﻿export function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
@@ -18,5 +18,6 @@ export function buildWhatsAppLink(phone: string, message: string) {
   const cleanPhone = phone.replace(/[^0-9]/g, "");
   return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
 }
+
 
 

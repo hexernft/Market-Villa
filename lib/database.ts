@@ -1,4 +1,4 @@
-export type Business = {
+﻿export type Business = {
   id: string;
   owner_id: string;
   name: string;

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
@@ -51,3 +51,5 @@ export function AnimatedNumber({
 
   return <motion.span className={className}>{display}</motion.span>;
 }
+
+

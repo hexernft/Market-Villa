@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { toPng } from "html-to-image";
@@ -388,7 +388,7 @@ export function WhatsAppCheckout({
                               </p>
 
                               <p className="mt-1 text-xs text-slate-500">
-                                {formatCurrency(item.price)} × {item.quantity}
+                                {formatCurrency(item.price)} Ã— {item.quantity}
                               </p>
                             </div>
 
@@ -471,3 +471,4 @@ export function WhatsAppCheckout({
     </>
   );
 }
+
