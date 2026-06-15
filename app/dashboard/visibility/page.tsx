@@ -34,6 +34,18 @@ type BusinessVisibility = {
   created_at?: string | null;
 };
 
+type VisibilityPricingItem = {
+  pricing_key: string;
+  name: string;
+  description: string | null;
+  price_label: string | null;
+  amount: number;
+  amount_in_kobo: number;
+  duration_days: number | null;
+  is_active: boolean | null;
+  sort_order: number | null;
+};
+
 type VisibilityPurchase = {
   id: string;
   business_id: string;
@@ -83,13 +95,16 @@ function isFeaturedActive(business: BusinessVisibility) {
   return new Date(business.featured_until) > new Date();
 }
 
-const visibilityPackages = getVisibilityPackageList();
+const fallbackVisibilityPackages: VisibilityPricingItem[] = [];
 
 export default function VisibilityPage() {
   const searchParams = useSearchParams();
   const [businesses, setBusinesses] = useState<BusinessVisibility[]>([]);
   const [visibilityPurchases, setVisibilityPurchases] = useState<
     VisibilityPurchase[]
+  >([]);
+  const [visibilityPricingItems, setVisibilityPricingItems] = useState<
+    VisibilityPricingItem[]
   >([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -107,6 +122,12 @@ export default function VisibilityPage() {
       (purchase) => purchase.business_id === selectedBusinessId
     );
   }, [visibilityPurchases, selectedBusinessId]);
+
+  const visibilityPackages = useMemo(() => {
+    return visibilityPricingItems.length > 0
+      ? visibilityPricingItems
+      : fallbackVisibilityPackages;
+  }, [visibilityPricingItems]);
 
   async function loadBusinesses() {
     setIsLoading(true);
@@ -154,6 +175,19 @@ export default function VisibilityPage() {
       } else {
         setVisibilityPurchases([]);
       }
+
+      const { data: pricingItems, error: pricingError } = await supabase
+        .from("pricing_items")
+        .select(
+          "pricing_key,name,description,price_label,amount,amount_in_kobo,duration_days,is_active,sort_order"
+        )
+        .eq("pricing_type", "visibility")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true });
+
+      if (pricingError) throw pricingError;
+
+      setVisibilityPricingItems((pricingItems || []) as VisibilityPricingItem[]);
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -538,13 +572,13 @@ export default function VisibilityPage() {
 
           <div className="mt-6 grid gap-3">
             {visibilityPackages.map((item) => {
-              const isSelected = selectedVisibilityPackage === item.id;
+              const isSelected = selectedVisibilityPackage === item.pricing_key;
 
               return (
                 <button
-                  key={item.id}
+                  key={item.pricing_key}
                   type="button"
-                  onClick={() => setSelectedVisibilityPackage(item.id)}
+                  onClick={() => setSelectedVisibilityPackage(item.pricing_key)}
                   className={`text-left transition ${
                     isSelected
                       ? "border-[#ff6a00] bg-[#ff6a00]/15"
@@ -568,7 +602,7 @@ export default function VisibilityPage() {
                           : "bg-white/10 text-white/70"
                       }`}
                     >
-                      {item.priceLabel}
+                      {item.price_label}
                     </span>
                   </div>
                 </button>
