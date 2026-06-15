@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { CreditCard, Globe2, Loader2, Store } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   getMyBusinesses,
   updateBusinessPublishStatus,
@@ -395,245 +395,155 @@ export default function BillingPage() {
         </div>
       ) : null}
 
-      <section className="grid gap-5 xl:grid-cols-[1fr_0.65fr]">
-        <div className="grid content-start gap-4">
-          <div className="grid gap-5 lg:grid-cols-3">
-            {plans.map((plan) => {
-              const isCurrent = plan.id === currentPlan?.id;
-              const isPopular = plan.id === "growth";
-              const planAmount = plan.amount;
+      <section className="overflow-hidden rounded-[2rem] bg-[#06110f] p-5 text-white shadow-sm md:p-7">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3">
+            <span className="relative inline-flex h-8 w-14 items-center rounded-xl border border-white/10 bg-white/10 p-1">
+              <span className="h-5 w-8 rounded-lg bg-[#95bf47]" />
+            </span>
 
-              const features = [
-                plan.productLimit
-                  ? `Up to ${plan.productLimit} products`
-                  : "Unlimited products",
-                plan.storeLimit
-                  ? `${plan.storeLimit} store${plan.storeLimit > 1 ? "s" : ""}`
-                  : "Unlimited stores",
-                "Beautiful business storefront",
-                "WhatsApp order flow",
-                "Dashboard management",
-              ];
-
-              return (
-                <div
-                  key={plan.id}
-                  className={`relative flex min-h-[540px] flex-col overflow-hidden rounded-[2rem] border p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg ${
-                    isPopular
-                      ? "border-slate-950 bg-[#f7f3e8]"
-                      : "border-slate-200 bg-white"
-                  }`}
-                >
-                  {isPopular ? (
-                    <div className="absolute left-0 right-0 top-0 bg-slate-950 px-5 py-2 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white">
-                      Most popular
-                    </div>
-                  ) : null}
-
-                  <div className={isPopular ? "pt-8" : ""}>
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-2xl font-semibold tracking-[-0.05em] text-slate-950">
-                          {plan.name}
-                        </p>
-
-                        <p className="mt-2 min-h-[48px] text-sm leading-6 text-slate-600">
-                          {plan.description}
-                        </p>
-                      </div>
-
-                      {isCurrent ? (
-                        <span className="shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
-                          Current
-                        </span>
-                      ) : null}
-                    </div>
-
-                    <div className="mt-8">
-                      <p className="text-sm font-medium text-slate-500">
-                        Monthly
-                      </p>
-
-                      <div className="mt-2">
-                        <span className="block text-4xl font-semibold tracking-[-0.08em] text-slate-950">
-                          {plan.priceLabel || formatNaira(planAmount)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => handlePayForPlan(plan.id)}
-                      disabled={
-                        isCurrent || Boolean(payingPlanId) || isVerifyingPayment
-                      }
-                      className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
-                        isCurrent
-                          ? "bg-emerald-100 text-emerald-800"
-                          : isPopular
-                          ? "bg-slate-950 text-white hover:bg-slate-800"
-                          : "bg-slate-100 text-slate-950 hover:bg-slate-200"
-                      }`}
-                    >
-                      {payingPlanId === plan.id ? (
-                        <Loader2 size={16} className="animate-spin" />
-                      ) : null}
-
-                      {isCurrent
-                        ? "Current plan"
-                        : payingPlanId === plan.id
-                        ? "Opening payment..."
-                        : `Choose ${plan.name}`}
-                    </button>
-
-                    <div className="mt-7 border-t border-slate-200 pt-6">
-                      <p className="text-sm font-semibold text-slate-950">
-                        What's included
-                      </p>
-
-                      <div className="mt-4 grid gap-3">
-                        {features.map((feature) => (
-                          <div
-                            key={feature}
-                            className="flex items-start gap-3 text-sm"
-                          >
-                            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">
-                              ✓
-                            </span>
-
-                            <span className="leading-6 text-slate-700">
-                              {feature}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto pt-6">
-                    <div className="rounded-2xl bg-white/70 p-3 text-xs leading-5 text-slate-600 ring-1 ring-slate-200">
-                      Best for{" "}
-                      <span className="font-semibold text-slate-950">
-                        {plan.id === "starter"
-                          ? "new businesses getting online."
-                          : plan.id === "growth"
-                          ? "growing businesses with more products."
-                          : "businesses managing larger storefronts."}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            <span className="text-base font-semibold text-white">
+              Pay yearly
+            </span>
           </div>
+
+          <a
+            href="#plan-features"
+            className="text-sm font-semibold text-white underline underline-offset-4 transition hover:text-[#95bf47]"
+          >
+            Compare all features
+          </a>
         </div>
 
-        <aside className="grid content-start gap-4">
-          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-slate-50 text-slate-800">
-                <CreditCard size={19} />
-              </span>
+        <div className="grid gap-5 xl:grid-cols-3">
+          {plans.map((plan) => {
+            const isCurrent = plan.id === currentPlan?.id;
+            const planAmount = plan.amount;
 
-              <div>
-                <p className="font-semibold text-slate-950">Billing Details</p>
-                <p className="text-sm text-slate-500">
-                  {selectedBusiness?.subscription_status || "trial"}
-                </p>
+            const subtitle =
+              plan.id === "starter"
+                ? "For solo entrepreneurs"
+                : plan.id === "growth"
+                ? "For small teams"
+                : "For growing businesses";
+
+            const features =
+              plan.id === "starter"
+                ? [
+                    "Launch a polished online storefront",
+                    plan.productLimit
+                      ? `Up to ${plan.productLimit} products`
+                      : "Unlimited products",
+                    "WhatsApp order flow",
+                    "Basic dashboard management",
+                    "Public store link",
+                  ]
+                : plan.id === "growth"
+                ? [
+                    "Everything in Starter",
+                    plan.productLimit
+                      ? `Up to ${plan.productLimit} products`
+                      : "Unlimited products",
+                    plan.storeLimit
+                      ? `Up to ${plan.storeLimit} stores`
+                      : "Unlimited stores",
+                    "Better store management tools",
+                    "Great for product-heavy businesses",
+                  ]
+                : [
+                    "Everything in Growth",
+                    plan.productLimit
+                      ? `Up to ${plan.productLimit} products`
+                      : "Unlimited products",
+                    plan.storeLimit
+                      ? `Up to ${plan.storeLimit} stores`
+                      : "Unlimited stores",
+                    "Built for larger storefronts",
+                    "Premium business visibility",
+                  ];
+
+            return (
+              <div
+                key={plan.id}
+                className="flex min-h-[610px] flex-col rounded-[2rem] bg-[#151b18] px-6 py-7 text-white ring-1 ring-white/5 transition hover:-translate-y-1 hover:ring-white/15 md:px-7"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[25px] font-semibold leading-none tracking-[-0.05em] text-white">
+                      {plan.name}
+                    </p>
+
+                    <p className="mt-2 text-[17px] font-medium leading-6 text-[#95bf47]">
+                      {subtitle}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="whitespace-nowrap text-[25px] font-semibold leading-none tracking-[-0.06em] text-white">
+                      {plan.priceLabel || formatNaira(planAmount)}
+                    </p>
+
+                    <p className="mt-1 text-xs font-semibold text-white/80">
+                      /mo
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handlePayForPlan(plan.id)}
+                  disabled={
+                    isCurrent || Boolean(payingPlanId) || isVerifyingPayment
+                  }
+                  className="mt-12 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-5 text-[17px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-[#06110f] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {payingPlanId === plan.id ? (
+                    <Loader2 size={18} className="animate-spin" />
+                  ) : null}
+
+                  {isCurrent
+                    ? "Current plan"
+                    : payingPlanId === plan.id
+                    ? "Opening payment..."
+                    : `Choose ${plan.name}`}
+                </button>
+
+                <div
+                  id="plan-features"
+                  className="mt-8 grid gap-0 text-[16px] font-semibold leading-6 text-white/65"
+                >
+                  {features.map((feature) => (
+                    <div
+                      key={feature}
+                      className="border-t border-white/10 py-4 first:border-t-0"
+                    >
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-auto pt-8">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                    <p className="text-sm font-semibold text-white/50">
+                      Current store
+                    </p>
+
+                    <p className="mt-1 truncate text-base font-semibold text-white">
+                      {selectedBusiness?.name}
+                    </p>
+
+                    <p className="mt-3 text-sm font-medium text-white/50">
+                      Status:{" "}
+                      <span className="text-white">
+                        {selectedBusiness?.subscription_status || "trial"}
+                      </span>
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="grid gap-2">
-              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="text-slate-500">Business</span>
-                <span className="truncate font-semibold text-slate-950">
-                  {selectedBusiness?.name}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="text-slate-500">Current plan</span>
-                <span className="font-semibold text-slate-950">
-                  {currentPlan?.name || "No plan"}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="text-slate-500">Monthly amount</span>
-                <span className="font-semibold text-slate-950">
-                  {formatNaira(currentPlanAmount)}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="text-slate-500">Payment</span>
-                <span className="font-semibold text-slate-950">Paystack</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-amber-50 text-amber-700">
-                <Globe2 size={19} />
-              </span>
-
-              <div>
-                <p className="font-semibold text-slate-950">Custom Domain</p>
-                <p className="text-sm text-slate-500">
-                  {selectedBusiness?.custom_domain || "Not connected"}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-2">
-              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="text-slate-500">Setup</span>
-                <span className="font-semibold text-slate-950">
-                  {formatNaira(25000)}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="text-slate-500">Managed</span>
-                <span className="font-semibold text-slate-950">
-                  {formatNaira(45000)} - {formatNaira(75000)}
-                </span>
-              </div>
-            </div>
-
-            <Link
-              href="/dashboard/domain"
-              className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-amber-950 transition hover:-translate-y-0.5 hover:bg-amber-200"
-            >
-              Request Domain
-            </Link>
-          </div>
-
-          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
-                <Store size={19} />
-              </span>
-
-              <div>
-                <p className="font-semibold text-slate-950">Store Visibility</p>
-                <p className="text-sm text-slate-500">
-                  /store/{selectedBusiness?.slug}
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl bg-slate-50 p-3 text-sm">
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-slate-500">Current status</span>
-                <span className="font-semibold text-slate-950">
-                  {selectedBusiness?.is_published ? "Live" : "Draft"}
-                </span>
-              </div>
-            </div>
-          </div>
-        </aside>
+            );
+          })}
+        </div>
       </section>
     </div>
   );
