@@ -308,7 +308,7 @@ export default function BillingPage() {
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-5 inline-flex rounded-full bg-[#8b4dff] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#7c3aed]"
+          className="mt-5 inline-flex rounded-2xl bg-[#8b4dff] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#7c3aed]"
         >
           Start Onboarding
         </Link>
@@ -326,7 +326,7 @@ export default function BillingPage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-72"
+              className="min-h-10 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[#8b4dff] focus:ring-4 focus:ring-slate-100 md:min-w-72"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -339,7 +339,7 @@ export default function BillingPage() {
               type="button"
               onClick={handleTogglePublishStatus}
               disabled={isUpdatingPublishStatus}
-              className={`inline-flex min-h-12 items-center justify-center rounded-full px-5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
+              className={`inline-flex min-h-10 items-center justify-center rounded-2xl px-5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
                 selectedBusiness?.is_published
                   ? "whitespace-nowrap bg-red-600 text-white hover:bg-red-700"
                   : "whitespace-nowrap bg-emerald-600 text-white hover:bg-emerald-700"
@@ -402,7 +402,7 @@ export default function BillingPage() {
           <button
             type="button"
             onClick={() => setIsYearly((value) => !value)}
-            className="flex w-fit items-center gap-3 rounded-full transition"
+            className="flex w-fit items-center gap-3 rounded-2xl transition"
           >
             <span
               className={`relative inline-flex h-7 w-12 items-center rounded-xl border border-white/10 p-1 transition ${
@@ -421,7 +421,7 @@ export default function BillingPage() {
             </span>
 
             {isYearly ? (
-              <span className="rounded-full bg-[#a36cff]/15 px-2.5 py-1 text-xs font-semibold text-[#a36cff]">
+              <span className="rounded-2xl bg-[#a36cff]/15 px-2.5 py-1 text-xs font-semibold text-[#a36cff]">
                 Save 20%
               </span>
             ) : null}
@@ -527,7 +527,7 @@ export default function BillingPage() {
                   disabled={
                     isCurrent || Boolean(payingPlanId) || isVerifyingPayment
                   }
-                  className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-[#07070b] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-6 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-2xl border border-white/20 px-5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-[#07070b] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {payingPlanId === plan.id ? (
                     <Loader2 size={16} className="animate-spin" />
@@ -549,7 +549,7 @@ export default function BillingPage() {
                   {features.map((feature) => (
                     <div
                       key={feature}
-                      className="border-t border-white/10 py-3.5 first:border-t-0"
+                      className="border-t border-white/10 py-2.5 first:border-t-0"
                     >
                       {feature}
                     </div>

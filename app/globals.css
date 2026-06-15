@@ -530,3 +530,84 @@ nav {
   color: #8b4dff !important;
   fill: #8b4dff !important;
 }
+
+
+/* WhatsApp AI inspired button system for Market Villa */
+:root {
+  --mv-purple: #8b4dff;
+  --mv-purple-hover: #7c3aed;
+  --mv-button-radius: 1rem;
+  --mv-button-height: 2.45rem;
+  --mv-button-font-size: 0.82rem;
+  --mv-button-font-weight: 750;
+  --mv-button-shadow: 0 12px 28px rgba(139, 77, 255, 0.18), inset 0 1px 0 rgba(255,255,255,.14);
+  --mv-button-glass: rgba(255,255,255,.06);
+  --mv-button-glass-border: rgba(255,255,255,.12);
+}
+
+button,
+[role="button"],
+a[class*="rounded"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  border-radius: var(--mv-button-radius) !important;
+}
+
+button:not(.sidebar-link):not(.mobile-nav-chip):not(.store-cart-dot),
+a.action-link-primary,
+a.action-link-secondary,
+.topbar-button,
+.topbar-button-danger,
+.theme-toggle-btn {
+  min-height: var(--mv-button-height) !important;
+  padding-top: 0.58rem !important;
+  padding-bottom: 0.58rem !important;
+  font-size: var(--mv-button-font-size) !important;
+  font-weight: var(--mv-button-font-weight) !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1 !important;
+}
+
+button[type="submit"],
+.action-link-primary,
+.bg-\[\#8b4dff\],
+.bg-purple-500,
+.bg-purple-600,
+.bg-indigo-500,
+.bg-indigo-600 {
+  background: linear-gradient(135deg, var(--mv-purple), #7c3aed 72%, #b452ff) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  color: white !important;
+  box-shadow: var(--mv-button-shadow) !important;
+}
+
+button[type="submit"]:hover,
+.action-link-primary:hover,
+.hover\:bg-\[\#7c3aed\]:hover,
+.hover\:bg-purple-700:hover,
+.hover\:bg-purple-600:hover {
+  background: linear-gradient(135deg, #9d6cff, var(--mv-purple-hover) 74%, #c084fc) !important;
+  transform: translateY(-1px);
+}
+
+.action-link-secondary,
+button[class*="border"],
+a[class*="border"] {
+  backdrop-filter: blur(14px);
+}
+
+button:disabled,
+a[aria-disabled="true"] {
+  cursor: not-allowed !important;
+  opacity: .58 !important;
+  transform: none !important;
+}
+
+button svg,
+a[role="button"] svg,
+.action-link-primary svg,
+.action-link-secondary svg {
+  width: 1rem;
+  height: 1rem;
+}
