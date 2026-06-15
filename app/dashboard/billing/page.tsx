@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -41,7 +41,7 @@ const fallbackBillingPlans: BillingPlan[] = [
     description: "For small businesses starting online.",
     amount: 10000,
     amountInKobo: 1000000,
-    priceLabel: "₦10,000/month",
+    priceLabel: "\u20A610,000/month",
     productLimit: 20,
     storeLimit: 1,
     sortOrder: 10,
@@ -52,7 +52,7 @@ const fallbackBillingPlans: BillingPlan[] = [
     description: "For growing businesses ready to sell more products.",
     amount: 20000,
     amountInKobo: 2000000,
-    priceLabel: "₦20,000/month",
+    priceLabel: "\u20A620,000/month",
     productLimit: 100,
     storeLimit: 3,
     sortOrder: 20,
@@ -64,7 +64,7 @@ const fallbackBillingPlans: BillingPlan[] = [
       "For established businesses that need more stores, more products, and stronger visibility.",
     amount: 30000,
     amountInKobo: 3000000,
-    priceLabel: "₦30,000/month",
+    priceLabel: "\u20A630,000/month",
     productLimit: 500,
     storeLimit: 10,
     sortOrder: 30,
@@ -72,7 +72,7 @@ const fallbackBillingPlans: BillingPlan[] = [
 ];
 
 function formatNaira(amount: number) {
-  return `₦${amount.toLocaleString()}`;
+  return `\u20A6${Number(amount || 0).toLocaleString("en-NG")}`;
 }
 
 function normalizeSubscriptionPlan(plan: string | null | undefined) {
@@ -97,6 +97,7 @@ export default function BillingPage() {
   const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
   const [verifiedReference, setVerifiedReference] = useState("");
   const [message, setMessage] = useState("");
+  const [isYearly, setIsYearly] = useState(false);
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
@@ -269,6 +270,7 @@ export default function BillingPage() {
       const payment = await initializePlanPayment({
         businessId: selectedBusiness.id,
         plan: planId as any,
+        billingCycle: isYearly ? "yearly" : "monthly",
       });
 
       window.location.href = payment.authorizationUrl;
@@ -395,17 +397,35 @@ export default function BillingPage() {
         </div>
       ) : null}
 
-      <section className="overflow-hidden rounded-[2rem] bg-[#06110f] p-5 text-white shadow-sm md:p-7">
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-            <span className="relative inline-flex h-8 w-14 items-center rounded-xl border border-white/10 bg-white/10 p-1">
-              <span className="h-5 w-8 rounded-lg bg-[#95bf47]" />
+      <section className="overflow-hidden rounded-[1.75rem] bg-[#06110f] p-4 text-white shadow-sm md:p-6">
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <button
+            type="button"
+            onClick={() => setIsYearly((value) => !value)}
+            className="flex w-fit items-center gap-3 rounded-full transition"
+          >
+            <span
+              className={`relative inline-flex h-7 w-12 items-center rounded-xl border border-white/10 p-1 transition ${
+                isYearly ? "bg-white/10" : "bg-white/5"
+              }`}
+            >
+              <span
+                className={`h-5 w-5 rounded-lg transition ${
+                  isYearly ? "translate-x-5 bg-[#95bf47]" : "translate-x-0 bg-white/45"
+                }`}
+              />
             </span>
 
-            <span className="text-base font-semibold text-white">
+            <span className="text-sm font-semibold text-white">
               Pay yearly
             </span>
-          </div>
+
+            {isYearly ? (
+              <span className="rounded-full bg-[#95bf47]/15 px-2.5 py-1 text-xs font-semibold text-[#95bf47]">
+                Save 20%
+              </span>
+            ) : null}
+          </button>
 
           <a
             href="#plan-features"
@@ -415,10 +435,12 @@ export default function BillingPage() {
           </a>
         </div>
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-4 xl:grid-cols-3">
           {plans.map((plan) => {
             const isCurrent = plan.id === currentPlan?.id;
-            const planAmount = plan.amount;
+            const monthlyAmount = plan.amount;
+            const yearlyAmount = Math.round(monthlyAmount * 12 * 0.8);
+            const displayAmount = isYearly ? yearlyAmount : monthlyAmount;
 
             const subtitle =
               plan.id === "starter"
@@ -435,7 +457,7 @@ export default function BillingPage() {
                       ? `Up to ${plan.productLimit} products`
                       : "Unlimited products",
                     "WhatsApp order flow",
-                    "Basic dashboard management",
+                    "Dashboard management",
                     "Public store link",
                   ]
                 : plan.id === "growth"
@@ -447,8 +469,8 @@ export default function BillingPage() {
                     plan.storeLimit
                       ? `Up to ${plan.storeLimit} stores`
                       : "Unlimited stores",
-                    "Better store management tools",
-                    "Great for product-heavy businesses",
+                    "Better store tools",
+                    "For product-heavy businesses",
                   ]
                 : [
                     "Everything in Growth",
@@ -458,36 +480,46 @@ export default function BillingPage() {
                     plan.storeLimit
                       ? `Up to ${plan.storeLimit} stores`
                       : "Unlimited stores",
-                    "Built for larger storefronts",
+                    "For larger storefronts",
                     "Premium business visibility",
                   ];
 
             return (
               <div
                 key={plan.id}
-                className="flex min-h-[610px] flex-col rounded-[2rem] bg-[#151b18] px-6 py-7 text-white ring-1 ring-white/5 transition hover:-translate-y-1 hover:ring-white/15 md:px-7"
+                className="flex min-h-[470px] flex-col rounded-[1.65rem] bg-[#151b18] px-5 py-6 text-white ring-1 ring-white/5 transition hover:-translate-y-1 hover:ring-white/15"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-[25px] font-semibold leading-none tracking-[-0.05em] text-white">
+                    <p className="text-[21px] font-semibold leading-none tracking-[-0.05em] text-white">
                       {plan.name}
                     </p>
 
-                    <p className="mt-2 text-[17px] font-medium leading-6 text-[#95bf47]">
+                    <p className="mt-1.5 text-[14px] font-medium leading-5 text-[#95bf47]">
                       {subtitle}
                     </p>
                   </div>
 
                   <div className="text-right">
-                    <p className="whitespace-nowrap text-[25px] font-semibold leading-none tracking-[-0.06em] text-white">
-                      {plan.priceLabel || formatNaira(planAmount)}
+                    <p className="whitespace-nowrap text-[21px] font-semibold leading-none tracking-[-0.06em] text-white">
+                      {formatNaira(displayAmount)}
                     </p>
 
-                    <p className="mt-1 text-xs font-semibold text-white/80">
-                      /mo
+                    <p className="mt-1 text-[11px] font-semibold text-white/70">
+                      /{isYearly ? "yr" : "mo"}
                     </p>
                   </div>
                 </div>
+
+                {isYearly ? (
+                  <p className="mt-4 text-xs font-medium text-white/45">
+                    Billed yearly. You save {formatNaira(monthlyAmount * 12 - yearlyAmount)}.
+                  </p>
+                ) : (
+                  <p className="mt-4 text-xs font-medium text-white/45">
+                    Billed monthly. Switch to yearly to save 20%.
+                  </p>
+                )}
 
                 <button
                   type="button"
@@ -495,44 +527,46 @@ export default function BillingPage() {
                   disabled={
                     isCurrent || Boolean(payingPlanId) || isVerifyingPayment
                   }
-                  className="mt-12 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-5 text-[17px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-[#06110f] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-[#06110f] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {payingPlanId === plan.id ? (
-                    <Loader2 size={18} className="animate-spin" />
+                    <Loader2 size={16} className="animate-spin" />
                   ) : null}
 
                   {isCurrent
                     ? "Current plan"
                     : payingPlanId === plan.id
                     ? "Opening payment..."
+                    : isYearly
+                    ? `Choose ${plan.name} yearly`
                     : `Choose ${plan.name}`}
                 </button>
 
                 <div
                   id="plan-features"
-                  className="mt-8 grid gap-0 text-[16px] font-semibold leading-6 text-white/65"
+                  className="mt-6 grid gap-0 text-[14px] font-semibold leading-5 text-white/60"
                 >
                   {features.map((feature) => (
                     <div
                       key={feature}
-                      className="border-t border-white/10 py-4 first:border-t-0"
+                      className="border-t border-white/10 py-3.5 first:border-t-0"
                     >
                       {feature}
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-auto pt-8">
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                    <p className="text-sm font-semibold text-white/50">
+                <div className="mt-auto pt-5">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+                    <p className="text-xs font-semibold text-white/45">
                       Current store
                     </p>
 
-                    <p className="mt-1 truncate text-base font-semibold text-white">
+                    <p className="mt-1 truncate text-sm font-semibold text-white">
                       {selectedBusiness?.name}
                     </p>
 
-                    <p className="mt-3 text-sm font-medium text-white/50">
+                    <p className="mt-2 text-xs font-medium text-white/45">
                       Status:{" "}
                       <span className="text-white">
                         {selectedBusiness?.subscription_status || "trial"}
@@ -548,3 +582,5 @@ export default function BillingPage() {
     </div>
   );
 }
+
+

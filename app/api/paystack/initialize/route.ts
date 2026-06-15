@@ -1,12 +1,13 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY || "";
 const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")
   .replace(/\/$/, "");
+
+type BillingCycle = "monthly" | "yearly";
 
 function getBearerToken(request: Request) {
   const authHeader = request.headers.get("authorization") || "";
@@ -26,12 +27,32 @@ async function readJsonSafely(response: Response) {
   }
 }
 
+function normalizeBillingCycle(value: unknown): BillingCycle {
+  return value === "yearly" ? "yearly" : "monthly";
+}
+
+function calculatePayableAmountInKobo({
+  monthlyAmountInKobo,
+  billingCycle,
+}: {
+  monthlyAmountInKobo: number;
+  billingCycle: BillingCycle;
+}) {
+  if (billingCycle === "yearly") {
+    return Math.round(monthlyAmountInKobo * 12 * 0.8);
+  }
+
+  return monthlyAmountInKobo;
+}
+
 function createPaymentReference({
   planId,
   businessId,
+  billingCycle,
 }: {
   planId: string;
   businessId: string;
+  billingCycle: BillingCycle;
 }) {
   const safeBusinessId = businessId.replace(/[^a-zA-Z0-9]/g, "").slice(0, 10);
   const randomPart =
@@ -39,7 +60,7 @@ function createPaymentReference({
       ? crypto.randomUUID().replace(/-/g, "").slice(0, 10)
       : Math.random().toString(36).slice(2, 12);
 
-  return `mv-${planId}-${safeBusinessId}-${Date.now()}-${randomPart}`;
+  return `mv-${planId}-${billingCycle}-${safeBusinessId}-${Date.now()}-${randomPart}`;
 }
 
 export async function POST(request: Request) {
@@ -98,6 +119,7 @@ export async function POST(request: Request) {
 
     const businessId = String(body.businessId || "").trim();
     const planId = String(body.plan || "").trim();
+    const billingCycle = normalizeBillingCycle(body.billingCycle);
 
     if (!businessId || !planId) {
       return NextResponse.json(
@@ -121,20 +143,32 @@ export async function POST(request: Request) {
       );
     }
 
-    const plan = {
-      id: String(pricingItem.pricing_key),
-      name: String(pricingItem.name),
-      amount: Number(pricingItem.amount || 0),
-      amountInKobo: Number(pricingItem.amount_in_kobo || 0),
-      priceLabel: String(pricingItem.price_label || ""),
-    };
+    const monthlyAmount = Number(pricingItem.amount || 0);
+    const monthlyAmountInKobo = Number(pricingItem.amount_in_kobo || 0);
 
-    if (!plan.amountInKobo || plan.amountInKobo < 100) {
+    if (!monthlyAmountInKobo || monthlyAmountInKobo < 100) {
       return NextResponse.json(
         { error: "Selected plan has an invalid payment amount." },
         { status: 400 }
       );
     }
+
+    const payableAmountInKobo = calculatePayableAmountInKobo({
+      monthlyAmountInKobo,
+      billingCycle,
+    });
+
+    const payableAmount = Math.round(payableAmountInKobo / 100);
+
+    const plan = {
+      id: String(pricingItem.pricing_key),
+      name: String(pricingItem.name),
+      monthlyAmount,
+      monthlyAmountInKobo,
+      payableAmount,
+      payableAmountInKobo,
+      priceLabel: String(pricingItem.price_label || ""),
+    };
 
     const { data: business, error: businessError } = await supabase
       .from("businesses")
@@ -159,6 +193,7 @@ export async function POST(request: Request) {
     const reference = createPaymentReference({
       planId,
       businessId,
+      billingCycle,
     });
 
     const callbackUrl = `${appUrl}/dashboard/billing?payment_reference=${encodeURIComponent(
@@ -175,7 +210,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           email: user.email,
-          amount: plan.amountInKobo,
+          amount: plan.payableAmountInKobo,
           currency: "NGN",
           reference,
           callback_url: callbackUrl,
@@ -183,6 +218,10 @@ export async function POST(request: Request) {
             business_id: businessId,
             owner_id: user.id,
             plan: plan.id,
+            billing_cycle: billingCycle,
+            monthly_amount: plan.monthlyAmount,
+            payable_amount: plan.payableAmount,
+            yearly_discount_percent: billingCycle === "yearly" ? 20 : 0,
             business_name: business.name,
             source: "market_villa_subscription",
           },
@@ -217,12 +256,22 @@ export async function POST(request: Request) {
       business_id: businessId,
       owner_id: user.id,
       plan: plan.id,
-      amount: plan.amount,
+      amount: plan.payableAmount,
       currency: "NGN",
       reference: returnedReference,
       status: "pending",
       authorization_url: authorizationUrl,
-      raw_response: paystackData,
+      raw_response: {
+        ...paystackData,
+        market_villa: {
+          plan: plan.id,
+          billing_cycle: billingCycle,
+          monthly_amount: plan.monthlyAmount,
+          payable_amount: plan.payableAmount,
+          payable_amount_in_kobo: plan.payableAmountInKobo,
+          yearly_discount_percent: billingCycle === "yearly" ? 20 : 0,
+        },
+      },
     });
 
     if (paymentError) {
@@ -235,6 +284,9 @@ export async function POST(request: Request) {
     return NextResponse.json({
       authorizationUrl,
       reference: returnedReference,
+      billingCycle,
+      amount: plan.payableAmount,
+      amountInKobo: plan.payableAmountInKobo,
     });
   } catch (error) {
     const errorMessage =
@@ -243,4 +295,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
-
