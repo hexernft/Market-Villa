@@ -397,101 +397,131 @@ export default function BillingPage() {
 
       <section className="grid gap-5 xl:grid-cols-[1fr_0.65fr]">
         <div className="grid content-start gap-4">
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-5 lg:grid-cols-3">
             {plans.map((plan) => {
               const isCurrent = plan.id === currentPlan?.id;
+              const isPopular = plan.id === "growth";
               const planAmount = plan.amount;
+
+              const features = [
+                plan.productLimit
+                  ? `Up to ${plan.productLimit} products`
+                  : "Unlimited products",
+                plan.storeLimit
+                  ? `${plan.storeLimit} store${plan.storeLimit > 1 ? "s" : ""}`
+                  : "Unlimited stores",
+                "Beautiful business storefront",
+                "WhatsApp order flow",
+                "Dashboard management",
+              ];
 
               return (
                 <div
                   key={plan.id}
-                  className={`rounded-[1.5rem] border p-4 shadow-sm transition ${
-                    isCurrent
-                      ? "border-slate-950 bg-slate-950 text-white"
-                      : "border-slate-200 bg-white text-slate-950 hover:-translate-y-0.5 hover:shadow-md"
+                  className={`relative flex min-h-[540px] flex-col overflow-hidden rounded-[2rem] border p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg ${
+                    isPopular
+                      ? "border-slate-950 bg-[#f7f3e8]"
+                      : "border-slate-200 bg-white"
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-lg font-semibold">{plan.name}</p>
+                  {isPopular ? (
+                    <div className="absolute left-0 right-0 top-0 bg-slate-950 px-5 py-2 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white">
+                      Most popular
+                    </div>
+                  ) : null}
 
-                      <p
-                        className={`mt-1 text-xs leading-5 ${
-                          isCurrent ? "text-slate-300" : "text-slate-500"
-                        }`}
-                      >
-                        {plan.description}
-                      </p>
+                  <div className={isPopular ? "pt-8" : ""}>
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-2xl font-semibold tracking-[-0.05em] text-slate-950">
+                          {plan.name}
+                        </p>
+
+                        <p className="mt-2 min-h-[48px] text-sm leading-6 text-slate-600">
+                          {plan.description}
+                        </p>
+                      </div>
+
+                      {isCurrent ? (
+                        <span className="shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+                          Current
+                        </span>
+                      ) : null}
                     </div>
 
-                    {isCurrent ? (
-                      <span className="rounded-full bg-emerald-300 px-3 py-1 text-xs font-semibold text-slate-950">
-                        Current
-                      </span>
-                    ) : null}
-                  </div>
+                    <div className="mt-8">
+                      <p className="text-sm font-medium text-slate-500">
+                        Monthly
+                      </p>
 
-                  <div
-                    className={`mt-5 rounded-[1.25rem] p-4 ${
-                      isCurrent ? "bg-white/10" : "bg-slate-50"
-                    }`}
-                  >
-                    <p
-                      className={`text-xs font-semibold uppercase tracking-[0.18em] ${
-                        isCurrent ? "text-slate-400" : "text-slate-500"
+                      <div className="mt-2">
+                        <span className="block text-4xl font-semibold tracking-[-0.08em] text-slate-950">
+                          {plan.priceLabel || formatNaira(planAmount)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handlePayForPlan(plan.id)}
+                      disabled={
+                        isCurrent || Boolean(payingPlanId) || isVerifyingPayment
+                      }
+                      className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
+                        isCurrent
+                          ? "bg-emerald-100 text-emerald-800"
+                          : isPopular
+                          ? "bg-slate-950 text-white hover:bg-slate-800"
+                          : "bg-slate-100 text-slate-950 hover:bg-slate-200"
                       }`}
                     >
-                      Monthly
-                    </p>
+                      {payingPlanId === plan.id ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : null}
 
-                    <div className="mt-2 flex items-end gap-2">
-                      <span className="text-3xl font-semibold tracking-[-0.06em]">
-                        {plan.priceLabel || formatNaira(planAmount)}
-                      </span>
-                    </div>
+                      {isCurrent
+                        ? "Current plan"
+                        : payingPlanId === plan.id
+                        ? "Opening payment..."
+                        : `Choose ${plan.name}`}
+                    </button>
 
-                    <div
-                      className={`mt-4 grid gap-2 text-xs ${
-                        isCurrent ? "text-slate-300" : "text-slate-600"
-                      }`}
-                    >
-                      <p>
-                        Products:{" "}
-                        <span className="font-semibold">
-                          {plan.productLimit ? plan.productLimit : "Unlimited"}
-                        </span>
+                    <div className="mt-7 border-t border-slate-200 pt-6">
+                      <p className="text-sm font-semibold text-slate-950">
+                        What's included
                       </p>
-                      <p>
-                        Stores:{" "}
-                        <span className="font-semibold">
-                          {plan.storeLimit ? plan.storeLimit : "Unlimited"}
-                        </span>
-                      </p>
+
+                      <div className="mt-4 grid gap-3">
+                        {features.map((feature) => (
+                          <div
+                            key={feature}
+                            className="flex items-start gap-3 text-sm"
+                          >
+                            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">
+                              ✓
+                            </span>
+
+                            <span className="leading-6 text-slate-700">
+                              {feature}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handlePayForPlan(plan.id)}
-                    disabled={
-                      isCurrent || Boolean(payingPlanId) || isVerifyingPayment
-                    }
-                    className={`mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
-                      isCurrent
-                        ? "bg-white text-slate-950"
-                        : "bg-slate-950 text-white hover:bg-slate-800"
-                    }`}
-                  >
-                    {payingPlanId === plan.id ? (
-                      <Loader2 size={16} className="animate-spin" />
-                    ) : null}
-
-                    {isCurrent
-                      ? "Current Plan"
-                      : payingPlanId === plan.id
-                      ? "Opening..."
-                      : `Pay ${plan.name}`}
-                  </button>
+                  <div className="mt-auto pt-6">
+                    <div className="rounded-2xl bg-white/70 p-3 text-xs leading-5 text-slate-600 ring-1 ring-slate-200">
+                      Best for{" "}
+                      <span className="font-semibold text-slate-950">
+                        {plan.id === "starter"
+                          ? "new businesses getting online."
+                          : plan.id === "growth"
+                          ? "growing businesses with more products."
+                          : "businesses managing larger storefronts."}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               );
             })}
