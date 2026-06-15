@@ -3,19 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import {
-  CreditCard,
-  Globe2,
-  Loader2,
-  Store,
-} from "lucide-react";
+import { CreditCard, Globe2, Loader2, Store } from "lucide-react";
 import {
   getMyBusinesses,
   updateBusinessPublishStatus,
 } from "@/lib/business-actions";
 import { initializePlanPayment, verifyPlanPayment } from "@/lib/payment-actions";
 import { supabase } from "@/lib/supabase";
-
 
 type DashboardBusiness = {
   id: string;
@@ -44,43 +38,54 @@ const fallbackBillingPlans: BillingPlan[] = [
   {
     id: "starter",
     name: "Starter",
-    description: "For small businesses getting online professionally.",
-    amount: 5000,
-    amountInKobo: 500000,
-    priceLabel: "₦5,000/month",
-    productLimit: 50,
+    description: "For small businesses starting online.",
+    amount: 10000,
+    amountInKobo: 1000000,
+    priceLabel: "₦10,000/month",
+    productLimit: 20,
     storeLimit: 1,
-    sortOrder: 1,
+    sortOrder: 10,
   },
   {
     id: "growth",
     name: "Growth",
-    description: "For growing businesses that need more products, stores, and analytics.",
-    amount: 10000,
-    amountInKobo: 1000000,
-    priceLabel: "₦10,000/month",
-    productLimit: null,
-    storeLimit: 3,
-    sortOrder: 2,
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    description: "For serious sellers, teams, and service businesses.",
+    description: "For growing businesses ready to sell more products.",
     amount: 20000,
     amountInKobo: 2000000,
     priceLabel: "₦20,000/month",
-    productLimit: null,
-    storeLimit: null,
-    sortOrder: 3,
+    productLimit: 100,
+    storeLimit: 3,
+    sortOrder: 20,
+  },
+  {
+    id: "premium",
+    name: "Premium",
+    description:
+      "For established businesses that need more stores, more products, and stronger visibility.",
+    amount: 30000,
+    amountInKobo: 3000000,
+    priceLabel: "₦30,000/month",
+    productLimit: 500,
+    storeLimit: 10,
+    sortOrder: 30,
   },
 ];
 
 function formatNaira(amount: number) {
-  return `\u20A6${amount.toLocaleString()}`;
+  return `₦${amount.toLocaleString()}`;
 }
 
-export default function SettingsPage() {
+function normalizeSubscriptionPlan(plan: string | null | undefined) {
+  const value = String(plan || "").toLowerCase();
+
+  if (value === "basic") return "starter";
+  if (value === "business") return "growth";
+  if (value === "pro") return "premium";
+
+  return value;
+}
+
+export default function BillingPage() {
   const searchParams = useSearchParams();
 
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
@@ -97,12 +102,17 @@ export default function SettingsPage() {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
 
+  const selectedBusinessPlanId = normalizeSubscriptionPlan(
+    selectedBusiness?.subscription_plan
+  );
+
   const currentPlan =
-    plans.find((plan) => plan.id === selectedBusiness?.subscription_plan) ||
+    plans.find((plan) => plan.id === selectedBusinessPlanId) ||
+    plans.find((plan) => plan.id === "starter") ||
     plans[0] ||
     null;
 
-  async function loadBusinesses() {
+  async function loadBillingData() {
     const items = await getMyBusinesses();
 
     setBusinesses(items);
@@ -121,13 +131,18 @@ export default function SettingsPage() {
       .order("sort_order", { ascending: true });
 
     if (pricingError) {
-      throw pricingError;
+      console.error("Unable to load pricing items:", pricingError);
+      setPlans(fallbackBillingPlans);
+      return;
     }
 
-    setPlans(
-      (pricingItems || []).map((item: any) => ({
+    const mappedPlans: BillingPlan[] = (pricingItems || [])
+      .filter((item: any) =>
+        ["starter", "growth", "premium"].includes(String(item.pricing_key))
+      )
+      .map((item: any) => ({
         id: String(item.pricing_key),
-        name: String(item.name),
+        name: String(item.name || ""),
         description: String(item.description || ""),
         amount: Number(item.amount || 0),
         amountInKobo: Number(item.amount_in_kobo || 0),
@@ -135,30 +150,30 @@ export default function SettingsPage() {
         productLimit: item.product_limit,
         storeLimit: item.store_limit,
         sortOrder: item.sort_order,
-      }))
-    );
+      }));
+
+    setPlans(mappedPlans.length > 0 ? mappedPlans : fallbackBillingPlans);
   }
 
   useEffect(() => {
     let mounted = true;
 
-    async function loadSettings() {
+    async function loadPage() {
       try {
         setIsLoading(true);
+        setMessage("");
 
-        const items = await getMyBusinesses();
+        await loadBillingData();
 
         if (!mounted) return;
-
-        setBusinesses(items);
-
-        if (items.length > 0) {
-          setSelectedBusinessId(items[0].id);
-        }
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : "Unable to load billing.";
-        setMessage(errorMessage);
+
+        if (mounted) {
+          setMessage(errorMessage);
+          setPlans(fallbackBillingPlans);
+        }
       } finally {
         if (mounted) {
           setIsLoading(false);
@@ -166,7 +181,7 @@ export default function SettingsPage() {
       }
     }
 
-    loadSettings();
+    loadPage();
 
     return () => {
       mounted = false;
@@ -192,7 +207,7 @@ export default function SettingsPage() {
         setVerifiedReference(paymentReference);
 
         if (result.success) {
-          await loadBusinesses();
+          await loadBillingData();
           setMessage("Payment verified successfully. Your plan is now active.");
         } else {
           setMessage(result.message || "Payment was not successful.");
@@ -222,7 +237,7 @@ export default function SettingsPage() {
         isPublished: !selectedBusiness.is_published,
       });
 
-      await loadBusinesses();
+      await loadBillingData();
 
       setMessage(
         selectedBusiness.is_published
@@ -323,7 +338,9 @@ export default function SettingsPage() {
               onClick={handleTogglePublishStatus}
               disabled={isUpdatingPublishStatus}
               className={`inline-flex min-h-12 items-center justify-center rounded-full px-5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 ${
-                selectedBusiness?.is_published ? "whitespace-nowrap bg-red-600 text-white hover:bg-red-700" : "whitespace-nowrap bg-emerald-600 text-white hover:bg-emerald-700"
+                selectedBusiness?.is_published
+                  ? "whitespace-nowrap bg-red-600 text-white hover:bg-red-700"
+                  : "whitespace-nowrap bg-emerald-600 text-white hover:bg-emerald-700"
               }`}
             >
               {isUpdatingPublishStatus
@@ -429,8 +446,27 @@ export default function SettingsPage() {
 
                     <div className="mt-2 flex items-end gap-2">
                       <span className="text-3xl font-semibold tracking-[-0.06em]">
-                        {formatNaira(planAmount)}
+                        {plan.priceLabel || formatNaira(planAmount)}
                       </span>
+                    </div>
+
+                    <div
+                      className={`mt-4 grid gap-2 text-xs ${
+                        isCurrent ? "text-slate-300" : "text-slate-600"
+                      }`}
+                    >
+                      <p>
+                        Products:{" "}
+                        <span className="font-semibold">
+                          {plan.productLimit ? plan.productLimit : "Unlimited"}
+                        </span>
+                      </p>
+                      <p>
+                        Stores:{" "}
+                        <span className="font-semibold">
+                          {plan.storeLimit ? plan.storeLimit : "Unlimited"}
+                        </span>
+                      </p>
                     </div>
                   </div>
 
