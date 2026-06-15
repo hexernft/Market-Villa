@@ -16,6 +16,7 @@ import {
   Store,
   Megaphone,
   Banknote,
+  BadgeDollarSign,
 } from "lucide-react";
 import {
   getAllBusinessesForAdmin,
@@ -406,6 +407,14 @@ export default function AdminPage() {
           >
             <Banknote size={18} />
             Revenue
+          </Link>
+
+          <Link
+            href="/admin/pricing"
+            className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <BadgeDollarSign size={18} />
+            Pricing
           </Link>
 
           <a
