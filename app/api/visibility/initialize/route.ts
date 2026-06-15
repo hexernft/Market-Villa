@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getVisibilityPackage } from "@/lib/visibility-packages";
+
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
@@ -32,9 +32,7 @@ export async function POST(request: Request) {
     const businessId = String(body?.businessId || "").trim();
     const packageId = String(body?.packageId || "").trim();
 
-    const visibilityPackage = getVisibilityPackage(packageId);
-
-    if (!businessId || !visibilityPackage) {
+    if (!businessId || !packageId) {
       return NextResponse.json(
         { error: "Valid businessId and packageId are required." },
         { status: 400 }
@@ -66,6 +64,41 @@ export async function POST(request: Request) {
 
     if (business.owner_id !== user.id) {
       return NextResponse.json({ error: "You do not own this business." }, { status: 403 });
+    }
+
+    const { data: pricingItem, error: pricingError } = await supabaseAdmin
+      .from("pricing_items")
+      .select("pricing_key,name,description,price_label,amount,amount_in_kobo,duration_days,is_active")
+      .eq("pricing_type", "visibility")
+      .eq("pricing_key", packageId)
+      .eq("is_active", true)
+      .single();
+
+    if (pricingError || !pricingItem) {
+      return NextResponse.json(
+        { error: "Selected visibility package is not available." },
+        { status: 400 }
+      );
+    }
+
+    const visibilityPackage = {
+      id: String(pricingItem.pricing_key),
+      name: String(pricingItem.name),
+      priceLabel: String(pricingItem.price_label || ""),
+      amount: Number(pricingItem.amount || 0),
+      amountInKobo: Number(pricingItem.amount_in_kobo || 0),
+      durationDays:
+        pricingItem.duration_days === null || pricingItem.duration_days === undefined
+          ? null
+          : Number(pricingItem.duration_days),
+      description: String(pricingItem.description || ""),
+    };
+
+    if (!visibilityPackage.amountInKobo || visibilityPackage.amountInKobo < 100) {
+      return NextResponse.json(
+        { error: "Selected visibility package has an invalid payment amount." },
+        { status: 400 }
+      );
     }
 
     const reference = createReference();
