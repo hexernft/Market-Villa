@@ -40,6 +40,42 @@ type BillingPlan = {
   sortOrder?: number | null;
 };
 
+const fallbackBillingPlans: BillingPlan[] = [
+  {
+    id: "starter",
+    name: "Starter",
+    description: "For small businesses getting online professionally.",
+    amount: 5000,
+    amountInKobo: 500000,
+    priceLabel: "₦5,000/month",
+    productLimit: 50,
+    storeLimit: 1,
+    sortOrder: 1,
+  },
+  {
+    id: "growth",
+    name: "Growth",
+    description: "For growing businesses that need more products, stores, and analytics.",
+    amount: 10000,
+    amountInKobo: 1000000,
+    priceLabel: "₦10,000/month",
+    productLimit: null,
+    storeLimit: 3,
+    sortOrder: 2,
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    description: "For serious sellers, teams, and service businesses.",
+    amount: 20000,
+    amountInKobo: 2000000,
+    priceLabel: "₦20,000/month",
+    productLimit: null,
+    storeLimit: null,
+    sortOrder: 3,
+  },
+];
+
 function formatNaira(amount: number) {
   return `\u20A6${amount.toLocaleString()}`;
 }
