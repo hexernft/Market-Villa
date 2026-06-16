@@ -2766,3 +2766,56 @@ aside.admin-sidebar .admin-sidebar-link-active {
 .admin-center-page span[class*="bg-[#26143d]"] {
   color: #ffffff !important;
 }
+
+
+/* Mobile showcase section readability fix */
+.mobile-showcase-section {
+  color: #ffffff !important;
+}
+
+.mobile-showcase-panel {
+  color: #ffffff !important;
+  isolation: isolate;
+}
+
+.mobile-showcase-title {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  text-shadow: 0 16px 44px rgba(0, 0, 0, 0.42) !important;
+}
+
+.mobile-showcase-copy {
+  color: rgba(255, 255, 255, 0.82) !important;
+  opacity: 1 !important;
+}
+
+.mobile-showcase-kicker {
+  color: #d8c9ff !important;
+  opacity: 1 !important;
+}
+
+.mobile-showcase-badge {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.11) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+.mobile-showcase-media {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.mobile-showcase-section a {
+  color: #ffffff !important;
+}
+
+.mobile-showcase-secondary {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+.mobile-showcase-section img {
+  opacity: 1 !important;
+}

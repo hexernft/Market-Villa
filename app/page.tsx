@@ -379,6 +379,64 @@ export default function Home() {
           <span className="mx-5">Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.</span>
         </div>
       </section>
+
+      <section className="mobile-showcase-section px-4 py-12 md:px-4">
+        <div className="mobile-showcase-panel mx-auto grid max-w-7xl gap-8 overflow-hidden rounded-[2.1rem] border border-white/18 bg-[linear-gradient(145deg,#050008,#12051f_48%,#241436)] p-5 shadow-[0_34px_120px_rgba(0,0,0,0.38)] md:p-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:p-10">
+          <div>
+            <p className="mobile-showcase-kicker text-[11px] font-bold uppercase tracking-[0.24em] text-[#c4b5fd]">
+              Device-ready storefronts
+            </p>
+
+            <h2 className="mobile-showcase-title mt-4 max-w-2xl text-[2.35rem] font-semibold leading-[1.02] text-white md:text-[4rem]">
+              Your business looks premium on every screen.
+            </h2>
+
+            <p className="mobile-showcase-copy mt-5 max-w-xl text-base leading-8 text-white/78">
+              From furniture stores to food vendors, Market Villa helps businesses present products, prices, and customer actions in a clean mobile-ready page.
+            </p>
+
+            <div className="mt-7 grid gap-3 sm:grid-cols-3">
+              {["Mobile-ready", "Product-focused", "WhatsApp-friendly"].map((item) => (
+                <div
+                  key={item}
+                  className="mobile-showcase-badge rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-bold text-white backdrop-blur"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                href="/login"
+                className="market-primary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-bold text-white"
+              >
+                Create Business Page
+              </a>
+
+              <a
+                href="/stores"
+                className="mobile-showcase-secondary inline-flex items-center justify-center rounded-2xl border border-white/22 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/16"
+              >
+                Explore Stores
+              </a>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="mobile-showcase-media relative overflow-hidden rounded-[1.8rem] border border-white/16 bg-white/[0.06] p-4 shadow-[0_28px_95px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+              <Image
+                src="/mobile.png"
+                alt="Furniture business storefront preview on tablet and mobile"
+                width={1100}
+                height={760}
+                className="w-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.45)]"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <TestimonialsSection />
       <PlatformFooter />
     </main>
