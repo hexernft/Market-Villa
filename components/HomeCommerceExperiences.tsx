@@ -30,6 +30,7 @@ const businessTypes = [
     label: "Fashion",
     image: "/sleekstitch-luxury.png",
     store: "SleekStitch Atelier",
+    pageLabel: "sleekstitch-atelier",
     category: "Custom clothing",
     headline: "A tailored storefront for premium pieces.",
     description:
@@ -42,15 +43,17 @@ const businessTypes = [
   {
     id: "food",
     label: "Food",
-    image: "/thrift-store.png",
-    store: "Villa Bites",
-    category: "Meals and catering",
-    headline: "A clear menu for daily orders and weekend trays.",
+    image: "/zcas-tastybites-spread.png",
+    store: "ZCAS TastyBites",
+    pageLabel: "zcas",
+    pageUrl: "https://zcas.vercel.app/index.html",
+    category: "Pastries and treats",
+    headline: "A sweet storefront for homemade treats.",
     description:
-      "Organize meals, delivery notes, order windows, and package options in a way customers can scan fast.",
-    product: "Family Jollof Tray",
-    price: "₦24,500",
-    location: "Wuse, Abuja",
+      "Show cupcakes, doughnuts, cakes, meat pies, drinks, order windows, and WhatsApp details in one clean page.",
+    product: "Custom Celebration Cake",
+    price: "Order from ZCAS",
+    location: "Abuja, Nigeria",
     accent: "#10b981",
   },
   {
@@ -58,6 +61,7 @@ const businessTypes = [
     label: "Beauty",
     image: "/african-fashion-atelier.png",
     store: "Glow Room Studio",
+    pageLabel: "glow-room-studio",
     category: "Beauty services",
     headline: "Turn services into a polished booking page.",
     description:
@@ -72,6 +76,7 @@ const businessTypes = [
     label: "Retail",
     image: "/phone-shop.png",
     store: "Gadget Lane",
+    pageLabel: "gadget-lane",
     category: "Phones and accessories",
     headline: "Make product discovery feel organized.",
     description:
@@ -236,7 +241,7 @@ export function HomeCommerceExperiences() {
                   <span className="h-3 w-3 rounded-full bg-[#f59e0b]" />
                   <span className="h-3 w-3 rounded-full bg-[#22c55e]" />
                   <span className="ml-2 truncate text-xs font-bold text-[#241436]/48">
-                    marketvilla.app/{activeType.store.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
+                    {activeType.pageUrl ?? `marketvilla.app/${activeType.pageLabel}`}
                   </span>
                 </div>
 
@@ -268,6 +273,18 @@ export function HomeCommerceExperiences() {
                         <p className="font-bold text-[#7c3aed]">{activeType.price}</p>
                       </div>
                     </div>
+
+                    {activeType.pageUrl ? (
+                      <a
+                        href={activeType.pageUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#241436] px-4 py-3 text-sm font-bold text-white shadow-[0_12px_35px_rgba(36,20,54,0.18)] transition hover:bg-[#3a1f59]"
+                      >
+                        View ZCAS page
+                        <ExternalLink size={15} />
+                      </a>
+                    ) : null}
                   </motion.div>
                 </AnimatePresence>
 
