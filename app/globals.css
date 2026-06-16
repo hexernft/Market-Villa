@@ -2819,3 +2819,36 @@ aside.admin-sidebar .admin-sidebar-link-active {
 .mobile-showcase-section img {
   opacity: 1 !important;
 }
+
+/* Mobile performance guardrails */
+@media (max-width: 640px) {
+  .market-hero-carousel-slide {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .market-hero-carousel-slide:nth-child(n+2) {
+    display: none !important;
+    background-image: none !important;
+  }
+
+  .home-hero-visual,
+  .home-showcase-card,
+  .home-lift-card,
+  .home-mini-card,
+  .mobile-showcase-panel,
+  .platform-navbar-surface {
+    box-shadow: 0 18px 42px rgba(36, 20, 54, 0.14) !important;
+  }
+
+  .home-showcase-card,
+  .mobile-showcase-panel,
+  .platform-navbar-surface {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .market-villa-marquee {
+    animation-duration: 42s !important;
+  }
+}

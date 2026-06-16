@@ -1,25 +1,24 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
-import { SupportWidget } from "@/components/SupportWidget";
 import { AppMotionProvider } from "@/components/AppMotionProvider";
+import { DeferredSupportWidget } from "@/components/DeferredSupportWidget";
 
 export const metadata: Metadata = {
   title: "Market Villa",
-  description: "Mini business websites with WhatsApp checkout."
+  description: "Mini business websites with WhatsApp checkout.",
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body><AppMotionProvider>{children}</AppMotionProvider><SupportWidget /></body>
+      <body>
+        <AppMotionProvider>{children}</AppMotionProvider>
+        <DeferredSupportWidget />
+      </body>
     </html>
   );
 }
-
-
-
-

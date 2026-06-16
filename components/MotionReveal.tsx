@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 type MotionRevealProps = {
@@ -16,12 +17,33 @@ export function MotionReveal({
   className = "",
   direction = "up",
 }: MotionRevealProps) {
+  const [useStaticReveal, setUseStaticReveal] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(max-width: 640px), (prefers-reduced-motion: reduce)",
+    );
+
+    function handleChange() {
+      setUseStaticReveal(mediaQuery.matches);
+    }
+
+    handleChange();
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
   const offset =
     direction === "left"
       ? { x: -36, y: 0 }
       : direction === "right"
         ? { x: 36, y: 0 }
-        : { x: 0, y: 34 };
+      : { x: 0, y: 34 };
+
+  if (useStaticReveal) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div

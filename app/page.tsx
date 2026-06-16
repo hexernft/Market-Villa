@@ -38,16 +38,41 @@ export default function Home() {
           <div className="market-hero-carousel home-hero-visual relative min-h-[520px] overflow-hidden rounded-[2.5rem] border border-white/65 shadow-[0_30px_100px_rgba(55,31,83,0.18)] md:min-h-[640px]">
             <div
               className="market-hero-carousel-slide"
-              style={{ backgroundImage: 'url("/main-hero.png")', animationDelay: "0s" }}
-            />
+              style={{ animationDelay: "0s" }}
+            >
+              <Image
+                src="/main-hero.png"
+                alt="Market Villa storefront preview"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
             <div
               className="market-hero-carousel-slide"
-              style={{ backgroundImage: 'url("/phone-shop.png")', animationDelay: "5s" }}
-            />
+              style={{ animationDelay: "5s" }}
+            >
+              <Image
+                src="/phone-shop.png"
+                alt="Phone shop storefront preview"
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
             <div
               className="market-hero-carousel-slide"
-              style={{ backgroundImage: 'url("/phone-hub.png")', animationDelay: "10s" }}
-            />
+              style={{ animationDelay: "10s" }}
+            >
+              <Image
+                src="/phone-hub.png"
+                alt="Mobile business storefront preview"
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.10),transparent_30%)]" />
           </div>
 

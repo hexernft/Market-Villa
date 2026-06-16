@@ -176,6 +176,7 @@ export function PlatformNavbar() {
   const [products, setProducts] = useState<ProductRow[]>([]);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [hasLoadedSearchData, setHasLoadedSearchData] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
@@ -193,6 +194,8 @@ export function PlatformNavbar() {
   }, []);
 
   useEffect(() => {
+    if (hasLoadedSearchData || !isSearchFocused || !query.trim()) return;
+
     let mounted = true;
 
     async function loadSearchData() {
@@ -207,6 +210,7 @@ export function PlatformNavbar() {
 
       setStores(businessResponse.data || []);
       setProducts(productResponse.data || []);
+      setHasLoadedSearchData(true);
       setIsLoadingSearch(false);
     }
 
@@ -215,7 +219,7 @@ export function PlatformNavbar() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [hasLoadedSearchData, isSearchFocused, query]);
 
   const searchResults = useMemo(() => {
     if (!query.trim()) return [];
