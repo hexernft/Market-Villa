@@ -81,7 +81,7 @@ export function HeroStore3D() {
                       <p className="text-sm font-semibold text-slate-950">
                         Meat Pie
                       </p>
-                      <p className="mt-1 text-xs text-slate-500">â‚¦1,500</p>
+                      <p className="mt-1 text-xs text-slate-500">₦1,500</p>
                     </div>
 
                     <div className="border border-slate-200 bg-white p-3">

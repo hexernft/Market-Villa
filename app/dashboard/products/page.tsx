@@ -80,10 +80,6 @@ export default function ProductsPage() {
   const [busyProductId, setBusyProductId] = useState("");
   const [message, setMessage] = useState("");
 
-  const editingProduct = products.find(
-    (product) => product.id === editingProductId
-  );
-
   const filteredProducts = useMemo(() => {
     const search = query.toLowerCase().trim();
 
@@ -351,7 +347,7 @@ export default function ProductsPage() {
 
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} â€” /store/{business.slug}
+                  {business.name} — /store/{business.slug}
                 </option>
               ))}
             </select>

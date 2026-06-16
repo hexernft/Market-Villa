@@ -20,7 +20,7 @@ export const VISIBILITY_PACKAGES: Record<VisibilityPackageId, VisibilityPackage>
   featured_store: {
     id: "featured_store",
     name: "Homepage Featured",
-    priceLabel: "â‚¦5,000/week",
+    priceLabel: "₦5,000/week",
     amount: 5000,
     amountInKobo: 500000,
     durationDays: 7,
@@ -29,7 +29,7 @@ export const VISIBILITY_PACKAGES: Record<VisibilityPackageId, VisibilityPackage>
   category_boost: {
     id: "category_boost",
     name: "Category Top Spot",
-    priceLabel: "â‚¦3,000/week",
+    priceLabel: "₦3,000/week",
     amount: 3000,
     amountInKobo: 300000,
     durationDays: 7,
@@ -38,7 +38,7 @@ export const VISIBILITY_PACKAGES: Record<VisibilityPackageId, VisibilityPackage>
   store_of_the_week: {
     id: "store_of_the_week",
     name: "Store of the Week",
-    priceLabel: "â‚¦10,000/week",
+    priceLabel: "₦10,000/week",
     amount: 10000,
     amountInKobo: 1000000,
     durationDays: 7,
@@ -47,7 +47,7 @@ export const VISIBILITY_PACKAGES: Record<VisibilityPackageId, VisibilityPackage>
   new_store_boost: {
     id: "new_store_boost",
     name: "New Store Boost",
-    priceLabel: "â‚¦1,500/3 days",
+    priceLabel: "₦1,500/3 days",
     amount: 1500,
     amountInKobo: 150000,
     durationDays: 3,
@@ -56,7 +56,7 @@ export const VISIBILITY_PACKAGES: Record<VisibilityPackageId, VisibilityPackage>
   visibility_pack: {
     id: "visibility_pack",
     name: "Visibility Pack",
-    priceLabel: "â‚¦15,000/month",
+    priceLabel: "₦15,000/month",
     amount: 15000,
     amountInKobo: 1500000,
     durationDays: 30,
@@ -65,7 +65,7 @@ export const VISIBILITY_PACKAGES: Record<VisibilityPackageId, VisibilityPackage>
   verified_badge: {
     id: "verified_badge",
     name: "Verified Badge",
-    priceLabel: "â‚¦2,000/month",
+    priceLabel: "₦2,000/month",
     amount: 2000,
     amountInKobo: 200000,
     durationDays: 30,

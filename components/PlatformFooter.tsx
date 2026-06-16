@@ -1,11 +1,10 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
-import { Store } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 
 export function PlatformFooter() {
   return (
-    <footer className="border-t border-white/10 bg-[linear-gradient(160deg,#241436,#321b4d_70%,#412064)] px-5 py-10 md:px-5">
+    <footer className="border-t border-white/10 bg-[#241436] px-5 py-10 md:px-5">
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-start">
         <div>
           <Link href="/" className="flex items-center gap-3">
@@ -67,7 +66,7 @@ export function PlatformFooter() {
       </div>
 
       <div className="mx-auto mt-10 flex max-w-7xl flex-col justify-between gap-3 border-t border-white/10 pt-6 text-xs text-white/40 md:flex-row">
-        <p>Â© 2026 {BRAND.name}. All rights reserved.</p>
+        <p>© 2026 {BRAND.name}. All rights reserved.</p>
         <p>Built for small businesses.</p>
       </div>
     </footer>

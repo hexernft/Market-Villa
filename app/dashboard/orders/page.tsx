@@ -255,7 +255,7 @@ export default function OrdersPage() {
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} â€” /store/{business.slug}
+                  {business.name} — /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -393,7 +393,7 @@ export default function OrdersPage() {
                             </p>
 
                             <p className="mt-1 text-xs text-slate-500">
-                              {formatCurrency(Number(item.unit_price || 0))} Ã—{" "}
+                              {formatCurrency(Number(item.unit_price || 0))} ×{" "}
                               {item.quantity}
                             </p>
                           </div>

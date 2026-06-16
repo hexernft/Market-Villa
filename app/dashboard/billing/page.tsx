@@ -316,8 +316,6 @@ export default function BillingPage() {
     );
   }
 
-  const currentPlanAmount = currentPlan?.amount || 0;
-
   return (
     <div className="grid gap-5">
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">

@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { StoreSmartSearch } from "@/components/StoreSmartSearch";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -203,62 +204,11 @@ export default function StoresPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f1ff] text-slate-950">
+    <main className="market-stores-page min-h-screen bg-[#f7f1ff] text-slate-950">
       <PlatformNavbar />
+      <StoreSmartSearch />
 
-      <section className="bg-[radial-gradient(circle_at_top_right,rgba(124,58,237,0.18),transparent_34%),linear-gradient(180deg,#f7f1ff_0%,#ffffff_100%)] px-5 pb-12 pt-32 md:px-5 md:pt-36">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-            <div>
-              <p className="text-sm font-semibold tracking-[0.18em] text-[#7c3aed]">
-                Market Villa stores
-              </p>
-
-              <h1 className="mt-3 max-w-3xl text-2xl font-semibold leading-[1.05] tracking-[-0.05em] text-slate-950 md:text-2xl">
-                Discover businesses built on Market Villa.
-              </h1>
-
-              <p className="mt-5 max-w-2xl text-sm leading-8 text-slate-600">
-                Explore featured stores, find businesses by category, and see
-                how sellers are using simple pages to look professional online.
-              </p>
-            </div>
-
-            <div className="border border-purple-200 bg-white p-5 shadow-sm">
-              <div className="relative">
-                <Search
-                  size={18}
-                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-
-                <input
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  className="h-11 w-full border border-slate-200 bg-white pl-12 pr-4 text-sm outline-none transition focus:border-[#7c3aed]"
-                  placeholder="Search stores, categories, locations..."
-                />
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {categories.slice(0, 8).map((category) => (
-                  <button
-                    key={category}
-                    type="button"
-                    onClick={() => setActiveCategory(category)}
-                    className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
-                      activeCategory === category
-                        ? "bg-[#7c3aed] text-white"
-                        : "bg-purple-50 text-slate-700 hover:bg-purple-100"
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {message ? (
         <section className="px-5 pt-5 md:px-5">
@@ -268,7 +218,7 @@ export default function StoresPage() {
         </section>
       ) : null}
 
-      <section className="px-5 py-12 md:px-5">
+      <section className="market-featured-stores-section px-5 py-12 md:px-5">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
@@ -307,7 +257,7 @@ export default function StoresPage() {
         </div>
       </section>
 
-      <section className="border-t border-purple-100 bg-[#f6efff] px-5 py-12 md:px-5">
+      <section className="market-store-directory-section border-t border-purple-100 bg-[#f6efff] px-5 py-12 md:px-5">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>

@@ -12,7 +12,6 @@ import {
   Package,
   ShoppingBag,
   Sparkles,
-  Store,
   UserRound,
   Wallet,
 } from "lucide-react";
@@ -244,7 +243,7 @@ export default function DashboardPage() {
     {
       label: "Revenue",
       value: metrics.revenue,
-      prefix: "â‚¦",
+      prefix: "₦",
       icon: Wallet,
     },
     {

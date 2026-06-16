@@ -1,4 +1,5 @@
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Globe2, MessageCircle, Store } from "lucide-react";
 import { PlatformNavbar } from "@/components/PlatformNavbar";
@@ -70,7 +71,111 @@ export default function Home() {
         </div>
       </section>
 
-                  <section id="how" className="px-4 py-10 md:px-4">
+      <section className="px-4 py-10 md:px-4">
+        <div className="fashion-brand-showcase mx-auto grid max-w-7xl overflow-hidden text-white shadow-[0_30px_90px_rgba(36,20,54,0.2)] lg:grid-cols-[0.86fr_1.14fr]">
+          <div className="flex flex-col justify-between p-6 md:p-8 lg:p-10">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#c4b5fd]">
+                Fashion brand example
+              </p>
+
+              <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-[-0.05em] text-white md:text-5xl">
+                Give African fashion the kind of storefront it deserves.
+              </h2>
+
+              <p className="mt-5 max-w-lg text-sm leading-7 text-white/68">
+                Present collections, textile detail, and founder craft with a page that feels premium before the first WhatsApp message.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+                <p className="text-sm font-semibold text-white">Editorial product story</p>
+                <p className="mt-2 text-sm leading-6 text-white/60">
+                  Lead with a rich boutique image that shows the full brand mood.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
+                <p className="text-sm font-semibold text-white">Handmade trust</p>
+                <p className="mt-2 text-sm leading-6 text-white/60">
+                  Add a close atelier moment that makes the craft feel personal.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="fashion-brand-visual relative min-h-[420px] overflow-hidden">
+            <Image
+              src="/african-fashion-editorial.png"
+              alt="African fashion brand storefront editorial"
+              fill
+              sizes="(min-width: 1024px) 58vw, 100vw"
+              className="fashion-brand-main object-cover"
+            />
+
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(36,20,54,0.42),rgba(36,20,54,0.04)_46%,rgba(36,20,54,0.32))]" />
+
+            <div className="fashion-brand-accent absolute">
+              <Image
+                src="/african-fashion-atelier.png"
+                alt="African fashion atelier detail"
+                fill
+                sizes="(min-width: 1024px) 22vw, 48vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-10 md:px-4">
+        <div className="sleekstitch-showcase mx-auto grid max-w-7xl overflow-hidden bg-black text-white shadow-[0_30px_90px_rgba(36,20,54,0.2)] lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="sleekstitch-device-wrap flex min-h-[560px] items-center justify-center p-8 md:p-10">
+            <div className="sleekstitch-tablet">
+              <div className="sleekstitch-gallery grid h-full gap-3 sm:grid-cols-[1.15fr_0.85fr]">
+                <div className="relative min-h-[420px] overflow-hidden bg-neutral-950">
+                  <Image
+                    src="/sleekstitch-luxury.png"
+                    alt="Sleek Luxury by SleekStitch Atelier"
+                    fill
+                    sizes="(min-width: 1024px) 44vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+
+                <div className="relative min-h-[420px] overflow-hidden bg-neutral-950">
+                  <Image
+                    src="/sleekstitch-executive.png"
+                    alt="Sleek Executive by SleekStitch Atelier"
+                    fill
+                    sizes="(min-width: 1024px) 32vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-between p-6 md:p-8 lg:p-10">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/45">
+                SleekStitch Atelier
+              </p>
+
+              <h2 className="mt-4 max-w-md text-4xl font-semibold tracking-[-0.06em] text-white md:text-6xl">
+                Confidence, stitched with intention.
+              </h2>
+            </div>
+
+            <p className="mt-8 max-w-md text-sm leading-7 text-white/64">
+              High-quality custom clothing with flawless craftsmanship, designed to reflect each client&apos;s individuality.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="how" className="px-4 py-10 md:px-4">
         <div className="mx-auto max-w-7xl">
           <h2 className="text-center text-2xl font-semibold text-white md:text-2xl">
             Powerful tools. Beautiful results.
@@ -113,7 +218,7 @@ export default function Home() {
       </section>
 
 <section className="px-4 py-8 md:px-4">
-        <div className="mx-auto grid max-w-7xl gap-5 rounded-[2rem] bg-[linear-gradient(160deg,#241436,#321b4d_70%,#412064)] p-6 text-white shadow-[0_28px_70px_rgba(36,20,54,0.22)] lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <div className="mv-why-panel mx-auto grid max-w-7xl gap-5 rounded-[2rem] p-6 text-white shadow-[0_28px_70px_rgba(36,20,54,0.22)] lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">Why Market Villa</p>
             <h2 className="mt-3 text-2xl font-semibold text-white md:text-2xl">A simple page before the WhatsApp conversation.</h2>
@@ -127,7 +232,7 @@ export default function Home() {
               <MotionReveal key={item} delay={index * 0.08} direction="right">
                 <div className="flex gap-3 rounded-[1.35rem] border border-white/10 bg-white/8 p-4 backdrop-blur">
                   <CheckCircle2 size={17} className="mt-1 shrink-0 text-[#c4b5fd]" />
-                  <p className="text-sm leading-6 text-white/72">{item}</p>
+                  <p className="text-[20px] leading-8 text-white/80">{item}</p>
                 </div>
               </MotionReveal>
             ))}
@@ -167,6 +272,9 @@ export default function Home() {
     </main>
   );
 }
+
+
+
 
 
 

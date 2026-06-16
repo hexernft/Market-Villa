@@ -6,7 +6,6 @@ import {
   Building2,
   Loader2,
   Mail,
-  Phone,
   Save,
   ShieldCheck,
   User,

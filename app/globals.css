@@ -512,56 +512,6 @@ p {
   content: none !important;
 }
 
-/* App page background: brand purple */
-html,
-body {
-  min-height: 100%;
-  background:
-    radial-gradient(circle at 16% 10%, rgba(255, 255, 255, 0.14), transparent 26%),
-    radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.10), transparent 30%),
-    radial-gradient(circle at 50% 95%, rgba(36, 20, 54, 0.26), transparent 34%),
-    linear-gradient(135deg, #7c3aed 0%, #6d28d9 42%, #4c1d95 100%) !important;
-  background-attachment: fixed;
-}
-
-.mv-page-shell,
-main {
-  background: transparent !important;
-}
-
-/* Navbar: solid grey-white-purple translucent */
-header,
-nav {
-  color: #241436 !important;
-}
-
-header > div,
-nav > div,
-.platform-navbar,
-.mv-navbar {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.88),
-      rgba(248, 244, 255, 0.82),
-      rgba(236, 225, 255, 0.76)
-    ) !important;
-  border: 1px solid rgba(255, 255, 255, 0.72) !important;
-  box-shadow: 0 22px 70px rgba(55, 31, 83, 0.16) !important;
-  backdrop-filter: blur(22px) saturate(145%) !important;
-}
-
-header a,
-nav a,
-header button,
-nav button,
-header span,
-nav span,
-header p,
-nav p {
-  color: #241436 !important;
-}
-
 /* Hero text card under carousel: same soft translucent surface */
 .hero-carousel-copy-card {
   background:
@@ -606,25 +556,6 @@ section > div[class*="bg-white/"],
   box-shadow: 0 24px 80px rgba(36, 20, 54, 0.18) !important;
 }
 
-/* Market Villa final soft black-purple surface theme */
-
-/* App page background: closer to black than purple */
-html,
-body {
-  min-height: 100%;
-  background:
-    radial-gradient(circle at 16% 10%, rgba(124, 58, 237, 0.20), transparent 26%),
-    radial-gradient(circle at 88% 18%, rgba(168, 85, 247, 0.14), transparent 30%),
-    radial-gradient(circle at 50% 95%, rgba(76, 29, 149, 0.20), transparent 34%),
-    linear-gradient(135deg, #030008 0%, #07020d 38%, #12051f 72%, #050009 100%) !important;
-  background-attachment: fixed;
-}
-
-.mv-page-shell,
-main {
-  background: transparent !important;
-}
-
 /* Navbar: soft translucent grey-white-purple */
 header,
 nav {
@@ -647,8 +578,8 @@ nav > div,
   backdrop-filter: blur(22px) saturate(145%) !important;
 }
 
-header a,
-nav a,
+header a:not(.market-primary-button),
+nav a:not(.market-primary-button),
 header button,
 nav button,
 header span,
@@ -656,6 +587,11 @@ nav span,
 header p,
 nav p {
   color: #241436 !important;
+}
+
+header .market-primary-button,
+nav .market-primary-button {
+  color: #ffffff !important;
 }
 
 /* Hero card under carousel: soft translucent surface */
@@ -696,31 +632,6 @@ section > div[class*="bg-white/"],
 .premium-card-hover {
   border-color: rgba(255, 255, 255, 0.70) !important;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24) !important;
-}
-
-/* Text readability fix only */
-
-/* Text sitting directly on the dark page background */
-.mv-page-shell > section > div > h1,
-.mv-page-shell > section > div > h2,
-.mv-page-shell > section > div > h3,
-.mv-page-shell > section > div > p,
-main > section > div > h1,
-main > section > div > h2,
-main > section > div > h3,
-main > section > div > p {
-  color: rgba(255, 255, 255, 0.94) !important;
-}
-
-.mv-page-shell > section > div > p,
-main > section > div > p {
-  color: rgba(255, 255, 255, 0.72) !important;
-}
-
-/* Small labels directly on dark background */
-.mv-page-shell > section > div > p[class*="uppercase"],
-main > section > div > p[class*="uppercase"] {
-  color: #c4b5fd !important;
 }
 
 /* Text inside light/grey cards should stay dark and readable */
@@ -776,22 +687,6 @@ footer h1,
 footer h2,
 footer h3 {
   color: #ffffff !important;
-}
-
-/* Strong homepage text readability fix only */
-
-/* Section headings sitting directly on dark background */
-#how h2,
-#faq > div > div:first-child h2,
-#faq > div > div:first-child p,
-.mv-page-shell section > div > div > h2,
-.mv-page-shell section > div > div > p[class*="uppercase"] {
-  color: #ffffff !important;
-}
-
-#faq > div > div:first-child p,
-.mv-page-shell section > div > div > p[class*="uppercase"] {
-  color: #c4b5fd !important;
 }
 
 /* Feature cards, FAQ cards, testimonial cards: make text darker and sharper */
@@ -853,6 +748,10 @@ footer h3 {
   color: #ffffff !important;
 }
 
+footer {
+  background: #241436 !important;
+}
+
 footer p,
 footer a,
 footer span {
@@ -860,6 +759,11 @@ footer span {
 }
 
 /* Three equal purple black feature cards */
+#how {
+  background: #c4b5fd !important;
+  border-radius: 0 !important;
+}
+
 #how .grid > div,
 #how .mv-soft-panel,
 #how .premium-card-hover {
@@ -1171,4 +1075,1093 @@ footer span {
   color: rgba(255, 255, 255, 0.78) !important;
   font-size: 1.05rem !important;
   line-height: 1.75 !important;
+}
+
+/* Market Villa app-wide Shopify-style typography */
+html,
+body {
+  font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-rendering: geometricPrecision;
+}
+
+body {
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+/* Clean, thin premium headings */
+h1,
+h2 {
+  font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.065em !important;
+}
+
+h3 {
+  font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.035em !important;
+}
+
+/* Paragraphs stay readable */
+p,
+li,
+span,
+input,
+select,
+textarea {
+  font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  letter-spacing: -0.012em;
+}
+
+/* Buttons and nav should stay sharp, not too thin */
+button,
+a,
+nav,
+header {
+  font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+button,
+a[class*="rounded"],
+.market-primary-button {
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Homepage hero heading gets the closest Sidekick-style feel */
+.hero-carousel-copy-card h1,
+.mv-lavender-hero h1 {
+  font-weight: 300 !important;
+  letter-spacing: -0.075em !important;
+  line-height: 0.95 !important;
+}
+
+/* Homepage African fashion brand showcase */
+.fashion-brand-showcase {
+  border-radius: 2.35rem;
+  border: 1px solid rgba(196, 181, 253, 0.18);
+  background:
+    radial-gradient(circle at 14% 18%, rgba(124, 58, 237, 0.22), transparent 22rem),
+    radial-gradient(circle at 88% 84%, rgba(255, 170, 112, 0.16), transparent 22rem),
+    linear-gradient(135deg, #241436 0%, #2d1748 52%, #3f2060 100%);
+}
+
+.fashion-brand-visual {
+  background: #160b22;
+}
+
+.fashion-brand-main {
+  object-position: 47% 50%;
+}
+
+.fashion-brand-accent {
+  bottom: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 4vw, 3rem);
+  z-index: 2;
+  aspect-ratio: 3 / 4;
+  width: min(32%, 17rem);
+  overflow: hidden;
+  border-radius: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  box-shadow: 0 26px 60px rgba(13, 5, 24, 0.36);
+}
+
+.fashion-brand-showcase h2,
+.fashion-brand-showcase h3,
+.fashion-brand-showcase p {
+  color: #ffffff !important;
+}
+
+.fashion-brand-showcase p:not([class*="uppercase"]) {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.fashion-brand-showcase p[class*="uppercase"] {
+  color: #c4b5fd !important;
+}
+
+.fashion-brand-showcase div[class*="bg-white/8"] {
+  background: rgba(255, 255, 255, 0.09) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.fashion-brand-showcase div[class*="bg-white/8"] p:first-child {
+  color: #ffffff !important;
+}
+
+.fashion-brand-showcase div[class*="bg-white/8"] p:last-child {
+  color: rgba(255, 255, 255, 0.68) !important;
+}
+
+@media (max-width: 1023px) {
+  .fashion-brand-showcase {
+    border-radius: 2rem;
+  }
+
+  .fashion-brand-visual {
+    min-height: 430px;
+  }
+
+  .fashion-brand-accent {
+    width: min(42%, 13rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .fashion-brand-main {
+    object-position: 50% 50%;
+  }
+
+  .fashion-brand-visual {
+    min-height: 380px;
+  }
+
+.fashion-brand-accent {
+    bottom: 0.9rem;
+    right: 0.9rem;
+    width: min(48%, 11rem);
+    border-radius: 1.35rem;
+  }
+}
+
+/* Homepage SleekStitch Atelier feature */
+.sleekstitch-showcase {
+  border-radius: 2.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sleekstitch-device-wrap {
+  perspective: 1200px;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.12), transparent 22rem),
+    radial-gradient(circle at 76% 76%, rgba(196, 181, 253, 0.16), transparent 24rem);
+}
+
+.sleekstitch-tablet {
+  position: relative;
+  width: min(100%, 48rem);
+  aspect-ratio: 1.45 / 1;
+  padding: clamp(0.55rem, 1.4vw, 0.95rem);
+  border-radius: 2.15rem;
+  background:
+    linear-gradient(145deg, #f8fafc 0%, #d7d7dd 34%, #fafafa 62%, #9b9aa4 100%);
+  box-shadow:
+    0 42px 90px rgba(0, 0, 0, 0.42),
+    18px 28px 70px rgba(124, 58, 237, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+  transform: rotateX(7deg) rotateY(-15deg) rotateZ(-3deg);
+  transform-style: preserve-3d;
+}
+
+.sleekstitch-tablet::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0.38rem;
+  z-index: 3;
+  height: 0.38rem;
+  width: 3.2rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgba(12, 12, 16, 0.28);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.22);
+}
+
+.sleekstitch-tablet::after {
+  content: "";
+  position: absolute;
+  inset: clamp(0.55rem, 1.4vw, 0.95rem);
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 1.45rem;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 0 36px rgba(255, 255, 255, 0.08);
+}
+
+.sleekstitch-gallery > div {
+  border-radius: 1.35rem;
+}
+
+.sleekstitch-gallery img {
+  filter: saturate(0.96) contrast(1.03);
+}
+
+@media (max-width: 1023px) {
+  .sleekstitch-showcase {
+    border-radius: 2rem;
+  }
+
+  .sleekstitch-device-wrap {
+    min-height: 500px;
+    overflow: hidden;
+  }
+
+  .sleekstitch-tablet {
+    width: min(94%, 42rem);
+    transform: rotateX(6deg) rotateY(-9deg) rotateZ(-2deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .sleekstitch-device-wrap {
+    min-height: auto;
+    padding: 1rem !important;
+  }
+
+  .sleekstitch-tablet {
+    aspect-ratio: auto;
+    width: 100%;
+    transform: rotateZ(-1deg);
+  }
+
+  .sleekstitch-gallery {
+    min-height: auto !important;
+  }
+
+  .sleekstitch-gallery > div {
+    min-height: 360px;
+    border-radius: 1.35rem;
+  }
+}
+
+/* Section headings: softer and more premium */
+#how h2,
+#faq h2,
+section h2 {
+  font-weight: 300 !important;
+  letter-spacing: -0.06em !important;
+}
+
+
+/* Stores page readability polish */
+.market-stores-page {
+  color: #ffffff;
+}
+
+.market-stores-page h1,
+.market-stores-page h2,
+.market-stores-page h3 {
+  color: #ffffff !important;
+}
+
+.market-stores-page section > div > p,
+.market-stores-page p[class*="uppercase"],
+.market-stores-page .text-\[\#7c3aed\] {
+  color: #a78bfa !important;
+}
+
+.market-stores-page section > div > h2,
+.market-stores-page section > div > h1 {
+  color: rgba(255, 255, 255, 0.96) !important;
+}
+
+.market-stores-page section > div > p:not([class*="uppercase"]) {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Store cards only: soft white-purple glass */
+.market-stores-page article,
+.market-stores-page .mv-soft-panel,
+.market-stores-page .premium-card-hover,
+.market-stores-page div[class*="bg-white/"] {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.90),
+      rgba(248, 244, 255, 0.82),
+      rgba(236, 225, 255, 0.74)
+    ) !important;
+  border-color: rgba(255, 255, 255, 0.72) !important;
+  color: #241436 !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.26) !important;
+}
+
+.market-stores-page article h1,
+.market-stores-page article h2,
+.market-stores-page article h3,
+.market-stores-page .mv-soft-panel h1,
+.market-stores-page .mv-soft-panel h2,
+.market-stores-page .mv-soft-panel h3 {
+  color: #241436 !important;
+}
+
+.market-stores-page article p,
+.market-stores-page .mv-soft-panel p {
+  color: rgba(36, 20, 54, 0.74) !important;
+}
+
+/* Keep buttons strong */
+.market-stores-page .market-primary-button,
+.market-stores-page a[class*="bg-[#7c3aed]"],
+.market-stores-page a[class*="from-[#8b5cf6]"] {
+  color: #ffffff !important;
+}
+
+
+/* Search page focused readability fix */
+.market-search-page input {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  color: #241436 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65) !important;
+}
+
+.market-search-page input::placeholder {
+  color: rgba(36, 20, 54, 0.42) !important;
+}
+
+.market-search-page input:focus {
+  border-color: rgba(196, 181, 253, 0.9) !important;
+  box-shadow:
+    0 0 0 4px rgba(124, 58, 237, 0.16),
+    inset 0 1px 0 rgba(255,255,255,0.7) !important;
+}
+
+.market-search-page input + svg,
+.market-search-page svg {
+  color: rgba(36, 20, 54, 0.58) !important;
+}
+
+/* Search panel */
+.market-search-page .mx-auto.mt-8.max-w-4xl {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.18),
+      rgba(255,255,255,0.10)
+    ) !important;
+  border-color: rgba(255,255,255,0.34) !important;
+}
+
+/* Filter tabs */
+.market-search-page button {
+  color: rgba(255,255,255,0.82) !important;
+}
+
+.market-search-page button:hover {
+  color: #ffffff !important;
+}
+
+/* Active filter tab */
+.market-search-page button.bg-white {
+  background: rgba(255,255,255,0.92) !important;
+  color: #241436 !important;
+}
+
+/* Suggested search chips */
+.market-search-page button.rounded-full {
+  background: rgba(255,255,255,0.13) !important;
+  border-color: rgba(255,255,255,0.24) !important;
+  color: rgba(255,255,255,0.88) !important;
+}
+
+.market-search-page button.rounded-full:hover {
+  background: rgba(255,255,255,0.22) !important;
+  color: #ffffff !important;
+}
+
+/* Empty state card */
+.market-search-page .rounded-\[2rem\].border.border-white\/10.bg-white\/8 {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,0.12),
+      rgba(255,255,255,0.07)
+    ) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+.market-search-page .rounded-\[2rem\].border.border-white\/10.bg-white\/8 h2 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.market-search-page .rounded-\[2rem\].border.border-white\/10.bg-white\/8 p {
+  color: rgba(255,255,255,0.74) !important;
+  opacity: 1 !important;
+}
+
+
+/* Store directory section polish */
+.market-store-directory-section {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(124, 58, 237, 0.24), transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(168, 85, 247, 0.16), transparent 30%),
+    linear-gradient(135deg, #050008 0%, #0b0314 42%, #160824 100%) !important;
+  color: #ffffff !important;
+}
+
+.market-store-directory-section h1,
+.market-store-directory-section h2,
+.market-store-directory-section h3 {
+  color: #ffffff !important;
+}
+
+.market-store-directory-section p {
+  color: rgba(255, 255, 255, 0.74) !important;
+}
+
+.market-store-directory-section p[class*="uppercase"],
+.market-store-directory-section .text-\[\#7c3aed\],
+.market-store-directory-section .text-\[\#a78bfa\] {
+  color: #c4b5fd !important;
+}
+
+.market-store-directory-section div[class*="rounded"],
+.market-store-directory-section article {
+  color: #241436 !important;
+}
+
+.market-store-directory-section article,
+.market-store-directory-section .premium-card-hover,
+.market-store-directory-section .mv-soft-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(248, 244, 255, 0.86),
+      rgba(236, 225, 255, 0.78)
+    ) !important;
+  border-color: rgba(255, 255, 255, 0.78) !important;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.30) !important;
+}
+
+.market-store-directory-section article h1,
+.market-store-directory-section article h2,
+.market-store-directory-section article h3,
+.market-store-directory-section article p,
+.market-store-directory-section .premium-card-hover h1,
+.market-store-directory-section .premium-card-hover h2,
+.market-store-directory-section .premium-card-hover h3,
+.market-store-directory-section .premium-card-hover p,
+.market-store-directory-section .mv-soft-panel h1,
+.market-store-directory-section .mv-soft-panel h2,
+.market-store-directory-section .mv-soft-panel h3,
+.market-store-directory-section .mv-soft-panel p {
+  color: #241436 !important;
+}
+
+.market-store-directory-section article p,
+.market-store-directory-section .premium-card-hover p,
+.market-store-directory-section .mv-soft-panel p {
+  color: rgba(36, 20, 54, 0.72) !important;
+}
+
+.market-store-directory-section a[class*="market-primary-button"],
+.market-store-directory-section a[href*="/store/"] {
+  color: #ffffff !important;
+}
+
+.market-store-directory-section button,
+.market-store-directory-section a {
+  font-weight: 700 !important;
+}
+
+/* Store smart search readability only */
+.market-store-directory-section + section h2,
+.market-stores-page .store-smart-search h2,
+section h2:has(+ p) {
+  color: #ffffff !important;
+}
+
+.market-stores-page .store-smart-search p,
+.market-stores-page section p {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+/* Specifically brighten smart discovery intro paragraph */
+.market-stores-page section p.mt-4.max-w-xl,
+.market-stores-page section p[class*="text-white/72"] {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
+/* Search input text and placeholder */
+.market-stores-page input {
+  color: #241436 !important;
+}
+
+.market-stores-page input::placeholder {
+  color: rgba(36, 20, 54, 0.48) !important;
+}
+
+/* Search chips and tabs */
+.market-stores-page button {
+  color: rgba(36, 20, 54, 0.88) !important;
+}
+
+.market-stores-page button[class*="text-white"] {
+  color: rgba(255, 255, 255, 0.86) !important;
+}
+
+.market-stores-page button.bg-white,
+.market-stores-page button[class*="bg-white"] {
+  color: #241436 !important;
+}
+
+/* Smart discovery badge */
+.market-stores-page .inline-flex.items-center.gap-2.rounded-full {
+  color: #241436 !important;
+}
+
+
+
+
+/* Featured stores premium showcase */
+.market-featured-stores-section {
+  position: relative !important;
+  overflow: hidden !important;
+  color: #ffffff !important;
+  padding-top: 4rem !important;
+  padding-bottom: 5rem !important;
+}
+
+.market-featured-stores-section::before {
+  content: "";
+  position: absolute;
+  inset: 1rem 2rem;
+  z-index: 0;
+  border-radius: 3rem;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(139, 92, 246, 0.28), transparent 28%),
+    radial-gradient(circle at 78% 18%, rgba(196, 181, 253, 0.16), transparent 30%),
+    radial-gradient(circle at 45% 80%, rgba(124, 58, 237, 0.20), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 40px 140px rgba(0, 0, 0, 0.32);
+  pointer-events: none;
+}
+
+.market-featured-stores-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Section headings */
+.market-featured-stores-section p[class*="uppercase"],
+.market-featured-stores-section > div > p {
+  color: #c4b5fd !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+}
+
+.market-featured-stores-section h1,
+.market-featured-stores-section h2,
+.market-featured-stores-section h3 {
+  color: #ffffff !important;
+}
+
+.market-featured-stores-section > div > h2,
+.market-featured-stores-section > div h2 {
+  color: #ffffff !important;
+  font-size: clamp(2rem, 3vw, 3rem) !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.07em !important;
+  text-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+}
+
+/* Featured store card */
+.market-featured-stores-section article,
+.market-featured-stores-section .premium-card-hover,
+.market-featured-stores-section .mv-soft-panel {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 2.35rem !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 244, 255, 0.93) 50%, rgba(226, 214, 255, 0.88)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.90) !important;
+  box-shadow:
+    0 34px 110px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(196, 181, 253, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+  transition:
+    transform 240ms ease,
+    box-shadow 240ms ease,
+    border-color 240ms ease !important;
+}
+
+.market-featured-stores-section article:hover,
+.market-featured-stores-section .premium-card-hover:hover,
+.market-featured-stores-section .mv-soft-panel:hover {
+  transform: translateY(-8px) !important;
+  border-color: rgba(196, 181, 253, 0.76) !important;
+  box-shadow:
+    0 44px 130px rgba(0, 0, 0, 0.44),
+    0 0 48px rgba(124, 58, 237, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Premium shine */
+.market-featured-stores-section article::after,
+.market-featured-stores-section .premium-card-hover::after,
+.market-featured-stores-section .mv-soft-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0%, transparent 36%, rgba(255,255,255,0.34) 48%, transparent 60%, transparent 100%);
+  transform: translateX(-120%);
+  transition: transform 900ms ease;
+}
+
+.market-featured-stores-section article:hover::after,
+.market-featured-stores-section .premium-card-hover:hover::after,
+.market-featured-stores-section .mv-soft-panel:hover::after {
+  transform: translateX(120%);
+}
+
+/* Store of the week badge */
+.market-featured-stores-section article::before,
+.market-featured-stores-section .premium-card-hover::before,
+.market-featured-stores-section .mv-soft-panel::before {
+  content: "Featured Store";
+  position: absolute;
+  right: 1.2rem;
+  top: 1.2rem;
+  z-index: 30;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed 72%, #5b21b6);
+  color: #ffffff;
+  padding: 0.52rem 0.95rem;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  box-shadow:
+    0 16px 38px rgba(124, 58, 237, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+/* Top visual area inside card */
+.market-featured-stores-section article > div:first-child,
+.market-featured-stores-section .premium-card-hover > div:first-child,
+.market-featured-stores-section .mv-soft-panel > div:first-child {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(139, 92, 246, 0.22), transparent 28%),
+    linear-gradient(145deg, #f8f4ff, #eadfff) !important;
+}
+
+/* Store icon stronger */
+.market-featured-stores-section svg {
+  color: #7c3aed !important;
+  filter: drop-shadow(0 8px 18px rgba(124, 58, 237, 0.22));
+}
+
+/* Card text */
+.market-featured-stores-section article h1,
+.market-featured-stores-section article h2,
+.market-featured-stores-section article h3,
+.market-featured-stores-section .premium-card-hover h1,
+.market-featured-stores-section .premium-card-hover h2,
+.market-featured-stores-section .premium-card-hover h3,
+.market-featured-stores-section .mv-soft-panel h1,
+.market-featured-stores-section .mv-soft-panel h2,
+.market-featured-stores-section .mv-soft-panel h3 {
+  color: #160b24 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.market-featured-stores-section article p,
+.market-featured-stores-section .premium-card-hover p,
+.market-featured-stores-section .mv-soft-panel p {
+  color: rgba(22, 11, 36, 0.74) !important;
+  font-weight: 500 !important;
+}
+
+/* Location text */
+.market-featured-stores-section p[class*="tracking"],
+.market-featured-stores-section .text-\[\#7c3aed\],
+.market-featured-stores-section .text-\[\#a78bfa\] {
+  color: #7c3aed !important;
+}
+
+/* Category/status chips */
+.market-featured-stores-section span,
+.market-featured-stores-section div[class*="rounded-full"] {
+  font-weight: 800 !important;
+}
+
+/* Main CTA */
+.market-featured-stores-section a[href*="/store/"] {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed 72%, #6d28d9) !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  box-shadow:
+    0 18px 46px rgba(124, 58, 237, 0.38),
+    inset 0 1px 0 rgba(255,255,255,0.20) !important;
+}
+
+.market-featured-stores-section a[href*="/store/"]:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 24px 60px rgba(124, 58, 237, 0.46),
+    inset 0 1px 0 rgba(255,255,255,0.24) !important;
+}
+
+/* Small action button */
+.market-featured-stores-section button {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(124, 58, 237, 0.16) !important;
+  color: #241436 !important;
+  box-shadow: 0 10px 26px rgba(36, 20, 54, 0.10) !important;
+}
+
+/* Featured section heading text on white glass */
+.market-featured-stores-section > div > p,
+.market-featured-stores-section p[class*="uppercase"] {
+  color: #7c3aed !important;
+}
+
+.market-featured-stores-section > div > h1,
+.market-featured-stores-section > div > h2,
+.market-featured-stores-section > div > h3,
+.market-featured-stores-section h1,
+.market-featured-stores-section h2,
+.market-featured-stores-section h3 {
+  color: #241436 !important;
+  text-shadow: none !important;
+}
+
+.market-featured-stores-section > div > p:not([class*="uppercase"]),
+.market-featured-stores-section p {
+  color: rgba(36, 20, 54, 0.72) !important;
+}
+
+/* Live stores badge */
+.market-featured-stores-section div[class*="rounded-full"],
+.market-featured-stores-section span[class*="rounded-full"] {
+  color: #241436 !important;
+}
+
+/* Store card inside the white glass area */
+.market-featured-stores-section article,
+.market-featured-stores-section .premium-card-hover,
+.market-featured-stores-section .mv-soft-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(248, 244, 255, 0.92),
+      rgba(235, 226, 255, 0.86)
+    ) !important;
+  border-color: rgba(124, 58, 237, 0.18) !important;
+}
+
+/* Store card text */
+.market-featured-stores-section article h1,
+.market-featured-stores-section article h2,
+.market-featured-stores-section article h3,
+.market-featured-stores-section article p,
+.market-featured-stores-section .premium-card-hover h1,
+.market-featured-stores-section .premium-card-hover h2,
+.market-featured-stores-section .premium-card-hover h3,
+.market-featured-stores-section .premium-card-hover p,
+.market-featured-stores-section .mv-soft-panel h1,
+.market-featured-stores-section .mv-soft-panel h2,
+.market-featured-stores-section .mv-soft-panel h3,
+.market-featured-stores-section .mv-soft-panel p {
+  color: #241436 !important;
+}
+
+.market-featured-stores-section article p,
+.market-featured-stores-section .premium-card-hover p,
+.market-featured-stores-section .mv-soft-panel p {
+  color: rgba(36, 20, 54, 0.72) !important;
+}
+
+/* Location/category accent text */
+.market-featured-stores-section .text-\[\#7c3aed\],
+.market-featured-stores-section .text-\[\#a78bfa\],
+.market-featured-stores-section p[class*="tracking"] {
+  color: #7c3aed !important;
+}
+
+/* View store button readability */
+.market-featured-stores-section a[href*="/store/"] {
+  color: #ffffff !important;
+}
+
+.market-featured-stores-section a[href*="/store/"] svg {
+  color: #ffffff !important;
+}
+
+/* Featured stores: remove glass container and improve readability */
+.market-featured-stores-section::before {
+  display: none !important;
+  content: none !important;
+}
+
+.market-featured-stores-section {
+  background: transparent !important;
+  padding-top: 3rem !important;
+  padding-bottom: 4rem !important;
+}
+
+/* Featured section headings on dark background */
+.market-featured-stores-section > div > p,
+.market-featured-stores-section p[class*="uppercase"] {
+  color: #a78bfa !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+}
+
+.market-featured-stores-section > div > h1,
+.market-featured-stores-section > div > h2,
+.market-featured-stores-section > div > h3,
+.market-featured-stores-section h1,
+.market-featured-stores-section h2,
+.market-featured-stores-section h3 {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+.market-featured-stores-section > div > p:not([class*="uppercase"]),
+.market-featured-stores-section p {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+/* Store count badge */
+.market-featured-stores-section div[class*="rounded-full"],
+.market-featured-stores-section span[class*="rounded-full"] {
+  color: #241436 !important;
+}
+
+/* Featured store card stays bright and readable */
+.market-featured-stores-section article,
+.market-featured-stores-section .premium-card-hover,
+.market-featured-stores-section .mv-soft-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(248, 244, 255, 0.92),
+      rgba(236, 225, 255, 0.86)
+    ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.82) !important;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.32) !important;
+}
+
+/* Text inside store card */
+.market-featured-stores-section article h1,
+.market-featured-stores-section article h2,
+.market-featured-stores-section article h3,
+.market-featured-stores-section article p,
+.market-featured-stores-section .premium-card-hover h1,
+.market-featured-stores-section .premium-card-hover h2,
+.market-featured-stores-section .premium-card-hover h3,
+.market-featured-stores-section .premium-card-hover p,
+.market-featured-stores-section .mv-soft-panel h1,
+.market-featured-stores-section .mv-soft-panel h2,
+.market-featured-stores-section .mv-soft-panel h3,
+.market-featured-stores-section .mv-soft-panel p {
+  color: #241436 !important;
+}
+
+.market-featured-stores-section article p,
+.market-featured-stores-section .premium-card-hover p,
+.market-featured-stores-section .mv-soft-panel p {
+  color: rgba(36, 20, 54, 0.72) !important;
+}
+
+/* Accent text inside card */
+.market-featured-stores-section .text-\[\#7c3aed\],
+.market-featured-stores-section .text-\[\#a78bfa\],
+.market-featured-stores-section p[class*="tracking"] {
+  color: #7c3aed !important;
+}
+
+/* Keep CTA readable */
+.market-featured-stores-section a[href*="/store/"],
+.market-featured-stores-section a[href*="/store/"] svg {
+  color: #ffffff !important;
+}
+
+/* Featured store approval seal and dark buttons */
+
+/* Remove the normal pill badge look */
+.market-featured-stores-section article::before,
+.market-featured-stores-section .premium-card-hover::before,
+.market-featured-stores-section .mv-soft-panel::before {
+  content: "✓ Featured";
+  position: absolute;
+  right: 1.15rem;
+  top: 1.15rem;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  width: 5.4rem;
+  height: 5.4rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.28), transparent 28%),
+    linear-gradient(145deg, #241436 0%, #3b1f5f 48%, #7c3aed 100%);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1.05;
+  text-align: center;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 18px 44px rgba(36, 20, 54, 0.34),
+    0 0 0 6px rgba(124, 58, 237, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+/* Small decorative seal ring */
+.market-featured-stores-section article::after,
+.market-featured-stores-section .premium-card-hover::after,
+.market-featured-stores-section .mv-soft-panel::after {
+  content: "";
+  position: absolute;
+  right: 1.48rem;
+  top: 1.48rem;
+  z-index: 31;
+  width: 4.75rem;
+  height: 4.75rem;
+  border-radius: 999px;
+  border: 1px dashed rgba(255, 255, 255, 0.62);
+  pointer-events: none;
+  background: transparent !important;
+  transform: none !important;
+}
+
+/* Make main store CTA dark with white text */
+.market-featured-stores-section a[href*="/store/"] {
+  background:
+    linear-gradient(135deg, #050008 0%, #12051f 48%, #241436 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(196, 181, 253, 0.18) !important;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+
+.market-featured-stores-section a[href*="/store/"] span,
+.market-featured-stores-section a[href*="/store/"] svg {
+  color: #ffffff !important;
+}
+
+/* Make secondary/copy buttons dark too */
+.market-featured-stores-section button {
+  background:
+    linear-gradient(135deg, #12051f, #241436) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(196, 181, 253, 0.18) !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+
+.market-featured-stores-section button svg,
+.market-featured-stores-section button span {
+  color: #ffffff !important;
+}
+
+/* Keep category/live chips readable, not affected like buttons */
+.market-featured-stores-section span.rounded-full,
+.market-featured-stores-section div.rounded-full {
+  color: #241436 !important;
+}
+
+/* Restored warm white and soft purple app surface */
+html,
+body {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(255, 228, 214, 0.86), transparent 28rem),
+    radial-gradient(circle at 72% 14%, rgba(199, 174, 255, 0.64), transparent 30rem),
+    radial-gradient(circle at 96% 42%, rgba(247, 214, 232, 0.54), transparent 26rem),
+    linear-gradient(135deg, #fff7f3 0%, #f7f1ff 44%, #efe3ff 100%) !important;
+  background-attachment: fixed;
+}
+
+.mv-page-shell,
+main {
+  background:
+    radial-gradient(circle at 13% 8%, rgba(255, 228, 214, 0.80), transparent 26rem),
+    radial-gradient(circle at 82% 10%, rgba(199, 174, 255, 0.66), transparent 28rem),
+    linear-gradient(135deg, #fff7f3, #f7f1ff 48%, #eadfff) !important;
+}
+
+#how h2,
+#faq > div > div:first-child h2,
+.mv-page-shell section > div > div > h2 {
+  color: #241436 !important;
+}
+
+#faq > div > div:first-child p,
+.mv-page-shell section > div > div > p[class*="uppercase"] {
+  color: #7c3aed !important;
+}
+
+.mv-page-shell > section > div > h1,
+.mv-page-shell > section > div > h2,
+.mv-page-shell > section > div > h3,
+.mv-page-shell > section > div > p,
+main > section > div > h1,
+main > section > div > h2,
+main > section > div > h3,
+main > section > div > p {
+  color: #241436 !important;
+}
+
+.mv-why-panel {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(124, 58, 237, 0.38), transparent 32%),
+    radial-gradient(circle at 86% 18%, rgba(168, 85, 247, 0.22), transparent 34%),
+    linear-gradient(145deg, #050008 0%, #12051f 48%, #241436 100%) !important;
+  border: 1px solid rgba(196, 181, 253, 0.22) !important;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.mv-why-panel > div:first-child p {
+  color: rgba(255, 255, 255, 0.58) !important;
+}
+
+.mv-why-panel > div:first-child h2 {
+  color: #ffffff !important;
+}
+
+.mv-why-panel .grid > div {
+  border-color: rgba(196, 181, 253, 0.22) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.mv-why-panel .grid > div p {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+/* Dashboard surface consistency */
+.mv-dashboard-content section,
+.mv-dashboard-content article,
+.mv-dashboard-content aside,
+.mv-dashboard-content form,
+.mv-dashboard-content div[class*="border"][class*="bg-white"][class*="shadow-sm"],
+.mv-dashboard-content div[class*="border"][class*="bg-purple-50"],
+.mv-dashboard-content div[class*="border"][class*="bg-red-50"],
+.mv-dashboard-content div[class*="border"][class*="bg-emerald-50"],
+.mv-dashboard-content div[class*="border"][class*="bg-slate-50"] {
+  border-radius: 1.5rem !important;
+}
+
+.mv-dashboard-content span[class*="place-items-center"],
+.mv-dashboard-content div[class*="place-items-center"] {
+  border-radius: 1rem !important;
+}
+
+.mv-dashboard-content select,
+.mv-dashboard-content input,
+.mv-dashboard-content textarea {
+  border-radius: 1rem !important;
 }

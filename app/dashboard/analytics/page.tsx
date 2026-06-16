@@ -299,7 +299,7 @@ export default function AnalyticsPage() {
           >
             {businesses.map((business) => (
               <option key={business.id} value={business.id}>
-                {business.name} â€” /store/{business.slug}
+                  {business.name} — /store/{business.slug}
               </option>
             ))}
           </select>

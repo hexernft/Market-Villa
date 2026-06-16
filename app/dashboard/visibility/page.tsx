@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -16,7 +16,6 @@ import {
   Star,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { getVisibilityPackageList } from "@/lib/visibility-packages";
 
 type BusinessVisibility = {
   id: string;
@@ -129,7 +128,7 @@ export default function VisibilityPage() {
       : fallbackVisibilityPackages;
   }, [visibilityPricingItems]);
 
-  async function loadBusinesses() {
+  const loadBusinesses = useCallback(async () => {
     setIsLoading(true);
     setMessage("");
 
@@ -198,7 +197,7 @@ export default function VisibilityPage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
   async function copyStoreLink() {
     if (!selectedBusiness?.slug) return;
@@ -264,7 +263,7 @@ export default function VisibilityPage() {
     }
   }
 
-  async function verifyVisibilityPayment(reference: string) {
+  const verifyVisibilityPayment = useCallback(async (reference: string) => {
     setMessage("Confirming visibility payment...");
 
     try {
@@ -302,11 +301,11 @@ export default function VisibilityPage() {
 
       setMessage(errorMessage);
     }
-  }
+  }, [loadBusinesses]);
 
   useEffect(() => {
     loadBusinesses();
-  }, []);
+  }, [loadBusinesses]);
 
   useEffect(() => {
     const reference = searchParams.get("visibility_reference");
@@ -314,7 +313,7 @@ export default function VisibilityPage() {
     if (reference) {
       verifyVisibilityPayment(reference);
     }
-  }, [searchParams]);
+  }, [searchParams, verifyVisibilityPayment]);
 
   if (isLoading) {
     return (
@@ -680,7 +679,7 @@ export default function VisibilityPage() {
 
                     <span className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-[#7c3aed] ring-1 ring-purple-100">
                       {purchase.package_price_label ||
-                        `â‚¦${Number(purchase.amount || 0).toLocaleString()}`}
+                        `₦${Number(purchase.amount || 0).toLocaleString()}`}
                     </span>
                   </div>
 

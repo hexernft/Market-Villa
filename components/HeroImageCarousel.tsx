@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const heroImages = [
-  "/hero-main.png",
-  "/hero1.png",
-  "/hero2.png",
-  "/hero3.png",
+  "/main-hero.png",
+  "/phone-shop.png",
+  "/phone-hub.png",
+  "/thrift-store.png",
 ];
 
 export function HeroImageCarousel() {
