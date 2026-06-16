@@ -2487,6 +2487,38 @@ main > section > div > p {
   background: rgba(255, 255, 255, 0.08) !important;
 }
 
+.admin-sidebar,
+.admin-sidebar nav {
+  color: #ffffff !important;
+  background-color: #26143d !important;
+}
+
+.admin-sidebar a,
+.admin-sidebar span,
+.admin-sidebar p,
+.admin-sidebar svg {
+  color: inherit !important;
+}
+
+.admin-sidebar nav a {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.admin-sidebar nav a[class*="bg-white/10"] {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.admin-sidebar nav a:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+}
+
+.admin-sidebar span[class*="text-slate-400"],
+.admin-sidebar p[class*="text-slate-300"] {
+  color: rgba(255, 255, 255, 0.64) !important;
+}
+
 .mv-page-shell .home-dark-panel,
 .mv-page-shell .store-smart-search > div,
 .mv-page-shell .fashion-brand-showcase,
@@ -2637,5 +2669,100 @@ main > section > div > p {
 
 .market-stores-page .market-featured-stores-section article a.market-primary-button,
 .market-stores-page .market-store-directory-section article a.market-primary-button {
+  color: #ffffff !important;
+}
+
+/* Final admin sidebar readability override */
+aside.admin-sidebar {
+  background: #26143d !important;
+  color: #ffffff !important;
+}
+
+aside.admin-sidebar .admin-sidebar-nav {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+aside.admin-sidebar .admin-sidebar-link,
+aside.admin-sidebar .admin-sidebar-link span,
+aside.admin-sidebar .admin-sidebar-link svg {
+  color: rgba(255, 255, 255, 0.74) !important;
+}
+
+aside.admin-sidebar .admin-sidebar-link-active,
+aside.admin-sidebar .admin-sidebar-link-active span,
+aside.admin-sidebar .admin-sidebar-link-active svg,
+aside.admin-sidebar .admin-sidebar-link:hover,
+aside.admin-sidebar .admin-sidebar-link:hover span,
+aside.admin-sidebar .admin-sidebar-link:hover svg {
+  color: #ffffff !important;
+}
+
+aside.admin-sidebar .admin-sidebar-link-active {
+  background: rgba(255, 255, 255, 0.13) !important;
+}
+
+.admin-center-page {
+  color: #241436 !important;
+}
+
+.admin-center-header,
+.admin-center-header > div {
+  color: #241436 !important;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(248, 244, 255, 0.90),
+      rgba(236, 225, 255, 0.86)
+    ) !important;
+}
+
+.admin-center-header h1,
+.admin-center-header p,
+.admin-center-header span {
+  color: #241436 !important;
+  text-shadow: none !important;
+}
+
+.admin-center-header p[class*="uppercase"] {
+  color: rgba(36, 20, 54, 0.68) !important;
+}
+
+.admin-center-header .admin-center-cta,
+.admin-center-header .admin-center-cta:visited,
+.admin-center-header .admin-center-cta:hover {
+  color: #ffffff !important;
+  background: #26143d !important;
+}
+
+.admin-center-page section[class*="from-[#241436]"],
+.admin-center-page section[class*="via-[#26143d]"] {
+  color: #ffffff !important;
+}
+
+.admin-center-page section[class*="from-[#241436]"] h1,
+.admin-center-page section[class*="from-[#241436]"] h2,
+.admin-center-page section[class*="from-[#241436]"] h3,
+.admin-center-page section[class*="via-[#26143d]"] h1,
+.admin-center-page section[class*="via-[#26143d]"] h2,
+.admin-center-page section[class*="via-[#26143d]"] h3 {
+  color: #ffffff !important;
+}
+
+.admin-center-page section[class*="from-[#241436]"] p,
+.admin-center-page section[class*="via-[#26143d]"] p {
+  color: rgba(255, 255, 255, 0.76) !important;
+}
+
+.admin-center-page section[class*="from-[#241436]"] p[class*="uppercase"],
+.admin-center-page section[class*="via-[#26143d]"] p[class*="uppercase"] {
+  color: #99f6e4 !important;
+}
+
+.admin-center-page a[class*="bg-[#26143d]"],
+.admin-center-page button[class*="bg-[#26143d]"],
+.admin-center-page span[class*="bg-[#26143d]"] {
   color: #ffffff !important;
 }

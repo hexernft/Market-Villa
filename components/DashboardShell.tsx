@@ -120,11 +120,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="p-4">
-            <div className="mb-3 rounded-[1.25rem] border border-white/10 bg-white/8 p-4">
-              <p className="text-xs font-semibold text-white">Business Plan</p>
-              <p className="mt-1 text-[11px] text-white/50">Manage your store setup.</p>
-              <Link href="/dashboard/billing" className="mt-3 inline-flex w-full items-center justify-center rounded-2xl bg-white/10 px-4 py-2 text-xs font-semibold text-white hover:bg-white/15">Manage plan</Link>
-            </div>
             <button type="button" onClick={handleLogout} disabled={isLoggingOut} className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-semibold text-white/80 transition hover:bg-white/12 hover:text-white disabled:cursor-not-allowed disabled:opacity-60">
               {isLoggingOut ? <Loader2 size={17} className="animate-spin" /> : <LogOut size={17} />}
               {isLoggingOut ? "Logging out..." : "Logout"}

@@ -361,8 +361,8 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-100">
-      <aside className="fixed z-50 left-0 top-0 hidden h-screen w-72 border-r border-white/10 bg-[#26143d] p-5 text-white lg:block">
+    <main className="admin-center-page min-h-screen bg-slate-100">
+      <aside className="admin-sidebar fixed z-50 left-0 top-0 hidden h-screen w-72 border-r border-white/10 bg-[#26143d] p-5 text-white lg:block">
         <Link href="/" className="mb-8 flex items-center gap-3">
           <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
             <ShieldCheck size={20} />
@@ -376,10 +376,10 @@ export default function AdminPage() {
           </span>
         </Link>
 
-        <nav className="grid gap-2">
+        <nav className="admin-sidebar-nav grid gap-2">
           <a
             href="#overview"
-            className="flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-2.5 text-sm font-medium text-white"
+            className="admin-sidebar-link admin-sidebar-link-active flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-2.5 text-sm font-medium text-white"
           >
             <LayoutDashboard size={18} />
             Overview
@@ -387,7 +387,7 @@ export default function AdminPage() {
 
           <a
             href="#businesses"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Building2 size={18} />
             Businesses
@@ -395,7 +395,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/visibility-requests"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Megaphone size={18} />
             Visibility Requests
@@ -403,7 +403,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/revenue"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Banknote size={18} />
             Revenue
@@ -411,7 +411,7 @@ export default function AdminPage() {
 
           <Link
             href="/admin/pricing"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <BadgeDollarSign size={18} />
             Pricing
@@ -419,7 +419,7 @@ export default function AdminPage() {
 
           <a
             href="#domains"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Globe2 size={18} />
             Domain Requests
@@ -427,23 +427,17 @@ export default function AdminPage() {
 
           <Link
             href="/dashboard"
-            className="relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
           >
             <Store size={18} />
             Business Dashboard
           </Link>
         </nav>
 
-        <div className="absolute bottom-5 left-5 right-5 rounded-[1.5rem] border border-white/10 bg-white/10 p-4">
-          <p className="text-sm font-semibold">Platform Owner View</p>
-          <p className="mt-2 text-xs leading-5 text-slate-300">
-            This area is only for accounts with the super_admin role.
-          </p>
-        </div>
       </aside>
 
       <section className="lg:pl-72">
-        <header className="sticky z-50 top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur-xl">
+        <header className="admin-center-header sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur-xl">
           <div className="flex items-center justify-between px-5 py-2.5 md:px-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
@@ -457,7 +451,7 @@ export default function AdminPage() {
 
             <Link
               href="/"
-              className="rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+              className="admin-center-cta rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
             >
               View Website
             </Link>
