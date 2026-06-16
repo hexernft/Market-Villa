@@ -2165,3 +2165,477 @@ main > section > div > p {
 .mv-dashboard-content textarea {
   border-radius: 1rem !important;
 }
+
+/* Homepage motion polish */
+.home-hero-visual,
+.home-hero-copy,
+.home-showcase-card,
+.home-lift-card,
+.home-mini-card {
+  will-change: transform, opacity;
+}
+
+.home-hero-visual {
+  animation: homeHeroVisualIn 900ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    homeSlowFloat 9s ease-in-out 1s infinite;
+}
+
+.home-hero-copy {
+  animation: homeCopyIn 760ms cubic-bezier(0.22, 1, 0.36, 1) 220ms both;
+}
+
+.home-showcase-card {
+  position: relative;
+  isolation: isolate;
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease,
+    border-color 260ms ease;
+}
+
+.home-showcase-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(110deg, transparent 0%, transparent 38%, rgba(255, 255, 255, 0.16) 48%, transparent 58%, transparent 100%);
+  opacity: 0;
+  transform: translateX(-120%);
+}
+
+.home-showcase-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 36px 105px rgba(36, 20, 54, 0.26) !important;
+}
+
+.home-showcase-card:hover::after {
+  animation: homeCardShine 980ms ease;
+}
+
+.home-mini-card {
+  transition:
+    transform 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease;
+}
+
+.home-mini-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.30) !important;
+  background: rgba(255, 255, 255, 0.13) !important;
+}
+
+.home-image-stage img,
+.sleekstitch-gallery img {
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 500ms ease;
+}
+
+.home-image-stage:hover img,
+.sleekstitch-tablet:hover img {
+  transform: scale(1.035);
+  filter: saturate(1.04) contrast(1.04);
+}
+
+.home-floating-accent {
+  animation: homeAccentFloat 6.5s ease-in-out infinite;
+}
+
+.home-floating-tablet {
+  animation: homeTabletDrift 7.5s ease-in-out infinite;
+}
+
+.home-lift-card {
+  transition:
+    transform 240ms ease,
+    box-shadow 240ms ease,
+    border-color 240ms ease;
+}
+
+.home-lift-card:hover {
+  transform: translateY(-8px) scale(1.01) !important;
+}
+
+.market-primary-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.market-primary-button::after {
+  content: "";
+  position: absolute;
+  inset: -40% -70%;
+  background: linear-gradient(115deg, transparent 36%, rgba(255,255,255,0.32) 48%, transparent 60%);
+  transform: translateX(-120%);
+}
+
+.market-primary-button:hover::after {
+  animation: homeButtonShine 720ms ease;
+}
+
+@keyframes homeHeroVisualIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes homeCopyIn {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes homeSlowFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes homeAccentFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(-0.7deg);
+  }
+}
+
+@keyframes homeTabletDrift {
+  0%, 100% {
+    transform: rotateX(7deg) rotateY(-15deg) rotateZ(-3deg) translateY(0);
+  }
+  50% {
+    transform: rotateX(8deg) rotateY(-13deg) rotateZ(-2.4deg) translateY(-10px);
+  }
+}
+
+@keyframes homeCardShine {
+  0% {
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+}
+
+@keyframes homeButtonShine {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@media (max-width: 1023px) {
+  .home-floating-tablet {
+    animation-name: homeTabletDriftTablet;
+  }
+
+  @keyframes homeTabletDriftTablet {
+    0%, 100% {
+      transform: rotateX(6deg) rotateY(-9deg) rotateZ(-2deg) translateY(0);
+    }
+    50% {
+      transform: rotateX(6.5deg) rotateY(-7deg) rotateZ(-1.5deg) translateY(-8px);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .home-floating-tablet {
+    animation-name: homeTabletDriftMobile;
+  }
+
+  @keyframes homeTabletDriftMobile {
+    0%, 100% {
+      transform: rotateZ(-1deg) translateY(0);
+    }
+    50% {
+      transform: rotateZ(-0.4deg) translateY(-5px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-visual,
+  .home-hero-copy,
+  .home-floating-accent,
+  .home-floating-tablet,
+  .market-primary-button::after,
+  .home-showcase-card::after {
+    animation: none !important;
+  }
+
+  .home-showcase-card,
+  .home-mini-card,
+  .home-lift-card,
+  .home-image-stage img,
+  .sleekstitch-gallery img {
+    transition: none !important;
+  }
+}
+
+/* Homepage contrast guardrails */
+.platform-navbar-shell {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+  transform: none !important;
+}
+
+.platform-navbar-shell[data-scrolled="true"] {
+  pointer-events: auto;
+  padding: 0 !important;
+}
+
+.platform-navbar-shell[data-scrolled="true"] > .platform-navbar-surface {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.96),
+      rgba(248, 244, 255, 0.94),
+      rgba(236, 225, 255, 0.92)
+    ) !important;
+  box-shadow: 0 18px 58px rgba(36, 20, 54, 0.18) !important;
+}
+
+.platform-navbar-shell[data-scrolled="false"] > .platform-navbar-surface {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-radius: 0 0 1.6rem 1.6rem !important;
+}
+
+/* Dashboard sidebar contrast guardrails */
+.dashboard-sidebar,
+.dashboard-sidebar > div {
+  color: #ffffff !important;
+}
+
+.dashboard-sidebar nav {
+  color: rgba(255, 255, 255, 0.78) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.dashboard-sidebar a,
+.dashboard-sidebar button,
+.dashboard-sidebar span,
+.dashboard-sidebar p,
+.dashboard-sidebar svg {
+  color: inherit !important;
+}
+
+.dashboard-sidebar a[href="/dashboard"],
+.dashboard-sidebar a[class*="bg-[#7c3aed]"] {
+  color: #ffffff !important;
+}
+
+.dashboard-sidebar nav a:not([class*="bg-[#7c3aed]"]) {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.dashboard-sidebar nav a:not([class*="bg-[#7c3aed]"]):hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.10) !important;
+}
+
+.dashboard-sidebar p[class*="text-white/50"],
+.dashboard-sidebar p[class*="text-white/45"] {
+  color: rgba(255, 255, 255, 0.62) !important;
+}
+
+.dashboard-sidebar div[class*="bg-white/8"],
+.dashboard-sidebar a[class*="bg-white/10"],
+.dashboard-sidebar button[class*="bg-white/8"],
+.dashboard-sidebar button[class*="bg-white/10"] {
+  color: rgba(255, 255, 255, 0.86) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.mv-page-shell .home-dark-panel,
+.mv-page-shell .store-smart-search > div,
+.mv-page-shell .fashion-brand-showcase,
+.mv-page-shell .sleekstitch-showcase,
+.mv-page-shell .mv-empty-feature-card,
+.mv-page-shell .mv-why-panel,
+.mv-page-shell section.bg-\[\#241436\] {
+  color: #ffffff !important;
+}
+
+.mv-page-shell .home-dark-panel h1,
+.mv-page-shell .home-dark-panel h2,
+.mv-page-shell .home-dark-panel h3,
+.mv-page-shell .store-smart-search > div h1,
+.mv-page-shell .store-smart-search > div h2,
+.mv-page-shell .store-smart-search > div h3,
+.mv-page-shell .fashion-brand-showcase h1,
+.mv-page-shell .fashion-brand-showcase h2,
+.mv-page-shell .fashion-brand-showcase h3,
+.mv-page-shell .sleekstitch-showcase h1,
+.mv-page-shell .sleekstitch-showcase h2,
+.mv-page-shell .sleekstitch-showcase h3,
+.mv-page-shell .mv-empty-feature-card h1,
+.mv-page-shell .mv-empty-feature-card h2,
+.mv-page-shell .mv-empty-feature-card h3,
+.mv-page-shell .mv-why-panel h1,
+.mv-page-shell .mv-why-panel h2,
+.mv-page-shell .mv-why-panel h3 {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+.mv-page-shell .home-dark-panel p,
+.mv-page-shell .store-smart-search > div p,
+.mv-page-shell .fashion-brand-showcase p,
+.mv-page-shell .sleekstitch-showcase p,
+.mv-page-shell .mv-empty-feature-card p,
+.mv-page-shell .mv-why-panel p,
+.mv-page-shell section.bg-\[\#241436\] span {
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.mv-page-shell .home-dark-panel p[class*="uppercase"],
+.mv-page-shell .store-smart-search > div p[class*="uppercase"],
+.mv-page-shell .fashion-brand-showcase p[class*="uppercase"],
+.mv-page-shell .sleekstitch-showcase p[class*="uppercase"],
+.mv-page-shell .mv-why-panel p[class*="uppercase"] {
+  color: #c4b5fd !important;
+}
+
+.mv-page-shell .home-light-panel,
+.mv-page-shell .home-light-panel h1,
+.mv-page-shell .home-light-panel h2,
+.mv-page-shell .home-light-panel h3,
+.mv-page-shell .home-light-panel p,
+.mv-page-shell .home-light-copy,
+.mv-page-shell .home-light-copy h1,
+.mv-page-shell .home-light-copy h2,
+.mv-page-shell .home-light-copy h3,
+.mv-page-shell .home-light-copy p,
+.mv-page-shell .home-commerce-experiences > div > h1,
+.mv-page-shell .home-commerce-experiences > div > h2,
+.mv-page-shell .home-commerce-experiences > div > h3,
+.mv-page-shell .home-commerce-experiences > div > p {
+  color: #241436 !important;
+  text-shadow: none !important;
+}
+
+.mv-page-shell .home-light-panel p:not([class*="uppercase"]) {
+  color: rgba(36, 20, 54, 0.70) !important;
+}
+
+.mv-page-shell .home-light-copy p:not([class*="uppercase"]) {
+  color: rgba(36, 20, 54, 0.70) !important;
+}
+
+.mv-page-shell .home-dark-panel button.text-white,
+.mv-page-shell .store-smart-search button.text-white,
+.mv-page-shell .store-smart-search a.text-white {
+  color: #ffffff !important;
+}
+
+.mv-page-shell .home-dark-panel button.text-\[\#241436\],
+.mv-page-shell .home-light-panel button.text-\[\#241436\],
+.mv-page-shell .home-light-panel .text-\[\#241436\] {
+  color: #241436 !important;
+}
+
+/* Stores page aligned with homepage */
+.market-stores-page {
+  background:
+    radial-gradient(circle at 13% 8%, rgba(255, 228, 214, 0.80), transparent 26rem),
+    radial-gradient(circle at 82% 10%, rgba(199, 174, 255, 0.66), transparent 28rem),
+    linear-gradient(135deg, #fff7f3, #f7f1ff 48%, #eadfff) !important;
+}
+
+.market-stores-page .market-featured-stores-section,
+.market-stores-page .market-store-directory-section {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.market-stores-page .market-featured-stores-section h1,
+.market-stores-page .market-featured-stores-section h2,
+.market-stores-page .market-featured-stores-section h3,
+.market-stores-page .market-store-directory-section h1,
+.market-stores-page .market-store-directory-section h2,
+.market-stores-page .market-store-directory-section h3 {
+  color: #241436 !important;
+  text-shadow: none !important;
+}
+
+.market-stores-page .market-featured-stores-section p:not([class*="uppercase"]),
+.market-stores-page .market-store-directory-section p:not([class*="uppercase"]) {
+  color: rgba(36, 20, 54, 0.68) !important;
+}
+
+.market-stores-page .market-featured-stores-section p[class*="uppercase"],
+.market-stores-page .market-store-directory-section p[class*="uppercase"] {
+  color: #7c3aed !important;
+}
+
+.market-stores-page .market-featured-stores-section article::before,
+.market-stores-page .market-featured-stores-section article::after,
+.market-stores-page .market-featured-stores-section .home-lift-card::before,
+.market-stores-page .market-featured-stores-section .home-lift-card::after {
+  display: none !important;
+  content: none !important;
+}
+
+.market-stores-page .market-featured-stores-section article,
+.market-stores-page .market-store-directory-section article {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(248, 244, 255, 0.80)) !important;
+  border-color: rgba(255, 255, 255, 0.76) !important;
+  color: #241436 !important;
+}
+
+.market-stores-page .market-featured-stores-section article h3,
+.market-stores-page .market-store-directory-section article h3 {
+  color: #241436 !important;
+}
+
+.market-stores-page .market-featured-stores-section article p,
+.market-stores-page .market-store-directory-section article p {
+  color: rgba(36, 20, 54, 0.66) !important;
+}
+
+.market-stores-page .market-featured-stores-section article a.market-primary-button,
+.market-stores-page .market-store-directory-section article a.market-primary-button {
+  color: #ffffff !important;
+}

@@ -90,7 +90,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <button type="button" onClick={() => setIsSidebarOpen(false)} className="fixed inset-0 z-40 bg-[#241436]/45 backdrop-blur-sm lg:hidden" aria-label="Close menu overlay" />
       ) : null}
 
-      <aside className={`fixed inset-y-0 left-0 z-50 w-72 p-3 transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <aside className={`dashboard-sidebar fixed inset-y-0 left-0 z-50 w-72 p-3 transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-[linear-gradient(160deg,#241436_0%,#2f174b_70%,#412064_100%)] text-white shadow-[0_26px_70px_rgba(36,20,54,0.22)]">
           <div className="flex items-center justify-between px-5 py-5">
             <Link href="/dashboard" className="flex items-center gap-3">

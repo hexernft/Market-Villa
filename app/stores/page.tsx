@@ -1,8 +1,8 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { StoreSmartSearch } from "@/components/StoreSmartSearch";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -53,14 +53,6 @@ function getStoreLocation(store: MarketStore) {
 
 function getStoreImage(store: MarketStore) {
   return store.cover_image_url || store.image_url || store.logo_url || "";
-}
-
-function getWeekNumber() {
-  const now = new Date();
-  const firstDay = new Date(now.getFullYear(), 0, 1);
-  const pastDays = Math.floor((now.getTime() - firstDay.getTime()) / 86400000);
-
-  return Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
 }
 
 function getFeaturedStores(stores: MarketStore[]) {
@@ -204,34 +196,101 @@ export default function StoresPage() {
   }
 
   return (
-    <main className="market-stores-page min-h-screen bg-[#f7f1ff] text-slate-950">
+    <main className="market-stores-page mv-page-shell min-h-screen text-[#241436]">
       <PlatformNavbar />
-      <StoreSmartSearch />
 
-      
+      <section className="px-4 pb-10 pt-28 md:px-4 md:pt-32">
+        <div className="home-showcase-card home-light-panel mx-auto grid max-w-7xl gap-6 overflow-hidden rounded-[2rem] border border-white/75 bg-white/76 p-5 shadow-[0_30px_90px_rgba(36,20,54,0.18)] backdrop-blur-2xl lg:grid-cols-[0.9fr_1.1fr] lg:p-7">
+          <div className="flex flex-col justify-between gap-8 p-1 md:p-2">
+            <div>
+              <p className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#7c3aed]">
+                <Store size={15} />
+                Market Villa stores
+              </p>
+
+              <h1 className="mt-4 max-w-2xl text-4xl font-semibold leading-[1.02] text-[#241436] md:text-6xl">
+                Discover businesses ready to sell.
+              </h1>
+
+              <p className="mt-5 max-w-xl text-sm leading-7 text-[#241436]/70">
+                Browse live storefronts, featured businesses, and WhatsApp-ready sellers across Market Villa.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-[#f8f4ff] p-4">
+                <p className="text-2xl font-semibold text-[#241436]">
+                  {stores.length}
+                </p>
+                <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#7c3aed]">
+                  Live stores
+                </p>
+              </div>
+
+              <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-white/78 p-4">
+                <p className="text-2xl font-semibold text-[#241436]">
+                  {featuredStores.length}
+                </p>
+                <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#7c3aed]">
+                  Featured
+                </p>
+              </div>
+
+              <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-[#fff5f7] p-4">
+                <p className="text-2xl font-semibold text-[#241436]">
+                  {categories.length}
+                </p>
+                <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#7c3aed]">
+                  Categories
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative min-h-[430px] overflow-hidden rounded-[1.65rem] bg-[#241436]">
+            <Image
+              src="/phone-hub.png"
+              alt="Market Villa store discovery preview"
+              fill
+              sizes="(min-width: 1024px) 52vw, 100vw"
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(36,20,54,0.68))]" />
+            <div className="home-dark-panel absolute bottom-4 left-4 right-4 rounded-[1.35rem] border border-white/18 bg-black/40 p-4 text-white shadow-[0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-xl">
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#c4b5fd]">
+                Smart discovery lives in the navbar
+              </p>
+              <p className="mt-2 text-sm leading-6 text-white/76">
+                Scroll to search stores and products from anywhere on the page.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {message ? (
-        <section className="px-5 pt-5 md:px-5">
-          <div className="mx-auto max-w-7xl border border-purple-200 bg-purple-50 p-4 text-sm text-slate-700">
+        <section className="px-4 py-4 md:px-4">
+          <div className="home-light-panel mx-auto max-w-7xl rounded-[1.35rem] border border-[#7c3aed]/12 bg-white/76 p-4 text-sm font-semibold text-[#241436]/70 shadow-[0_18px_50px_rgba(36,20,54,0.10)] backdrop-blur-2xl">
             {message}
           </div>
         </section>
       ) : null}
 
-      <section className="market-featured-stores-section px-5 py-12 md:px-5">
+      <section className="market-featured-stores-section px-4 py-10 md:px-4">
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold tracking-[0.18em] text-[#7c3aed]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#7c3aed]">
                 Featured this week
               </p>
 
-              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-[#241436] md:text-5xl">
                 Stores worth checking out
               </h2>
             </div>
 
-            <span className="hidden rounded-full bg-white px-4 py-2 text-xs font-semibold text-slate-500 ring-1 ring-slate-200 md:inline-flex">
+            <span className="hidden rounded-2xl border border-[#7c3aed]/12 bg-white/76 px-4 py-2 text-xs font-bold text-[#241436]/58 shadow-sm md:inline-flex">
               {stores.length} live stores
             </span>
           </div>
@@ -257,22 +316,58 @@ export default function StoresPage() {
         </div>
       </section>
 
-      <section className="market-store-directory-section border-t border-purple-100 bg-[#f6efff] px-5 py-12 md:px-5">
+      <section className="market-store-directory-section px-4 py-10 md:px-4">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-6 flex items-end justify-between gap-4">
+          <div className="mb-6 grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="text-sm font-semibold tracking-[0.18em] text-[#7c3aed]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#7c3aed]">
                 Store directory
               </p>
 
-              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-[#241436] md:text-5xl">
                 Search all live stores
               </h2>
+
+              <p className="mt-3 text-sm leading-7 text-[#241436]/66">
+                Filter by category or search by name, location, and business type.
+              </p>
             </div>
 
-            <p className="text-sm text-slate-500">
-              Showing {filteredStores.length} of {stores.length}
-            </p>
+            <div className="home-light-panel rounded-[1.6rem] border border-white/70 bg-white/74 p-3 shadow-[0_20px_60px_rgba(36,20,54,0.12)] backdrop-blur-2xl">
+              <div className="relative">
+                <Search
+                  size={17}
+                  className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#7c3aed]"
+                />
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search stores, cities, products..."
+                  className="h-12 w-full rounded-2xl border border-[#7c3aed]/12 bg-white/80 px-10 text-sm font-semibold text-[#241436] outline-none placeholder:text-[#241436]/42 focus:border-[#7c3aed]/34"
+                />
+              </div>
+
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setActiveCategory(category)}
+                    className={`shrink-0 rounded-2xl border px-3 py-2 text-xs font-bold transition ${
+                      activeCategory === category
+                        ? "border-[#7c3aed]/26 bg-[#241436] text-white"
+                        : "border-[#7c3aed]/12 bg-white/72 text-[#241436]/68 hover:bg-white"
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+
+              <p className="mt-2 px-1 text-xs font-semibold text-[#241436]/52">
+                Showing {filteredStores.length} of {stores.length}
+              </p>
+            </div>
           </div>
 
           {filteredStores.length > 0 ? (
@@ -293,21 +388,23 @@ export default function StoresPage() {
         </div>
       </section>
 
-      <section className="bg-[#7c3aed] px-5 py-10 text-white md:px-5">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
+      <section className="px-4 py-10 md:px-4">
+        <div className="mv-why-panel home-showcase-card mx-auto flex max-w-7xl flex-col gap-5 rounded-[2rem] p-6 text-white shadow-[0_28px_70px_rgba(36,20,54,0.22)] md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-[-0.04em]">
+            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/55">
+              Join the directory
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white">
               Want your business featured?
             </h2>
-            <p className="mt-2 text-sm leading-6 text-white/80">
-              Create your Market Villa page and publish your store to join the
-              directory.
+            <p className="mt-2 max-w-xl text-sm leading-6 text-white/76">
+              Create your Market Villa page and publish your store to join the directory.
             </p>
           </div>
 
           <Link
             href="/login"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-[#7c3aed] shadow-sm transition hover:bg-purple-50"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-[#241436] shadow-sm transition hover:bg-[#f8f4ff]"
           >
             Create Business Page
             <ArrowRight size={17} />
@@ -347,9 +444,9 @@ function StoreCard({
         delay: Math.min(index * 0.05, 0.25),
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="premium-card-hover group overflow-hidden border border-purple-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#7c3aed]/40 hover:shadow-md"
+      className="home-lift-card group overflow-hidden rounded-[1.6rem] border border-white/70 bg-white/76 text-[#241436] shadow-[0_20px_60px_rgba(36,20,54,0.12)] backdrop-blur-2xl transition hover:-translate-y-1 hover:border-[#7c3aed]/26"
     >
-      <div className="relative h-44 overflow-hidden bg-slate-100">
+      <div className="relative h-48 overflow-hidden bg-[#f8f4ff]">
         {image ? (
           <img
             src={image}
@@ -357,13 +454,13 @@ function StoreCard({
             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="grid h-full place-items-center bg-purple-50">
+          <div className="grid h-full place-items-center bg-[#f8f4ff]">
             <Store size={34} className="text-[#7c3aed]" />
           </div>
         )}
 
         {featured ? (
-          <span className="absolute left-4 top-4 rounded-full bg-[#7c3aed] px-3 py-1 text-xs font-semibold text-white">
+          <span className="absolute left-4 top-4 rounded-2xl bg-[#241436] px-3 py-1.5 text-xs font-bold text-white shadow-[0_14px_35px_rgba(36,20,54,0.24)]">
             Store of the Week
           </span>
         ) : null}
@@ -371,31 +468,31 @@ function StoreCard({
 
       <div className="p-5">
         <div className="mb-4 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-[#7c3aed]">
+          <span className="inline-flex items-center gap-1 rounded-2xl border border-[#7c3aed]/12 bg-[#f8f4ff] px-3 py-1.5 text-xs font-bold text-[#7c3aed]">
             <Tag size={13} />
             {category}
           </span>
 
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+          <span className="inline-flex items-center gap-1 rounded-2xl border border-emerald-200/70 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
             <CheckCircle2 size={13} />
             {store.is_verified ? "Verified" : "Live"}
           </span>
         </div>
 
-        <h3 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
+        <h3 className="text-xl font-semibold tracking-[-0.04em] text-[#241436]">
           {store.name || "Untitled store"}
         </h3>
 
-        <p className="mt-2 line-clamp-2 min-h-[48px] text-sm leading-6 text-slate-500">
+        <p className="mt-2 line-clamp-2 min-h-[48px] text-sm leading-6 text-[#241436]/62">
           {store.description ||
             `A Market Villa business page based in ${location}.`}
         </p>
 
-        <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+        <p className="mt-3 text-xs font-bold uppercase tracking-[0.16em] text-[#7c3aed]">
           {location}
         </p>
 
-        <p className="mt-2 text-xs text-slate-400">
+        <p className="mt-2 text-xs font-semibold text-[#241436]/45">
           {Number(store.weekly_views || 0).toLocaleString()} weekly views
         </p>
 
@@ -403,7 +500,7 @@ function StoreCard({
           {store.slug ? (
             <Link
               href={`/store/${store.slug}`}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#7c3aed] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#8b5cf6]"
+              className="market-primary-button inline-flex flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold text-white"
             >
               View store
               <ArrowRight size={15} />
@@ -416,7 +513,7 @@ function StoreCard({
             className={`grid h-11 w-11 place-items-center rounded-full border transition ${
               isCopied
                 ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-slate-200 bg-white text-slate-600 hover:border-[#7c3aed]/40 hover:text-[#7c3aed]"
+                : "border-[#7c3aed]/12 bg-white/76 text-[#241436]/64 hover:border-[#7c3aed]/34 hover:text-[#7c3aed]"
             }`}
             aria-label={isCopied ? "Store link copied" : "Copy store link"}
             title={isCopied ? "Copied" : "Copy store link"}
@@ -435,7 +532,7 @@ function StoreSkeletonGrid() {
       {Array.from({ length: 6 }).map((_, index) => (
         <div
           key={index}
-          className="overflow-hidden border border-purple-100 bg-white shadow-sm"
+          className="overflow-hidden rounded-[1.6rem] border border-white/70 bg-white/76 shadow-[0_20px_60px_rgba(36,20,54,0.10)] backdrop-blur-2xl"
         >
           <div className="mv-skeleton h-44" />
           <div className="space-y-3 p-5">
@@ -443,7 +540,7 @@ function StoreSkeletonGrid() {
             <div className="mv-skeleton h-6 w-3/4 rounded" />
             <div className="mv-skeleton h-4 w-full rounded" />
             <div className="mv-skeleton h-4 w-2/3 rounded" />
-            <div className="mv-skeleton h-11 w-full rounded-full" />
+            <div className="mv-skeleton h-11 w-full rounded-2xl" />
           </div>
         </div>
       ))}
@@ -453,14 +550,14 @@ function StoreSkeletonGrid() {
 
 function EmptyStores() {
   return (
-    <div className="border border-dashed border-purple-200 bg-white p-10 text-center">
+    <div className="home-light-panel rounded-[1.6rem] border border-dashed border-[#7c3aed]/22 bg-white/76 p-10 text-center shadow-[0_20px_60px_rgba(36,20,54,0.10)] backdrop-blur-2xl">
       <Store className="mx-auto text-[#7c3aed]" size={34} />
 
-      <h3 className="mt-4 text-xl font-semibold tracking-[-0.04em] text-slate-950">
+      <h3 className="mt-4 text-xl font-semibold tracking-[-0.04em] text-[#241436]">
         No stores found
       </h3>
 
-      <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+      <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#241436]/62">
         Published stores will appear here. Try another search or check back
         later.
       </p>

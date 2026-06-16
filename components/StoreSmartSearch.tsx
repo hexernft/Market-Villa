@@ -217,7 +217,11 @@ function mapProductToResult(
   };
 }
 
-export function StoreSmartSearch() {
+type StoreSmartSearchProps = {
+  variant?: "standalone" | "home";
+};
+
+export function StoreSmartSearch({ variant = "standalone" }: StoreSmartSearchProps) {
   const [query, setQuery] = useState("");
   const [stores, setStores] = useState<StoreRow[]>([]);
   const [products, setProducts] = useState<ProductRow[]>([]);
@@ -281,7 +285,11 @@ export function StoreSmartSearch() {
   ];
 
   return (
-    <section className="px-4 pb-8 pt-28 md:px-4 md:pt-32">
+    <section
+      className={`store-smart-search px-4 pb-8 md:px-4 ${
+        variant === "home" ? "pt-10 md:pt-12" : "pt-28 md:pt-32"
+      }`}
+    >
       <div className="mx-auto max-w-7xl rounded-[2.4rem] border border-white/12 bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.26),transparent_32%),linear-gradient(145deg,#050008,#12051f_55%,#241436)] p-5 shadow-[0_30px_100px_rgba(0,0,0,0.34)] md:p-7">
         <div className="grid gap-6 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
           <div>
