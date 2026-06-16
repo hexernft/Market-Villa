@@ -15,6 +15,28 @@ const suggestions = [
   "How does billing work?",
 ];
 
+async function readSupportResponse(response: Response) {
+  const responseText = await response.text();
+
+  if (!responseText.trim()) {
+    return {
+      error: response.ok
+        ? "AI support returned an empty response. Please try again."
+        : "AI support is unavailable right now. Please try again shortly.",
+    };
+  }
+
+  try {
+    return JSON.parse(responseText) as { error?: string; reply?: string };
+  } catch {
+    return {
+      error: response.ok
+        ? "AI support returned an unreadable response. Please try again."
+        : "AI support is unavailable right now. Please try again shortly.",
+    };
+  }
+}
+
 export function SupportWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -55,7 +77,7 @@ export function SupportWidget() {
         }),
       });
 
-      const data = await response.json();
+      const data = await readSupportResponse(response);
 
       if (!response.ok) {
         throw new Error(data?.error || "Unable to contact AI support.");

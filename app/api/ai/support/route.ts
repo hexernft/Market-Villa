@@ -1,31 +1,45 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const openaiApiKey = process.env.OPENAI_API_KEY || "";
-const model = process.env.OPENAI_MODEL || "gpt-5-mini";
-
-const openai = new OpenAI({
-  apiKey: openaiApiKey,
-});
+type SupportRequestBody = {
+  message?: unknown;
+};
 
 export async function POST(request: Request) {
   try {
+    const openaiApiKey = process.env.OPENAI_API_KEY || "";
+    const model = process.env.OPENAI_MODEL || "gpt-5-mini";
+
     if (!openaiApiKey) {
       return NextResponse.json(
         { error: "OPENAI_API_KEY is not configured." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
-    const body = await request.json();
+    let body: SupportRequestBody;
+
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid request body. Please send a JSON message." },
+        { status: 400 },
+      );
+    }
+
     const message = String(body?.message || "").trim();
 
     if (!message) {
       return NextResponse.json(
         { error: "Message is required." },
-        { status: 400 }
+        { status: 400 },
       );
     }
+
+    const openai = new OpenAI({
+      apiKey: openaiApiKey,
+    });
 
     const response = await openai.responses.create({
       model,
@@ -43,7 +57,8 @@ export async function POST(request: Request) {
       max_output_tokens: 450,
     });
 
-    const reply = response.output_text || "I could not generate a response.";
+    const reply =
+      response.output_text?.trim() || "I could not generate a response.";
 
     return NextResponse.json({
       success: true,
@@ -56,4 +71,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
-
