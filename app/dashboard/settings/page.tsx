@@ -1,13 +1,25 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
+  BarChart3,
   Bell,
   Building2,
+  ChevronRight,
+  CreditCard,
+  Globe2,
+  HelpCircle,
+  LayoutDashboard,
   Loader2,
   Mail,
+  Megaphone,
+  Package,
+  Palette,
   Save,
   ShieldCheck,
+  ShoppingBag,
+  Sparkles,
   User,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -18,6 +30,36 @@ type Profile = {
   email?: string | null;
   role?: string | null;
 };
+
+const menuSections = [
+  {
+    title: "Store Setup",
+    items: [
+      { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+      { label: "Profile", href: "/dashboard/profile", icon: User },
+      { label: "Theme", href: "/dashboard/theme", icon: Palette },
+      { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
+      { label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
+      { label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
+    ],
+  },
+  {
+    title: "Selling",
+    items: [
+      { label: "Products", href: "/dashboard/products", icon: Package },
+      { label: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
+      { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+      { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
+    ],
+  },
+  {
+    title: "Support",
+    items: [
+      { label: "Help Center", href: "/help", icon: HelpCircle },
+      { label: "Platform Status", href: "/status", icon: ShieldCheck },
+    ],
+  },
+];
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -132,18 +174,17 @@ export default function SettingsPage() {
 
   return (
     <div className="grid gap-5">
-      <section className="border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="border border-slate-200 bg-white p-4 shadow-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-          Settings
+          More
         </p>
 
         <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-          Account settings
+          Dashboard menu
         </h2>
 
         <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-          Manage your profile, support contact details, and basic account
-          preferences.
+          Everything from the desktop sidebar is available here on mobile.
         </p>
       </section>
 
@@ -159,10 +200,46 @@ export default function SettingsPage() {
         </div>
       ) : null}
 
+      <section className="grid gap-3 xl:grid-cols-3">
+        {menuSections.map((section) => (
+          <div
+            key={section.title}
+            className="border border-slate-200 bg-white p-3 shadow-sm"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+              {section.title}
+            </p>
+
+            <div className="mt-3 grid gap-1.5">
+              {section.items.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-white"
+                  >
+                    <span className="inline-flex items-center gap-3">
+                      <span className="grid h-8 w-8 place-items-center rounded-2xl bg-white text-emerald-700">
+                        <Icon size={18} />
+                      </span>
+                      {item.label}
+                    </span>
+
+                    <ChevronRight size={17} className="text-slate-400" />
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </section>
+
       <section className="grid gap-5 xl:grid-cols-[1fr_0.8fr]">
-        <div className="border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="border border-slate-200 bg-white p-4 shadow-sm">
           <div className="mb-5 flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center bg-[#26143d] text-white">
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
               <User size={18} />
             </span>
 
@@ -203,7 +280,7 @@ export default function SettingsPage() {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSaving ? (
                 <Loader2 size={17} className="animate-spin" />
@@ -216,9 +293,9 @@ export default function SettingsPage() {
         </div>
 
         <aside className="grid gap-5">
-          <div className="border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="border border-slate-200 bg-white p-4 shadow-sm">
             <div className="mb-5 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center bg-[#26143d] text-white">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
                 <Building2 size={18} />
               </span>
 
@@ -259,9 +336,9 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="border border-slate-200 bg-[#26143d] p-5 text-white shadow-sm">
+          <div className="border border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center bg-white text-slate-950">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
                 <ShieldCheck size={18} />
               </span>
 
@@ -269,15 +346,15 @@ export default function SettingsPage() {
                 <h3 className="text-sm font-semibold tracking-[-0.03em]">
                   Security
                 </h3>
-                <p className="text-sm text-white/55">
+                <p className="text-sm text-slate-500">
                   Password and login security options can be added here later.
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 flex items-center gap-3 border border-white/10 bg-white/5 p-4">
-              <Bell size={17} className="text-white/60" />
-              <p className="text-sm leading-6 text-white/65">
+            <div className="mt-5 flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <Bell size={17} className="text-slate-500" />
+              <p className="text-sm leading-6 text-slate-500">
                 Renewal reminders and account alerts will connect here after
                 Paystack is finalized.
               </p>

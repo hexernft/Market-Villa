@@ -4,12 +4,16 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  Boxes,
+  CheckCircle2,
   Clock3,
+  Copy,
   ExternalLink,
   Globe2,
   Loader2,
   Package,
+  Palette,
+  Plus,
+  Send,
   ShoppingBag,
   Sparkles,
   UserRound,
@@ -18,7 +22,6 @@ import {
 import {
   getMyBusinesses,
   getProductsByBusinessId,
-  getServicesByBusinessId,
 } from "@/lib/business-actions";
 import { supabase } from "@/lib/supabase";
 import { formatCurrency } from "@/lib/utils";
@@ -31,6 +34,11 @@ type DashboardBusiness = {
   is_published?: boolean | null;
   subscription_plan?: string | null;
   subscription_status?: string | null;
+  description?: string | null;
+  logo_url?: string | null;
+  cover_image_url?: string | null;
+  whatsapp?: string | null;
+  selected_theme?: string | null;
   created_at?: string | null;
 };
 
@@ -84,11 +92,11 @@ export default function DashboardPage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [productsCount, setProductsCount] = useState(0);
-  const [servicesCount, setServicesCount] = useState(0);
   const [orders, setOrders] = useState<DashboardOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMetrics, setIsLoadingMetrics] = useState(false);
   const [message, setMessage] = useState("");
+  const [copyMessage, setCopyMessage] = useState("");
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
@@ -112,9 +120,56 @@ export default function DashboardPage() {
       orders: orders.length,
       pendingOrders,
       products: productsCount,
-      services: servicesCount,
     };
-  }, [orders, productsCount, servicesCount]);
+  }, [orders, productsCount]);
+
+  const storeUrl = selectedBusiness?.slug
+    ? `/store/${selectedBusiness.slug}`
+    : "";
+
+  const setupItems = useMemo(() => {
+    if (!selectedBusiness) {
+      return [];
+    }
+
+    return [
+      {
+        label: "Complete store profile",
+        href: "/dashboard/profile",
+        done: Boolean(
+          selectedBusiness.name &&
+            selectedBusiness.description &&
+            selectedBusiness.whatsapp
+        ),
+      },
+      {
+        label: "Add logo or cover",
+        href: "/dashboard/profile",
+        done: Boolean(selectedBusiness.logo_url || selectedBusiness.cover_image_url),
+      },
+      {
+        label: "Add your first product",
+        href: "/dashboard/products",
+        done: productsCount > 0,
+      },
+      {
+        label: "Choose a theme",
+        href: "/dashboard/theme",
+        done: Boolean(selectedBusiness.selected_theme),
+      },
+      {
+        label: "Publish your store",
+        href: "/dashboard/profile",
+        done: Boolean(selectedBusiness.is_published),
+      },
+    ];
+  }, [productsCount, selectedBusiness]);
+
+  const completedSetupCount = setupItems.filter((item) => item.done).length;
+  const setupProgress =
+    setupItems.length > 0
+      ? Math.round((completedSetupCount / setupItems.length) * 100)
+      : 0;
 
   async function loadBusinesses() {
     const items = await getMyBusinesses();
@@ -131,9 +186,8 @@ export default function DashboardPage() {
     setMessage("");
 
     try {
-      const [products, services, orderResponse] = await Promise.all([
+      const [products, orderResponse] = await Promise.all([
         getProductsByBusinessId(businessId),
-        getServicesByBusinessId(businessId),
         supabase
           .from("orders")
           .select("*")
@@ -147,7 +201,6 @@ export default function DashboardPage() {
       }
 
       setProductsCount(products.length);
-      setServicesCount(services.length);
       setOrders((orderResponse.data || []) as DashboardOrder[]);
     } catch (error) {
       const errorMessage =
@@ -157,6 +210,23 @@ export default function DashboardPage() {
     } finally {
       setIsLoadingMetrics(false);
     }
+  }
+
+  async function handleCopyStoreLink() {
+    if (!selectedBusiness?.slug) return;
+
+    const origin =
+      typeof window !== "undefined" ? window.location.origin : "";
+    const url = `${origin}/store/${selectedBusiness.slug}`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopyMessage("Store link copied.");
+    } catch {
+      setCopyMessage("Copy failed. Open your store and copy the link.");
+    }
+
+    window.setTimeout(() => setCopyMessage(""), 2200);
   }
 
   useEffect(() => {
@@ -192,7 +262,6 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!selectedBusinessId) {
       setProductsCount(0);
-      setServicesCount(0);
       setOrders([]);
       return;
     }
@@ -224,7 +293,7 @@ export default function DashboardPage() {
         </h2>
 
         <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500">
-          Set up your storefront, add products or services, and publish your
+          Set up your storefront, add products, and publish your
           page.
         </p>
 
@@ -261,93 +330,101 @@ export default function DashboardPage() {
       value: metrics.products,
       icon: Package,
     },
-    {
-      label: "Services",
-      value: metrics.services,
-      icon: Boxes,
-    },
   ];
 
   const quickActions = [
     {
-      label: "Add Products",
+      label: "Product",
       href: "/dashboard/products",
       icon: Package,
     },
     {
-      label: "Add Services",
-      href: "/dashboard/services",
-      icon: Boxes,
+      label: "Theme",
+      href: "/dashboard/theme",
+      icon: Palette,
     },
     {
-      label: "Edit Profile",
+      label: "Profile",
       href: "/dashboard/profile",
       icon: UserRound,
     },
     {
-      label: "Billing",
-      href: "/dashboard/billing",
-      icon: Wallet,
-    },
-    {
-      label: "Custom Domain",
+      label: "Domain",
       href: "/dashboard/domain",
       icon: Globe2,
     },
   ];
 
   return (
-    <div className="grid gap-5">
-      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-center">
-          <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
-            <select
-              value={selectedBusinessId}
-              onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-10 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100 md:min-w-72"
-            >
-              {businesses.map((business) => (
-                <option key={business.id} value={business.id}>
-                  {business.name} - /store/{business.slug}
-                </option>
-              ))}
-            </select>
+    <div className="dashboard-overview-mobile grid gap-5">
+      <section className="dashboard-hero-card rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+              Business Dashboard
+            </p>
 
-            {selectedBusiness?.slug ? (
-              <Link
-                href={`/store/${selectedBusiness.slug}`}
-                target="_blank"
-                className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
-              >
-                View Store
-                <ExternalLink size={16} />
-              </Link>
-            ) : null}
+            <h1 className="mt-2 truncate text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+              Hi, {selectedBusiness?.name || "there"}
+            </h1>
+
+            <p className="mt-1 text-sm text-slate-500">
+              {selectedBusiness?.is_published
+                ? "Your store is live. Keep it fresh."
+                : "Finish setup and share your store link."}
+            </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
-            <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
-              <p className="text-xs text-slate-500">Store</p>
-              <p className="mt-1 text-sm font-semibold text-slate-950">
-                {selectedBusiness?.is_published ? "Live" : "Draft"}
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-teal-50 px-3 py-2.5">
-              <p className="text-xs text-teal-700">Plan</p>
-              <p className="mt-1 truncate text-sm font-semibold text-teal-950">
-                {selectedBusiness?.subscription_plan || "Starter"}
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-purple-50 px-3 py-2.5">
-              <p className="text-xs text-purple-700">Status</p>
-              <p className="mt-1 truncate text-sm font-semibold text-purple-950">
-                {selectedBusiness?.subscription_status || "Trial"}
-              </p>
-            </div>
-          </div>
+          <span
+            className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
+              selectedBusiness?.is_published
+                ? "bg-emerald-50 text-emerald-700"
+                : "bg-amber-50 text-amber-700"
+            }`}
+          >
+            {selectedBusiness?.is_published ? "Live" : "Draft"}
+          </span>
         </div>
+
+        <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_auto_auto] sm:items-center">
+          <select
+            value={selectedBusinessId}
+            onChange={(event) => setSelectedBusinessId(event.target.value)}
+            className="min-h-10 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50"
+          >
+            {businesses.map((business) => (
+              <option key={business.id} value={business.id}>
+                {business.name} - /store/{business.slug}
+              </option>
+            ))}
+          </select>
+
+          {storeUrl ? (
+            <Link
+              href={storeUrl}
+              target="_blank"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-2xl bg-[#06110f] px-4 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5"
+            >
+              Visit store
+              <ExternalLink size={16} />
+            </Link>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={handleCopyStoreLink}
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5"
+          >
+            <Copy size={16} />
+            Share link
+          </button>
+        </div>
+
+        {copyMessage ? (
+          <p className="mt-3 text-sm font-medium text-emerald-700">
+            {copyMessage}
+          </p>
+        ) : null}
       </section>
 
       {isLoadingMetrics ? (
@@ -363,21 +440,87 @@ export default function DashboardPage() {
         </div>
       ) : null}
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+      <section className="dashboard-setup-card rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-sm text-slate-500">Complete your setup</p>
+            <h2 className="mt-1 text-lg font-semibold tracking-[-0.03em] text-slate-950">
+              {completedSetupCount}/{setupItems.length} steps done
+            </h2>
+          </div>
+
+          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            {setupProgress}%
+          </span>
+        </div>
+
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
+          <div
+            className="h-full rounded-full bg-emerald-600 transition-all"
+            style={{ width: `${setupProgress}%` }}
+          />
+        </div>
+
+        <div className="mt-4 grid gap-2">
+          {setupItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-white"
+            >
+              <span className="inline-flex items-center gap-2">
+                {item.done ? (
+                  <CheckCircle2 size={17} className="text-emerald-600" />
+                ) : (
+                  <span className="grid h-[17px] w-[17px] place-items-center rounded-full border border-slate-300">
+                    <Plus size={11} />
+                  </span>
+                )}
+                {item.label}
+              </span>
+
+              <ArrowRight size={15} className="text-slate-400" />
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="dashboard-quick-actions">
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
+          {quickActions.map((action) => {
+            const Icon = action.icon;
+
+            return (
+              <Link
+                key={action.href}
+                href={action.href}
+                className="grid min-h-[5.8rem] place-items-center gap-2 rounded-[1.2rem] border border-slate-200 bg-white p-3 text-center text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5"
+              >
+                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+                  <Icon size={20} />
+                </span>
+                {action.label}
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
         {statCards.map((card) => {
           const Icon = card.icon;
 
           return (
             <div
               key={card.label}
-              className="premium-card-hover rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              className="dashboard-metric-card rounded-[1.2rem] border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex items-center justify-between gap-3">
-                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#26143d] text-white">
+                <span className="grid h-9 w-9 place-items-center rounded-2xl bg-slate-50 text-slate-700">
                   <Icon size={17} />
                 </span>
 
-                <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
                   {card.label}
                 </span>
               </div>
@@ -386,14 +529,14 @@ export default function DashboardPage() {
                 value={card.value}
                 prefix={card.prefix || ""}
                 compact={card.label === "Revenue"}
-                className="mt-5 block truncate text-2xl font-semibold tracking-[-0.04em] text-slate-950"
+                className="mt-4 block truncate text-2xl font-semibold tracking-[-0.04em] text-slate-950"
               />
             </div>
           );
         })}
       </section>
 
-      <section className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+      <section className="grid gap-5">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white shadow-sm">
           <div className="flex items-center justify-between gap-4 border-b border-slate-200 p-4">
             <div>
@@ -454,84 +597,29 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="p-8 text-center">
-              <div className="mx-auto grid h-11 w-11 place-items-center rounded-2xl bg-slate-100 text-slate-500">
+              <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
                 <ShoppingBag size={18} />
               </div>
 
               <p className="mt-4 text-sm font-semibold text-slate-950">
-                No orders yet
+                No customer activity yet
               </p>
+
+              <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+                Share your store link and customer inquiries will become easier
+                to track here.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleCopyStoreLink}
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+              >
+                <Send size={16} />
+                Share store link
+              </button>
             </div>
           )}
-        </div>
-
-        <div className="grid content-start gap-5">
-          <div className="rounded-[1.5rem] border border-slate-200 bg-[#26143d] p-4 text-white shadow-sm">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/40">
-                  Store Status
-                </p>
-
-                <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em]">
-                  {selectedBusiness?.name}
-                </h3>
-              </div>
-
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                  selectedBusiness?.is_published
-                    ? "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-300/25"
-                    : "bg-purple-400/15 text-purple-200 ring-1 ring-purple-300/25"
-                }`}
-              >
-                {selectedBusiness?.is_published ? "Published" : "Draft"}
-              </span>
-            </div>
-
-            <div className="mt-5 grid gap-2">
-              <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-3">
-                <span className="text-sm text-white/55">Plan</span>
-                <span className="text-sm font-semibold capitalize">
-                  {selectedBusiness?.subscription_plan || "Starter"}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-3">
-                <span className="text-sm text-white/55">Subscription</span>
-                <span className="text-sm font-semibold capitalize">
-                  {selectedBusiness?.subscription_status || "Trial"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-              Quick Actions
-            </p>
-
-            <div className="mt-4 grid gap-2">
-              {quickActions.map((action) => {
-                const Icon = action.icon;
-
-                return (
-                  <Link
-                    key={action.href}
-                    href={action.href}
-                    className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-950 hover:text-slate-950"
-                  >
-                    <span className="inline-flex items-center gap-2">
-                      <Icon size={16} />
-                      {action.label}
-                    </span>
-
-                    <ArrowRight size={15} />
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </section>
     </div>

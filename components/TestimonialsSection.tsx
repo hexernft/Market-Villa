@@ -28,7 +28,7 @@ export function TestimonialsSection() {
             Testimonials
           </p>
 
-          <h2 className="mt-3 font-serif text-2xl font-semibold tracking-[-0.05em] text-[#231136] md:text-3xl">
+          <h2 className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-[#231136] md:text-3xl">
             Built for businesses that want to look more trusted online.
           </h2>
 

@@ -30,10 +30,10 @@ const categories = [
   "Beauty & Wellness",
   "Apartment & Hospitality",
   "Retail Store",
-  "Digital Services",
+  "Digital Products",
   "School / Education",
   "Church / Ministry",
-  "Professional Services",
+  "Professional Products",
   "Other",
 ];
 

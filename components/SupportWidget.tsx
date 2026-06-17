@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, MessageCircle, Send, X } from "lucide-react";
+import { Bot, MessageSquare, Send, X } from "lucide-react";
 
 type ChatMessage = {
   role: "assistant" | "user";
@@ -122,25 +122,26 @@ export function SupportWidget() {
           onClick={() => setIsOpen(true)}
           aria-label="Open support chat"
           title="Support"
-          animate={{
-            boxShadow: [
-              "0 10px 26px rgba(124,58,237,0.24)",
-              "0 18px 46px rgba(124,58,237,0.38)",
-              "0 10px 26px rgba(124,58,237,0.24)",
-            ],
-          }}
-          transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-          whileHover={{ y: -3, scale: 1.02 }}
+          whileHover={{ y: -2, scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="group fixed bottom-5 right-5 z-50 inline-flex items-center gap-0 overflow-hidden rounded-full bg-[var(--mv-violet)] p-2.5 text-white ring-1 ring-white/10 transition-all duration-300 hover:gap-2.5 hover:bg-[var(--mv-purple-hover)] hover:px-3.5"
+          className="support-widget-trigger fixed bottom-5 right-5 z-50 inline-flex h-9 w-9 items-center justify-center bg-transparent p-0 text-[var(--mv-violet)] transition-colors duration-200 hover:text-[var(--mv-purple-hover)] md:h-11 md:w-11"
+          style={{
+            width: "2rem",
+            height: "2rem",
+            minHeight: 0,
+            padding: 0,
+            border: 0,
+            borderRadius: 0,
+            background: "transparent",
+            backgroundImage: "none",
+            boxShadow: "none",
+          }}
         >
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white">
-            <MessageCircle size={20} />
-          </span>
-
-          <span className="max-w-0 overflow-hidden whitespace-nowrap pr-0 text-xs font-semibold opacity-0 transition-all duration-300 group-hover:max-w-20 group-hover:pr-1 group-hover:opacity-100">
-            Support
-          </span>
+          <MessageSquare
+            aria-hidden="true"
+            className="h-5 w-5 md:h-6 md:w-6"
+            strokeWidth={2.35}
+          />
         </motion.button>
       ) : null}
 

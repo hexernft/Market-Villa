@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import {
   BarChart3,
-  Boxes,
   ClipboardList,
   CreditCard,
   Globe2,
@@ -14,13 +13,11 @@ import {
   Loader2,
   LogOut,
   Megaphone,
-  Menu,
   Package,
   Palette,
   Settings,
   Sparkles,
   UserRound,
-  X,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { BRAND } from "@/lib/brand";
@@ -31,7 +28,6 @@ const navItems = [
   { label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
   { label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
   { label: "Products", href: "/dashboard/products", icon: Package },
-  { label: "Services", href: "/dashboard/services", icon: Boxes },
   { label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
   { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
   { label: "Profile", href: "/dashboard/profile", icon: UserRound },
@@ -40,11 +36,18 @@ const navItems = [
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
+const mobileNavItems = [
+  { label: "Home", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Products", href: "/dashboard/products", icon: Package },
+  { label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
+  { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+  { label: "More", href: "/dashboard/settings", icon: Settings },
+];
+
 export function DashboardShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
@@ -81,18 +84,10 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="mv-page-shell min-h-screen text-[#241436]">
-      <button type="button" onClick={() => setIsSidebarOpen(true)} className="fixed left-4 top-4 z-50 grid h-12 w-12 place-items-center rounded-2xl bg-[#7c3aed] text-white shadow-lg lg:hidden" aria-label="Open menu">
-        <Menu size={19} />
-      </button>
-
-      {isSidebarOpen ? (
-        <button type="button" onClick={() => setIsSidebarOpen(false)} className="fixed inset-0 z-40 bg-[#241436]/45 backdrop-blur-sm lg:hidden" aria-label="Close menu overlay" />
-      ) : null}
-
-      <aside className={`dashboard-sidebar fixed inset-y-0 left-0 z-50 w-72 p-3 transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+    <div className="mv-page-shell dashboard-mobile-light min-h-screen text-[#241436]">
+      <aside className="dashboard-sidebar fixed inset-y-0 left-0 z-50 hidden w-72 p-3 lg:block">
         <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-[linear-gradient(160deg,#241436_0%,#2f174b_70%,#412064_100%)] text-white shadow-[0_26px_70px_rgba(36,20,54,0.22)]">
-          <div className="flex items-center justify-between px-5 py-5">
+          <div className="flex items-center px-5 py-5">
             <Link href="/dashboard" className="flex items-center gap-3">
               <Image src="/market-villa-logo.png" alt="Market Villa" width={72} height={72} className="h-16 w-16 object-contain" priority />
               <div>
@@ -100,10 +95,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 <p className="text-xs font-medium text-white/50">Brand studio</p>
               </div>
             </Link>
-
-            <button type="button" onClick={() => setIsSidebarOpen(false)} className="grid h-9 w-9 place-items-center rounded-2xl bg-white/10 text-white lg:hidden" aria-label="Close menu">
-              <X size={18} />
-            </button>
           </div>
 
           <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-2.5">
@@ -111,7 +102,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               const Icon = item.icon;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
-                <Link key={item.href} href={item.href} onClick={() => setIsSidebarOpen(false)} className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition ${isActive ? "bg-[#7c3aed] text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-white/68 hover:bg-white/10 hover:text-white"}`}>
+                <Link key={item.href} href={item.href} className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition ${isActive ? "bg-[#7c3aed] text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-white/68 hover:bg-white/10 hover:text-white"}`}>
                   <Icon size={17} />
                   {item.label}
                 </Link>
@@ -128,9 +119,35 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <main className="min-h-screen lg:pl-72">
-        <div className="mv-dashboard-content px-4 py-5 md:px-4 lg:px-5">{children}</div>
+      <main className="min-h-screen pb-24 lg:pb-0 lg:pl-72">
+        <div className="mv-dashboard-content px-4 py-5 pt-20 md:px-4 lg:px-5 lg:pt-5">{children}</div>
       </main>
+
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white px-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] pt-2 lg:hidden" aria-label="Mobile dashboard navigation">
+        <div className="grid grid-cols-5 gap-1">
+          {mobileNavItems.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/dashboard" && pathname.startsWith(item.href));
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-2xl px-1 text-[11px] font-semibold transition ${
+                  isActive
+                    ? "bg-emerald-50 text-emerald-700"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                }`}
+              >
+                <Icon size={20} strokeWidth={isActive ? 2.4 : 2} />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }

@@ -33,7 +33,6 @@ const productCategories = [
   "Retail",
   "Booking",
   "Digital Product",
-  "Service Add-on",
   "Other",
 ];
 
@@ -329,17 +328,17 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="grid gap-6">
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-center">
-          <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+    <div className="grid gap-5">
+      <section className="rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-center">
+          <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
             <select
               value={selectedBusinessId}
               onChange={(event) => {
                 setSelectedBusinessId(event.target.value);
                 resetForm();
               }}
-              className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
+              className="min-h-10 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 md:min-w-80"
             >
               {businesses.length === 0 ? (
                 <option value="">No business created yet</option>
@@ -361,30 +360,30 @@ export default function ProductsPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:bg-white focus:ring-4 focus:ring-slate-100"
+                className="min-h-10 w-full rounded-2xl border border-slate-200 bg-white px-11 text-sm outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-50"
                 placeholder="Search products"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-2xl bg-slate-50 px-4 py-2.5">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="rounded-2xl bg-slate-50 px-3 py-2">
               <p className="text-xs text-slate-500">Total</p>
-              <p className="mt-1 text-xl font-semibold text-slate-950">
+              <p className="mt-1 text-lg font-semibold text-slate-950">
                 {products.length}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-emerald-50 px-4 py-2.5">
+            <div className="rounded-2xl bg-emerald-50 px-3 py-2">
               <p className="text-xs text-emerald-700">Live</p>
-              <p className="mt-1 text-xl font-semibold text-emerald-950">
+              <p className="mt-1 text-lg font-semibold text-emerald-950">
                 {availableProductsCount}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-purple-50 px-4 py-2.5">
+            <div className="rounded-2xl bg-purple-50 px-3 py-2">
               <p className="text-xs text-purple-700">Featured</p>
-              <p className="mt-1 text-xl font-semibold text-purple-950">
+              <p className="mt-1 text-lg font-semibold text-purple-950">
                 {featuredProductsCount}
               </p>
             </div>
@@ -421,24 +420,24 @@ export default function ProductsPage() {
           }`}
         >
           {!isProductFormOpen ? (
-            <div className="rounded-[2rem] border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
+            <div className="rounded-[1.35rem] border border-dashed border-slate-300 bg-white p-6 text-center shadow-sm">
               <button
                 type="button"
                 onClick={openNewProductForm}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-emerald-700"
               >
                 <Plus size={18} />
                 Add Product
               </button>
 
               <p className="mt-3 text-sm text-slate-500">
-                Add a product, service, or catalogue item.
+                Add a product or catalogue item.
               </p>
             </div>
           ) : null}
 
           {isProductFormOpen ? (
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+            <div className="rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm md:p-6">
               <div className="mb-5 flex items-center justify-between gap-4">
                 <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
                   {editingProductId ? "Edit" : "New Item"}
@@ -622,21 +621,40 @@ export default function ProductsPage() {
 
           <div className="grid content-start gap-4">
             {filteredProducts.length === 0 ? (
-              <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-sm">
-                <p className="text-sm font-medium text-slate-600">
-                  No products found.
+              <div className="rounded-[1.35rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
+                <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+                  <ImagePlus size={20} />
+                </div>
+
+                <p className="mt-4 text-base font-semibold text-slate-950">
+                  {products.length === 0
+                    ? "You have no products yet"
+                    : "No matching products"}
                 </p>
 
-                <p className="mt-2 text-xs text-slate-400">
-                  Add a product or adjust your search.
+                <p className="mx-auto mt-2 max-w-sm text-sm text-slate-500">
+                  {products.length === 0
+                    ? "Start by adding the first item customers can ask about on WhatsApp."
+                    : "Try another search term or clear the search field."}
                 </p>
+
+                {products.length === 0 ? (
+                  <button
+                    type="button"
+                    onClick={openNewProductForm}
+                    className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                  >
+                    <Plus size={17} />
+                    Add Product
+                  </button>
+                ) : null}
               </div>
             ) : null}
 
             {filteredProducts.map((product) => (
               <article
                 key={product.id}
-                className={`overflow-hidden rounded-[1.75rem] border bg-white shadow-sm transition ${
+                className={`overflow-hidden rounded-[1.25rem] border bg-white shadow-sm transition ${
                   editingProductId === product.id
                     ? "border-slate-950 ring-4 ring-slate-100"
                     : "border-slate-200 hover:-translate-y-0.5 hover:shadow-md"
@@ -644,7 +662,7 @@ export default function ProductsPage() {
               >
                 <div className="grid md:grid-cols-[12rem_1fr]">
                   <div
-                    className="min-h-56 bg-cover bg-center md:min-h-full"
+                    className="min-h-48 bg-cover bg-center md:min-h-full"
                     style={{
                       backgroundImage: `url(${
                         product.image_url ||
@@ -653,7 +671,7 @@ export default function ProductsPage() {
                     }}
                   />
 
-                  <div className="p-5">
+                  <div className="p-4">
                     <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
                       <div>
                         <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -680,7 +698,7 @@ export default function ProductsPage() {
                           ) : null}
                         </div>
 
-                        <p className="text-xl font-semibold tracking-[-0.03em] text-slate-950">
+                        <p className="text-lg font-semibold tracking-[-0.03em] text-slate-950">
                           {product.name}
                         </p>
 
@@ -689,7 +707,7 @@ export default function ProductsPage() {
                         </p>
                       </div>
 
-                      <p className="whitespace-nowrap text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+                      <p className="whitespace-nowrap text-lg font-semibold tracking-[-0.04em] text-slate-950">
                         {formatCurrency(Number(product.price || 0))}
                       </p>
                     </div>
@@ -699,7 +717,7 @@ export default function ProductsPage() {
                         type="button"
                         onClick={() => startEditing(product)}
                         disabled={busyProductId === product.id}
-                        className="rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:opacity-60"
+                        className="rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-emerald-700 disabled:opacity-60"
                       >
                         Edit
                       </button>

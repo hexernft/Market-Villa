@@ -9,7 +9,6 @@ import {
   ExternalLink,
   Globe2,
   MessageCircle,
-  PackageCheck,
   Paintbrush,
   Search,
   ShieldCheck,
@@ -62,11 +61,11 @@ const businessTypes = [
     image: "/african-fashion-atelier.png",
     store: "Glow Room Studio",
     pageLabel: "glow-room-studio",
-    category: "Beauty services",
-    headline: "Turn services into a polished booking page.",
+    category: "Beauty products",
+    headline: "Turn beauty products into a polished storefront.",
     description:
-      "Present services, proof photos, opening hours, and consultation prompts without sending scattered screenshots.",
-    product: "Bridal Glow Session",
+      "Present products, proof photos, prices, and WhatsApp prompts without sending scattered screenshots.",
+    product: "Bridal Glow Kit",
     price: "₦45,000",
     location: "GRA, Port Harcourt",
     accent: "#ec4899",
@@ -97,13 +96,6 @@ const storefrontTabs = [
     detail: "Add prices, stock notes, images, and clear inquiry buttons.",
   },
   {
-    id: "services",
-    label: "Services",
-    icon: PackageCheck,
-    title: "Services and packages",
-    detail: "List packages, delivery areas, booking rules, and custom requests.",
-  },
-  {
     id: "reviews",
     label: "Reviews",
     icon: Star,
@@ -126,7 +118,7 @@ const launchSteps = [
     icon: Store,
   },
   {
-    title: "Upload products or services",
+    title: "Upload products",
     text: "Give customers enough detail to decide before messaging.",
     icon: Paintbrush,
   },
@@ -387,7 +379,7 @@ export function HomeCommerceExperiences() {
                     Help business owners sound ready.
                   </h2>
                   <p className="mt-3 text-sm leading-7 text-[#241436]/66">
-                    Position your AI as a practical assistant for store bios, product descriptions, service packages, and WhatsApp replies.
+                    Position your AI as a practical assistant for store bios, product descriptions, catalog notes, and WhatsApp replies.
                   </p>
                 </div>
               </div>

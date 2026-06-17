@@ -303,8 +303,8 @@ export function StoreSmartSearch({ variant = "standalone" }: StoreSmartSearchPro
             </h2>
 
             <p className="mt-4 max-w-xl text-base leading-7 text-white/72">
-              Type what you need naturally. Find businesses, products, services,
-              and WhatsApp-ready sellers on Market Villa.
+              Type what you need naturally. Find businesses, products, and
+              WhatsApp-ready sellers on Market Villa.
             </p>
           </div>
 

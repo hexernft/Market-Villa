@@ -4,7 +4,7 @@
   domain: "marketvilla.com",
   tagline: "Beautiful mini websites for businesses that sell through WhatsApp.",
   description:
-    "Market Villa helps small businesses create a professional mini website, show products and services, choose a unique theme, and receive clean WhatsApp orders.",
+    "Market Villa helps small businesses create a professional mini website, show products, choose a unique theme, and receive clean WhatsApp orders.",
   supportEmail: "hello@marketvilla.com",
   demoStores: [
     {

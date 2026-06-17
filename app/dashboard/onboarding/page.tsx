@@ -25,10 +25,10 @@ const categories = [
   "Beauty & Wellness",
   "Apartment & Hospitality",
   "Retail Store",
-  "Digital Services",
+  "Digital Products",
   "School / Education",
   "Church / Ministry",
-  "Professional Services",
+  "Professional Products",
   "Other",
 ];
 
@@ -280,7 +280,7 @@ export default function OnboardingPage() {
                 </p>
 
                 <p className="mt-1 text-xs leading-5 text-slate-500">
-                  Adds editable starter products and services.
+                  Adds editable starter products.
                 </p>
               </div>
 

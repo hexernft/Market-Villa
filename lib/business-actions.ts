@@ -376,12 +376,6 @@ export async function createBusiness(input: CreateBusinessInput) {
       }))
     );
 
-    await supabase.from("services").insert(
-      sample.services.map((service) => ({
-        ...service,
-        business_id: data.id,
-      }))
-    );
   }
 
   return data;
@@ -417,7 +411,7 @@ export async function getMyBusinesses() {
 export async function getPublicBusinessBySlug(slug: string) {
   const { data, error } = await supabase
     .from("businesses")
-    .select("*, products (*), services (*)")
+    .select("*, products (*)")
     .eq("slug", slug)
     .eq("is_published", true)
     .single();
@@ -457,14 +451,6 @@ export function mapSupabaseBusinessToStoreBusiness(business: any) {
           product.image_url ||
           "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop",
         available: product.is_available,
-      })),
-    services: (business.services || [])
-      .filter((service: any) => service.is_visible)
-      .map((service: any) => ({
-        id: service.id,
-        name: service.name,
-        description: service.description || "",
-        priceLabel: service.price_label || "Request quote",
       })),
   };
 }
@@ -1071,17 +1057,6 @@ export async function getPublicBusinessPageBySlug(slug: string) {
         category,
         image_url,
         is_available,
-        is_featured
-      ),
-      services (
-        id,
-        name,
-        description,
-        service_type,
-        price_label,
-        availability_note,
-        button_label,
-        is_visible,
         is_featured
       )
     `

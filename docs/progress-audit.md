@@ -64,7 +64,7 @@ Missing or not represented in migrations:
 
 - baseline schema for `profiles`, `businesses`, `products`, `services`, `orders`, `order_items`, `domain_requests`, `visibility_requests`, `pricing_items`, and `store_events`
 - RLS policies for tenant isolation across the main app tables
-- public read policies for published stores/products/services
+- public read policies for published stores/products; services remain legacy/inactive after the product-only scope change
 - storage bucket creation and storage policies for `business-images`
 - admin policy strategy for `super_admin`
 

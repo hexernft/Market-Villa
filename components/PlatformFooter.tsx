@@ -22,7 +22,7 @@ export function PlatformFooter() {
 
           <p className="mt-5 max-w-md text-sm leading-7 text-white/60">
             Market Villa helps small businesses create professional mini websites,
-            show products and services, and receive customer inquiries.
+            show products, and receive customer inquiries.
           </p>
         </div>
 

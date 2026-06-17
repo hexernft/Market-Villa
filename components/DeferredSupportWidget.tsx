@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const SupportWidget = dynamic(
@@ -12,9 +13,20 @@ const SupportWidget = dynamic(
 );
 
 export function DeferredSupportWidget() {
+  const pathname = usePathname();
   const [shouldLoad, setShouldLoad] = useState(false);
 
+  const isAppWorkspace =
+    pathname?.startsWith("/dashboard") ||
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/admin-login");
+
   useEffect(() => {
+    if (isAppWorkspace) {
+      setShouldLoad(false);
+      return;
+    }
+
     const loadWidget = () => setShouldLoad(true);
 
     if ("requestIdleCallback" in window) {
@@ -26,7 +38,7 @@ export function DeferredSupportWidget() {
     const timeoutId = globalThis.setTimeout(loadWidget, 1400);
 
     return () => globalThis.clearTimeout(timeoutId);
-  }, []);
+  }, [isAppWorkspace]);
 
-  return shouldLoad ? <SupportWidget /> : null;
+  return shouldLoad && !isAppWorkspace ? <SupportWidget /> : null;
 }

@@ -6,7 +6,7 @@ import { BRAND } from "@/lib/brand";
 const sections = [
   {
     title: "1. Information We Collect",
-    body: "Market Villa may collect account information, business details, product and service information, uploaded images, customer order details, payment references, and basic platform usage data.",
+    body: "Market Villa may collect account information, business details, product information, uploaded images, customer order details, payment references, and basic platform usage data.",
   },
   {
     title: "2. How We Use Information",

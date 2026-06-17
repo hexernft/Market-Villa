@@ -3,7 +3,6 @@
 import { use, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  CalendarCheck,
   Check,
   Clock,
   Copy,
@@ -17,6 +16,7 @@ import {
   Store,
 } from "lucide-react";
 import { CartItem, WhatsAppCheckout } from "@/components/WhatsAppCheckout";
+import { PlatformNavbar } from "@/components/PlatformNavbar";
 import { getPublicBusinessPageBySlug } from "@/lib/business-actions";
 import { getBusinessTheme } from "@/lib/themes";
 import { buildWhatsAppLink, formatCurrency } from "@/lib/utils";
@@ -38,18 +38,6 @@ type PublicProduct = {
   is_featured: boolean;
 };
 
-type PublicService = {
-  id: string;
-  name: string;
-  description: string | null;
-  service_type: string | null;
-  price_label: string | null;
-  availability_note: string | null;
-  button_label: string | null;
-  is_visible: boolean;
-  is_featured: boolean;
-};
-
 type PublicBusiness = {
   id: string;
   name: string;
@@ -68,7 +56,6 @@ type PublicBusiness = {
   theme_id: string | null;
   is_published: boolean;
   products: PublicProduct[];
-  services: PublicService[];
 };
 
 const fallbackCover =
@@ -150,10 +137,6 @@ export default function StorePage({ params }: StorePageProps) {
     });
   }, [business?.products, query]);
 
-  const visibleServices = useMemo(() => {
-    return (business?.services || []).filter((service) => service.is_visible);
-  }, [business?.services]);
-
   const categories = Array.from(
     new Set(visibleProducts.map((product) => product.category || "Products"))
   );
@@ -184,75 +167,84 @@ export default function StorePage({ params }: StorePageProps) {
 
   if (isLoading) {
     return (
-      <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
-        <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
-          <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-[#26143d] text-white">
-            <Store size={22} />
+      <>
+        <PlatformNavbar />
+        <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-24 md:py-28">
+          <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
+            <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-[#26143d] text-white">
+              <Store size={22} />
+            </div>
+
+            <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
+              Loading store
+            </h1>
+
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Please wait while this business page loads.
+            </p>
           </div>
-
-          <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
-            Loading store
-          </h1>
-
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Please wait while this business page loads.
-          </p>
-        </div>
-      </main>
+        </main>
+      </>
     );
   }
 
   if (!business) {
     return (
-      <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
-        <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
-          <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-red-50 text-red-700">
-            <Store size={22} />
+      <>
+        <PlatformNavbar />
+        <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-24 md:py-28">
+          <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
+            <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-red-50 text-red-700">
+              <Store size={22} />
+            </div>
+
+            <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
+              Store not found
+            </h1>
+
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              This store does not exist or the link may be incorrect.
+            </p>
+
+            <Link
+              href="/"
+              className="mt-6 inline-flex rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+            >
+              Back to Market Villa
+            </Link>
           </div>
-
-          <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
-            Store not found
-          </h1>
-
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            This store does not exist or the link may be incorrect.
-          </p>
-
-          <Link
-            href="/"
-            className="mt-6 inline-flex rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Back to Market Villa
-          </Link>
-        </div>
-      </main>
+        </main>
+      </>
     );
   }
 
   if (!business.is_published) {
     return (
-      <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
-        <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
-          <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-purple-50 text-purple-700">
-            <Store size={22} />
+      <>
+        <PlatformNavbar />
+        <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-24 md:py-28">
+          <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
+            <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-purple-50 text-purple-700">
+              <Store size={22} />
+            </div>
+
+            <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
+              Store currently unavailable
+            </h1>
+
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              {business.name} is not currently available to the public.
+            </p>
+
+            <Link
+              href="/"
+              className="mt-6 inline-flex rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+            >
+              Back to Market Villa
+            </Link>
           </div>
-
-          <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
-            Store currently unavailable
-          </h1>
-
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            {business.name} is not currently available to the public.
-          </p>
-
-          <Link
-            href="/"
-            className="mt-6 inline-flex rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
-          >
-            Back to Market Villa
-          </Link>
-        </div>
-      </main>
+        </main>
+      </>
     );
   }
 
@@ -320,7 +312,9 @@ export default function StorePage({ params }: StorePageProps) {
   }
 
   return (
-    <main className={`min-h-screen ${theme.page}`}>
+    <>
+      <PlatformNavbar />
+      <main className={`min-h-screen pt-24 md:pt-28 ${theme.page}`}>
       <section
         className={`store-pattern bg-gradient-to-br ${theme.hero} px-5 py-8 md:px-5`}
       >
@@ -403,15 +397,6 @@ export default function StorePage({ params }: StorePageProps) {
                   View Products
                 </a>
 
-                {visibleServices.length ? (
-                  <a
-                    href="#services"
-                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold ${theme.secondaryButton}`}
-                  >
-                    <CalendarCheck size={17} />
-                    Quick Requests
-                  </a>
-                ) : null}
               </div>
             </div>
 
@@ -539,60 +524,6 @@ export default function StorePage({ params }: StorePageProps) {
             )}
           </section>
 
-          {visibleServices.length ? (
-            <section id="services">
-              <div className="mb-4 flex items-end justify-between gap-4">
-                <div>
-                  <p
-                    className={`text-xs font-semibold uppercase tracking-[0.22em] ${theme.sectionLabel}`}
-                  >
-                    Services
-                  </p>
-
-                  <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em]">
-                    Quick Requests
-                  </h2>
-                </div>
-
-                <p className="text-sm opacity-60">
-                  {visibleServices.length} option
-                  {visibleServices.length === 1 ? "" : "s"}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {visibleServices.map((service) =>
-                  whatsapp ? (
-                    <a
-                      key={service.id}
-                      href={buildWhatsAppLink(
-                        whatsapp,
-                        `Hello ${business.name}, I want to ask about ${service.name}.`
-                      )}
-                      target="_blank"
-                      rel="noreferrer"
-                onClick={() => handleWhatsAppClick("store_whatsapp_link")}
-                      title={service.description || service.service_type || service.name}
-                      className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.button}`}
-                    >
-                      <CalendarCheck size={16} />
-                      {service.button_label || service.name || "Request Service"}
-                    </a>
-                  ) : (
-                    <span
-                      key={service.id}
-                      title={service.description || service.service_type || service.name}
-                      className={`${theme.card} inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm`}
-                    >
-                      <CalendarCheck size={16} />
-                      {service.button_label || service.name || "Request Service"}
-                    </span>
-                  )
-                )}
-              </div>
-            </section>
-          ) : null}
-
           <footer className={`${theme.mutedCard} rounded-[1.5rem] p-5 shadow-sm`}>
             <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr_0.8fr]">
               <div>
@@ -602,7 +533,7 @@ export default function StorePage({ params }: StorePageProps) {
 
                 <p className="mt-2 max-w-md text-sm leading-6 opacity-70">
                   {business.tagline ||
-                    "Browse products, request services, and contact the business directly."}
+                    "Browse products and contact the business directly."}
                 </p>
 
                 <div className="mt-5 flex flex-wrap gap-3">
@@ -692,15 +623,6 @@ export default function StorePage({ params }: StorePageProps) {
                     View Products
                   </a>
 
-                  {visibleServices.length ? (
-                    <a
-                      href="#services"
-                      className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 text-sm font-semibold ring-1 ring-white/10"
-                    >
-                      <CalendarCheck size={17} className="opacity-70" />
-                      Quick Requests
-                    </a>
-                  ) : null}
                 </div>
               </div>
             </div>
@@ -722,6 +644,7 @@ export default function StorePage({ params }: StorePageProps) {
         cart={cart}
         setCart={setCart}
       />
-    </main>
+      </main>
+    </>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
 import {
   ArrowRight,
@@ -168,6 +169,7 @@ function mapProductToResult(
 }
 
 export function PlatformNavbar() {
+  const pathname = usePathname();
   const [hasMounted, setHasMounted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -177,6 +179,7 @@ export function PlatformNavbar() {
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [hasLoadedSearchData, setHasLoadedSearchData] = useState(false);
+  const isStorePage = Boolean(pathname?.startsWith("/store/"));
 
   useEffect(() => {
     setHasMounted(true);
@@ -194,7 +197,12 @@ export function PlatformNavbar() {
   }, []);
 
   useEffect(() => {
-    if (hasLoadedSearchData || !isSearchFocused || !query.trim()) return;
+    if (
+      !isStorePage ||
+      hasLoadedSearchData ||
+      !isSearchFocused ||
+      !query.trim()
+    ) return;
 
     let mounted = true;
 
@@ -219,7 +227,7 @@ export function PlatformNavbar() {
     return () => {
       mounted = false;
     };
-  }, [hasLoadedSearchData, isSearchFocused, query]);
+  }, [hasLoadedSearchData, isSearchFocused, isStorePage, query]);
 
   const searchResults = useMemo(() => {
     if (!query.trim()) return [];
@@ -289,6 +297,7 @@ export function PlatformNavbar() {
             ))}
           </nav>
 
+          {isStorePage ? (
           <div
             className="relative hidden min-w-0 max-w-xl flex-1 translate-y-0 opacity-100 transition-all duration-300 md:block"
           >
@@ -370,6 +379,7 @@ export function PlatformNavbar() {
               </div>
             ) : null}
           </div>
+          ) : null}
 
           <div className="flex items-center gap-2">
             <Link
@@ -401,6 +411,7 @@ export function PlatformNavbar() {
           </div>
         </div>
 
+        {isStorePage ? (
         <div className="relative mt-2 md:hidden">
             <Search
               size={16}
@@ -458,6 +469,7 @@ export function PlatformNavbar() {
               </div>
             ) : null}
           </div>
+        ) : null}
 
         {isMenuOpen ? (
           <nav

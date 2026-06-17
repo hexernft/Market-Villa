@@ -6,14 +6,14 @@ import { BRAND } from "@/lib/brand";
 const sections = [
   {
     title: "1. About Market Villa",
-    body: "Market Villa is a platform that allows business owners to create mini websites for displaying products, services, contact information, and customer order flows.",
+    body: "Market Villa is a platform that allows business owners to create mini websites for displaying products, contact information, and customer order flows.",
   },
   {
     title: "2. Business Accounts",
-    body: "Business owners are responsible for keeping their account information accurate, including business name, contact details, product prices, availability, and service descriptions.",
+    body: "Business owners are responsible for keeping their account information accurate, including business name, contact details, product prices, availability, and product descriptions.",
   },
   {
-    title: "3. Products, Services, and Orders",
+    title: "3. Products and Orders",
     body: "Market Villa helps customers view business pages and submit order or inquiry details. The business owner remains responsible for confirming orders, delivery, payment collection, refunds, and customer communication.",
   },
   {

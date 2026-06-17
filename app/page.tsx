@@ -16,9 +16,9 @@ const features = [
 
 const faqItems = [
   { question: "Do I need technical skills?", answer: "No. Market Villa is built so a business owner can create and manage a simple page without writing code." },
-  { question: "Can customers order through the page?", answer: "Yes. Customers can view your products or services and start a clear WhatsApp order or inquiry." },
+  { question: "Can customers order through the page?", answer: "Yes. Customers can view your products and start a clear WhatsApp order or inquiry." },
   { question: "Can I use my own domain?", answer: "Yes. Custom domain setup can be requested as an add-on when the business is ready." },
-  { question: "What kind of businesses can use Market Villa?", answer: "Food vendors, fashion brands, beauty businesses, apartments, retail stores, and service providers can all use it." },
+  { question: "What kind of businesses can use Market Villa?", answer: "Food vendors, fashion brands, beauty businesses, apartments, and retail stores can all use it." },
 ];
 
 const zcasTreats = [
@@ -363,7 +363,7 @@ export default function Home() {
           <div className="grid gap-3">
             {[
               "Customers see your business clearly before messaging.",
-              "Products and services stay organized in one place.",
+              "Products stay organized in one place.",
               "Business owners can keep their page updated anytime.",
             ].map((item, index) => (
               <MotionReveal key={item} delay={index * 0.08} direction="right">
@@ -398,9 +398,9 @@ export default function Home() {
 
       <section className="relative overflow-hidden bg-[#241436] py-2">
         <div className="market-villa-marquee flex whitespace-nowrap text-[11px] font-medium leading-none text-white/70">
-          <span className="mx-5">Market Villa helps businesses create clean pages, organize products and services, receive WhatsApp inquiries, and look more trusted online.</span>
+          <span className="mx-5">Market Villa helps businesses create clean pages, organize products, receive WhatsApp inquiries, and look more trusted online.</span>
           <span className="mx-5">Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.</span>
-          <span className="mx-5">Market Villa helps businesses create clean pages, organize products and services, receive WhatsApp inquiries, and look more trusted online.</span>
+          <span className="mx-5">Market Villa helps businesses create clean pages, organize products, receive WhatsApp inquiries, and look more trusted online.</span>
           <span className="mx-5">Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.</span>
         </div>
       </section>

@@ -10,13 +10,11 @@ import {
   Clock3,
   Loader2,
   ShoppingBag,
-  Sparkles,
   Wallet,
 } from "lucide-react";
 import {
   getMyBusinesses,
   getProductsByBusinessId,
-  getServicesByBusinessId,
 } from "@/lib/business-actions";
 import { supabase } from "@/lib/supabase";
 import { formatCurrency } from "@/lib/utils";
@@ -44,10 +42,6 @@ type DashboardOrder = {
 };
 
 type DashboardProduct = {
-  id: string;
-};
-
-type DashboardService = {
   id: string;
 };
 
@@ -92,7 +86,6 @@ export default function AnalyticsPage() {
 
   const [orders, setOrders] = useState<DashboardOrder[]>([]);
   const [products, setProducts] = useState<DashboardProduct[]>([]);
-  const [services, setServices] = useState<DashboardService[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMetrics, setIsLoadingMetrics] = useState(false);
@@ -118,9 +111,8 @@ export default function AnalyticsPage() {
       completedOrders,
       revenue,
       products: products.length,
-      services: services.length,
     };
-  }, [orders, products.length, services.length]);
+  }, [orders, products.length]);
 
   async function loadBusinesses() {
     const businessItems = await getMyBusinesses();
@@ -137,9 +129,8 @@ export default function AnalyticsPage() {
     setMessage("");
 
     try {
-      const [productItems, serviceItems, orderResponse] = await Promise.all([
+      const [productItems, orderResponse] = await Promise.all([
         getProductsByBusinessId(businessId),
-        getServicesByBusinessId(businessId),
         supabase
           .from("orders")
           .select("*")
@@ -152,7 +143,6 @@ export default function AnalyticsPage() {
       }
 
       setProducts(productItems);
-      setServices(serviceItems);
       setOrders((orderResponse.data || []) as DashboardOrder[]);
     } catch (error) {
       const errorMessage =
@@ -198,7 +188,6 @@ export default function AnalyticsPage() {
     if (!selectedBusinessId) {
       setOrders([]);
       setProducts([]);
-      setServices([]);
       return;
     }
 
@@ -266,11 +255,6 @@ export default function AnalyticsPage() {
       value: metrics.products.toString(),
       icon: Boxes,
     },
-    {
-      label: "Services",
-      value: metrics.services.toString(),
-      icon: Sparkles,
-    },
   ];
 
   return (
@@ -287,8 +271,7 @@ export default function AnalyticsPage() {
             </h2>
 
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-500">
-              Track orders, revenue, products, services and recent customer
-              activity.
+              Track orders, revenue, products and recent customer activity.
             </p>
           </div>
 

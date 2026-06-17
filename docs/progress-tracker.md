@@ -27,8 +27,8 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 
 | Area | Definition |
 | --- | --- |
-| Product Promise | Help small businesses create polished mini websites, display products/services, receive WhatsApp inquiries, and manage their business presence online. |
-| MVP Focus | Auth, business workspace, store builder, public store page, products/services, WhatsApp inquiry flow, admin center, basic billing, and store discovery. |
+| Product Promise | Help small businesses create polished mini websites, display products, receive WhatsApp inquiries, and manage their business presence online. |
+| MVP Focus | Auth, business workspace, store builder, public store page, products, WhatsApp inquiry flow, admin center, basic billing, and store discovery. |
 | Commercial Focus | Subscription enforcement, theme access limits, Paystack billing, admin overrides, domain requests, analytics, and featured stores. |
 | Growth Focus | AI search/discovery, sponsored stores, reseller/agency accounts, CRM, follow-up automation, and WhatsApp Cloud API integrations. |
 
@@ -41,7 +41,7 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | 3 | Architecture | Define frontend, backend, database, auth, payments, hosting, storage, AI, and messaging systems. | System architecture map and data flow. | In Progress |
 | 4 | Database and Security | Design tables, relationships, indexes, RLS policies, and storage rules. Baseline schema/RLS/storage migrations are now prepared and need review before applying to Supabase. | Secure database schema and access rules. | Needs Review |
 | 5 | Auth and Roles | Business login, admin login, role checks, protected routes, and unauthorized handling. | Stable role-based access. | In Progress |
-| 6 | Core Product Build | Business dashboard, profile, products, services, public store page, themes, and store directory. | Usable MVP storefront system. | In Progress |
+| 6 | Core Product Build | Business dashboard, profile, products, public store page, themes, and store directory. | Usable MVP storefront system. | In Progress |
 | 7 | Billing and Plans | Pricing, Paystack, subscriptions, plan limits, failed payment handling, and admin override. | Commercial SaaS billing flow. | In Progress |
 | 8 | Admin Center | Manage businesses, pricing, domains, visibility, subscriptions, and platform controls. | Protected admin operations hub. | In Progress |
 | 9 | AI Search and Discovery | Natural search for stores/products, ranking logic, result cards, and future AI integration. | Customer discovery engine. | In Progress |
@@ -54,7 +54,7 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | Task | What to Build / Verify | Success Criteria | Status |
 | --- | --- | --- | --- |
 | Define target users | Super admin, business owner, business staff, public customer, future reseller/agency. | User roles documented. | In Progress |
-| Define MVP feature scope | Auth, business creation, dashboard, store page, products/services, WhatsApp inquiry, themes, admin center. | MVP locked. | In Progress |
+| Define MVP feature scope | Auth, business creation, dashboard, store page, products, WhatsApp inquiry, themes, admin center. | MVP locked. | In Progress |
 | Define pricing rules | Free, Starter, Grow, Pro plan features, limits, upgrades, downgrades, grace rules. | Pricing matrix accepted. | In Progress |
 | Define customer journeys | Business owner journey, customer browsing journey, admin journey, payment journey. | Journey map completed. | Needs Review |
 | Separate MVP vs V1 vs V2 | Avoid building every future idea before launch. | Roadmap staged. | In Progress |
@@ -66,7 +66,7 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | Frontend architecture | Next.js app routes, public pages, dashboard pages, admin pages, reusable components. | Route map documented. | In Progress |
 | Backend/API architecture | Server actions/API routes for payments, store actions, admin actions, domain actions, and webhooks. | Backend map ready. | In Progress |
 | Database architecture | Supabase Postgres tables, relationships, indexes, constraints, policies. | Schema baseline ready. | In Progress |
-| Storage architecture | Logos, covers, products, services, orders, and future gallery buckets. `business-images` bucket and owner-folder storage policies are prepared in migration. | Storage rules ready. | Needs Review |
+| Storage architecture | Logos, covers, products, orders, and future gallery buckets. `business-images` bucket and owner-folder storage policies are prepared in migration. | Storage rules ready. | Needs Review |
 | External services | Paystack, Vercel, Supabase, future AI API, future WhatsApp Cloud API. | Integration plan agreed. | In Progress |
 
 ## 3. Database Design and Data Model
@@ -75,7 +75,7 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | --- | --- | --- | --- |
 | Profiles table | User identity, email, role, created date, owner/staff/admin designation. | `profiles.role` works. | In Progress |
 | Businesses table | Owner, name, slug, category, description, location, WhatsApp, status, plan, selected theme. | Business record stable. | In Progress |
-| Products and services | CRUD tables with images, category, price, description, availability, business link. | Catalog data works. | In Progress |
+| Products | CRUD table with images, category, price, description, availability, business link. Services were removed from the active product scope. | Catalog data works. | In Progress |
 | Payments/subscriptions | Payments, pricing items, plan, status, reference, raw response, renewal/grace/suspension fields. | Billing data reliable. | In Progress |
 | Domain requests | Business domain requests, status, admin note, approval/rejection flow. | Domain flow tracked. | In Progress |
 | Analytics/events | Store visits, WhatsApp clicks, product clicks, search terms, upgrade attempts. Store event table and increment RPCs are prepared in migration; product/search/upgrade analytics still need expansion. | Analytics schema ready. | In Progress |
@@ -97,7 +97,7 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | Business login | `/login` routes business users to `/dashboard`. | Business login stable. | In Progress |
 | Admin login | `/admin-login` routes `super_admin` users to `/admin`. | Admin login stable. | In Progress |
 | Business creation | New owner creates or receives business workspace. | Business onboarding works. | In Progress |
-| Onboarding checklist | Guide user to add profile, products, services, theme, WhatsApp, publish. | Checklist live. | Not Started |
+| Onboarding checklist | Guide user to add profile, products, theme, WhatsApp, publish. | Checklist live. | In Progress |
 | Forgot password flow | Login can send Supabase reset emails and `/reset-password` lets users set a new password from the email link. | Recovery works. | Needs Review |
 
 ## 6. Core Dashboard and Store Builder
@@ -107,7 +107,7 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | Dashboard shell | Business sidebar, protected layout, responsive navigation, logout, loading state. | Dashboard works on desktop/mobile. | In Progress |
 | Business profile | Edit name, description, location, WhatsApp, logo, cover, brand details. | Profile saves correctly. | In Progress |
 | Products | Add/edit/delete products, images, categories, prices, availability. | Products render on store. | In Progress |
-| Services | Add/edit/delete services, categories, descriptions, prices or starting price. | Services render on store. | In Progress |
+| Services | Removed from active MVP scope; `/dashboard/services` redirects to Products. | No service management UI is shown. | Done |
 | Orders/inquiries | WhatsApp order flow, inquiry summary, future order tracking. | Inquiry flow usable. | In Progress |
 | Public store page | Slug-based store, SEO, theme rendering, responsive layout, empty states. | Store page polished. | In Progress |
 
@@ -183,7 +183,7 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | SEO metadata | Dynamic store titles, descriptions, OG images, slugs, sitemap, robots. Sitemap and robots are now added; dynamic store metadata still needs a store-page server/client split. | Share previews polished. | In Progress |
 | Legal pages | Terms, privacy, refund/subscription policy, acceptable use. | Launch compliant. | Not Started |
 | Help center | FAQs, how to create store, add products, connect WhatsApp, upgrade, request domain. | Support reduced. | Not Started |
-| Demo data | Demo stores for fashion, bakery, phone shop, furniture, services. | Showcase ready. | In Progress |
+| Demo data | Demo stores for fashion, bakery, phone shop, furniture, and product-led categories. | Showcase ready. | In Progress |
 | Launch graphics | Homepage visuals, social posts, demo video, pitch materials. | Launch assets ready. | In Progress |
 
 ## 14. Deployment and Production Readiness
@@ -229,7 +229,7 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | 1 | Lock plan/theme access rules | Free 2 themes/single-page, Starter 5, Grow/Pro 10. Enforce on frontend and backend. |
 | 2 | Stabilize admin access and permissions | Ensure `profiles.role = super_admin`, protected admin routes, and tenant-safe dashboard access. |
 | 3 | Finalize Paystack subscription enforcement | Monthly/yearly amounts, verification, webhook, grace period, suspension, override. |
-| 4 | Finish RLS/security review | Confirm public/private access policies for businesses, products, services, payments, domains, and storage. |
+| 4 | Finish RLS/security review | Confirm public/private access policies for businesses, products, payments, domains, and storage. |
 | 5 | Run beta with real businesses | Use 3-5 businesses and collect feedback before full launch. |
 
 ## Update Notes
