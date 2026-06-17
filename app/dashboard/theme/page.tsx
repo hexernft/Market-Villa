@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Eye,
   Loader2,
+  Lock,
   Palette,
   Sparkles,
 } from "lucide-react";
@@ -22,10 +23,41 @@ type DashboardBusiness = {
   subscription_plan?: string | null;
 };
 
+const themeFilters = [
+  { label: "All", value: "all" },
+  { label: "Retail", value: "retail" },
+  { label: "Food", value: "food" },
+  { label: "Luxury", value: "luxury" },
+  { label: "Clean", value: "clean" },
+];
+
+function getThemeFilter(theme: (typeof availableThemes)[number]) {
+  const haystack = `${theme.id} ${theme.name} ${theme.description} ${theme.layout}`.toLowerCase();
+
+  if (haystack.includes("food") || haystack.includes("vendor")) return "food";
+  if (
+    haystack.includes("luxury") ||
+    haystack.includes("apartment") ||
+    haystack.includes("beauty")
+  ) {
+    return "luxury";
+  }
+  if (
+    haystack.includes("minimal") ||
+    haystack.includes("corporate") ||
+    haystack.includes("service")
+  ) {
+    return "clean";
+  }
+
+  return "retail";
+}
+
 export default function ThemePage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [selectedThemeId, setSelectedThemeId] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -45,6 +77,14 @@ export default function ThemePage() {
   const selectedBusinessThemeLimit = getThemeLimitForPlan(
     selectedBusiness?.subscription_plan,
   );
+
+  const visibleThemes = useMemo(() => {
+    if (activeFilter === "all") return availableThemes;
+
+    return availableThemes.filter(
+      (theme) => getThemeFilter(theme) === activeFilter,
+    );
+  }, [activeFilter]);
 
   useEffect(() => {
     let mounted = true;
@@ -201,29 +241,74 @@ export default function ThemePage() {
         </div>
       ) : null}
 
+      <section className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+              Theme Store
+            </p>
+
+            <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+              Choose the storefront look customers will see
+            </h2>
+
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+              Browse theme options for product pages, preview how each style
+              frames your business, then save the one that best fits your brand.
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-[#d9fff3] px-4 py-3 text-sm font-semibold text-[#032f2a]">
+            {selectedBusinessThemeLimit} unlocked / {availableThemes.length} total
+          </div>
+        </div>
+
+        <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
+          {themeFilters.map((filter) => (
+            <button
+              key={filter.value}
+              type="button"
+              onClick={() => setActiveFilter(filter.value)}
+              className={`whitespace-nowrap rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                activeFilter === filter.value
+                  ? "border-[#7c3aed] bg-[#7c3aed] text-white"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-[#7c3aed]/40"
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
       <section className="grid gap-5 xl:grid-cols-[1fr_0.65fr]">
         <div className="grid content-start gap-4">
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
-                Storefront Themes
+                Theme Options
               </p>
 
               <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                Select a storefront style
+                {activeFilter === "all"
+                  ? "All storefront themes"
+                  : `${themeFilters.find((filter) => filter.value === activeFilter)?.label} themes`}
               </h2>
             </div>
 
             <p className="text-sm text-slate-500">
-              {selectedBusinessThemeLimit} of {availableThemes.length} themes available
+              {visibleThemes.length} option{visibleThemes.length === 1 ? "" : "s"}
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {availableThemes.map((theme, index) => {
+            {visibleThemes.map((theme) => {
+              const themeIndex = availableThemes.findIndex(
+                (item) => item.id === theme.id,
+              );
               const isLocked = !canUseThemeForPlan({
                 plan: selectedBusiness?.subscription_plan,
-                themeIndex: index,
+                themeIndex,
               });
 
               return (
@@ -249,8 +334,9 @@ export default function ThemePage() {
                   selected={selectedThemeId === theme.id}
                 />
                 {isLocked ? (
-                  <span className="absolute right-3 top-3 rounded-full bg-[#26143d] px-3 py-1 text-xs font-semibold text-white shadow-sm">
-                    Upgrade
+                  <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-xl bg-[#26143d] px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                    <Lock size={12} />
+                    Locked
                   </span>
                 ) : null}
               </button>

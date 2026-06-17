@@ -2807,27 +2807,50 @@ aside.admin-sidebar .admin-sidebar-link-active {
 }
 
 .mobile-showcase-title {
-  color: #ffffff !important;
+  color: #fdfcff !important;
   opacity: 1 !important;
-  font-weight: 650 !important;
-  letter-spacing: 0 !important;
-  text-shadow: 0 16px 44px rgba(0, 0, 0, 0.42) !important;
+  font-weight: 720 !important;
+  letter-spacing: -0.035em !important;
+  text-shadow: 0 14px 38px rgba(0, 0, 0, 0.55) !important;
 }
 
 .mobile-showcase-copy {
-  color: rgba(255, 255, 255, 0.82) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
   opacity: 1 !important;
+  font-weight: 500 !important;
 }
 
 .mobile-showcase-kicker {
-  color: #d8c9ff !important;
+  color: #a7f3d0 !important;
   opacity: 1 !important;
+  text-shadow: 0 8px 24px rgba(16, 185, 129, 0.32) !important;
+}
+
+.mobile-showcase-tabs {
+  border-radius: 1.15rem !important;
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.18), rgba(167, 243, 208, 0.12)) !important;
+  border: 1px solid rgba(167, 243, 208, 0.34) !important;
+  padding: 0.45rem !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 18px 44px rgba(20, 184, 166, 0.14) !important;
 }
 
 .mobile-showcase-badge {
-  color: #ffffff !important;
-  background: rgba(255, 255, 255, 0.11) !important;
-  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #032f2a !important;
+  background: #d9fff3 !important;
+  border-color: rgba(153, 246, 228, 0.95) !important;
+  box-shadow: 0 8px 20px rgba(5, 150, 105, 0.16) !important;
+}
+
+.mobile-showcase-badge:nth-child(2) {
+  background: #f7e8ff !important;
+  border-color: rgba(216, 180, 254, 0.95) !important;
+  color: #35124d !important;
+}
+
+.mobile-showcase-badge:nth-child(3) {
+  background: #fff7d6 !important;
+  border-color: rgba(253, 224, 71, 0.95) !important;
+  color: #3a2600 !important;
 }
 
 .mobile-showcase-media {

@@ -316,7 +316,10 @@ export default function StorePage({ params }: StorePageProps) {
       <PlatformNavbar />
       <main className={`min-h-screen pt-24 md:pt-28 ${theme.page}`}>
       <section
-        className={`store-pattern bg-gradient-to-br ${theme.hero} px-5 py-8 md:px-5`}
+        className={`store-pattern bg-gradient-to-br ${theme.hero} bg-cover bg-center px-5 py-8 md:px-5`}
+        style={{
+          backgroundImage: `linear-gradient(135deg, rgba(36, 20, 54, 0.88), rgba(36, 20, 54, 0.58), rgba(6, 17, 15, 0.78)), url(${coverImage})`,
+        }}
       >
         <div className="mx-auto max-w-7xl">
           <header className="mb-12 flex items-center justify-between">
@@ -400,7 +403,7 @@ export default function StorePage({ params }: StorePageProps) {
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 p-3 backdrop-blur-xl">
+            <div className="overflow-hidden rounded-[2rem] border border-white/18 bg-white/12 p-3 shadow-[0_28px_90px_rgba(0,0,0,0.32)] backdrop-blur-xl">
               <div
                 className="h-80 rounded-[1.5rem] bg-cover bg-center md:h-[24rem]"
                 style={{ backgroundImage: `url(${coverImage})` }}

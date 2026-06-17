@@ -420,11 +420,11 @@ export default function Home() {
               From furniture stores to food vendors, Market Villa helps businesses present products, prices, and customer actions in a clean mobile-ready page.
             </p>
 
-            <div className="mt-7 grid gap-3 sm:grid-cols-3">
+            <div className="mobile-showcase-tabs mt-7 grid gap-3 sm:grid-cols-3">
               {["Mobile-ready", "Product-focused", "WhatsApp-friendly"].map((item) => (
                 <div
                   key={item}
-                  className="mobile-showcase-badge rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-bold text-white backdrop-blur"
+                  className="mobile-showcase-badge rounded-2xl border px-4 py-3 text-sm font-bold"
                 >
                   {item}
                 </div>
