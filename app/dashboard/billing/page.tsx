@@ -9,6 +9,7 @@ import {
   updateBusinessPublishStatus,
 } from "@/lib/business-actions";
 import { initializePlanPayment, verifyPlanPayment } from "@/lib/payment-actions";
+import { normalizePlanId } from "@/lib/plans";
 import { supabase } from "@/lib/supabase";
 
 type DashboardBusiness = {
@@ -58,7 +59,7 @@ const fallbackBillingPlans: BillingPlan[] = [
     sortOrder: 20,
   },
   {
-    id: "premium",
+    id: "pro",
     name: "Premium",
     description:
       "For established businesses that need more stores, more products, and stronger visibility.",
@@ -76,13 +77,7 @@ function formatNaira(amount: number) {
 }
 
 function normalizeSubscriptionPlan(plan: string | null | undefined) {
-  const value = String(plan || "").toLowerCase();
-
-  if (value === "basic") return "starter";
-  if (value === "business") return "growth";
-  if (value === "pro") return "premium";
-
-  return value;
+  return normalizePlanId(plan);
 }
 
 export default function BillingPage() {
@@ -137,21 +132,33 @@ export default function BillingPage() {
       return;
     }
 
-    const mappedPlans: BillingPlan[] = (pricingItems || [])
+    const mappedPlansById = new Map<string, BillingPlan>();
+
+    (pricingItems || [])
       .filter((item: any) =>
-        ["starter", "growth", "premium"].includes(String(item.pricing_key))
+        ["starter", "growth", "pro", "premium"].includes(
+          String(item.pricing_key),
+        )
       )
-      .map((item: any) => ({
-        id: String(item.pricing_key),
-        name: String(item.name || ""),
-        description: String(item.description || ""),
-        amount: Number(item.amount || 0),
-        amountInKobo: Number(item.amount_in_kobo || 0),
-        priceLabel: String(item.price_label || ""),
-        productLimit: item.product_limit,
-        storeLimit: item.store_limit,
-        sortOrder: item.sort_order,
-      }));
+      .forEach((item: any) => {
+        const id = normalizePlanId(String(item.pricing_key));
+
+        mappedPlansById.set(id, {
+          id,
+          name: String(item.name || ""),
+          description: String(item.description || ""),
+          amount: Number(item.amount || 0),
+          amountInKobo: Number(item.amount_in_kobo || 0),
+          priceLabel: String(item.price_label || ""),
+          productLimit: item.product_limit,
+          storeLimit: item.store_limit,
+          sortOrder: item.sort_order,
+        });
+      });
+
+    const mappedPlans = Array.from(mappedPlansById.values()).sort(
+      (a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0),
+    );
 
     setPlans(mappedPlans.length > 0 ? mappedPlans : fallbackBillingPlans);
   }

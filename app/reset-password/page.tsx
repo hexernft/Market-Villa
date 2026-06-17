@@ -1,67 +1,75 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { requestPasswordReset, signInWithEmail } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
+import { updatePassword } from "@/lib/auth";
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const router = useRouter();
 
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [notice, setNotice] = useState("");
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    let isMounted = true;
+
+    async function checkSession() {
+      const { data } = await supabase.auth.getSession();
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (!data.session) {
+        setMessage("Open this page from the password reset email link.");
+      }
+
+      setIsCheckingSession(false);
+    }
+
+    void checkSession();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+      void checkSession();
+    });
+
+    return () => {
+      isMounted = false;
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  async function handleResetPassword(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setMessage("");
     setNotice("");
-    setIsSubmitting(true);
 
-    try {
-      await signInWithEmail({
-        email,
-        password,
-      });
-
-      router.push("/dashboard");
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unable to login.";
-      setMessage(errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  async function handlePasswordReset() {
-    setMessage("");
-    setNotice("");
-
-    if (!email.trim()) {
-      setMessage("Enter your email address first, then request a reset link.");
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match.");
       return;
     }
 
-    setIsResettingPassword(true);
+    setIsSubmitting(true);
 
     try {
-      await requestPasswordReset({ email });
-      setNotice("Password reset link sent. Check your email to continue.");
+      await updatePassword({ password });
+      setNotice("Password updated. Redirecting you to login...");
+      await supabase.auth.signOut();
+      setTimeout(() => router.push("/login"), 1200);
     } catch (error) {
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Unable to send password reset link.";
+        error instanceof Error ? error.message : "Unable to update password.";
       setMessage(errorMessage);
     } finally {
-      setIsResettingPassword(false);
+      setIsSubmitting(false);
     }
   }
 
@@ -76,7 +84,7 @@ export default function LoginPage() {
       <div className="relative mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl items-center justify-center">
         <div className="auth-card w-full max-w-sm rounded-[26px] bg-white px-5 py-6 shadow-[0_18px_50px_rgba(15,23,42,0.10)] sm:px-4 sm:py-7">
           <div className="mb-3 flex flex-col items-center text-center">
-            <div className=" mb-2">
+            <div className="mb-2">
               <Image
                 src="/market-villa-logo.png"
                 alt="Market Villa"
@@ -94,43 +102,34 @@ export default function LoginPage() {
 
           <div className="mb-5 text-center">
             <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.04em] text-slate-950 sm:text-[30px]">
-              Welcome back
+              Set a new password
             </h1>
 
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-              Login to manage your business page.
+              Choose a new password for your business account.
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="grid gap-3">
-            <input
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-violet)] focus:shadow-[0_0_0_4px_rgba(124,58,237,0.12)]"
-              placeholder="Email address"
-              type="email"
-              required
-            />
-
+          <form onSubmit={handleResetPassword} className="grid gap-3">
             <input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-violet)] focus:shadow-[0_0_0_4px_rgba(124,58,237,0.12)]"
-              placeholder="Password"
+              placeholder="New password"
               type="password"
+              minLength={6}
               required
             />
 
-            <div className="-mt-1 flex justify-end">
-              <button
-                type="button"
-                onClick={handlePasswordReset}
-                disabled={isResettingPassword}
-                className="text-sm font-semibold text-[#5b21b6] transition hover:text-[#7c3aed] disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {isResettingPassword ? "Sending reset link..." : "Forgot password?"}
-              </button>
-            </div>
+            <input
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
+              className="h-11 rounded-[14px] border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none transition duration-200 placeholder:text-slate-400 focus:border-[var(--mv-violet)] focus:shadow-[0_0_0_4px_rgba(124,58,237,0.12)]"
+              placeholder="Confirm new password"
+              type="password"
+              minLength={6}
+              required
+            />
 
             {message ? (
               <div className="rounded-[20px] border border-red-200 bg-red-50 px-4 py-2.5 text-sm leading-6 text-red-700">
@@ -146,35 +145,26 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isCheckingSession || isSubmitting || Boolean(notice)}
               className="mt-1 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#7c3aed] px-5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#8b5cf6] hover:shadow-[0_16px_40px_rgba(2,8,31,0.22)] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {isSubmitting ? (
+              {isCheckingSession || isSubmitting ? (
                 <Loader2 size={18} className="animate-spin" />
               ) : null}
-              {isSubmitting ? "Logging in..." : "Login to Dashboard"}
+              {isCheckingSession
+                ? "Checking link..."
+                : isSubmitting
+                  ? "Updating password..."
+                  : "Update password"}
             </button>
           </form>
 
-          <div className="my-4 flex items-center gap-3">
-            <span className="h-px flex-1 bg-slate-200" />
-            <span className="text-sm text-slate-400">or</span>
-            <span className="h-px flex-1 bg-slate-200" />
-          </div>
-
-          <Link
-            href="/signup"
-            className="inline-flex h-11 w-full items-center justify-center rounded-full border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-800 transition duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50"
-          >
-            Create Business Account
-          </Link>
-
-          <div className="mt-3 text-center">
+          <div className="mt-4 text-center">
             <Link
-              href="/"
+              href="/login"
               className="text-sm text-slate-500 transition hover:text-slate-900"
             >
-              Back to website
+              Back to login
             </Link>
           </div>
         </div>
@@ -183,10 +173,6 @@ export default function LoginPage() {
       <style jsx>{`
         .auth-card {
           animation: cardIn 0.55s ease-out;
-        }
-
-        . {
-          animation: floatLogo 4s ease-in-out infinite;
         }
 
         .orb {
@@ -234,16 +220,6 @@ export default function LoginPage() {
           }
         }
 
-        @keyframes floatLogo {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-5px);
-          }
-        }
-
         @keyframes drift {
           0%,
           100% {
@@ -257,4 +233,3 @@ export default function LoginPage() {
     </main>
   );
 }
-

@@ -1,5 +1,12 @@
 ﻿import { supabase } from "@/lib/supabase";
 
+import {
+  canUseThemeForPlan,
+  isValidPlanAlias,
+  normalizePlanId,
+} from "@/lib/plans";
+import { businessThemes } from "@/lib/themes";
+
 export type CreateBusinessInput = {
   name: string;
   slug: string;
@@ -798,6 +805,31 @@ export async function updateBusinessTheme({
   businessId: string;
   themeId: string;
 }) {
+  const { data: business, error: businessError } = await supabase
+    .from("businesses")
+    .select("id,subscription_plan")
+    .eq("id", businessId)
+    .single();
+
+  if (businessError) {
+    throw businessError;
+  }
+
+  const themeIndex = businessThemes.findIndex((theme) => theme.id === themeId);
+
+  if (themeIndex === -1) {
+    throw new Error("Selected theme does not exist.");
+  }
+
+  if (
+    !canUseThemeForPlan({
+      plan: business?.subscription_plan,
+      themeIndex,
+    })
+  ) {
+    throw new Error("Upgrade your plan to use this theme.");
+  }
+
   const { data, error } = await supabase
     .from("businesses")
     .update({
@@ -894,7 +926,6 @@ export async function updateBusinessSubscriptionControls({
 }) {
   await requireSuperAdmin();
 
-  const allowedPlans = ["starter", "growth", "pro"];
   const allowedStatuses = [
     "trial",
     "active",
@@ -903,7 +934,7 @@ export async function updateBusinessSubscriptionControls({
     "payment_failed",
   ];
 
-  if (!allowedPlans.includes(plan)) {
+  if (!isValidPlanAlias(plan)) {
     throw new Error("Invalid subscription plan.");
   }
 
@@ -914,7 +945,7 @@ export async function updateBusinessSubscriptionControls({
   const { data, error } = await supabase
     .from("businesses")
     .update({
-      subscription_plan: plan,
+      subscription_plan: normalizePlanId(plan),
       subscription_status: status,
       subscription_expires_at: expiresAt || null,
       grace_period_ends_at: graceEndsAt || null,

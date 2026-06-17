@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getVisibilityPackage } from "@/lib/visibility-packages";
 import {
-  isValidPlanId,
+  isValidPlanAlias,
   MARKET_VILLA_PLANS,
-  MarketVillaPlanId,
+  normalizePlanId,
 } from "@/lib/plans";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -26,10 +26,10 @@ function verifyPaystackSignature(rawBody: string, signature: string) {
 }
 
 function getPlanFromMetadata(data: any) {
-  const plan = String(data?.metadata?.plan || "") as MarketVillaPlanId;
+  const plan = String(data?.metadata?.plan || "");
 
-  if (isValidPlanId(plan)) {
-    return plan;
+  if (isValidPlanAlias(plan)) {
+    return normalizePlanId(plan);
   }
 
   return "";
@@ -319,7 +319,7 @@ export async function POST(request: Request) {
 
       if (
         existingPayment?.plan &&
-        String(existingPayment.plan) !== String(plan)
+        normalizePlanId(String(existingPayment.plan)) !== String(plan)
       ) {
         return NextResponse.json({
           received: true,

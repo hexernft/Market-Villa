@@ -12,12 +12,14 @@ import {
 import { ThemePreviewCard } from "@/components/ThemePreviewCard";
 import { getMyBusinesses, updateBusinessTheme } from "@/lib/business-actions";
 import { availableThemes } from "@/lib/mock-data";
+import { canUseThemeForPlan, getThemeLimitForPlan } from "@/lib/plans";
 
 type DashboardBusiness = {
   id: string;
   name: string;
   slug: string;
   theme_id: string;
+  subscription_plan?: string | null;
 };
 
 export default function ThemePage() {
@@ -39,6 +41,10 @@ export default function ThemePage() {
       availableThemes[0]
     );
   }, [selectedThemeId]);
+
+  const selectedBusinessThemeLimit = getThemeLimitForPlan(
+    selectedBusiness?.subscription_plan,
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -209,25 +215,47 @@ export default function ThemePage() {
             </div>
 
             <p className="text-sm text-slate-500">
-              {availableThemes.length} theme
-              {availableThemes.length === 1 ? "" : "s"}
+              {selectedBusinessThemeLimit} of {availableThemes.length} themes available
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {availableThemes.map((theme) => (
+            {availableThemes.map((theme, index) => {
+              const isLocked = !canUseThemeForPlan({
+                plan: selectedBusiness?.subscription_plan,
+                themeIndex: index,
+              });
+
+              return (
               <button
                 key={theme.id}
                 type="button"
-                onClick={() => setSelectedThemeId(theme.id)}
-                className="text-left transition hover:-translate-y-0.5"
+                onClick={() => {
+                  if (isLocked) {
+                    setMessage("Upgrade your plan to use this theme.");
+                    return;
+                  }
+
+                  setSelectedThemeId(theme.id);
+                }}
+                className={`relative text-left transition ${
+                  isLocked
+                    ? "cursor-not-allowed opacity-55"
+                    : "hover:-translate-y-0.5"
+                }`}
               >
                 <ThemePreviewCard
                   theme={theme}
                   selected={selectedThemeId === theme.id}
                 />
+                {isLocked ? (
+                  <span className="absolute right-3 top-3 rounded-full bg-[#26143d] px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                    Upgrade
+                  </span>
+                ) : null}
               </button>
-            ))}
+            );
+            })}
           </div>
         </div>
 

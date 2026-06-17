@@ -18,17 +18,34 @@ create table if not exists public.payments (
 
 alter table public.payments enable row level security;
 
-create policy if not exists "Business owners can view own payments"
-on public.payments for select
-using (owner_id = auth.uid());
+do $$
+begin
+  if not exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'payments' and policyname = 'Business owners can view own payments') then
+    create policy "Business owners can view own payments"
+    on public.payments for select
+    using (owner_id = auth.uid() or public.is_super_admin());
+  end if;
 
-create policy if not exists "Business owners can create own payments"
-on public.payments for insert
-with check (owner_id = auth.uid());
+  if not exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'payments' and policyname = 'Business owners can create own payments') then
+    create policy "Business owners can create own payments"
+    on public.payments for insert
+    with check (owner_id = auth.uid());
+  end if;
 
-create policy if not exists "Business owners can update own pending payments"
-on public.payments for update
-using (owner_id = auth.uid());
+  if not exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'payments' and policyname = 'Business owners can update own pending payments') then
+    create policy "Business owners can update own pending payments"
+    on public.payments for update
+    using (owner_id = auth.uid() or public.is_super_admin())
+    with check (owner_id = auth.uid() or public.is_super_admin());
+  end if;
+
+  if not exists (select 1 from pg_policies where schemaname = 'public' and tablename = 'payments' and policyname = 'Super admins can manage payments') then
+    create policy "Super admins can manage payments"
+    on public.payments for all
+    using (public.is_super_admin())
+    with check (public.is_super_admin());
+  end if;
+end $$;
 
 alter table public.businesses
 add column if not exists subscription_started_at timestamptz,

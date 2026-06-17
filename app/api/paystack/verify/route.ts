@@ -1,9 +1,10 @@
 ﻿import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  isValidPlanId,
+  isValidPlanAlias,
   MARKET_VILLA_PLANS,
   MarketVillaPlanId,
+  normalizePlanId,
 } from "@/lib/plans";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -134,15 +135,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const plan = String(payment.plan || "") as MarketVillaPlanId;
+    const rawPlan = String(payment.plan || "");
 
-    if (!isValidPlanId(plan)) {
+    if (!isValidPlanAlias(rawPlan)) {
       return NextResponse.json(
         { error: "Invalid plan on payment record." },
         { status: 400 }
       );
     }
 
+    const plan = normalizePlanId(rawPlan) as MarketVillaPlanId;
     const expectedPlan = MARKET_VILLA_PLANS[plan];
 
     if (!expectedPlan?.amountInKobo) {
@@ -246,7 +248,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (metadata.plan && String(metadata.plan) !== plan) {
+    if (metadata.plan && normalizePlanId(String(metadata.plan)) !== plan) {
       return NextResponse.json(
         { error: "Payment plan metadata does not match." },
         { status: 400 }
