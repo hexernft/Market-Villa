@@ -17,6 +17,9 @@ import {
   Megaphone,
   Banknote,
   BadgeDollarSign,
+  Car,
+  Home,
+  Package,
 } from "lucide-react";
 import {
   getAllBusinessesForAdmin,
@@ -26,6 +29,8 @@ import {
   updateBusinessSubscriptionControls,
   updateDomainRequestStatus,
 } from "@/lib/business-actions";
+import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
+import { normalizePlanId } from "@/lib/plans";
 
 type AdminBusiness = {
   id: string;
@@ -39,6 +44,7 @@ type AdminBusiness = {
   custom_domain_status: string;
   subscription_plan: string;
   subscription_status: string;
+  business_mode?: string | null;
   subscription_expires_at: string | null;
   grace_period_ends_at: string | null;
   admin_override_active: boolean | null;
@@ -288,6 +294,21 @@ export default function AdminPage() {
   const overrideCount = businesses.filter(
     (business) => business.admin_override_active
   ).length;
+  const productModeCount = businesses.filter(
+    (business) => normalizeBusinessMode(business.business_mode) === "products"
+  ).length;
+  const propertyModeCount = businesses.filter(
+    (business) => normalizeBusinessMode(business.business_mode) === "properties"
+  ).length;
+  const carModeCount = businesses.filter(
+    (business) => normalizeBusinessMode(business.business_mode) === "cars"
+  ).length;
+  const modeMismatchCount = businesses.filter((business) => {
+    const mode = normalizeBusinessMode(business.business_mode);
+    const plan = normalizePlanId(business.subscription_plan);
+
+    return mode !== "products" && plan !== "pro";
+  }).length;
   const pendingDomainCount = domainRequests.filter(
     (request) => request.status === "pending"
   ).length;
@@ -519,7 +540,7 @@ export default function AdminPage() {
             </section>
           ) : (
             <>
-              <section className="grid gap-4 md:grid-cols-5">
+              <section className="grid gap-4 md:grid-cols-4 xl:grid-cols-8">
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
                   <p className="text-sm text-slate-500">Businesses</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
@@ -545,6 +566,34 @@ export default function AdminPage() {
                   <p className="text-sm text-slate-500">Pending Domains</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {pendingDomainCount}
+                  </p>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm text-slate-500">Products</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
+                    {productModeCount}
+                  </p>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm text-slate-500">Properties</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
+                    {propertyModeCount}
+                  </p>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm text-slate-500">Cars</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
+                    {carModeCount}
+                  </p>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-5 shadow-sm">
+                  <p className="text-sm text-amber-700">Mode Issues</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-amber-950">
+                    {modeMismatchCount}
                   </p>
                 </div>
               </section>
@@ -584,10 +633,23 @@ export default function AdminPage() {
                     </div>
                   ) : null}
 
-                  {filteredBusinesses.map((business) => (
+                  {filteredBusinesses.map((business) => {
+                    const mode = normalizeBusinessMode(business.business_mode);
+                    const modeMeta = getBusinessModeMeta(mode);
+                    const isModeMismatch =
+                      mode !== "products" &&
+                      normalizePlanId(business.subscription_plan) !== "pro";
+                    const ModeIcon =
+                      mode === "cars" ? Car : mode === "properties" ? Home : Package;
+
+                    return (
                     <article
                       key={business.id}
-                      className="rounded-[1.5rem] border border-slate-200 p-5"
+                      className={`rounded-[1.5rem] border p-5 ${
+                        isModeMismatch
+                          ? "border-amber-200 bg-amber-50"
+                          : "border-slate-200"
+                      }`}
                     >
                       <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
                         <div>
@@ -610,9 +672,20 @@ export default function AdminPage() {
                               {business.subscription_plan}
                             </span>
 
+                            <span className="inline-flex items-center gap-1 rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-white">
+                              <ModeIcon size={13} />
+                              {modeMeta.shortLabel}
+                            </span>
+
                             <span className="rounded-full bg-[#26143d] px-3 py-1 text-xs font-semibold text-white">
                               {business.subscription_status}
                             </span>
+
+                            {isModeMismatch ? (
+                              <span className="rounded-full bg-amber-200 px-3 py-1 text-xs font-semibold text-amber-950">
+                                Pro mismatch
+                              </span>
+                            ) : null}
                           </div>
 
                           <h3 className="text-xl font-semibold tracking-[-0.03em] text-slate-950">
@@ -625,6 +698,10 @@ export default function AdminPage() {
 
                           <p className="mt-2 text-sm text-slate-500">
                             {business.location || "No location added"}
+                          </p>
+
+                          <p className="mt-2 text-sm text-slate-500">
+                            Mode: {modeMeta.label} - {modeMeta.inventoryLabel}
                           </p>
 
                           {business.custom_domain ? (
@@ -689,7 +766,8 @@ export default function AdminPage() {
                         </div>
                       </div>
                     </article>
-                  ))}
+                    );
+                  })}
                 </div>
               </section>
 

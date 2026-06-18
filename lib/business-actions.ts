@@ -1297,6 +1297,76 @@ export async function createPropertyInquiry(input: CreatePropertyInquiryInput) {
   return data;
 }
 
+export async function getVehicleInquiriesByBusinessId(businessId: string) {
+  const { data, error } = await supabase
+    .from("vehicle_inquiries")
+    .select("*")
+    .eq("business_id", businessId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return data || [];
+}
+
+export async function getPropertyInquiriesByBusinessId(businessId: string) {
+  const { data, error } = await supabase
+    .from("property_inquiries")
+    .select("*")
+    .eq("business_id", businessId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return data || [];
+}
+
+export async function updateVehicleInquiryStatus({
+  inquiryId,
+  status,
+}: {
+  inquiryId: string;
+  status: string;
+}) {
+  const { data, error } = await supabase
+    .from("vehicle_inquiries")
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq("id", inquiryId)
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function updatePropertyInquiryStatus({
+  inquiryId,
+  status,
+}: {
+  inquiryId: string;
+  status: string;
+}) {
+  const { data, error } = await supabase
+    .from("property_inquiries")
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq("id", inquiryId)
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
 export async function getOrdersWithItemsByBusinessId(businessId: string) {
   const { data, error } = await supabase
     .from("orders")

@@ -3011,6 +3011,7 @@ export default function StorePage({ params }: StorePageProps) {
             </div>
           </section>
 
+          {hasSection("feature-strip") ? (
           <section className="px-4 py-3 md:px-5">
             <div className="mx-auto grid gap-3 md:max-w-7xl md:grid-cols-3">
               {[
@@ -3031,7 +3032,9 @@ export default function StorePage({ params }: StorePageProps) {
               ))}
             </div>
           </section>
+          ) : null}
 
+          {hasSection("products") ? (
           <section id="listings" className="px-4 py-5 md:px-5">
             <div className="mx-auto md:max-w-7xl">
               <div className="mb-5 grid gap-4 rounded-[1rem] bg-white p-4 shadow-sm ring-1 ring-[#eadfd6] md:grid-cols-[1fr_auto] md:items-center">
@@ -3063,6 +3066,16 @@ export default function StorePage({ params }: StorePageProps) {
                     const details = product.property_details || {};
                     const specs = getPropertySpecs(product);
                     const status = getPropertyStatusLabel(product.property_status);
+                    const feeDetails = [
+                      details.inspectionFee
+                        ? `Inspection: ${details.inspectionFee}`
+                        : "",
+                      details.agencyFee ? `Agency: ${details.agencyFee}` : "",
+                      details.cautionFee ? `Caution: ${details.cautionFee}` : "",
+                      details.titleDocument
+                        ? `Docs: ${details.titleDocument}`
+                        : "",
+                    ].filter(Boolean);
 
                     return (
                       <article
@@ -3125,6 +3138,14 @@ export default function StorePage({ params }: StorePageProps) {
                             </p>
                           ) : null}
 
+                          {hasSection("details") && feeDetails.length ? (
+                            <div className="mt-4 grid gap-2 rounded-[0.9rem] bg-[#fbf8f5] p-3 text-xs font-semibold text-[#6f625d]">
+                              {feeDetails.map((item) => (
+                                <span key={String(item)}>{String(item)}</span>
+                              ))}
+                            </div>
+                          ) : null}
+
                           <div className="mt-5 grid gap-2 sm:grid-cols-2">
                             {whatsapp ? (
                               <>
@@ -3180,7 +3201,9 @@ export default function StorePage({ params }: StorePageProps) {
               )}
             </div>
           </section>
+          ) : null}
 
+          {hasSection("contact") ? (
           <footer className="px-4 pb-8 pt-2 md:px-5">
             <div className="mx-auto rounded-[1rem] bg-white p-5 text-[#201713] shadow-sm ring-1 ring-[#eadfd6] md:max-w-7xl">
               <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
@@ -3219,6 +3242,7 @@ export default function StorePage({ params }: StorePageProps) {
               </div>
             </div>
           </footer>
+          ) : null}
         </main>
       </>
     );

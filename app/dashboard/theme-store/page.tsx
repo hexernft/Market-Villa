@@ -111,6 +111,10 @@ function getThemeModeLabel(themeId: string) {
   return "Product Theme";
 }
 
+function getThemePriceLabel(theme: (typeof availableThemes)[number]) {
+  return theme.priceLabel || "Price pending";
+}
+
 export default function ThemeStorePage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
@@ -470,7 +474,7 @@ export default function ThemeStorePage() {
                   {themeModeLabel}
                 </span>
                 <span className="inline-flex rounded-xl bg-[#d9fff3] px-3 py-1 text-xs font-semibold text-[#032f2a] shadow-sm">
-                  Price soon
+                  {getThemePriceLabel(theme)}
                 </span>
               </div>
 

@@ -81,6 +81,9 @@ export type BusinessTheme = {
   features?: string[];
   storefrontSections?: string[];
   configurableSections?: ThemeSectionOption[];
+  priceLabel?: string;
+  priceAmount?: number;
+  pricingNote?: string;
 };
 
 const basicThemeSections: ThemeSectionOption[] = [
@@ -488,6 +491,39 @@ const carShowroomSections: ThemeSectionOption[] = [
   },
 ];
 
+const propertyListingSections: ThemeSectionOption[] = [
+  {
+    id: "feature-strip",
+    label: "Trust Highlights",
+    description: "Show inspection, document, and direct-contact highlights.",
+  },
+  {
+    id: "availability-notes",
+    label: "Availability Notes",
+    description: "Show availability, viewing, location, and access notes.",
+  },
+  {
+    id: "inspection",
+    label: "Inspection Requests",
+    description: "Show prompts for inspection booking and availability checks.",
+  },
+  {
+    id: "details",
+    label: "Fees & Documents",
+    description: "Show title documents, inspection fees, agency fees, and service charges.",
+  },
+  {
+    id: "products",
+    label: "Property Listings",
+    description: "Show the full listing gallery and inquiry buttons.",
+  },
+  {
+    id: "contact",
+    label: "Contact",
+    description: "Show WhatsApp and business contact details.",
+  },
+];
+
 export const businessThemes: BusinessTheme[] = [
   {
     id: "classic-commerce",
@@ -660,6 +696,12 @@ export const businessThemes: BusinessTheme[] = [
     border: "border-stone-200",
     productCard: "rounded-[2rem] bg-white text-stone-950 shadow-sm",
     sectionLabel: "text-[#7a552c]",
+    bestFor: "Real estate, shortlets, rentals, land, and commercial property",
+    features: ["Inspection prompts", "Fees and documents", "Availability-led listings"],
+    storefrontSections: ["Inspection request", "Listing details", "Direct WhatsApp"],
+    configurableSections: propertyListingSections,
+    priceLabel: "Set price",
+    pricingNote: "Premium property theme",
   },
   {
     id: "beauty-lounge",

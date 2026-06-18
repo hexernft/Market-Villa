@@ -1447,6 +1447,23 @@ export default function ProductsPage() {
                     propertyDetails.furnishedStatus,
                     propertyDetails.pricePeriod,
                   ].filter(Boolean);
+                  const propertyFinancials = [
+                    propertyDetails.inspectionFee
+                      ? `Inspection: ${propertyDetails.inspectionFee}`
+                      : "",
+                    propertyDetails.agencyFee
+                      ? `Agency: ${propertyDetails.agencyFee}`
+                      : "",
+                    propertyDetails.cautionFee
+                      ? `Caution: ${propertyDetails.cautionFee}`
+                      : "",
+                    propertyDetails.titleDocument
+                      ? `Docs: ${propertyDetails.titleDocument}`
+                      : "",
+                    propertyDetails.availabilityDate
+                      ? `Available: ${propertyDetails.availabilityDate}`
+                      : "",
+                  ].filter(Boolean);
 
                   return (
                 <div className="grid md:grid-cols-[12rem_1fr]">
@@ -1529,6 +1546,14 @@ export default function ProductsPage() {
                               >
                                 {String(spec)}
                               </span>
+                            ))}
+                          </div>
+                        ) : null}
+
+                        {isPropertiesMode && propertyFinancials.length ? (
+                          <div className="mt-3 grid max-w-xl gap-2 rounded-2xl bg-amber-50 p-3 text-xs font-semibold text-amber-900 sm:grid-cols-2">
+                            {propertyFinancials.slice(0, 5).map((item) => (
+                              <span key={String(item)}>{String(item)}</span>
                             ))}
                           </div>
                         ) : null}
