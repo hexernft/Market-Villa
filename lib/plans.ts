@@ -106,18 +106,18 @@ export function canUseBusinessModeForPlan({
 
   const normalizedPlan = normalizePlanId(plan);
 
-  return normalizedPlan === "growth" || normalizedPlan === "pro";
+  return normalizedPlan === "pro";
 }
 
 export function getBusinessModePlanMessage(mode: string | null | undefined) {
   const cleanMode = String(mode || "products");
 
   if (cleanMode === "cars") {
-    return "Cars are available from the Growth plan.";
+    return "Cars are available from the Pro plan.";
   }
 
   if (cleanMode === "properties") {
-    return "Properties are available from the Growth plan.";
+    return "Properties are available from the Pro plan.";
   }
 
   return "";

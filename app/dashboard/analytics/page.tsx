@@ -18,6 +18,7 @@ import {
 } from "@/lib/business-actions";
 import { supabase } from "@/lib/supabase";
 import { formatCurrency } from "@/lib/utils";
+import { getBusinessModeMeta } from "@/lib/business-modes";
 
 type DashboardBusiness = {
   id: string;
@@ -26,6 +27,7 @@ type DashboardBusiness = {
   subscription_plan?: string | null;
   subscription_status?: string | null;
   is_published?: boolean | null;
+  business_mode?: string | null;
 };
 
 type DashboardOrder = {
@@ -94,6 +96,7 @@ export default function AnalyticsPage() {
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
+  const modeMeta = getBusinessModeMeta(selectedBusiness?.business_mode);
 
   const metrics = useMemo(() => {
     const totalOrders = orders.length;
@@ -251,7 +254,7 @@ export default function AnalyticsPage() {
       icon: CheckCircle2,
     },
     {
-      label: "Products",
+      label: modeMeta.inventoryLabel,
       value: metrics.products.toString(),
       icon: Boxes,
     },
@@ -271,7 +274,8 @@ export default function AnalyticsPage() {
             </h2>
 
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-500">
-              Track orders, revenue, products and recent customer activity.
+              Track orders, revenue, {modeMeta.inventoryLabel.toLowerCase()} and
+              recent customer activity.
             </p>
           </div>
 

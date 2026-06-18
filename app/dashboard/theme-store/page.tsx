@@ -9,7 +9,6 @@ import {
   Lock,
   Palette,
   Search,
-  Sparkles,
   Store,
 } from "lucide-react";
 import { ThemePreviewCard } from "@/components/ThemePreviewCard";
@@ -101,6 +100,15 @@ function getFilter(theme: (typeof availableThemes)[number]) {
   }
 
   return "retail";
+}
+
+function getThemeModeLabel(themeId: string) {
+  const mode = getThemeBusinessMode(themeId);
+
+  if (mode === "cars") return "Car Theme";
+  if (mode === "properties") return "Property Theme";
+
+  return "Product Theme";
 }
 
 export default function ThemeStorePage() {
@@ -360,6 +368,24 @@ export default function ThemeStorePage() {
         </div>
       ) : null}
 
+      {isModeLocked ? (
+        <section className="rounded-[1.35rem] border border-amber-200 bg-amber-50 p-5 shadow-sm">
+          <p className="text-sm font-semibold text-amber-950">
+            {getBusinessModePlanMessage(selectedMode)}
+          </p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-amber-900">
+            Upgrade to Pro to unlock {selectedModeMeta.themeLabel.toLowerCase()}
+            and the matching inventory workflow.
+          </p>
+          <Link
+            href="/dashboard/billing"
+            className="mt-4 inline-flex min-h-10 items-center justify-center rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white"
+          >
+            View Pro Plan
+          </Link>
+        </section>
+      ) : null}
+
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
         <div className="grid gap-3 xl:grid-cols-[1fr_auto] xl:items-center">
           <div className="relative">
@@ -399,6 +425,7 @@ export default function ThemeStorePage() {
           const themeIndex = availableThemes.findIndex(
             (item) => item.id === theme.id,
           );
+          const themeModeLabel = getThemeModeLabel(theme.id);
           const isLocked =
             isModeLocked ||
             !canUseThemeForPlan({
@@ -439,8 +466,8 @@ export default function ThemeStorePage() {
 
               <div className="pointer-events-none absolute left-3 top-3 flex gap-2">
                 <span className="inline-flex items-center gap-1 rounded-xl bg-white px-3 py-1 text-xs font-semibold text-[#211331] shadow-sm">
-                  <Sparkles size={12} />
-                  Premium
+                  <Store size={12} />
+                  {themeModeLabel}
                 </span>
                 <span className="inline-flex rounded-xl bg-[#d9fff3] px-3 py-1 text-xs font-semibold text-[#032f2a] shadow-sm">
                   Price soon
@@ -450,7 +477,7 @@ export default function ThemeStorePage() {
               {isLocked ? (
                 <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-xl bg-[#26143d] px-3 py-1 text-xs font-semibold text-white shadow-sm">
                   <Lock size={12} />
-                  Locked
+                  Pro
                 </span>
               ) : null}
 

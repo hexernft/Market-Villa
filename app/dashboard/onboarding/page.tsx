@@ -218,7 +218,7 @@ export default function OnboardingPage() {
                       {mode.label}
                       {isModeLocked ? (
                         <span className="rounded-full bg-white px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-500">
-                          Growth
+                          Pro
                         </span>
                       ) : null}
                     </span>

@@ -125,6 +125,10 @@ export default function ProfilePage() {
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
+  const canUseSpecializedModes = canUseBusinessModeForPlan({
+    mode: "cars",
+    plan: selectedBusiness?.subscription_plan,
+  });
 
   useEffect(() => {
     let mounted = true;
@@ -192,6 +196,8 @@ export default function ProfilePage() {
   }
 
   function handleModeChange(mode: BusinessMode) {
+    const currentMode = normalizeBusinessMode(selectedBusiness?.business_mode);
+
     if (
       !canUseBusinessModeForPlan({
         mode,
@@ -200,6 +206,14 @@ export default function ProfilePage() {
     ) {
       setMessage(getBusinessModePlanMessage(mode));
       return;
+    }
+
+    if (selectedBusiness && mode !== currentMode) {
+      const confirmed = window.confirm(
+        "Switching business mode changes dashboard labels, inventory fields, available themes, and customer inquiry flow. Existing items stay saved, but the workspace will be tailored to the new section."
+      );
+
+      if (!confirmed) return;
     }
 
     setMessage("");
@@ -480,7 +494,7 @@ export default function ProfilePage() {
                       disabled={isModeLocked}
                     >
                       {mode.label}
-                      {isModeLocked ? " - Growth plan" : ""}
+                      {isModeLocked ? " - Pro plan" : ""}
                     </option>
                   );
                 })}
@@ -489,9 +503,28 @@ export default function ProfilePage() {
               <p className="text-xs leading-5 text-slate-500">
                 This controls dashboard wording, inventory fields, customer
                 inquiry flow, and which themes are shown in the Theme Store.
-                Cars and Properties are available from Growth.
+                Cars and Properties are available from Pro.
               </p>
             </label>
+
+            {!canUseSpecializedModes ? (
+              <div className="rounded-[1.25rem] border border-amber-200 bg-amber-50 p-4">
+                <p className="text-sm font-semibold text-amber-950">
+                  Cars and Properties require Premium.
+                </p>
+                <p className="mt-2 text-sm leading-6 text-amber-900">
+                  Keep using Products on your current plan, or upgrade to
+                  Premium to unlock property listings, vehicle inventory, car
+                  themes, and property themes.
+                </p>
+                <Link
+                  href="/dashboard/billing"
+                  className="mt-4 inline-flex min-h-10 items-center justify-center rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white"
+                >
+                  View Premium
+                </Link>
+              </div>
+            ) : null}
 
             <label className="grid gap-2">
               <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">

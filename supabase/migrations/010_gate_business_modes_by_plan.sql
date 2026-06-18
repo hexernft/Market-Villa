@@ -4,16 +4,19 @@ set
   theme_id = 'simple-one-page',
   updated_at = now()
 where business_mode in ('properties', 'cars')
-  and subscription_plan in ('starter', 'basic');
+  and subscription_plan in ('starter', 'basic', 'growth', 'business');
 
 alter table businesses
   drop constraint if exists businesses_mode_requires_growth_plan_check;
 
 alter table businesses
-  add constraint businesses_mode_requires_growth_plan_check
+  drop constraint if exists businesses_mode_requires_pro_plan_check;
+
+alter table businesses
+  add constraint businesses_mode_requires_pro_plan_check
   check (
     business_mode = 'products'
-    or subscription_plan in ('growth', 'business', 'pro', 'premium')
+    or subscription_plan in ('pro', 'premium')
   );
 
 drop policy if exists "Anyone can create vehicle inquiries for published dealerships" on vehicle_inquiries;
@@ -27,7 +30,7 @@ with check (
     where businesses.id = vehicle_inquiries.business_id
       and businesses.is_published = true
       and businesses.business_mode = 'cars'
-      and businesses.subscription_plan in ('growth', 'business', 'pro', 'premium')
+      and businesses.subscription_plan in ('pro', 'premium')
   )
 );
 
@@ -42,6 +45,6 @@ with check (
     where businesses.id = property_inquiries.business_id
       and businesses.is_published = true
       and businesses.business_mode = 'properties'
-      and businesses.subscription_plan in ('growth', 'business', 'pro', 'premium')
+      and businesses.subscription_plan in ('pro', 'premium')
   )
 );

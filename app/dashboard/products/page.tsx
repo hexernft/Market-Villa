@@ -195,6 +195,12 @@ export default function ProductsPage() {
     selectedBusiness?.theme_id === "car-showroom";
   const modeMeta = getBusinessModeMeta(selectedBusiness?.business_mode);
   const isPropertiesMode = modeMeta.id === "properties";
+  const singularInventoryLabel =
+    modeMeta.id === "properties"
+      ? "Listing"
+      : modeMeta.id === "cars"
+        ? "Vehicle"
+        : "Product";
   const isCurrentModeLocked = !canUseBusinessModeForPlan({
     mode: modeMeta.id,
     plan: selectedBusiness?.subscription_plan,
@@ -426,7 +432,7 @@ export default function ProductsPage() {
     event.preventDefault();
 
     if (!selectedBusinessId) {
-      setMessage("Create a business page first before adding products.");
+      setMessage(`Create a business page first before adding ${modeMeta.inventoryLabel.toLowerCase()}.`);
       return;
     }
 
@@ -563,7 +569,7 @@ export default function ProductsPage() {
       });
 
       await reloadProducts();
-      setMessage("Product availability updated.");
+      setMessage(`${singularInventoryLabel} visibility updated.`);
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -578,7 +584,7 @@ export default function ProductsPage() {
 
   async function handleDeleteProduct(productId: string) {
     const confirmed = window.confirm(
-      "Delete this product? This cannot be undone."
+      `Delete this ${singularInventoryLabel.toLowerCase()}? This cannot be undone.`
     );
 
     if (!confirmed) return;
@@ -599,7 +605,7 @@ export default function ProductsPage() {
           ? "Vehicle deleted successfully."
           : isPropertiesMode
             ? "Listing deleted successfully."
-            : "Product deleted successfully."
+            : `${singularInventoryLabel} deleted successfully.`
       );
     } catch (error) {
       const errorMessage =
@@ -704,7 +710,7 @@ export default function ProductsPage() {
           </p>
 
           <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
-            Switch this business back to Products or upgrade to Growth to manage
+            Switch this business back to Products or upgrade to Pro to manage
             {modeMeta.id === "cars" ? " vehicles" : " property listings"}.
           </p>
 
@@ -712,7 +718,7 @@ export default function ProductsPage() {
             href="/dashboard/billing"
             className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white"
           >
-            View Growth Plan
+            View Pro Plan
           </Link>
         </section>
       ) : (
@@ -731,7 +737,7 @@ export default function ProductsPage() {
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-emerald-700"
               >
                 <Plus size={18} />
-                Add {isDealershipMode ? "Vehicle" : modeMeta.inventoryLabel.slice(0, -1) || "Item"}
+                Add {singularInventoryLabel}
               </button>
 
             <p className="mt-3 text-sm text-slate-500">
@@ -748,7 +754,7 @@ export default function ProductsPage() {
             <div className="rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm md:p-6">
               <div className="mb-5 flex items-center justify-between gap-4">
                 <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
-                  {editingProductId ? "Edit" : "New Item"}
+                  {editingProductId ? "Edit" : `New ${singularInventoryLabel}`}
                 </span>
 
                 <span className="grid h-11 w-11 place-items-center rounded-2xl bg-teal-50 text-teal-700">
@@ -1345,7 +1351,7 @@ export default function ProductsPage() {
                       ? "Saving..."
                       : editingProductId
                       ? "Save Changes"
-                      : "Add Product"}
+                      : `Add ${singularInventoryLabel}`}
                   </button>
 
                   <button
@@ -1372,17 +1378,23 @@ export default function ProductsPage() {
                   {products.length === 0
                     ? isDealershipMode
                       ? "You have no vehicles yet"
-                      : "You have no products yet"
+                      : isPropertiesMode
+                        ? "You have no listings yet"
+                        : "You have no products yet"
                     : isDealershipMode
                       ? "No matching vehicles"
-                      : "No matching products"}
+                      : isPropertiesMode
+                        ? "No matching listings"
+                        : "No matching products"}
                 </p>
 
                 <p className="mx-auto mt-2 max-w-sm text-sm text-slate-500">
                   {products.length === 0
                     ? isDealershipMode
                       ? "Start by adding the first car customers can inspect or ask about on WhatsApp."
-                      : "Start by adding the first item customers can ask about on WhatsApp."
+                      : isPropertiesMode
+                        ? "Start by adding the first property customers can inspect or ask about on WhatsApp."
+                        : "Start by adding the first item customers can ask about on WhatsApp."
                     : "Try another search term or clear the search field."}
                 </p>
 
@@ -1453,7 +1465,7 @@ export default function ProductsPage() {
                       <div>
                         <div className="mb-3 flex flex-wrap items-center gap-2">
                           <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                            {product.category || "Products"}
+                            {product.category || modeMeta.inventoryLabel}
                           </span>
 
                           {product.is_available ? (

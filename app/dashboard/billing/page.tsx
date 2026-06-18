@@ -50,7 +50,7 @@ const fallbackBillingPlans: BillingPlan[] = [
   {
     id: "growth",
     name: "Growth",
-    description: "For growing businesses ready to sell more products.",
+    description: "For growing product businesses that need more room.",
     amount: 20000,
     amountInKobo: 2000000,
     priceLabel: "\u20A620,000/month",
@@ -62,7 +62,7 @@ const fallbackBillingPlans: BillingPlan[] = [
     id: "pro",
     name: "Premium",
     description:
-      "For established businesses that need more stores, more products, and stronger visibility.",
+      "For established businesses that need more stores, inventory, and stronger visibility.",
     amount: 30000,
     amountInKobo: 3000000,
     priceLabel: "\u20A630,000/month",
@@ -402,6 +402,31 @@ export default function BillingPage() {
         </div>
       ) : null}
 
+      <section className="rounded-[1.5rem] border border-[#d8c8ee] bg-white p-4 shadow-sm">
+        <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7c3aed]">
+              Pro Sections
+            </p>
+            <h2 className="mt-1 text-xl font-semibold tracking-[-0.04em] text-slate-950">
+              Cars and Properties unlock on Premium.
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+              After upgrading, open Profile and switch the business mode to
+              Products, Properties, or Cars. The dashboard, themes, and customer
+              inquiry flow will adjust automatically.
+            </p>
+          </div>
+
+          <Link
+            href="/dashboard/profile"
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-5 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-white"
+          >
+            Open Profile
+          </Link>
+        </div>
+      </section>
+
       <section className="overflow-hidden rounded-[1.75rem] bg-[#06110f] p-4 text-white shadow-sm md:p-6">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <button
@@ -451,8 +476,8 @@ export default function BillingPage() {
               plan.id === "starter"
                 ? "For solo entrepreneurs"
                 : plan.id === "growth"
-                ? "For small teams"
-                : "For growing businesses";
+                ? "For multi-category sellers"
+                : "For scaling businesses";
 
             const features =
               plan.id === "starter"
@@ -469,24 +494,25 @@ export default function BillingPage() {
                 ? [
                     "Everything in Starter",
                     plan.productLimit
-                      ? `Up to ${plan.productLimit} products`
-                      : "Unlimited products",
+                      ? `Up to ${plan.productLimit} inventory items`
+                      : "Unlimited inventory items",
                     plan.storeLimit
                       ? `Up to ${plan.storeLimit} stores`
                       : "Unlimited stores",
-                    "Better store tools",
+                    "More product themes and inventory room",
                     "For product-heavy businesses",
                   ]
                 : [
                     "Everything in Growth",
                     plan.productLimit
-                      ? `Up to ${plan.productLimit} products`
-                      : "Unlimited products",
+                      ? `Up to ${plan.productLimit} inventory items`
+                      : "Unlimited inventory items",
                     plan.storeLimit
                       ? `Up to ${plan.storeLimit} stores`
                       : "Unlimited stores",
-                    "For larger storefronts",
-                    "Premium business visibility",
+                    "Unlock Products, Properties, and Cars",
+                    "Property listing and car dealer tools",
+                    "More premium themes for every section",
                   ];
 
             return (
