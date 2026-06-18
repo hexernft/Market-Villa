@@ -16,6 +16,8 @@
   instagram_url: string | null;
   opening_hours: string | null;
   theme_id: string;
+  theme_sections: string[] | null;
+  business_mode: string;
   is_published: boolean;
   custom_domain: string | null;
   custom_domain_status: string;
@@ -35,6 +37,11 @@ export type Product = {
   image_url: string | null;
   is_available: boolean;
   is_featured: boolean;
+  item_type: string;
+  vehicle_status: string;
+  vehicle_details: Record<string, unknown>;
+  property_status: string;
+  property_details: Record<string, unknown>;
   sort_order: number;
   created_at: string;
   updated_at: string;

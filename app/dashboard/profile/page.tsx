@@ -23,6 +23,16 @@ import {
 import { uploadBusinessImage } from "@/lib/storage-actions";
 import { slugify } from "@/lib/utils";
 import { ImageUploadField } from "@/components/ImageUploadField";
+import {
+  BusinessMode,
+  businessModes,
+  getBusinessModeMeta,
+  normalizeBusinessMode,
+} from "@/lib/business-modes";
+import {
+  canUseBusinessModeForPlan,
+  getBusinessModePlanMessage,
+} from "@/lib/plans";
 
 const categories = [
   "Food & Drinks",
@@ -30,12 +40,35 @@ const categories = [
   "Beauty & Wellness",
   "Apartment & Hospitality",
   "Retail Store",
+  "Car Dealership",
   "Digital Products",
   "School / Education",
   "Church / Ministry",
   "Professional Products",
   "Other",
 ];
+
+const categoriesByMode: Record<BusinessMode, string[]> = {
+  products: categories,
+  properties: [
+    "Shortlet / Apartment",
+    "Rental Property",
+    "Land Sales",
+    "Commercial Property",
+    "Real Estate Agency",
+    "Property Management",
+    "Other",
+  ],
+  cars: [
+    "Car Dealership",
+    "Vehicle Importer",
+    "Auto Broker",
+    "Used Cars",
+    "Luxury Cars",
+    "Commercial Vehicles",
+    "Other",
+  ],
+};
 
 type DashboardBusiness = {
   id: string;
@@ -45,6 +78,7 @@ type DashboardBusiness = {
   tagline: string | null;
   description: string | null;
   logo_text: string | null;
+  logo_url: string | null;
   cover_image_url: string | null;
   whatsapp: string | null;
   phone: string | null;
@@ -52,6 +86,8 @@ type DashboardBusiness = {
   location: string | null;
   instagram_url: string | null;
   opening_hours: string | null;
+  business_mode?: string | null;
+  subscription_plan?: string | null;
   is_published: boolean;
 };
 
@@ -65,6 +101,10 @@ export default function ProfilePage() {
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
   const [logoText, setLogoText] = useState("");
+  const [logoUrl, setLogoUrl] = useState("");
+  const [compressedLogoFile, setCompressedLogoFile] = useState<File | null>(
+    null
+  );
   const [coverImageUrl, setCoverImageUrl] = useState("");
   const [compressedCoverFile, setCompressedCoverFile] = useState<File | null>(
     null
@@ -75,6 +115,7 @@ export default function ProfilePage() {
   const [location, setLocation] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
   const [openingHours, setOpeningHours] = useState("");
+  const [businessMode, setBusinessMode] = useState<BusinessMode>("products");
   const [isPublished, setIsPublished] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -128,6 +169,8 @@ export default function ProfilePage() {
     setTagline(selectedBusiness.tagline || "");
     setDescription(selectedBusiness.description || "");
     setLogoText(selectedBusiness.logo_text || "");
+    setLogoUrl(selectedBusiness.logo_url || "");
+    setCompressedLogoFile(null);
     setCoverImageUrl(selectedBusiness.cover_image_url || "");
     setCompressedCoverFile(null);
     setWhatsapp(selectedBusiness.whatsapp || "");
@@ -136,6 +179,7 @@ export default function ProfilePage() {
     setLocation(selectedBusiness.location || "");
     setInstagramUrl(selectedBusiness.instagram_url || "");
     setOpeningHours(selectedBusiness.opening_hours || "");
+    setBusinessMode(normalizeBusinessMode(selectedBusiness.business_mode));
     setIsPublished(selectedBusiness.is_published);
   }, [selectedBusiness]);
 
@@ -144,6 +188,25 @@ export default function ProfilePage() {
 
     if (!slug) {
       setSlug(slugify(value));
+    }
+  }
+
+  function handleModeChange(mode: BusinessMode) {
+    if (
+      !canUseBusinessModeForPlan({
+        mode,
+        plan: selectedBusiness?.subscription_plan,
+      })
+    ) {
+      setMessage(getBusinessModePlanMessage(mode));
+      return;
+    }
+
+    setMessage("");
+    setBusinessMode(mode);
+
+    if (!categoriesByMode[mode].includes(category)) {
+      setCategory(categoriesByMode[mode][0]);
     }
   }
 
@@ -159,7 +222,27 @@ export default function ProfilePage() {
     setMessage("");
 
     try {
+      if (
+        !canUseBusinessModeForPlan({
+          mode: businessMode,
+          plan: selectedBusiness?.subscription_plan,
+        })
+      ) {
+        throw new Error(getBusinessModePlanMessage(businessMode));
+      }
+
+      let finalLogoUrl = logoUrl;
       let finalCoverImageUrl = coverImageUrl;
+
+      if (compressedLogoFile) {
+        const uploadedLogo = await uploadBusinessImage({
+          file: compressedLogoFile,
+          businessId: selectedBusinessId,
+          folder: "logos",
+        });
+
+        finalLogoUrl = uploadedLogo.publicUrl;
+      }
 
       if (compressedCoverFile) {
         const uploadedImage = await uploadBusinessImage({
@@ -179,6 +262,7 @@ export default function ProfilePage() {
         tagline,
         description,
         logoText,
+        logoUrl: finalLogoUrl,
         coverImageUrl: finalCoverImageUrl,
         whatsapp,
         phone,
@@ -186,11 +270,14 @@ export default function ProfilePage() {
         location,
         instagramUrl,
         openingHours,
+        businessMode,
         isPublished,
       });
 
       const updatedBusinesses = await getMyBusinesses();
       setBusinesses(updatedBusinesses);
+      setLogoUrl(finalLogoUrl);
+      setCompressedLogoFile(null);
       setCoverImageUrl(finalCoverImageUrl);
       setCompressedCoverFile(null);
 
@@ -275,9 +362,9 @@ export default function ProfilePage() {
             </div>
 
             <div className="rounded-2xl bg-teal-50 px-3 py-2.5">
-              <p className="text-xs text-teal-700">Category</p>
+              <p className="text-xs text-teal-700">Mode</p>
               <p className="mt-1 truncate text-sm font-semibold text-teal-950">
-                {category}
+                {getBusinessModeMeta(businessMode).shortLabel}
               </p>
             </div>
 
@@ -348,7 +435,11 @@ export default function ProfilePage() {
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <Store size={16} />
-                  Category
+                  {businessMode === "properties"
+                    ? "Property category"
+                    : businessMode === "cars"
+                      ? "Car business type"
+                      : "Category"}
                 </span>
 
                 <select
@@ -356,12 +447,51 @@ export default function ProfilePage() {
                   onChange={(event) => setCategory(event.target.value)}
                   className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                 >
-                  {categories.map((item) => (
+                  {categoriesByMode[businessMode].map((item) => (
                     <option key={item}>{item}</option>
                   ))}
                 </select>
               </label>
             </div>
+
+            <label className="grid gap-2">
+              <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <Store size={16} />
+                Business mode
+              </span>
+
+              <select
+                value={businessMode}
+                onChange={(event) =>
+                  handleModeChange(normalizeBusinessMode(event.target.value))
+                }
+                className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+              >
+                {businessModes.map((mode) => {
+                  const isModeLocked = !canUseBusinessModeForPlan({
+                    mode: mode.id,
+                    plan: selectedBusiness?.subscription_plan,
+                  });
+
+                  return (
+                    <option
+                      key={mode.id}
+                      value={mode.id}
+                      disabled={isModeLocked}
+                    >
+                      {mode.label}
+                      {isModeLocked ? " - Growth plan" : ""}
+                    </option>
+                  );
+                })}
+              </select>
+
+              <p className="text-xs leading-5 text-slate-500">
+                This controls dashboard wording, inventory fields, customer
+                inquiry flow, and which themes are shown in the Theme Store.
+                Cars and Properties are available from Growth.
+              </p>
+            </label>
 
             <label className="grid gap-2">
               <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
@@ -385,20 +515,40 @@ export default function ProfilePage() {
             </label>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Logo text
-                </span>
-
-                <input
-                  value={logoText}
-                  onChange={(event) =>
-                    setLogoText(event.target.value.toUpperCase().slice(0, 4))
-                  }
-                  className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
-                  placeholder="MV"
+              <div className="grid gap-2">
+                <ImageUploadField
+                  label={logoUrl ? "Change logo" : "Add logo"}
+                  helper="Upload a square logo. If no logo is added, the public store will not show one."
+                  maxWidth={600}
+                  maxHeight={600}
+                  onCompressed={setCompressedLogoFile}
                 />
-              </label>
+
+                {logoUrl ? (
+                  <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3">
+                    <img
+                      src={logoUrl}
+                      alt="Current logo"
+                      className="h-12 w-12 rounded-2xl object-cover"
+                    />
+                    <div>
+                      <p className="text-sm font-semibold text-slate-800">
+                        Logo added
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLogoUrl("");
+                          setCompressedLogoFile(null);
+                        }}
+                        className="mt-1 text-xs font-semibold text-red-600"
+                      >
+                        Remove logo
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
 
               <label className="grid gap-2">
                 <span className="text-sm font-semibold text-slate-700">
@@ -593,9 +743,13 @@ export default function ProfilePage() {
               />
 
               <div className="p-4">
-                <div className="mb-3 grid h-10 w-12 place-items-center rounded-2xl bg-[#26143d] text-sm font-semibold text-white">
-                  {logoText || "MV"}
-                </div>
+                {logoUrl ? (
+                  <img
+                    src={logoUrl}
+                    alt="Business logo preview"
+                    className="mb-3 h-12 w-12 rounded-2xl object-cover"
+                  />
+                ) : null}
 
                 <p className="text-sm font-semibold tracking-[-0.04em] text-slate-950">
                   {name || "Business Name"}

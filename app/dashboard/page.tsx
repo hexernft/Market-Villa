@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
+  Building2,
+  Car,
   CheckCircle2,
   Clock3,
   Copy,
@@ -26,6 +28,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import { formatCurrency } from "@/lib/utils";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
+import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
 
 type DashboardBusiness = {
   id: string;
@@ -39,6 +42,7 @@ type DashboardBusiness = {
   cover_image_url?: string | null;
   whatsapp?: string | null;
   selected_theme?: string | null;
+  business_mode?: string | null;
   created_at?: string | null;
 };
 
@@ -88,6 +92,15 @@ function formatStatus(status?: string | null) {
   return String(status || "pending").replace(/_/g, " ");
 }
 
+function getInventoryIcon(mode: string | null | undefined) {
+  const normalizedMode = normalizeBusinessMode(mode);
+
+  if (normalizedMode === "properties") return Building2;
+  if (normalizedMode === "cars") return Car;
+
+  return Package;
+}
+
 export default function DashboardPage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
@@ -101,6 +114,9 @@ export default function DashboardPage() {
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
+
+  const modeMeta = getBusinessModeMeta(selectedBusiness?.business_mode);
+  const InventoryIcon = getInventoryIcon(selectedBusiness?.business_mode);
 
   const metrics = useMemo(() => {
     const revenue = orders.reduce(
@@ -148,7 +164,7 @@ export default function DashboardPage() {
         done: Boolean(selectedBusiness.logo_url || selectedBusiness.cover_image_url),
       },
       {
-        label: "Add your first product",
+        label: `Add your first ${modeMeta.inventoryLabel.toLowerCase().slice(0, -1)}`,
         href: "/dashboard/products",
         done: productsCount > 0,
       },
@@ -163,7 +179,7 @@ export default function DashboardPage() {
         done: Boolean(selectedBusiness.is_published),
       },
     ];
-  }, [productsCount, selectedBusiness]);
+  }, [modeMeta.inventoryLabel, productsCount, selectedBusiness]);
 
   const completedSetupCount = setupItems.filter((item) => item.done).length;
   const setupProgress =
@@ -293,7 +309,7 @@ export default function DashboardPage() {
         </h2>
 
         <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500">
-          Set up your storefront, add products, and publish your
+          Set up your storefront, add your inventory, and publish your
           page.
         </p>
 
@@ -326,17 +342,17 @@ export default function DashboardPage() {
       icon: Clock3,
     },
     {
-      label: "Products",
+      label: modeMeta.inventoryLabel,
       value: metrics.products,
-      icon: Package,
+      icon: InventoryIcon,
     },
   ];
 
   const quickActions = [
     {
-      label: "Product",
+      label: modeMeta.inventoryLabel.slice(0, -1),
       href: "/dashboard/products",
-      icon: Package,
+      icon: InventoryIcon,
     },
     {
       label: "Theme",

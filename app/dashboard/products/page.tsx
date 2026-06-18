@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import {
   BadgeCheck,
   Camera,
@@ -24,6 +25,11 @@ import {
 import { uploadBusinessImage } from "@/lib/storage-actions";
 import { formatCurrency } from "@/lib/utils";
 import { ImageUploadField } from "@/components/ImageUploadField";
+import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
+import {
+  canUseBusinessModeForPlan,
+  getBusinessModePlanMessage,
+} from "@/lib/plans";
 
 const productCategories = [
   "Pastries",
@@ -36,10 +42,66 @@ const productCategories = [
   "Other",
 ];
 
+const vehicleCategories = [
+  "SUV",
+  "Sedan",
+  "Truck",
+  "Bus",
+  "Coupe",
+  "Hatchback",
+  "Tokunbo",
+  "Brand New",
+  "Other",
+];
+
+const propertyCategories = [
+  "Apartment",
+  "House",
+  "Shortlet",
+  "Land",
+  "Office",
+  "Shop",
+  "Warehouse",
+  "Other",
+];
+
+const vehicleStatuses = [
+  { label: "Available", value: "available" },
+  { label: "Reserved", value: "reserved" },
+  { label: "Sold", value: "sold" },
+  { label: "In transit", value: "in_transit" },
+  { label: "On request", value: "on_request" },
+] as const;
+
+const propertyStatuses = [
+  { label: "Available", value: "available" },
+  { label: "Reserved", value: "reserved" },
+  { label: "Rented", value: "rented" },
+  { label: "Sold", value: "sold" },
+  { label: "Unavailable", value: "unavailable" },
+] as const;
+
+function formatVehicleStatus(status?: string | null) {
+  return (
+    vehicleStatuses.find((item) => item.value === status)?.label ||
+    "Available"
+  );
+}
+
+function formatPropertyStatus(status?: string | null) {
+  return (
+    propertyStatuses.find((item) => item.value === status)?.label ||
+    "Available"
+  );
+}
+
 type DashboardBusiness = {
   id: string;
   name: string;
   slug: string;
+  business_mode?: string | null;
+  theme_id?: string | null;
+  subscription_plan?: string | null;
 };
 
 type DashboardProduct = {
@@ -52,6 +114,11 @@ type DashboardProduct = {
   image_url: string | null;
   is_available: boolean;
   is_featured: boolean;
+  item_type?: string | null;
+  vehicle_status?: string | null;
+  vehicle_details?: Record<string, any> | null;
+  property_status?: string | null;
+  property_details?: Record<string, any> | null;
 };
 
 export default function ProductsPage() {
@@ -69,6 +136,46 @@ export default function ProductsPage() {
   const [description, setDescription] = useState("");
   const [isAvailable, setIsAvailable] = useState(true);
   const [isFeatured, setIsFeatured] = useState(false);
+  const [vehicleStatus, setVehicleStatus] =
+    useState<(typeof vehicleStatuses)[number]["value"]>("available");
+  const [vehicleMake, setVehicleMake] = useState("");
+  const [vehicleModel, setVehicleModel] = useState("");
+  const [vehicleYear, setVehicleYear] = useState("");
+  const [vehicleTrim, setVehicleTrim] = useState("");
+  const [vehicleMileage, setVehicleMileage] = useState("");
+  const [vehicleTransmission, setVehicleTransmission] = useState("");
+  const [vehicleFuelType, setVehicleFuelType] = useState("");
+  const [vehicleEngine, setVehicleEngine] = useState("");
+  const [vehicleBodyType, setVehicleBodyType] = useState("");
+  const [vehicleExteriorColor, setVehicleExteriorColor] = useState("");
+  const [vehicleInteriorColor, setVehicleInteriorColor] = useState("");
+  const [vehicleCondition, setVehicleCondition] = useState("");
+  const [vehicleDutyStatus, setVehicleDutyStatus] = useState("");
+  const [vehicleVin, setVehicleVin] = useState("");
+  const [vehicleLocation, setVehicleLocation] = useState("");
+  const [vehicleDocuments, setVehicleDocuments] = useState("");
+  const [vehicleFinancingAvailable, setVehicleFinancingAvailable] =
+    useState(false);
+  const [vehiclePriceNegotiable, setVehiclePriceNegotiable] = useState(false);
+  const [propertyStatus, setPropertyStatus] =
+    useState<(typeof propertyStatuses)[number]["value"]>("available");
+  const [propertyType, setPropertyType] = useState("");
+  const [propertyBedrooms, setPropertyBedrooms] = useState("");
+  const [propertyBathrooms, setPropertyBathrooms] = useState("");
+  const [propertyToilets, setPropertyToilets] = useState("");
+  const [propertyParking, setPropertyParking] = useState("");
+  const [propertyFurnishedStatus, setPropertyFurnishedStatus] = useState("");
+  const [propertyServicing, setPropertyServicing] = useState("");
+  const [propertyLandSize, setPropertyLandSize] = useState("");
+  const [propertyTitleDocument, setPropertyTitleDocument] = useState("");
+  const [propertyInspectionFee, setPropertyInspectionFee] = useState("");
+  const [propertyAvailabilityDate, setPropertyAvailabilityDate] = useState("");
+  const [propertyLocation, setPropertyLocation] = useState("");
+  const [propertyPricePeriod, setPropertyPricePeriod] = useState("");
+  const [propertyAmenities, setPropertyAmenities] = useState("");
+  const [propertyAgencyFee, setPropertyAgencyFee] = useState("");
+  const [propertyCautionFee, setPropertyCautionFee] = useState("");
+  const [propertyIsNegotiable, setPropertyIsNegotiable] = useState(false);
 
   const [editingProductId, setEditingProductId] = useState("");
   const [query, setQuery] = useState("");
@@ -78,6 +185,26 @@ export default function ProductsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [busyProductId, setBusyProductId] = useState("");
   const [message, setMessage] = useState("");
+
+  const selectedBusiness = useMemo(() => {
+    return businesses.find((business) => business.id === selectedBusinessId);
+  }, [businesses, selectedBusinessId]);
+
+  const isDealershipMode =
+    normalizeBusinessMode(selectedBusiness?.business_mode) === "cars" ||
+    selectedBusiness?.theme_id === "car-showroom";
+  const modeMeta = getBusinessModeMeta(selectedBusiness?.business_mode);
+  const isPropertiesMode = modeMeta.id === "properties";
+  const isCurrentModeLocked = !canUseBusinessModeForPlan({
+    mode: modeMeta.id,
+    plan: selectedBusiness?.subscription_plan,
+  });
+
+  const activeCategories = isDealershipMode
+    ? vehicleCategories
+    : isPropertiesMode
+      ? propertyCategories
+    : productCategories;
 
   const filteredProducts = useMemo(() => {
     const search = query.toLowerCase().trim();
@@ -169,12 +296,49 @@ export default function ProductsPage() {
   function clearFormFields() {
     setName("");
     setPrice("");
-    setCategory(productCategories[0]);
+    setCategory(activeCategories[0]);
     setImageUrl("");
     setCompressedImageFile(null);
     setDescription("");
     setIsAvailable(true);
     setIsFeatured(false);
+    setVehicleStatus("available");
+    setVehicleMake("");
+    setVehicleModel("");
+    setVehicleYear("");
+    setVehicleTrim("");
+    setVehicleMileage("");
+    setVehicleTransmission("");
+    setVehicleFuelType("");
+    setVehicleEngine("");
+    setVehicleBodyType("");
+    setVehicleExteriorColor("");
+    setVehicleInteriorColor("");
+    setVehicleCondition("");
+    setVehicleDutyStatus("");
+    setVehicleVin("");
+    setVehicleLocation("");
+    setVehicleDocuments("");
+    setVehicleFinancingAvailable(false);
+    setVehiclePriceNegotiable(false);
+    setPropertyStatus("available");
+    setPropertyType("");
+    setPropertyBedrooms("");
+    setPropertyBathrooms("");
+    setPropertyToilets("");
+    setPropertyParking("");
+    setPropertyFurnishedStatus("");
+    setPropertyServicing("");
+    setPropertyLandSize("");
+    setPropertyTitleDocument("");
+    setPropertyInspectionFee("");
+    setPropertyAvailabilityDate("");
+    setPropertyLocation("");
+    setPropertyPricePeriod("");
+    setPropertyAmenities("");
+    setPropertyAgencyFee("");
+    setPropertyCautionFee("");
+    setPropertyIsNegotiable(false);
     setEditingProductId("");
   }
 
@@ -190,15 +354,63 @@ export default function ProductsPage() {
   }
 
   function startEditing(product: DashboardProduct) {
+    const details = product.vehicle_details || {};
+    const propertyDetails = product.property_details || {};
+
     setEditingProductId(product.id);
     setName(product.name);
     setPrice(String(product.price || ""));
-    setCategory(product.category || productCategories[0]);
+    setCategory(product.category || activeCategories[0]);
     setImageUrl(product.image_url || "");
     setCompressedImageFile(null);
     setDescription(product.description || "");
     setIsAvailable(product.is_available);
     setIsFeatured(product.is_featured);
+    setVehicleStatus(
+      vehicleStatuses.some((status) => status.value === product.vehicle_status)
+        ? (product.vehicle_status as (typeof vehicleStatuses)[number]["value"])
+        : "available"
+    );
+    setVehicleMake(String(details.make || ""));
+    setVehicleModel(String(details.model || ""));
+    setVehicleYear(String(details.year || ""));
+    setVehicleTrim(String(details.trim || ""));
+    setVehicleMileage(String(details.mileage || ""));
+    setVehicleTransmission(String(details.transmission || ""));
+    setVehicleFuelType(String(details.fuelType || ""));
+    setVehicleEngine(String(details.engine || ""));
+    setVehicleBodyType(String(details.bodyType || ""));
+    setVehicleExteriorColor(String(details.exteriorColor || ""));
+    setVehicleInteriorColor(String(details.interiorColor || ""));
+    setVehicleCondition(String(details.condition || ""));
+    setVehicleDutyStatus(String(details.dutyStatus || ""));
+    setVehicleVin(String(details.vin || ""));
+    setVehicleLocation(String(details.vehicleLocation || ""));
+    setVehicleDocuments(String(details.documents || ""));
+    setVehicleFinancingAvailable(Boolean(details.financingAvailable));
+    setVehiclePriceNegotiable(Boolean(details.priceNegotiable));
+    setPropertyStatus(
+      propertyStatuses.some((status) => status.value === product.property_status)
+        ? (product.property_status as (typeof propertyStatuses)[number]["value"])
+        : "available"
+    );
+    setPropertyType(String(propertyDetails.propertyType || ""));
+    setPropertyBedrooms(String(propertyDetails.bedrooms || ""));
+    setPropertyBathrooms(String(propertyDetails.bathrooms || ""));
+    setPropertyToilets(String(propertyDetails.toilets || ""));
+    setPropertyParking(String(propertyDetails.parking || ""));
+    setPropertyFurnishedStatus(String(propertyDetails.furnishedStatus || ""));
+    setPropertyServicing(String(propertyDetails.servicing || ""));
+    setPropertyLandSize(String(propertyDetails.landSize || ""));
+    setPropertyTitleDocument(String(propertyDetails.titleDocument || ""));
+    setPropertyInspectionFee(String(propertyDetails.inspectionFee || ""));
+    setPropertyAvailabilityDate(String(propertyDetails.availabilityDate || ""));
+    setPropertyLocation(String(propertyDetails.propertyLocation || ""));
+    setPropertyPricePeriod(String(propertyDetails.pricePeriod || ""));
+    setPropertyAmenities(String(propertyDetails.amenities || ""));
+    setPropertyAgencyFee(String(propertyDetails.agencyFee || ""));
+    setPropertyCautionFee(String(propertyDetails.cautionFee || ""));
+    setPropertyIsNegotiable(Boolean(propertyDetails.isNegotiable));
     setMessage("");
     setIsProductFormOpen(true);
   }
@@ -223,6 +435,50 @@ export default function ProductsPage() {
 
     try {
       let finalImageUrl = imageUrl;
+      const vehicleDetails = {
+        make: vehicleMake,
+        model: vehicleModel,
+        year: vehicleYear,
+        trim: vehicleTrim,
+        mileage: vehicleMileage,
+        transmission: vehicleTransmission,
+        fuelType: vehicleFuelType,
+        engine: vehicleEngine,
+        bodyType: vehicleBodyType,
+        exteriorColor: vehicleExteriorColor,
+        interiorColor: vehicleInteriorColor,
+        condition: vehicleCondition,
+        dutyStatus: vehicleDutyStatus,
+        vin: vehicleVin,
+        vehicleLocation,
+        documents: vehicleDocuments,
+        financingAvailable: vehicleFinancingAvailable,
+        priceNegotiable: vehiclePriceNegotiable,
+      };
+      const propertyDetails = {
+        propertyType,
+        bedrooms: propertyBedrooms,
+        bathrooms: propertyBathrooms,
+        toilets: propertyToilets,
+        parking: propertyParking,
+        furnishedStatus: propertyFurnishedStatus,
+        servicing: propertyServicing,
+        landSize: propertyLandSize,
+        titleDocument: propertyTitleDocument,
+        inspectionFee: propertyInspectionFee,
+        availabilityDate: propertyAvailabilityDate,
+        propertyLocation,
+        pricePeriod: propertyPricePeriod,
+        amenities: propertyAmenities,
+        agencyFee: propertyAgencyFee,
+        cautionFee: propertyCautionFee,
+        isNegotiable: propertyIsNegotiable,
+      };
+      const itemType = isDealershipMode
+        ? "vehicle"
+        : isPropertiesMode
+          ? "property"
+          : "product";
 
       if (compressedImageFile) {
         const uploadedImage = await uploadBusinessImage({
@@ -244,9 +500,20 @@ export default function ProductsPage() {
           imageUrl: finalImageUrl,
           isAvailable,
           isFeatured,
+          itemType,
+          vehicleStatus: isDealershipMode ? vehicleStatus : "available",
+          vehicleDetails: isDealershipMode ? vehicleDetails : {},
+          propertyStatus: isPropertiesMode ? propertyStatus : "available",
+          propertyDetails: isPropertiesMode ? propertyDetails : {},
         });
 
-        setMessage("Product updated successfully.");
+        setMessage(
+          isDealershipMode
+            ? "Vehicle updated successfully."
+            : isPropertiesMode
+              ? "Listing updated successfully."
+              : "Product updated successfully."
+        );
       } else {
         await createProduct({
           businessId: selectedBusinessId,
@@ -257,9 +524,20 @@ export default function ProductsPage() {
           imageUrl: finalImageUrl,
           isAvailable,
           isFeatured,
+          itemType,
+          vehicleStatus: isDealershipMode ? vehicleStatus : "available",
+          vehicleDetails: isDealershipMode ? vehicleDetails : {},
+          propertyStatus: isPropertiesMode ? propertyStatus : "available",
+          propertyDetails: isPropertiesMode ? propertyDetails : {},
         });
 
-        setMessage("Product added successfully.");
+        setMessage(
+          isDealershipMode
+            ? "Vehicle added successfully."
+            : isPropertiesMode
+              ? "Listing added successfully."
+              : "Product added successfully."
+        );
       }
 
       await reloadProducts();
@@ -316,7 +594,13 @@ export default function ProductsPage() {
         resetForm();
       }
 
-      setMessage("Product deleted successfully.");
+      setMessage(
+        isDealershipMode
+          ? "Vehicle deleted successfully."
+          : isPropertiesMode
+            ? "Listing deleted successfully."
+            : "Product deleted successfully."
+      );
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unable to delete product.";
@@ -361,21 +645,23 @@ export default function ProductsPage() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 className="min-h-10 w-full rounded-2xl border border-slate-200 bg-white px-11 text-sm outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-50"
-                placeholder="Search products"
+                placeholder={`Search ${modeMeta.inventoryLabel.toLowerCase()}`}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
             <div className="rounded-2xl bg-slate-50 px-3 py-2">
-              <p className="text-xs text-slate-500">Total</p>
+            <p className="text-xs text-slate-500">Total</p>
               <p className="mt-1 text-lg font-semibold text-slate-950">
                 {products.length}
               </p>
             </div>
 
             <div className="rounded-2xl bg-emerald-50 px-3 py-2">
-              <p className="text-xs text-emerald-700">Live</p>
+              <p className="text-xs text-emerald-700">
+                {isDealershipMode ? "Visible" : "Live"}
+              </p>
               <p className="mt-1 text-lg font-semibold text-emerald-950">
                 {availableProductsCount}
               </p>
@@ -411,6 +697,24 @@ export default function ProductsPage() {
             Add your business profile before adding products.
           </p>
         </section>
+      ) : isCurrentModeLocked ? (
+        <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center shadow-sm">
+          <p className="text-sm font-semibold text-amber-950">
+            {getBusinessModePlanMessage(modeMeta.id)}
+          </p>
+
+          <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
+            Switch this business back to Products or upgrade to Growth to manage
+            {modeMeta.id === "cars" ? " vehicles" : " property listings"}.
+          </p>
+
+          <Link
+            href="/dashboard/billing"
+            className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white"
+          >
+            View Growth Plan
+          </Link>
+        </section>
       ) : (
         <section
           className={`grid gap-6 ${
@@ -427,11 +731,15 @@ export default function ProductsPage() {
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-emerald-700"
               >
                 <Plus size={18} />
-                Add Product
+                Add {isDealershipMode ? "Vehicle" : modeMeta.inventoryLabel.slice(0, -1) || "Item"}
               </button>
 
-              <p className="mt-3 text-sm text-slate-500">
-                Add a product or catalogue item.
+            <p className="mt-3 text-sm text-slate-500">
+                {isDealershipMode
+                  ? "Add a vehicle with specs, documents, and inspection notes."
+                  : modeMeta.id === "properties"
+                    ? "Add a property listing for customers to inspect or ask about."
+                  : "Add a product or catalogue item."}
               </p>
             </div>
           ) : null}
@@ -451,14 +759,24 @@ export default function ProductsPage() {
               <form onSubmit={handleSubmitProduct} className="grid gap-5">
                 <label className="grid gap-2">
                   <span className="text-sm font-semibold text-slate-700">
-                    Product name
+                    {isDealershipMode
+                      ? "Vehicle title"
+                      : isPropertiesMode
+                        ? "Listing title"
+                        : "Product name"}
                   </span>
 
                   <input
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
-                    placeholder="Product name"
+                    placeholder={
+                      isDealershipMode
+                        ? "Toyota Camry 2018 XLE"
+                        : isPropertiesMode
+                          ? "2-bedroom apartment in Wuse"
+                        : "Product name"
+                    }
                     required
                   />
                 </label>
@@ -466,7 +784,11 @@ export default function ProductsPage() {
                 <div className="grid gap-5 md:grid-cols-2">
                   <label className="grid gap-2">
                     <span className="text-sm font-semibold text-slate-700">
-                      Price
+                      {isDealershipMode
+                        ? "Asking price"
+                        : isPropertiesMode
+                          ? "Price / rent"
+                          : "Price"}
                     </span>
 
                     <input
@@ -490,7 +812,7 @@ export default function ProductsPage() {
                       onChange={(event) => setCategory(event.target.value)}
                       className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                     >
-                      {productCategories.map((item) => (
+                      {activeCategories.map((item) => (
                         <option key={item}>{item}</option>
                       ))}
                     </select>
@@ -500,10 +822,24 @@ export default function ProductsPage() {
                 <ImageUploadField
                   label={
                     editingProductId
-                      ? "Replace product image"
-                      : "Upload product image"
+                      ? isDealershipMode
+                        ? "Replace vehicle image"
+                        : isPropertiesMode
+                          ? "Replace listing image"
+                        : "Replace product image"
+                      : isDealershipMode
+                        ? "Upload vehicle image"
+                        : isPropertiesMode
+                          ? "Upload listing image"
+                        : "Upload product image"
                   }
-                  helper="Large images will be compressed before upload."
+                  helper={
+                    isDealershipMode
+                      ? "Use a clean exterior or hero image. Large images will be compressed."
+                      : isPropertiesMode
+                        ? "Use a clean property hero image. Large images will be compressed."
+                      : "Large images will be compressed before upload."
+                  }
                   maxWidth={1400}
                   maxHeight={1400}
                   onCompressed={(file) => setCompressedImageFile(file)}
@@ -511,7 +847,11 @@ export default function ProductsPage() {
 
                 <label className="grid gap-2">
                   <span className="text-sm font-semibold text-slate-700">
-                    Image URL
+                    {isDealershipMode
+                      ? "Vehicle image URL"
+                      : isPropertiesMode
+                        ? "Listing image URL"
+                        : "Image URL"}
                   </span>
 
                   <div className="relative">
@@ -531,7 +871,11 @@ export default function ProductsPage() {
 
                 <label className="grid gap-2">
                   <span className="text-sm font-semibold text-slate-700">
-                    Description
+                    {isDealershipMode
+                      ? "Vehicle description"
+                      : isPropertiesMode
+                        ? "Listing description"
+                        : "Description"}
                   </span>
 
                   <textarea
@@ -539,9 +883,407 @@ export default function ProductsPage() {
                     onChange={(event) => setDescription(event.target.value)}
                     rows={4}
                     className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
-                    placeholder="Add important product details."
+                    placeholder={
+                      isDealershipMode
+                        ? "Add mileage, condition, documents, location, and inspection notes."
+                        : isPropertiesMode
+                          ? "Add bedrooms, bathrooms, location, inspection notes, and availability."
+                        : "Add important product details."
+                    }
                   />
                 </label>
+
+                {isDealershipMode ? (
+                  <div className="grid gap-4 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">
+                        Vehicle details
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                        These details power the showroom specs, inspection
+                        notes, financing prompts, and buyer inquiry messages.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Make
+                        </span>
+                        <input
+                          value={vehicleMake}
+                          onChange={(event) => setVehicleMake(event.target.value)}
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                          placeholder="Toyota"
+                        />
+                      </label>
+
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Model
+                        </span>
+                        <input
+                          value={vehicleModel}
+                          onChange={(event) => setVehicleModel(event.target.value)}
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                          placeholder="Camry"
+                        />
+                      </label>
+
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Year
+                        </span>
+                        <input
+                          value={vehicleYear}
+                          onChange={(event) => setVehicleYear(event.target.value)}
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                          placeholder="2018"
+                        />
+                      </label>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Trim
+                        </span>
+                        <input
+                          value={vehicleTrim}
+                          onChange={(event) => setVehicleTrim(event.target.value)}
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                          placeholder="XLE"
+                        />
+                      </label>
+
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Mileage
+                        </span>
+                        <input
+                          value={vehicleMileage}
+                          onChange={(event) => setVehicleMileage(event.target.value)}
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                          placeholder="56,000 km"
+                        />
+                      </label>
+
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Status
+                        </span>
+                        <select
+                          value={vehicleStatus}
+                          onChange={(event) =>
+                            setVehicleStatus(
+                              event.target
+                                .value as (typeof vehicleStatuses)[number]["value"]
+                            )
+                          }
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        >
+                          {vehicleStatuses.map((status) => (
+                            <option key={status.value} value={status.value}>
+                              {status.label}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <input
+                        value={vehicleTransmission}
+                        onChange={(event) => setVehicleTransmission(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Transmission"
+                      />
+                      <input
+                        value={vehicleFuelType}
+                        onChange={(event) => setVehicleFuelType(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Fuel type"
+                      />
+                      <input
+                        value={vehicleEngine}
+                        onChange={(event) => setVehicleEngine(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Engine"
+                      />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <input
+                        value={vehicleBodyType}
+                        onChange={(event) => setVehicleBodyType(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Body type"
+                      />
+                      <input
+                        value={vehicleExteriorColor}
+                        onChange={(event) =>
+                          setVehicleExteriorColor(event.target.value)
+                        }
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Exterior color"
+                      />
+                      <input
+                        value={vehicleInteriorColor}
+                        onChange={(event) =>
+                          setVehicleInteriorColor(event.target.value)
+                        }
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Interior color"
+                      />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input
+                        value={vehicleCondition}
+                        onChange={(event) => setVehicleCondition(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Condition"
+                      />
+                      <input
+                        value={vehicleDutyStatus}
+                        onChange={(event) => setVehicleDutyStatus(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Duty / document status"
+                      />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <input
+                        value={vehicleVin}
+                        onChange={(event) => setVehicleVin(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="VIN / chassis number"
+                      />
+                      <input
+                        value={vehicleLocation}
+                        onChange={(event) => setVehicleLocation(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Vehicle location"
+                      />
+                    </div>
+
+                    <textarea
+                      value={vehicleDocuments}
+                      onChange={(event) => setVehicleDocuments(event.target.value)}
+                      rows={3}
+                      className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                      placeholder="Documents, inspection notes, customs duty, registration, transfer notes..."
+                    />
+
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
+                        <span className="text-sm font-semibold text-slate-700">
+                          Financing / installment available
+                        </span>
+                        <input
+                          type="checkbox"
+                          checked={vehicleFinancingAvailable}
+                          onChange={(event) =>
+                            setVehicleFinancingAvailable(event.target.checked)
+                          }
+                        />
+                      </label>
+                      <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
+                        <span className="text-sm font-semibold text-slate-700">
+                          Price negotiable
+                        </span>
+                        <input
+                          type="checkbox"
+                          checked={vehiclePriceNegotiable}
+                          onChange={(event) =>
+                            setVehiclePriceNegotiable(event.target.checked)
+                          }
+                        />
+                      </label>
+                    </div>
+                  </div>
+                ) : null}
+
+                {isPropertiesMode ? (
+                  <div className="grid gap-4 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">
+                        Property details
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                        These details power listing specs, inspection prompts,
+                        and WhatsApp inquiry messages.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Property type
+                        </span>
+                        <input
+                          value={propertyType}
+                          onChange={(event) => setPropertyType(event.target.value)}
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                          placeholder="2-bedroom apartment"
+                        />
+                      </label>
+
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Location
+                        </span>
+                        <input
+                          value={propertyLocation}
+                          onChange={(event) => setPropertyLocation(event.target.value)}
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                          placeholder="Lekki Phase 1"
+                        />
+                      </label>
+
+                      <label className="grid gap-2">
+                        <span className="text-xs font-semibold text-slate-600">
+                          Status
+                        </span>
+                        <select
+                          value={propertyStatus}
+                          onChange={(event) =>
+                            setPropertyStatus(
+                              event.target
+                                .value as (typeof propertyStatuses)[number]["value"]
+                            )
+                          }
+                          className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        >
+                          {propertyStatuses.map((status) => (
+                            <option key={status.value} value={status.value}>
+                              {status.label}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-4">
+                      <input
+                        value={propertyBedrooms}
+                        onChange={(event) => setPropertyBedrooms(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Bedrooms"
+                      />
+                      <input
+                        value={propertyBathrooms}
+                        onChange={(event) => setPropertyBathrooms(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Bathrooms"
+                      />
+                      <input
+                        value={propertyToilets}
+                        onChange={(event) => setPropertyToilets(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Toilets"
+                      />
+                      <input
+                        value={propertyParking}
+                        onChange={(event) => setPropertyParking(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Parking"
+                      />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <input
+                        value={propertyFurnishedStatus}
+                        onChange={(event) =>
+                          setPropertyFurnishedStatus(event.target.value)
+                        }
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Furnished status"
+                      />
+                      <input
+                        value={propertyPricePeriod}
+                        onChange={(event) => setPropertyPricePeriod(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Price period, e.g. yearly"
+                      />
+                      <input
+                        value={propertyAvailabilityDate}
+                        onChange={(event) =>
+                          setPropertyAvailabilityDate(event.target.value)
+                        }
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Availability date"
+                      />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <input
+                        value={propertyTitleDocument}
+                        onChange={(event) =>
+                          setPropertyTitleDocument(event.target.value)
+                        }
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Title document"
+                      />
+                      <input
+                        value={propertyInspectionFee}
+                        onChange={(event) =>
+                          setPropertyInspectionFee(event.target.value)
+                        }
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Inspection fee"
+                      />
+                      <input
+                        value={propertyLandSize}
+                        onChange={(event) => setPropertyLandSize(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Land / floor size"
+                      />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <input
+                        value={propertyServicing}
+                        onChange={(event) => setPropertyServicing(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Service charge"
+                      />
+                      <input
+                        value={propertyAgencyFee}
+                        onChange={(event) => setPropertyAgencyFee(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Agency fee"
+                      />
+                      <input
+                        value={propertyCautionFee}
+                        onChange={(event) => setPropertyCautionFee(event.target.value)}
+                        className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                        placeholder="Caution fee"
+                      />
+                    </div>
+
+                    <textarea
+                      value={propertyAmenities}
+                      onChange={(event) => setPropertyAmenities(event.target.value)}
+                      rows={3}
+                      className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
+                      placeholder="Amenities, estate notes, nearby landmarks, inspection instructions..."
+                    />
+
+                    <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
+                      <span className="text-sm font-semibold text-slate-700">
+                        Price negotiable
+                      </span>
+                      <input
+                        type="checkbox"
+                        checked={propertyIsNegotiable}
+                        onChange={(event) =>
+                          setPropertyIsNegotiable(event.target.checked)
+                        }
+                      />
+                    </label>
+                  </div>
+                ) : null}
 
                 <div className="grid gap-3 rounded-[1.5rem] bg-slate-50 p-3">
                   <label className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4">
@@ -628,13 +1370,19 @@ export default function ProductsPage() {
 
                 <p className="mt-4 text-base font-semibold text-slate-950">
                   {products.length === 0
-                    ? "You have no products yet"
-                    : "No matching products"}
+                    ? isDealershipMode
+                      ? "You have no vehicles yet"
+                      : "You have no products yet"
+                    : isDealershipMode
+                      ? "No matching vehicles"
+                      : "No matching products"}
                 </p>
 
                 <p className="mx-auto mt-2 max-w-sm text-sm text-slate-500">
                   {products.length === 0
-                    ? "Start by adding the first item customers can ask about on WhatsApp."
+                    ? isDealershipMode
+                      ? "Start by adding the first car customers can inspect or ask about on WhatsApp."
+                      : "Start by adding the first item customers can ask about on WhatsApp."
                     : "Try another search term or clear the search field."}
                 </p>
 
@@ -645,7 +1393,11 @@ export default function ProductsPage() {
                     className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
                   >
                     <Plus size={17} />
-                    Add Product
+                    {isDealershipMode
+                      ? "Add Vehicle"
+                      : isPropertiesMode
+                        ? "Add Listing"
+                        : "Add Product"}
                   </button>
                 ) : null}
               </div>
@@ -660,6 +1412,31 @@ export default function ProductsPage() {
                     : "border-slate-200 hover:-translate-y-0.5 hover:shadow-md"
                 }`}
               >
+                {(() => {
+                  const vehicleDetails = product.vehicle_details || {};
+                  const vehicleSpecs = [
+                    vehicleDetails.year,
+                    vehicleDetails.make,
+                    vehicleDetails.model,
+                    vehicleDetails.mileage,
+                    vehicleDetails.transmission,
+                    vehicleDetails.dutyStatus,
+                  ].filter(Boolean);
+                  const propertyDetails = product.property_details || {};
+                  const propertySpecs = [
+                    propertyDetails.propertyType,
+                    propertyDetails.bedrooms
+                      ? `${propertyDetails.bedrooms} bed`
+                      : "",
+                    propertyDetails.bathrooms
+                      ? `${propertyDetails.bathrooms} bath`
+                      : "",
+                    propertyDetails.propertyLocation,
+                    propertyDetails.furnishedStatus,
+                    propertyDetails.pricePeriod,
+                  ].filter(Boolean);
+
+                  return (
                 <div className="grid md:grid-cols-[12rem_1fr]">
                   <div
                     className="min-h-48 bg-cover bg-center md:min-h-full"
@@ -696,6 +1473,18 @@ export default function ProductsPage() {
                               Featured
                             </span>
                           ) : null}
+
+                          {isDealershipMode ? (
+                            <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-white">
+                              {formatVehicleStatus(product.vehicle_status)}
+                            </span>
+                          ) : null}
+
+                          {isPropertiesMode ? (
+                            <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-white">
+                              {formatPropertyStatus(product.property_status)}
+                            </span>
+                          ) : null}
                         </div>
 
                         <p className="text-lg font-semibold tracking-[-0.03em] text-slate-950">
@@ -705,6 +1494,32 @@ export default function ProductsPage() {
                         <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
                           {product.description || "No description added."}
                         </p>
+
+                        {isDealershipMode && vehicleSpecs.length ? (
+                          <div className="mt-3 flex max-w-xl flex-wrap gap-2">
+                            {vehicleSpecs.slice(0, 6).map((spec) => (
+                              <span
+                                key={String(spec)}
+                                className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"
+                              >
+                                {String(spec)}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+
+                        {isPropertiesMode && propertySpecs.length ? (
+                          <div className="mt-3 flex max-w-xl flex-wrap gap-2">
+                            {propertySpecs.slice(0, 6).map((spec) => (
+                              <span
+                                key={String(spec)}
+                                className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"
+                              >
+                                {String(spec)}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
                       </div>
 
                       <p className="whitespace-nowrap text-lg font-semibold tracking-[-0.04em] text-slate-950">
@@ -749,6 +1564,8 @@ export default function ProductsPage() {
                     </div>
                   </div>
                 </div>
+                  );
+                })()}
               </article>
             ))}
           </div>

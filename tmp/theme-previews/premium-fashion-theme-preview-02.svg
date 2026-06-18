@@ -1,0 +1,97 @@
+<svg width="1400" height="980" viewBox="0 0 1400 980" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1400" height="980" fill="#F4F5F7"/>
+
+  <rect x="54" y="42" width="1292" height="896" rx="18" fill="#FFFFFF" stroke="#D8DCE2" stroke-width="2"/>
+
+  <g>
+    <rect x="54" y="42" width="1292" height="82" rx="18" fill="#0C0E13"/>
+    <rect x="54" y="96" width="1292" height="28" fill="#0C0E13"/>
+    <text x="92" y="93" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="19" font-weight="800" letter-spacing="5">MONO RUNWAY</text>
+    <text x="774" y="93" fill="#AEB6C2" font-family="Arial, sans-serif" font-size="13" font-weight="700">HOME</text>
+    <text x="846" y="93" fill="#AEB6C2" font-family="Arial, sans-serif" font-size="13" font-weight="700">SHOP</text>
+    <text x="912" y="93" fill="#AEB6C2" font-family="Arial, sans-serif" font-size="13" font-weight="700">LOOKBOOK</text>
+    <text x="1018" y="93" fill="#AEB6C2" font-family="Arial, sans-serif" font-size="13" font-weight="700">CUSTOM</text>
+    <rect x="1136" y="68" width="152" height="36" rx="6" fill="#FFFFFF"/>
+    <text x="1170" y="91" fill="#0C0E13" font-family="Arial, sans-serif" font-size="13" font-weight="800">ORDER NOW</text>
+  </g>
+
+  <g>
+    <rect x="92" y="154" width="1216" height="370" rx="0" fill="#0C0E13"/>
+    <rect x="92" y="154" width="1216" height="370" fill="url(#runwayGrid)" opacity="0.42"/>
+
+    <rect x="126" y="184" width="286" height="310" fill="#171A22"/>
+    <rect x="154" y="213" width="230" height="252" fill="#EEF0F3"/>
+    <path d="M245 262H295L330 465H210L245 262Z" fill="#0C0E13"/>
+    <circle cx="270" cy="235" r="24" fill="#0C0E13"/>
+
+    <text x="470" y="226" fill="#FAFAFA" font-family="Arial, sans-serif" font-size="13" font-weight="800" letter-spacing="5">EDITORIAL STORE FRONT</text>
+    <text x="470" y="306" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="76" font-weight="900" letter-spacing="-5">Build a sharper{'\n'}fashion drop.</text>
+    <text x="474" y="398" fill="#AEB6C2" font-family="Arial, sans-serif" font-size="19">A clean monochrome theme for fashion brands that sell drops, capsules, custom fits, and styled looks.</text>
+
+    <rect x="474" y="438" width="152" height="48" rx="6" fill="#FFFFFF"/>
+    <text x="510" y="468" fill="#0C0E13" font-family="Arial, sans-serif" font-size="14" font-weight="800">SHOP DROP</text>
+    <rect x="642" y="438" width="144" height="48" rx="6" fill="#171A22" stroke="#FFFFFF" stroke-opacity="0.22"/>
+    <text x="679" y="468" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="800">LOOKBOOK</text>
+
+    <g>
+      <rect x="1028" y="196" width="212" height="276" fill="#FFFFFF"/>
+      <rect x="1048" y="216" width="172" height="174" fill="#E2E5EA"/>
+      <text x="1048" y="425" fill="#0C0E13" font-family="Arial, sans-serif" font-size="18" font-weight="800">Capsule Coat</text>
+      <text x="1048" y="451" fill="#6E7682" font-family="Arial, sans-serif" font-size="14">NGN 95,000</text>
+    </g>
+  </g>
+
+  <g>
+    <text x="92" y="590" fill="#0C0E13" font-family="Arial, sans-serif" font-size="34" font-weight="900" letter-spacing="-2">Shop by page</text>
+    <text x="92" y="620" fill="#6E7682" font-family="Arial, sans-serif" font-size="16">Premium fashion pages arranged like a modern commerce editorial.</text>
+
+    <rect x="92" y="650" width="190" height="136" rx="8" fill="#FFFFFF" stroke="#D8DCE2"/>
+    <text x="118" y="690" fill="#0C0E13" font-family="Arial, sans-serif" font-size="20" font-weight="900">Collections</text>
+    <text x="118" y="720" fill="#6E7682" font-family="Arial, sans-serif" font-size="14">Capsules, categories, drops</text>
+    <rect x="118" y="746" width="86" height="8" rx="4" fill="#0C0E13"/>
+
+    <rect x="306" y="650" width="190" height="136" rx="8" fill="#0C0E13"/>
+    <text x="332" y="690" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="20" font-weight="900">Lookbook</text>
+    <text x="332" y="720" fill="#AEB6C2" font-family="Arial, sans-serif" font-size="14">Styled campaign pages</text>
+    <rect x="332" y="746" width="86" height="8" rx="4" fill="#FFFFFF"/>
+
+    <rect x="520" y="650" width="190" height="136" rx="8" fill="#FFFFFF" stroke="#D8DCE2"/>
+    <text x="546" y="690" fill="#0C0E13" font-family="Arial, sans-serif" font-size="20" font-weight="900">Product Detail</text>
+    <text x="546" y="720" fill="#6E7682" font-family="Arial, sans-serif" font-size="14">Sizes, fabric, care notes</text>
+    <rect x="546" y="746" width="86" height="8" rx="4" fill="#0C0E13"/>
+
+    <rect x="734" y="650" width="190" height="136" rx="8" fill="#FFFFFF" stroke="#D8DCE2"/>
+    <text x="760" y="690" fill="#0C0E13" font-family="Arial, sans-serif" font-size="20" font-weight="900">Size Guide</text>
+    <text x="760" y="720" fill="#6E7682" font-family="Arial, sans-serif" font-size="14">Measurements and fit</text>
+    <rect x="760" y="746" width="86" height="8" rx="4" fill="#0C0E13"/>
+
+    <rect x="948" y="650" width="190" height="136" rx="8" fill="#FFFFFF" stroke="#D8DCE2"/>
+    <text x="974" y="690" fill="#0C0E13" font-family="Arial, sans-serif" font-size="20" font-weight="900">Custom Order</text>
+    <text x="974" y="720" fill="#6E7682" font-family="Arial, sans-serif" font-size="14">Bespoke WhatsApp flow</text>
+    <rect x="974" y="746" width="86" height="8" rx="4" fill="#0C0E13"/>
+
+    <rect x="1162" y="650" width="146" height="136" rx="8" fill="#FFFFFF" stroke="#D8DCE2"/>
+    <text x="1188" y="690" fill="#0C0E13" font-family="Arial, sans-serif" font-size="20" font-weight="900">Contact</text>
+    <text x="1188" y="720" fill="#6E7682" font-family="Arial, sans-serif" font-size="14">Studio details</text>
+    <rect x="1188" y="746" width="66" height="8" rx="4" fill="#0C0E13"/>
+  </g>
+
+  <g>
+    <rect x="92" y="824" width="1216" height="74" rx="12" fill="#F0F2F5" stroke="#D8DCE2"/>
+    <text x="124" y="868" fill="#0C0E13" font-family="Arial, sans-serif" font-size="18" font-weight="900">Theme personality</text>
+    <rect x="356" y="842" width="146" height="38" rx="19" fill="#FFFFFF"/>
+    <text x="397" y="866" fill="#0C0E13" font-family="Arial, sans-serif" font-size="13" font-weight="800">MONO</text>
+    <rect x="516" y="842" width="146" height="38" rx="19" fill="#FFFFFF"/>
+    <text x="552" y="866" fill="#0C0E13" font-family="Arial, sans-serif" font-size="13" font-weight="800">RUNWAY</text>
+    <rect x="676" y="842" width="166" height="38" rx="19" fill="#FFFFFF"/>
+    <text x="720" y="866" fill="#0C0E13" font-family="Arial, sans-serif" font-size="13" font-weight="800">DROP-LED</text>
+    <rect x="856" y="842" width="190" height="38" rx="19" fill="#FFFFFF"/>
+    <text x="900" y="866" fill="#0C0E13" font-family="Arial, sans-serif" font-size="13" font-weight="800">HIGH CONTRAST</text>
+  </g>
+
+  <defs>
+    <pattern id="runwayGrid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0H0V44" stroke="#FFFFFF" stroke-opacity="0.12"/>
+    </pattern>
+  </defs>
+</svg>

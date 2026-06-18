@@ -1,22 +1,72 @@
 ﻿import { supabase } from "@/lib/supabase";
 
 import {
+  canUseBusinessModeForPlan,
   canUseThemeForPlan,
+  getBusinessModePlanMessage,
   isValidPlanAlias,
   normalizePlanId,
 } from "@/lib/plans";
 import { businessThemes } from "@/lib/themes";
+import {
+  BusinessMode,
+  getThemeBusinessMode,
+  normalizeBusinessMode,
+} from "@/lib/business-modes";
+
+export type VehicleDetailsInput = {
+  make?: string;
+  model?: string;
+  year?: string;
+  trim?: string;
+  mileage?: string;
+  transmission?: string;
+  fuelType?: string;
+  engine?: string;
+  bodyType?: string;
+  exteriorColor?: string;
+  interiorColor?: string;
+  condition?: string;
+  dutyStatus?: string;
+  vin?: string;
+  vehicleLocation?: string;
+  documents?: string;
+  financingAvailable?: boolean;
+  priceNegotiable?: boolean;
+};
+
+export type PropertyDetailsInput = {
+  propertyType?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  toilets?: string;
+  parking?: string;
+  furnishedStatus?: string;
+  servicing?: string;
+  landSize?: string;
+  titleDocument?: string;
+  inspectionFee?: string;
+  availabilityDate?: string;
+  propertyLocation?: string;
+  pricePeriod?: string;
+  amenities?: string;
+  agencyFee?: string;
+  cautionFee?: string;
+  isNegotiable?: boolean;
+};
 
 export type CreateBusinessInput = {
   name: string;
   slug: string;
   category: string;
   description: string;
+  logoText?: string;
   whatsapp: string;
   location: string;
   openingHours: string;
   instagramUrl: string;
   themeId: string;
+  businessMode?: BusinessMode;
   includeSampleData?: boolean;
 };
 
@@ -29,6 +79,11 @@ export type CreateProductInput = {
   imageUrl: string;
   isAvailable: boolean;
   isFeatured: boolean;
+  itemType?: "product" | "vehicle" | "property";
+  vehicleStatus?: "available" | "reserved" | "sold" | "in_transit" | "on_request";
+  vehicleDetails?: VehicleDetailsInput;
+  propertyStatus?: "available" | "reserved" | "rented" | "sold" | "unavailable";
+  propertyDetails?: PropertyDetailsInput;
 };
 
 export type CreateServiceInput = {
@@ -60,6 +115,7 @@ export type UpdateBusinessProfileInput = {
   tagline: string;
   description: string;
   logoText: string;
+  logoUrl: string;
   coverImageUrl: string;
   whatsapp: string;
   phone: string;
@@ -68,6 +124,7 @@ export type UpdateBusinessProfileInput = {
   instagramUrl: string;
   openingHours: string;
   isPublished: boolean;
+  businessMode?: BusinessMode;
 };
 
 export type CheckoutCartItem = {
@@ -95,6 +152,35 @@ export type UpdateProductInput = {
   imageUrl: string;
   isAvailable: boolean;
   isFeatured: boolean;
+  itemType?: "product" | "vehicle" | "property";
+  vehicleStatus?: "available" | "reserved" | "sold" | "in_transit" | "on_request";
+  vehicleDetails?: VehicleDetailsInput;
+  propertyStatus?: "available" | "reserved" | "rented" | "sold" | "unavailable";
+  propertyDetails?: PropertyDetailsInput;
+};
+
+export type CreateVehicleInquiryInput = {
+  businessId: string;
+  productId: string;
+  vehicleName: string;
+  customerName: string;
+  customerPhone: string;
+  preferredDate: string;
+  preferredLocation: string;
+  inquiryType: "inspection" | "test_drive" | "video_request" | "price_request" | "financing";
+  message: string;
+};
+
+export type CreatePropertyInquiryInput = {
+  businessId: string;
+  productId: string;
+  propertyName: string;
+  customerName: string;
+  customerPhone: string;
+  preferredDate: string;
+  preferredLocation: string;
+  inquiryType: "inspection" | "availability" | "price_request" | "document_request";
+  message: string;
 };
 
 export type UpdateServiceInput = {
@@ -339,6 +425,17 @@ export async function createBusiness(input: CreateBusinessInput) {
     throw new Error("You must be logged in to create a business.");
   }
 
+  const businessMode = normalizeBusinessMode(input.businessMode);
+
+  if (
+    !canUseBusinessModeForPlan({
+      mode: businessMode,
+      plan: "starter",
+    })
+  ) {
+    throw new Error(getBusinessModePlanMessage(businessMode));
+  }
+
   const { data, error } = await supabase
     .from("businesses")
     .insert({
@@ -348,12 +445,14 @@ export async function createBusiness(input: CreateBusinessInput) {
       category: input.category,
       description: input.description,
       tagline: input.description,
-      logo_text: getLogoText(input.name),
+      logo_text:
+        typeof input.logoText === "string" ? input.logoText : getLogoText(input.name),
       whatsapp: input.whatsapp,
       phone: input.whatsapp,
       location: input.location,
       instagram_url: input.instagramUrl,
       opening_hours: input.openingHours,
+      business_mode: businessMode,
       theme_id: input.themeId,
       is_published: true,
       subscription_plan: "starter",
@@ -456,6 +555,36 @@ export function mapSupabaseBusinessToStoreBusiness(business: any) {
 }
 
 export async function createProduct(input: CreateProductInput) {
+  const { data: business, error: businessError } = await supabase
+    .from("businesses")
+    .select("business_mode,subscription_plan")
+    .eq("id", input.businessId)
+    .single();
+
+  if (businessError) {
+    throw businessError;
+  }
+
+  const businessMode = normalizeBusinessMode(business?.business_mode);
+  const itemType = input.itemType || "product";
+
+  if (
+    !canUseBusinessModeForPlan({
+      mode: businessMode,
+      plan: business?.subscription_plan,
+    })
+  ) {
+    throw new Error(getBusinessModePlanMessage(businessMode));
+  }
+
+  if (itemType === "vehicle" && businessMode !== "cars") {
+    throw new Error("Vehicle inventory is only available for car dealers.");
+  }
+
+  if (itemType === "property" && businessMode !== "properties") {
+    throw new Error("Property listings are only available for property businesses.");
+  }
+
   const { data, error } = await supabase
     .from("products")
     .insert({
@@ -467,6 +596,11 @@ export async function createProduct(input: CreateProductInput) {
       image_url: input.imageUrl,
       is_available: input.isAvailable,
       is_featured: input.isFeatured,
+      item_type: itemType,
+      vehicle_status: input.vehicleStatus || "available",
+      vehicle_details: input.vehicleDetails || {},
+      property_status: input.propertyStatus || "available",
+      property_details: input.propertyDetails || {},
     })
     .select()
     .single();
@@ -493,6 +627,39 @@ export async function getProductsByBusinessId(businessId: string) {
 }
 
 export async function updateProduct(input: UpdateProductInput) {
+  const { data: existingProduct, error: productError } = await supabase
+    .from("products")
+    .select("business_id,businesses (business_mode,subscription_plan)")
+    .eq("id", input.productId)
+    .single();
+
+  if (productError) {
+    throw productError;
+  }
+
+  const relatedBusiness = Array.isArray(existingProduct?.businesses)
+    ? existingProduct?.businesses[0]
+    : existingProduct?.businesses;
+  const businessMode = normalizeBusinessMode(relatedBusiness?.business_mode);
+  const itemType = input.itemType || "product";
+
+  if (
+    !canUseBusinessModeForPlan({
+      mode: businessMode,
+      plan: relatedBusiness?.subscription_plan,
+    })
+  ) {
+    throw new Error(getBusinessModePlanMessage(businessMode));
+  }
+
+  if (itemType === "vehicle" && businessMode !== "cars") {
+    throw new Error("Vehicle inventory is only available for car dealers.");
+  }
+
+  if (itemType === "property" && businessMode !== "properties") {
+    throw new Error("Property listings are only available for property businesses.");
+  }
+
   const { data, error } = await supabase
     .from("products")
     .update({
@@ -503,6 +670,11 @@ export async function updateProduct(input: UpdateProductInput) {
       image_url: input.imageUrl,
       is_available: input.isAvailable,
       is_featured: input.isFeatured,
+      item_type: itemType,
+      vehicle_status: input.vehicleStatus || "available",
+      vehicle_details: input.vehicleDetails || {},
+      property_status: input.propertyStatus || "available",
+      property_details: input.propertyDetails || {},
       updated_at: new Date().toISOString(),
     })
     .eq("id", input.productId)
@@ -754,6 +926,27 @@ export async function updateDomainRequestStatus({
 }
 
 export async function updateBusinessProfile(input: UpdateBusinessProfileInput) {
+  const { data: currentBusiness, error: currentBusinessError } = await supabase
+    .from("businesses")
+    .select("subscription_plan")
+    .eq("id", input.businessId)
+    .single();
+
+  if (currentBusinessError) {
+    throw currentBusinessError;
+  }
+
+  const businessMode = normalizeBusinessMode(input.businessMode);
+
+  if (
+    !canUseBusinessModeForPlan({
+      mode: businessMode,
+      plan: currentBusiness?.subscription_plan,
+    })
+  ) {
+    throw new Error(getBusinessModePlanMessage(businessMode));
+  }
+
   const { data, error } = await supabase
     .from("businesses")
     .update({
@@ -763,6 +956,7 @@ export async function updateBusinessProfile(input: UpdateBusinessProfileInput) {
       tagline: input.tagline,
       description: input.description,
       logo_text: input.logoText,
+      logo_url: input.logoUrl,
       cover_image_url: input.coverImageUrl,
       whatsapp: input.whatsapp,
       phone: input.phone,
@@ -770,6 +964,7 @@ export async function updateBusinessProfile(input: UpdateBusinessProfileInput) {
       location: input.location,
       instagram_url: input.instagramUrl,
       opening_hours: input.openingHours,
+      business_mode: businessMode,
       is_published: input.isPublished,
       updated_at: new Date().toISOString(),
     })
@@ -793,7 +988,7 @@ export async function updateBusinessTheme({
 }) {
   const { data: business, error: businessError } = await supabase
     .from("businesses")
-    .select("id,subscription_plan")
+    .select("id,business_mode,subscription_plan")
     .eq("id", businessId)
     .single();
 
@@ -805,6 +1000,28 @@ export async function updateBusinessTheme({
 
   if (themeIndex === -1) {
     throw new Error("Selected theme does not exist.");
+  }
+
+  const themeMode = getThemeBusinessMode(themeId);
+  const businessMode = normalizeBusinessMode(business?.business_mode);
+
+  if (themeMode !== businessMode) {
+    throw new Error(
+      themeMode === "cars"
+        ? "Car themes are only available for car dealers."
+        : themeMode === "properties"
+          ? "Property themes are only available for property businesses."
+          : "This theme is only available for product businesses.",
+    );
+  }
+
+  if (
+    !canUseBusinessModeForPlan({
+      mode: businessMode,
+      plan: business?.subscription_plan,
+    })
+  ) {
+    throw new Error(getBusinessModePlanMessage(businessMode));
   }
 
   if (
@@ -820,6 +1037,30 @@ export async function updateBusinessTheme({
     .from("businesses")
     .update({
       theme_id: themeId,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", businessId)
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function updateBusinessThemeSections({
+  businessId,
+  sectionIds,
+}: {
+  businessId: string;
+  sectionIds: string[];
+}) {
+  const { data, error } = await supabase
+    .from("businesses")
+    .update({
+      theme_sections: sectionIds,
       updated_at: new Date().toISOString(),
     })
     .eq("id", businessId)
@@ -1006,6 +1247,54 @@ export async function createOrder(input: CreateOrderInput) {
   }
 
   return order;
+}
+
+export async function createVehicleInquiry(input: CreateVehicleInquiryInput) {
+  const { data, error } = await supabase
+    .from("vehicle_inquiries")
+    .insert({
+      business_id: input.businessId,
+      product_id: input.productId || null,
+      vehicle_name: input.vehicleName,
+      customer_name: input.customerName,
+      customer_phone: input.customerPhone,
+      preferred_date: input.preferredDate,
+      preferred_location: input.preferredLocation,
+      inquiry_type: input.inquiryType,
+      message: input.message,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function createPropertyInquiry(input: CreatePropertyInquiryInput) {
+  const { data, error } = await supabase
+    .from("property_inquiries")
+    .insert({
+      business_id: input.businessId,
+      product_id: input.productId || null,
+      property_name: input.propertyName,
+      customer_name: input.customerName,
+      customer_phone: input.customerPhone,
+      preferred_date: input.preferredDate,
+      preferred_location: input.preferredLocation,
+      inquiry_type: input.inquiryType,
+      message: input.message,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
 
 export async function getOrdersWithItemsByBusinessId(businessId: string) {

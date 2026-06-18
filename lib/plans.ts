@@ -1,4 +1,5 @@
 export type MarketVillaPlanId = "starter" | "growth" | "pro";
+export type PlanGatedBusinessMode = "products" | "properties" | "cars";
 export type LegacyMarketVillaPlanId =
   | MarketVillaPlanId
   | "basic"
@@ -8,7 +9,7 @@ export type LegacyMarketVillaPlanId =
 export const PLAN_THEME_LIMITS: Record<MarketVillaPlanId, number> = {
   starter: 5,
   growth: 10,
-  pro: 10,
+  pro: 22,
 };
 
 export const MARKET_VILLA_PLANS: Record<
@@ -90,4 +91,34 @@ export function canUseThemeForPlan({
   themeIndex: number;
 }) {
   return themeIndex >= 0 && themeIndex < getThemeLimitForPlan(plan);
+}
+
+export function canUseBusinessModeForPlan({
+  mode,
+  plan,
+}: {
+  mode: PlanGatedBusinessMode | string | null | undefined;
+  plan: string | null | undefined;
+}) {
+  const cleanMode = String(mode || "products");
+
+  if (cleanMode === "products") return true;
+
+  const normalizedPlan = normalizePlanId(plan);
+
+  return normalizedPlan === "growth" || normalizedPlan === "pro";
+}
+
+export function getBusinessModePlanMessage(mode: string | null | undefined) {
+  const cleanMode = String(mode || "products");
+
+  if (cleanMode === "cars") {
+    return "Cars are available from the Growth plan.";
+  }
+
+  if (cleanMode === "properties") {
+    return "Properties are available from the Growth plan.";
+  }
+
+  return "";
 }

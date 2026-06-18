@@ -1,66 +1,42 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { CheckCircle2, Eye, Loader2, Palette, SlidersHorizontal } from "lucide-react";
 import {
-  CheckCircle2,
-  Eye,
-  Loader2,
-  Lock,
-  Palette,
-  Sparkles,
-} from "lucide-react";
-import { ThemePreviewCard } from "@/components/ThemePreviewCard";
-import { getMyBusinesses, updateBusinessTheme } from "@/lib/business-actions";
+  getMyBusinesses,
+  updateBusinessTheme,
+  updateBusinessThemeSections,
+} from "@/lib/business-actions";
 import { availableThemes } from "@/lib/mock-data";
-import { canUseThemeForPlan, getThemeLimitForPlan } from "@/lib/plans";
+import {
+  getBusinessTheme,
+  getThemeSectionOptions,
+  normalizeThemeSections,
+} from "@/lib/themes";
 
 type DashboardBusiness = {
   id: string;
   name: string;
   slug: string;
   theme_id: string;
+  theme_sections?: string[] | null;
   subscription_plan?: string | null;
 };
 
-const themeFilters = [
-  { label: "All", value: "all" },
-  { label: "Retail", value: "retail" },
-  { label: "Food", value: "food" },
-  { label: "Luxury", value: "luxury" },
-  { label: "Clean", value: "clean" },
-];
-
-function getThemeFilter(theme: (typeof availableThemes)[number]) {
-  const haystack = `${theme.id} ${theme.name} ${theme.description} ${theme.layout}`.toLowerCase();
-
-  if (haystack.includes("food") || haystack.includes("vendor")) return "food";
-  if (
-    haystack.includes("luxury") ||
-    haystack.includes("apartment") ||
-    haystack.includes("beauty")
-  ) {
-    return "luxury";
-  }
-  if (
-    haystack.includes("minimal") ||
-    haystack.includes("corporate") ||
-    haystack.includes("service")
-  ) {
-    return "clean";
-  }
-
-  return "retail";
-}
+const selectableThemes = availableThemes.filter(
+  (theme) => theme.id === "simple-one-page",
+);
 
 export default function ThemePage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
-  const [selectedThemeId, setSelectedThemeId] = useState("");
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [selectedThemeId, setSelectedThemeId] = useState("simple-one-page");
+  const [selectedSectionIds, setSelectedSectionIds] = useState<string[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSavingSections, setIsSavingSections] = useState(false);
   const [message, setMessage] = useState("");
 
   const selectedBusiness = useMemo(() => {
@@ -69,22 +45,18 @@ export default function ThemePage() {
 
   const selectedTheme = useMemo(() => {
     return (
-      availableThemes.find((theme) => theme.id === selectedThemeId) ||
-      availableThemes[0]
+      selectableThemes.find((theme) => theme.id === selectedThemeId) ||
+      selectableThemes[0]
     );
   }, [selectedThemeId]);
 
-  const selectedBusinessThemeLimit = getThemeLimitForPlan(
-    selectedBusiness?.subscription_plan,
-  );
+  const activeBusinessTheme = useMemo(() => {
+    return getBusinessTheme(selectedBusiness?.theme_id || "simple-one-page");
+  }, [selectedBusiness?.theme_id]);
 
-  const visibleThemes = useMemo(() => {
-    if (activeFilter === "all") return availableThemes;
-
-    return availableThemes.filter(
-      (theme) => getThemeFilter(theme) === activeFilter,
-    );
-  }, [activeFilter]);
+  const sectionOptions = useMemo(() => {
+    return getThemeSectionOptions(activeBusinessTheme.id);
+  }, [activeBusinessTheme.id]);
 
   useEffect(() => {
     let mounted = true;
@@ -101,7 +73,11 @@ export default function ThemePage() {
 
         if (items.length > 0) {
           setSelectedBusinessId(items[0].id);
-          setSelectedThemeId(items[0].theme_id || availableThemes[0].id);
+          setSelectedThemeId(
+            items[0].theme_id === "simple-one-page"
+              ? "simple-one-page"
+              : "simple-one-page",
+          );
         }
       } catch (error) {
         const errorMessage =
@@ -124,8 +100,24 @@ export default function ThemePage() {
   useEffect(() => {
     if (!selectedBusiness) return;
 
-    setSelectedThemeId(selectedBusiness.theme_id || availableThemes[0].id);
+    setSelectedThemeId("simple-one-page");
+    setSelectedSectionIds(
+      normalizeThemeSections(
+        selectedBusiness.theme_sections,
+        selectedBusiness.theme_id || "simple-one-page",
+      ),
+    );
   }, [selectedBusiness]);
+
+  function toggleSection(sectionId: string) {
+    setSelectedSectionIds((sectionIds) => {
+      if (sectionIds.includes(sectionId)) {
+        return sectionIds.filter((item) => item !== sectionId);
+      }
+
+      return [...sectionIds, sectionId];
+    });
+  }
 
   async function handleSaveTheme() {
     if (!selectedBusinessId) {
@@ -153,6 +145,37 @@ export default function ThemePage() {
       setMessage(errorMessage);
     } finally {
       setIsSaving(false);
+    }
+  }
+
+  async function handleSaveSections() {
+    if (!selectedBusinessId) {
+      setMessage("Create a business page first before customizing sections.");
+      return;
+    }
+
+    setIsSavingSections(true);
+    setMessage("");
+
+    try {
+      await updateBusinessThemeSections({
+        businessId: selectedBusinessId,
+        sectionIds: selectedSectionIds,
+      });
+
+      const updatedBusinesses = await getMyBusinesses();
+      setBusinesses(updatedBusinesses);
+
+      setMessage("Theme sections updated successfully.");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unable to update theme sections.";
+
+      setMessage(errorMessage);
+    } finally {
+      setIsSavingSections(false);
     }
   }
 
@@ -217,20 +240,11 @@ export default function ThemePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
-              <p className="text-xs text-slate-500">Theme</p>
-              <p className="mt-1 truncate text-sm font-semibold text-slate-950">
-                {selectedTheme.name}
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-teal-50 px-3 py-2.5">
-              <p className="text-xs text-teal-700">Business</p>
-              <p className="mt-1 truncate text-sm font-semibold text-teal-950">
-                {selectedBusiness?.name}
-              </p>
-            </div>
+          <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
+            <p className="text-xs text-slate-500">Current theme</p>
+            <p className="mt-1 truncate text-sm font-semibold text-slate-950">
+              {selectedTheme?.name || "Simple One Page"}
+            </p>
           </div>
         </div>
       </section>
@@ -242,186 +256,148 @@ export default function ThemePage() {
       ) : null}
 
       <section className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="mb-5 flex items-center gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-purple-50 text-purple-700">
+            <Palette size={19} />
+          </span>
+
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Theme Store
+              Theme
             </p>
-
             <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-              Choose the storefront look customers will see
+              Select theme name
             </h2>
-
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Browse theme options for product pages, preview how each style
-              frames your business, then save the one that best fits your brand.
-            </p>
-          </div>
-
-          <div className="rounded-2xl bg-[#d9fff3] px-4 py-3 text-sm font-semibold text-[#032f2a]">
-            {selectedBusinessThemeLimit} unlocked / {availableThemes.length} total
           </div>
         </div>
 
-        <div className="mt-5 flex gap-2 overflow-x-auto pb-1">
-          {themeFilters.map((filter) => (
-            <button
-              key={filter.value}
-              type="button"
-              onClick={() => setActiveFilter(filter.value)}
-              className={`whitespace-nowrap rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                activeFilter === filter.value
-                  ? "border-[#7c3aed] bg-[#7c3aed] text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:border-[#7c3aed]/40"
-              }`}
+        <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-slate-700">
+              Theme name
+            </span>
+
+            <select
+              value={selectedThemeId}
+              onChange={(event) => setSelectedThemeId(event.target.value)}
+              className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
             >
-              {filter.label}
-            </button>
-          ))}
+              {selectableThemes.map((theme) => (
+                <option key={theme.id} value={theme.id}>
+                  {theme.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <button
+            type="button"
+            onClick={handleSaveTheme}
+            disabled={isSaving}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSaving ? (
+              <Loader2 size={17} className="animate-spin" />
+            ) : (
+              <CheckCircle2 size={17} />
+            )}
+            {isSaving ? "Saving..." : "Save Theme"}
+          </button>
+        </div>
+
+        <div className="mt-4 rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
+          Other storefront designs are available in{" "}
+          <Link
+            href="/dashboard/theme-store"
+            className="font-semibold text-[#6d28d9]"
+          >
+            Theme Store
+          </Link>
+          .
         </div>
       </section>
 
-      <section className="grid gap-5 xl:grid-cols-[1fr_0.65fr]">
-        <div className="grid content-start gap-4">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
-                Theme Options
-              </p>
+      <section className="rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-slate-950 text-white">
+              <SlidersHorizontal size={19} />
+            </span>
 
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                Storefront Sections
+              </p>
               <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-                {activeFilter === "all"
-                  ? "All storefront themes"
-                  : `${themeFilters.find((filter) => filter.value === activeFilter)?.label} themes`}
+                Customize {activeBusinessTheme.name}
               </h2>
             </div>
-
-            <p className="text-sm text-slate-500">
-              {visibleThemes.length} option{visibleThemes.length === 1 ? "" : "s"}
-            </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {visibleThemes.map((theme) => {
-              const themeIndex = availableThemes.findIndex(
-                (item) => item.id === theme.id,
-              );
-              const isLocked = !canUseThemeForPlan({
-                plan: selectedBusiness?.subscription_plan,
-                themeIndex,
-              });
-
-              return (
-              <button
-                key={theme.id}
-                type="button"
-                onClick={() => {
-                  if (isLocked) {
-                    setMessage("Upgrade your plan to use this theme.");
-                    return;
-                  }
-
-                  setSelectedThemeId(theme.id);
-                }}
-                className={`relative text-left transition ${
-                  isLocked
-                    ? "cursor-not-allowed opacity-55"
-                    : "hover:-translate-y-0.5"
-                }`}
-              >
-                <ThemePreviewCard
-                  theme={theme}
-                  selected={selectedThemeId === theme.id}
-                />
-                {isLocked ? (
-                  <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-xl bg-[#26143d] px-3 py-1 text-xs font-semibold text-white shadow-sm">
-                    <Lock size={12} />
-                    Locked
-                  </span>
-                ) : null}
-              </button>
-            );
-            })}
-          </div>
+          <span className="hidden rounded-full bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-500 md:inline-flex">
+            Hero is always shown
+          </span>
         </div>
 
-        <aside className="grid content-start gap-4">
-          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-teal-50 text-teal-700">
-                <Palette size={19} />
-              </span>
+        <div className="grid gap-3 md:grid-cols-2">
+          {sectionOptions.map((section) => {
+            const isSelected = selectedSectionIds.includes(section.id);
 
-              <div>
-                <p className="font-semibold text-slate-950">
-                  Selected Theme
-                </p>
-                <p className="text-sm text-slate-500">{selectedTheme.name}</p>
-              </div>
-            </div>
+            return (
+              <button
+                key={section.id}
+                type="button"
+                onClick={() => toggleSection(section.id)}
+                className={`flex min-h-24 items-start gap-3 rounded-2xl border p-4 text-left transition ${
+                  isSelected
+                    ? "border-[#7c3aed] bg-purple-50 text-[#211331]"
+                    : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                }`}
+              >
+                <span
+                  className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border ${
+                    isSelected
+                      ? "border-[#7c3aed] bg-[#7c3aed] text-white"
+                      : "border-slate-300 bg-white text-transparent"
+                  }`}
+                >
+                  <CheckCircle2 size={15} />
+                </span>
 
-            <div className="overflow-hidden rounded-[1.25rem] border border-slate-200">
-              <div className={`h-32 bg-gradient-to-br ${selectedTheme.hero}`} />
+                <span>
+                  <span className="block text-sm font-semibold">
+                    {section.label}
+                  </span>
+                  <span className="mt-1 block text-sm leading-6 opacity-70">
+                    {section.description}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
-              <div className="bg-white p-4">
-                <p className="text-sm font-semibold text-slate-950">
-                  {selectedBusiness?.name}
-                </p>
+        <div className="mt-4 flex flex-col gap-3 rounded-2xl bg-slate-50 p-3 md:flex-row md:items-center md:justify-between">
+          <p className="text-sm leading-6 text-slate-600">
+            Turn off sections when the business does not have content for them.
+            The store page will hide those areas from customers.
+          </p>
 
-                <p className="mt-1 text-xs leading-5 text-slate-500">
-                  {selectedTheme.description}
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleSaveTheme}
-              disabled={isSaving}
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isSaving ? (
-                <Loader2 size={17} className="animate-spin" />
-              ) : (
-                <CheckCircle2 size={17} />
-              )}
-
-              {isSaving ? "Saving..." : "Save Theme"}
-            </button>
-          </div>
-
-          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-purple-50 text-purple-700">
-                <Sparkles size={19} />
-              </span>
-
-              <div>
-                <p className="font-semibold text-slate-950">Theme Use</p>
-                <p className="text-sm text-slate-500">Quick guide</p>
-              </div>
-            </div>
-
-            <div className="grid gap-2">
-              <div className="rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="font-semibold text-slate-950">Warm:</span>{" "}
-                <span className="text-slate-500">food and lifestyle</span>
-              </div>
-
-              <div className="rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="font-semibold text-slate-950">Luxury:</span>{" "}
-                <span className="text-slate-500">fashion and apartments</span>
-              </div>
-
-              <div className="rounded-2xl bg-slate-50 p-3 text-sm">
-                <span className="font-semibold text-slate-950">Navy:</span>{" "}
-                <span className="text-slate-500">corporate businesses</span>
-              </div>
-            </div>
-          </div>
-        </aside>
+          <button
+            type="button"
+            onClick={handleSaveSections}
+            disabled={isSavingSections}
+            className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSavingSections ? (
+              <Loader2 size={17} className="animate-spin" />
+            ) : (
+              <CheckCircle2 size={17} />
+            )}
+            {isSavingSections ? "Saving..." : "Save Sections"}
+          </button>
+        </div>
       </section>
     </div>
   );
 }
-

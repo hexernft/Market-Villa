@@ -6,6 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import {
   BarChart3,
+  Building2,
+  Car,
   ClipboardList,
   CreditCard,
   Globe2,
@@ -21,34 +23,49 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { BRAND } from "@/lib/brand";
+import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
 
 const navItems = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   { label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
   { label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
-  { label: "Products", href: "/dashboard/products", icon: Package },
+  { label: "Products", href: "/dashboard/products", icon: Package, modeAware: true },
   { label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
   { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
   { label: "Profile", href: "/dashboard/profile", icon: UserRound },
   { label: "Theme", href: "/dashboard/theme", icon: Palette },
+  { label: "Theme Store", href: "/dashboard/theme-store", icon: Sparkles },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 const mobileNavItems = [
   { label: "Home", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Products", href: "/dashboard/products", icon: Package },
+  { label: "Products", href: "/dashboard/products", icon: Package, modeAware: true },
   { label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
   { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   { label: "More", href: "/dashboard/settings", icon: Settings },
 ];
+
+function getInventoryIcon(mode: string | null | undefined) {
+  const normalizedMode = normalizeBusinessMode(mode);
+
+  if (normalizedMode === "properties") return Building2;
+  if (normalizedMode === "cars") return Car;
+
+  return Package;
+}
 
 export function DashboardShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [businessMode, setBusinessMode] = useState("products");
+
+  const modeMeta = getBusinessModeMeta(businessMode);
+  const InventoryIcon = getInventoryIcon(businessMode);
 
   useEffect(() => {
     let mounted = true;
@@ -57,6 +74,19 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       if (!mounted) return;
       setIsCheckingAuth(false);
       if (!data.session) router.push("/login");
+
+      if (data.session) {
+        const { data: businesses } = await supabase
+          .from("businesses")
+          .select("business_mode")
+          .order("created_at", { ascending: true })
+          .limit(1);
+
+        if (!mounted) return;
+        setBusinessMode(
+          normalizeBusinessMode(businesses?.[0]?.business_mode || "products")
+        );
+      }
     }
     checkAuth();
     return () => { mounted = false; };
@@ -99,12 +129,13 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
           <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-2.5">
             {navItems.map((item) => {
-              const Icon = item.icon;
+              const Icon = item.modeAware ? InventoryIcon : item.icon;
+              const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
                 <Link key={item.href} href={item.href} className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition ${isActive ? "bg-[#7c3aed] text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-white/68 hover:bg-white/10 hover:text-white"}`}>
                   <Icon size={17} />
-                  {item.label}
+                  {label}
                 </Link>
               );
             })}
@@ -126,7 +157,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white px-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] pt-2 lg:hidden" aria-label="Mobile dashboard navigation">
         <div className="grid grid-cols-5 gap-1">
           {mobileNavItems.map((item) => {
-            const Icon = item.icon;
+            const Icon = item.modeAware ? InventoryIcon : item.icon;
+            const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
             const isActive =
               pathname === item.href ||
               (item.href !== "/dashboard" && pathname.startsWith(item.href));
@@ -140,9 +172,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                     ? "bg-emerald-50 text-emerald-700"
                     : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
                 }`}
-              >
+                >
                 <Icon size={20} strokeWidth={isActive ? 2.4 : 2} />
-                <span>{item.label}</span>
+                <span>{label}</span>
               </Link>
             );
           })}

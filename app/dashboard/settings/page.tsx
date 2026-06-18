@@ -38,6 +38,7 @@ const menuSections = [
       { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
       { label: "Profile", href: "/dashboard/profile", icon: User },
       { label: "Theme", href: "/dashboard/theme", icon: Palette },
+      { label: "Theme Store", href: "/dashboard/theme-store", icon: Sparkles },
       { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
       { label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
       { label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },

@@ -15,9 +15,13 @@ import {
   Phone,
   Store,
 } from "lucide-react";
-import { businessThemes } from "@/lib/themes";
 import { createBusiness } from "@/lib/business-actions";
 import { slugify } from "@/lib/utils";
+import { BusinessMode, businessModes } from "@/lib/business-modes";
+import {
+  canUseBusinessModeForPlan,
+  getBusinessModePlanMessage,
+} from "@/lib/plans";
 
 const categories = [
   "Food & Drinks",
@@ -32,10 +36,33 @@ const categories = [
   "Other",
 ];
 
+const categoriesByMode: Record<BusinessMode, string[]> = {
+  products: categories,
+  properties: [
+    "Shortlet / Apartment",
+    "Rental Property",
+    "Land Sales",
+    "Commercial Property",
+    "Real Estate Agency",
+    "Property Management",
+    "Other",
+  ],
+  cars: [
+    "Car Dealership",
+    "Vehicle Importer",
+    "Auto Broker",
+    "Used Cars",
+    "Luxury Cars",
+    "Commercial Vehicles",
+    "Other",
+  ],
+};
+
 export default function OnboardingPage() {
   const router = useRouter();
 
   const [businessName, setBusinessName] = useState("");
+  const [businessMode, setBusinessMode] = useState<BusinessMode>("products");
   const [category, setCategory] = useState(categories[0]);
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
@@ -43,7 +70,7 @@ export default function OnboardingPage() {
   const [location, setLocation] = useState("");
   const [openingHours, setOpeningHours] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
-  const [themeId] = useState(businessThemes[0].id);
+  const [themeId] = useState("simple-one-page");
   const [includeSampleData, setIncludeSampleData] = useState(true);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,6 +84,17 @@ export default function OnboardingPage() {
     }
   }
 
+  function handleModeChange(mode: BusinessMode) {
+    if (!canUseBusinessModeForPlan({ mode, plan: "starter" })) {
+      setMessage(getBusinessModePlanMessage(mode));
+      return;
+    }
+
+    setMessage("");
+    setBusinessMode(mode);
+    setCategory(categoriesByMode[mode][0]);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -64,6 +102,10 @@ export default function OnboardingPage() {
     setIsSubmitting(true);
 
     try {
+      if (!canUseBusinessModeForPlan({ mode: businessMode, plan: "starter" })) {
+        throw new Error(getBusinessModePlanMessage(businessMode));
+      }
+
       const business = await createBusiness({
         name: businessName,
         slug: slugify(slug),
@@ -74,6 +116,7 @@ export default function OnboardingPage() {
         openingHours,
         instagramUrl,
         themeId,
+        businessMode,
         includeSampleData,
       });
 
@@ -146,6 +189,56 @@ export default function OnboardingPage() {
           </div>
 
           <div className="grid gap-4">
+            <div className="grid gap-3">
+              <span className="text-sm font-semibold text-slate-700">
+                What do you want to use Market Villa for?
+              </span>
+
+              <div className="grid gap-3 md:grid-cols-3">
+                {businessModes.map((mode) => {
+                  const isModeLocked = !canUseBusinessModeForPlan({
+                    mode: mode.id,
+                    plan: "starter",
+                  });
+
+                  return (
+                  <button
+                    key={mode.id}
+                    type="button"
+                    onClick={() => handleModeChange(mode.id)}
+                    className={`rounded-[1.25rem] border p-4 text-left transition ${
+                      businessMode === mode.id
+                        ? "border-[#26143d] bg-[#26143d] text-white shadow-sm"
+                        : isModeLocked
+                          ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400"
+                          : "border-slate-200 bg-slate-50 text-slate-800 hover:border-[#26143d]/40"
+                    }`}
+                  >
+                    <span className="flex items-center justify-between gap-3 text-sm font-semibold">
+                      {mode.label}
+                      {isModeLocked ? (
+                        <span className="rounded-full bg-white px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-500">
+                          Growth
+                        </span>
+                      ) : null}
+                    </span>
+                    <span
+                      className={`mt-2 block text-xs leading-5 ${
+                        businessMode === mode.id
+                          ? "text-white/70"
+                          : "text-slate-500"
+                      }`}
+                    >
+                      {isModeLocked
+                        ? getBusinessModePlanMessage(mode.id)
+                        : mode.description}
+                    </span>
+                  </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="grid gap-4 md:grid-cols-2">
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
@@ -166,7 +259,11 @@ export default function OnboardingPage() {
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <Store size={16} />
-                  Business category
+                  {businessMode === "properties"
+                    ? "Property category"
+                    : businessMode === "cars"
+                      ? "Car business type"
+                      : "Business category"}
                 </span>
 
                 <select
@@ -174,7 +271,7 @@ export default function OnboardingPage() {
                   onChange={(event) => setCategory(event.target.value)}
                   className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                 >
-                  {categories.map((item) => (
+                  {categoriesByMode[businessMode].map((item) => (
                     <option key={item}>{item}</option>
                   ))}
                 </select>
@@ -280,7 +377,11 @@ export default function OnboardingPage() {
                 </p>
 
                 <p className="mt-1 text-xs leading-5 text-slate-500">
-                  Adds editable starter products.
+                  Adds editable starter {businessMode === "cars"
+                    ? "vehicles"
+                    : businessMode === "properties"
+                      ? "listings"
+                      : "products"}.
                 </p>
               </div>
 
@@ -335,7 +436,11 @@ export default function OnboardingPage() {
 
             <div className="mt-3 grid gap-2">
               <div className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
-                Add or edit products.
+                Add or edit {businessMode === "cars"
+                  ? "vehicles"
+                  : businessMode === "properties"
+                    ? "property listings"
+                    : "products"}.
               </div>
 
               <div className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
@@ -343,7 +448,7 @@ export default function OnboardingPage() {
               </div>
 
               <div className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
-                Choose a storefront theme.
+                Choose a {businessModes.find((mode) => mode.id === businessMode)?.themeLabel.toLowerCase()}.
               </div>
             </div>
           </div>
