@@ -12,6 +12,7 @@ import {
   ExternalLink,
   Globe2,
   Loader2,
+  MessageCircle,
   Package,
   Palette,
   Plus,
@@ -116,6 +117,7 @@ export default function DashboardPage() {
   }, [businesses, selectedBusinessId]);
 
   const modeMeta = getBusinessModeMeta(selectedBusiness?.business_mode);
+  const selectedMode = normalizeBusinessMode(selectedBusiness?.business_mode);
   const InventoryIcon = getInventoryIcon(selectedBusiness?.business_mode);
 
   const metrics = useMemo(() => {
@@ -364,11 +366,17 @@ export default function DashboardPage() {
       href: "/dashboard/profile",
       icon: UserRound,
     },
-    {
-      label: "Domain",
-      href: "/dashboard/domain",
-      icon: Globe2,
-    },
+    selectedMode === "products"
+      ? {
+          label: "Domain",
+          href: "/dashboard/domain",
+          icon: Globe2,
+        }
+      : {
+          label: "Leads",
+          href: "/dashboard/leads",
+          icon: MessageCircle,
+        },
   ];
 
   return (

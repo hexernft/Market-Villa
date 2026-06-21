@@ -1,6 +1,5 @@
 ﻿"use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
@@ -26,7 +25,6 @@ import {
   getAllDomainRequestsForAdmin,
   updateBusinessPublishStatus,
   updateBusinessAdminOverride,
-  updateBusinessSubscriptionControls,
   updateDomainRequestStatus,
 } from "@/lib/business-actions";
 import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
@@ -78,31 +76,6 @@ const statusOptions = [
   "rejected",
 ];
 
-function formatDateTimeLocal(value: string | null) {
-  if (!value) return "";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) return "";
-
-  const offset = date.getTimezoneOffset();
-  const localDate = new Date(date.getTime() - offset * 60 * 1000);
-
-  return localDate.toISOString().slice(0, 16);
-}
-
-function toIsoDateTime(value: FormDataEntryValue | null) {
-  const cleanValue = String(value || "").trim();
-
-  if (!cleanValue) return "";
-
-  const date = new Date(cleanValue);
-
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toISOString();
-}
-
 export default function AdminPage() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
@@ -117,7 +90,6 @@ export default function AdminPage() {
   const [updatingId, setUpdatingId] = useState("");
   const [updatingBusinessId, setUpdatingBusinessId] = useState("");
   const [updatingOverrideBusinessId, setUpdatingOverrideBusinessId] = useState("");
-  const [updatingSubscriptionBusinessId, setUpdatingSubscriptionBusinessId] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -249,51 +221,10 @@ export default function AdminPage() {
       setUpdatingOverrideBusinessId("");
     }
   }
-  async function handleSaveSubscriptionControls(
-    event: React.FormEvent<HTMLFormElement>,
-    businessId: string
-  ) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    setUpdatingSubscriptionBusinessId(businessId);
-    setMessage("");
-
-    try {
-      await updateBusinessSubscriptionControls({
-        businessId,
-        plan: String(formData.get("plan") || "starter"),
-        status: String(formData.get("status") || "trial"),
-        expiresAt: toIsoDateTime(formData.get("expiresAt")),
-        graceEndsAt: toIsoDateTime(formData.get("graceEndsAt")),
-        adminOverrideActive: formData.get("adminOverrideActive") === "on",
-        isPublished: formData.get("isPublished") === "on",
-      });
-
-      await loadAdminData();
-
-      setMessage("Subscription controls updated successfully.");
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Unable to update subscription controls.";
-
-      setMessage(errorMessage);
-    } finally {
-      setUpdatingSubscriptionBusinessId("");
-    }
-  }
-
-
   const publishedCount = businesses.filter(
     (business) => business.is_published
   ).length;
 
-  const overrideCount = businesses.filter(
-    (business) => business.admin_override_active
-  ).length;
   const productModeCount = businesses.filter(
     (business) => normalizeBusinessMode(business.business_mode) === "products"
   ).length;

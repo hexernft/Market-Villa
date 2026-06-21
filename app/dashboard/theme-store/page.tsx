@@ -43,7 +43,6 @@ const filters = [
   { label: "Retail", value: "retail" },
   { label: "Food", value: "food" },
   { label: "Luxury", value: "luxury" },
-  { label: "Service", value: "service" },
   { label: "Specialized", value: "specialized" },
 ];
 
@@ -71,10 +70,6 @@ function getFilter(theme: (typeof availableThemes)[number]) {
     return "luxury";
   }
 
-  if (haystack.includes("service") || haystack.includes("corporate") || haystack.includes("pharmacy")) {
-    return "service";
-  }
-
   if (
     haystack.includes("kids") ||
     haystack.includes("baby") ||
@@ -82,6 +77,8 @@ function getFilter(theme: (typeof availableThemes)[number]) {
     haystack.includes("school") ||
     haystack.includes("tech") ||
     haystack.includes("event") ||
+    haystack.includes("pharmacy") ||
+    haystack.includes("corporate") ||
     haystack.includes("car") ||
     haystack.includes("vehicle") ||
     haystack.includes("dealer") ||

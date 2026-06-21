@@ -5,7 +5,6 @@
   | "food-market"
   | "bold-retail"
   | "minimal-studio"
-  | "service-pro"
   | "apartment-stay"
   | "beauty-lounge"
   | "local-vendor"
@@ -654,27 +653,6 @@ export const businessThemes: BusinessTheme[] = [
     border: "border-neutral-200",
     productCard: "rounded-none border border-neutral-200 bg-white text-black",
     sectionLabel: "text-neutral-500",
-  },
-  {
-    id: "service-pro",
-    name: "Service Pro",
-    description: "Consulting-style layout for agencies, professionals, and service brands.",
-    layout: "service-pro",
-    page: "bg-slate-50 text-slate-950",
-    hero: "from-[#07111f] via-[#0f253f] to-[#0f766e]",
-    card: "bg-white text-slate-950",
-    mutedCard: "bg-[#07111f] text-white",
-    text: "text-white",
-    mutedText: "text-slate-300",
-    accent: "bg-teal-400",
-    accentText: "text-teal-300",
-    button: "bg-teal-400 text-slate-950 hover:bg-teal-300",
-    secondaryButton:
-      "bg-white/10 text-white ring-1 ring-white/15 hover:bg-white/15",
-    chip: "bg-teal-300/15 text-teal-50 ring-1 ring-teal-200/20",
-    border: "border-slate-200",
-    productCard: "rounded-[1.5rem] bg-white text-slate-950 shadow-sm",
-    sectionLabel: "text-teal-700",
   },
   {
     id: "apartment-stay",

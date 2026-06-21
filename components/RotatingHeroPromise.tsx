@@ -8,7 +8,7 @@ const promises = [
   "food vendor customers remember",
   "beauty plug with a clean page",
   "local store that looks premium",
-  "service business people can trust",
+  "car dealer buyers can trust",
 ];
 
 export function RotatingHeroPromise() {

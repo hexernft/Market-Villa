@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { use, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -17,7 +17,11 @@ import {
 } from "lucide-react";
 import { CartItem, WhatsAppCheckout } from "@/components/WhatsAppCheckout";
 import { PlatformNavbar } from "@/components/PlatformNavbar";
-import { getPublicBusinessPageBySlug } from "@/lib/business-actions";
+import {
+  createPropertyInquiry,
+  createVehicleInquiry,
+  getPublicBusinessPageBySlug,
+} from "@/lib/business-actions";
 import {
   getBusinessTheme,
   normalizeThemeSections,
@@ -347,6 +351,38 @@ export default function StorePage({ params }: StorePageProps) {
       .join("\n");
   }
 
+  async function recordVehicleLead({
+    product,
+    intent,
+    inquiryType = "inspection",
+  }: {
+    product?: PublicProduct;
+    intent: string;
+    inquiryType?: "inspection" | "test_drive" | "video_request" | "price_request" | "financing";
+  }) {
+    if (!business?.id) return;
+
+    const details = product?.vehicle_details || {};
+
+    try {
+      await createVehicleInquiry({
+        businessId: business.id,
+        productId: product?.id || "",
+        vehicleName: product?.name || "General vehicle inquiry",
+        customerName: "WhatsApp visitor",
+        customerPhone: "Not provided",
+        preferredDate: "",
+        preferredLocation: String(details.vehicleLocation || business.location || ""),
+        inquiryType,
+        message: product
+          ? buildVehicleInquiryMessage(product, intent)
+          : `Hello ${business.name}, I want to ${intent}.`,
+      });
+    } catch (error) {
+      console.warn("Unable to record vehicle lead", error);
+    }
+  }
+
   function getPropertySpecs(product: PublicProduct) {
     const details = product.property_details || {};
 
@@ -398,6 +434,38 @@ export default function StorePage({ params }: StorePageProps) {
     ]
       .filter(Boolean)
       .join("\n");
+  }
+
+  async function recordPropertyLead({
+    product,
+    intent,
+    inquiryType = "inspection",
+  }: {
+    product?: PublicProduct;
+    intent: string;
+    inquiryType?: "inspection" | "availability" | "price_request" | "document_request";
+  }) {
+    if (!business?.id) return;
+
+    const details = product?.property_details || {};
+
+    try {
+      await createPropertyInquiry({
+        businessId: business.id,
+        productId: product?.id || "",
+        propertyName: product?.name || "General property inquiry",
+        customerName: "WhatsApp visitor",
+        customerPhone: "Not provided",
+        preferredDate: "",
+        preferredLocation: String(details.propertyLocation || business.location || ""),
+        inquiryType,
+        message: product
+          ? buildPropertyInquiryMessage(product, intent)
+          : `Hello ${business.name}, I want to ${intent}.`,
+      });
+    } catch (error) {
+      console.warn("Unable to record property lead", error);
+    }
   }
 
   async function handleCopyStoreLink() {
@@ -717,7 +785,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#fde047]">
                       Kids & Baby Store
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
 
@@ -1175,7 +1243,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#15803d]">
                       Fresh Market
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
                     {business.tagline ? (
@@ -1599,7 +1667,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
                       Care Retail
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
                     {business.tagline ? (
@@ -2045,7 +2113,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#fbbf24]">
                       Curated Pieces
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
                     {business.tagline ? (
@@ -2509,7 +2577,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#fdba74]">
                       Events & Packages
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
                     {business.tagline ? (
@@ -2993,7 +3061,13 @@ export default function StorePage({ params }: StorePageProps) {
                         )}
                         target="_blank"
                         rel="noreferrer"
-                        onClick={() => handleWhatsAppClick("property_hero_inspection")}
+                        onClick={() => {
+                          void recordPropertyLead({
+                            intent: "schedule a property inspection",
+                            inquiryType: "inspection",
+                          });
+                          handleWhatsAppClick("property_hero_inspection");
+                        }}
                         className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-white/20 px-5 text-sm font-semibold text-white"
                       >
                         <MessageCircle size={17} />
@@ -3159,9 +3233,14 @@ export default function StorePage({ params }: StorePageProps) {
                                   )}
                                   target="_blank"
                                   rel="noreferrer"
-                                  onClick={() =>
-                                    handleWhatsAppClick("property_inspection")
-                                  }
+                                  onClick={() => {
+                                    void recordPropertyLead({
+                                      product,
+                                      intent: "schedule an inspection",
+                                      inquiryType: "inspection",
+                                    });
+                                    handleWhatsAppClick("property_inspection");
+                                  }}
                                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#201713] px-4 text-sm font-semibold text-white"
                                 >
                                   <MessageCircle size={16} />
@@ -3177,9 +3256,14 @@ export default function StorePage({ params }: StorePageProps) {
                                   )}
                                   target="_blank"
                                   rel="noreferrer"
-                                  onClick={() =>
-                                    handleWhatsAppClick("property_availability")
-                                  }
+                                  onClick={() => {
+                                    void recordPropertyLead({
+                                      product,
+                                      intent: "confirm availability",
+                                      inquiryType: "availability",
+                                    });
+                                    handleWhatsAppClick("property_availability");
+                                  }}
                                   className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#eadfd6] px-4 text-sm font-semibold text-[#201713]"
                                 >
                                   Availability
@@ -3323,7 +3407,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#86efac]">
                       Vehicle Showroom
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
                     {business.tagline ? (
@@ -3346,7 +3430,13 @@ export default function StorePage({ params }: StorePageProps) {
                         )}
                         target="_blank"
                         rel="noreferrer"
-                        onClick={() => handleWhatsAppClick("car_showroom_test_drive")}
+                        onClick={() => {
+                          void recordVehicleLead({
+                            intent: "inspect or test drive a vehicle",
+                            inquiryType: "test_drive",
+                          });
+                          handleWhatsAppClick("car_showroom_test_drive");
+                        }}
                         className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#22c55e] px-5 text-sm font-semibold text-[#101714] transition hover:bg-[#86efac]"
                       >
                         <MessageCircle size={17} />
@@ -3587,7 +3677,13 @@ export default function StorePage({ params }: StorePageProps) {
                     )}
                     target="_blank"
                     rel="noreferrer"
-                    onClick={() => handleWhatsAppClick("car_showroom_test_drive")}
+                    onClick={() => {
+                      void recordVehicleLead({
+                        intent: "book a test drive or inspection",
+                        inquiryType: "test_drive",
+                      });
+                      handleWhatsAppClick("car_showroom_test_drive");
+                    }}
                     className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#101714]"
                   >
                     <MessageCircle size={17} />
@@ -3676,9 +3772,14 @@ export default function StorePage({ params }: StorePageProps) {
                               )}
                               target="_blank"
                               rel="noreferrer"
-                              onClick={() =>
-                                handleWhatsAppClick("car_showroom_vehicle_inquiry")
-                              }
+                              onClick={() => {
+                                void recordVehicleLead({
+                                  product,
+                                  intent: "confirm details and book an inspection",
+                                  inquiryType: "inspection",
+                                });
+                                handleWhatsAppClick("car_showroom_vehicle_inquiry");
+                              }}
                               className="rounded-full bg-[#101714] px-4 py-2 text-xs font-semibold text-white"
                             >
                               Confirm
@@ -3823,7 +3924,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#f1dfc6]">
                       Home & Furniture
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
 
@@ -4274,7 +4375,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7dd3fc]">
                       Tech Catalog
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
 
@@ -5179,20 +5280,20 @@ export default function StorePage({ params }: StorePageProps) {
               <div className="grid gap-6 p-5 md:grid-cols-[1fr_0.9fr] md:items-stretch md:p-7 lg:p-9">
                 <div className="flex flex-col justify-between gap-8">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#fed7aa]">
+                    <p className="text-xs font-black uppercase tracking-[0.24em] text-white drop-shadow-[0_3px_10px_rgba(0,0,0,0.75)]">
                       Daily Menu
                     </p>
-                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] md:text-7xl">
+                    <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
                     </h1>
 
                     {business.tagline ? (
-                      <p className="mt-5 max-w-xl text-lg leading-8 text-white/78">
+                      <p className="mt-5 max-w-xl text-lg font-medium leading-8 text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.75)]">
                         {business.tagline}
                       </p>
                     ) : null}
 
-                    <p className="mt-4 max-w-xl text-sm leading-7 text-white/60">
+                    <p className="mt-4 max-w-xl text-sm font-medium leading-7 text-white/90 drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)]">
                       {business.description ||
                         "Browse today's meals, trays, packs, drinks, and delivery notes before placing a WhatsApp order."}
                     </p>
@@ -6503,7 +6604,7 @@ export default function StorePage({ params }: StorePageProps) {
 
             <div className="mt-6 border-t border-white/10 pt-4">
               <p className="text-xs opacity-60">
-                © {new Date().getFullYear()} {business.name}. Powered by Market
+                Â© {new Date().getFullYear()} {business.name}. Powered by Market
                 Villa.
               </p>
             </div>
@@ -6525,3 +6626,4 @@ export default function StorePage({ params }: StorePageProps) {
     </>
   );
 }
+

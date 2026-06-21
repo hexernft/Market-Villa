@@ -408,15 +408,15 @@ export default function Home() {
       <section className="mobile-showcase-section px-4 py-12 md:px-4">
         <div className="mobile-showcase-panel mx-auto grid max-w-7xl gap-8 overflow-hidden rounded-[2.1rem] border border-white/18 bg-[linear-gradient(145deg,#050008,#12051f_48%,#241436)] p-5 shadow-[0_34px_120px_rgba(0,0,0,0.38)] md:p-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:p-10">
           <div>
-            <p className="mobile-showcase-kicker text-[11px] font-bold uppercase tracking-[0.24em] text-[#c4b5fd]">
+            <p className="mobile-showcase-kicker text-[11px] font-bold uppercase tracking-[0.24em] text-[#ffb36b]">
               Device-ready storefronts
             </p>
 
-            <h2 className="mobile-showcase-title mt-4 max-w-2xl text-[2.35rem] font-semibold leading-[1.02] text-white md:text-[4rem]">
+            <h2 className="mobile-showcase-title mt-4 max-w-2xl text-[2.35rem] font-semibold leading-[1.02] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.55)] md:text-[4rem]">
               Your business looks premium on every screen.
             </h2>
 
-            <p className="mobile-showcase-copy mt-5 max-w-xl text-base leading-8 text-white/78">
+            <p className="mobile-showcase-copy mt-5 max-w-xl text-base font-medium leading-8 text-white/90">
               From furniture stores to food vendors, Market Villa helps businesses present products, prices, and customer actions in a clean mobile-ready page.
             </p>
 
@@ -424,7 +424,7 @@ export default function Home() {
               {["Mobile-ready", "Product-focused", "WhatsApp-friendly"].map((item) => (
                 <div
                   key={item}
-                  className="mobile-showcase-badge rounded-2xl border px-4 py-3 text-sm font-bold"
+                  className="mobile-showcase-badge rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-bold text-white shadow-sm backdrop-blur-md"
                 >
                   {item}
                 </div>

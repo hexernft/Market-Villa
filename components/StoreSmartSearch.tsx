@@ -143,7 +143,6 @@ function mapStoreToResult(store: StoreRow, query: string): SearchResult {
     location,
     description,
     store.products_summary,
-    store.services_summary,
   ]);
 
   return {

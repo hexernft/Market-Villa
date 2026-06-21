@@ -243,8 +243,8 @@ export default function AdminPricingPage() {
             </p>
 
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              Next step: connect billing and Paystack routes to this database
-              table.
+              Billing, Paystack checkout, and payment verification use these
+              active subscription prices.
             </p>
           </div>
         </section>

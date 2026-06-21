@@ -2,7 +2,6 @@
 import { createClient } from "@supabase/supabase-js";
 import {
   isValidPlanAlias,
-  MARKET_VILLA_PLANS,
   MarketVillaPlanId,
   normalizePlanId,
 } from "@/lib/plans";
@@ -44,6 +43,36 @@ function addOneMonthWithGrace() {
     expiresAt,
     graceEndsAt,
   };
+}
+
+async function getExpectedAmountInKobo({
+  serviceClient,
+  paymentAmount,
+  plan,
+}: {
+  serviceClient: any;
+  paymentAmount: unknown;
+  plan: MarketVillaPlanId;
+}) {
+  const storedAmount = Number(paymentAmount || 0);
+
+  if (storedAmount > 0) {
+    return Math.round(storedAmount * 100);
+  }
+
+  const { data: pricingItem, error } = await serviceClient
+    .from("pricing_items")
+    .select("amount_in_kobo")
+    .eq("pricing_type", "subscription")
+    .eq("pricing_key", plan)
+    .eq("is_active", true)
+    .maybeSingle();
+
+  if (error || !pricingItem) {
+    return 0;
+  }
+
+  return Number(pricingItem.amount_in_kobo || 0);
 }
 
 export async function POST(request: Request) {
@@ -145,9 +174,13 @@ export async function POST(request: Request) {
     }
 
     const plan = normalizePlanId(rawPlan) as MarketVillaPlanId;
-    const expectedPlan = MARKET_VILLA_PLANS[plan];
+    const expectedAmountInKobo = await getExpectedAmountInKobo({
+      serviceClient,
+      paymentAmount: payment.amount,
+      plan,
+    });
 
-    if (!expectedPlan?.amountInKobo) {
+    if (!expectedAmountInKobo) {
       return NextResponse.json(
         { error: "Selected plan amount is invalid." },
         { status: 400 }
@@ -222,7 +255,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (transactionAmount !== expectedPlan.amountInKobo) {
+    if (transactionAmount !== expectedAmountInKobo) {
       return NextResponse.json(
         { error: "Payment amount does not match the selected plan." },
         { status: 400 }
@@ -301,7 +334,7 @@ export async function POST(request: Request) {
       message: "Payment verified successfully.",
       plan,
       businessId: payment.business_id,
-      amount: expectedPlan.amount,
+      amount: Math.round(expectedAmountInKobo / 100),
       paidAt: now.toISOString(),
       reference,
     });

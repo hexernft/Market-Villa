@@ -13,7 +13,6 @@ const layoutLabels: Record<string, string> = {
   "food-market": "Food grid",
   "bold-retail": "Retail drop",
   "minimal-studio": "Minimal",
-  "service-pro": "Service-led",
   "apartment-stay": "Hospitality",
   "beauty-lounge": "Beauty",
   "local-vendor": "Local",
@@ -86,12 +85,6 @@ export function ThemePreviewCard({ theme, selected }: Props) {
             <div className="h-4 w-2/3 bg-white/90" />
             <div className="h-px w-3/4 bg-white/30" />
             <div className="h-10 w-28 border border-white/70" />
-          </div>
-        ) : theme.layout === "service-pro" ? (
-          <div className="grid gap-2">
-            <div className="h-10 rounded-2xl bg-white/20" />
-            <div className="h-10 rounded-2xl bg-white/15" />
-            <div className="h-10 rounded-2xl bg-white/10" />
           </div>
         ) : theme.layout === "apartment-stay" ? (
           <div className="overflow-hidden rounded-2xl bg-white/15 p-2">

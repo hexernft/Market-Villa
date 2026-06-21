@@ -48,7 +48,7 @@ const menuSections = [
   {
     title: "Selling",
     items: [
-      { label: "Products", href: "/dashboard/products", icon: Package },
+      { label: "Inventory", href: "/dashboard/products", icon: Package },
       { label: "Leads", href: "/dashboard/leads", icon: MessageCircle },
       { label: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
       { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },

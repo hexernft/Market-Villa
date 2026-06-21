@@ -1,10 +1,8 @@
 ﻿import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getVisibilityPackage } from "@/lib/visibility-packages";
 import {
   isValidPlanAlias,
-  MARKET_VILLA_PLANS,
   normalizePlanId,
 } from "@/lib/plans";
 
@@ -73,92 +71,34 @@ function getSubscriptionDates() {
   };
 }
 
-
-async function activatePaidVisibilityPackage({
+async function getExpectedAmountInKobo({
   supabaseAdmin,
-  reference,
-  transaction,
+  paymentAmount,
+  plan,
 }: {
   supabaseAdmin: any;
-  reference: string;
-  transaction: any;
+  paymentAmount: unknown;
+  plan: string;
 }) {
-  const { data: visibilityRequest, error: requestError } = await supabaseAdmin
-    .from("visibility_requests")
-    .select("id,business_id,request_type,status,payment_reference")
-    .eq("payment_reference", reference)
+  const storedAmount = Number(paymentAmount || 0);
+
+  if (storedAmount > 0) {
+    return Math.round(storedAmount * 100);
+  }
+
+  const { data: pricingItem, error } = await supabaseAdmin
+    .from("pricing_items")
+    .select("amount_in_kobo")
+    .eq("pricing_type", "subscription")
+    .eq("pricing_key", plan)
+    .eq("is_active", true)
     .maybeSingle();
 
-  if (requestError || !visibilityRequest) {
-    return false;
+  if (error || !pricingItem) {
+    return 0;
   }
 
-  if (visibilityRequest.status === "approved") {
-    return true;
-  }
-
-  const visibilityPackage = getVisibilityPackage(visibilityRequest.request_type);
-
-  if (!visibilityPackage) {
-    throw new Error("Invalid visibility package.");
-  }
-
-  if (transaction.amount !== visibilityPackage.amountInKobo) {
-    throw new Error("Visibility payment amount mismatch.");
-  }
-
-  if (transaction.currency !== "NGN") {
-    throw new Error("Visibility payment currency mismatch.");
-  }
-
-  const now = new Date();
-  const expiresAt = visibilityPackage.durationDays ? new Date(now) : null;
-
-  if (expiresAt && visibilityPackage.durationDays) {
-    expiresAt.setDate(expiresAt.getDate() + visibilityPackage.durationDays);
-  }
-
-  if (visibilityPackage.id === "verified_badge") {
-    const { error: businessError } = await supabaseAdmin
-      .from("businesses")
-      .update({
-        is_verified: true,
-        visibility_plan: "verified",
-        updated_at: now.toISOString(),
-      })
-      .eq("id", visibilityRequest.business_id);
-
-    if (businessError) throw businessError;
-  } else {
-    const { error: businessError } = await supabaseAdmin
-      .from("businesses")
-      .update({
-        is_featured: true,
-        featured_until: expiresAt?.toISOString() || null,
-        visibility_plan: visibilityPackage.id,
-        updated_at: now.toISOString(),
-      })
-      .eq("id", visibilityRequest.business_id);
-
-    if (businessError) throw businessError;
-  }
-
-  const { error: updateRequestError } = await supabaseAdmin
-    .from("visibility_requests")
-    .update({
-      status: "approved",
-      paid_at: now.toISOString(),
-      activated_at: now.toISOString(),
-      expires_at: expiresAt?.toISOString() || null,
-      admin_note: `Payment confirmed automatically by Paystack webhook. Reference: ${reference}`,
-      reviewed_at: now.toISOString(),
-      updated_at: now.toISOString(),
-    })
-    .eq("id", visibilityRequest.id);
-
-  if (updateRequestError) throw updateRequestError;
-
-  return true;
+  return Number(pricingItem.amount_in_kobo || 0);
 }
 export async function POST(request: Request) {
   try {
@@ -234,16 +174,6 @@ export async function POST(request: Request) {
         });
       }
 
-      const expectedPlan = MARKET_VILLA_PLANS[plan];
-
-      if (!expectedPlan?.amountInKobo) {
-        return NextResponse.json({
-          received: true,
-          ignored: true,
-          reason: "Invalid plan amount.",
-        });
-      }
-
       if (currency !== "NGN") {
         await supabaseAdmin
           .from("payments")
@@ -261,7 +191,27 @@ export async function POST(request: Request) {
         });
       }
 
-      if (amountInKobo !== expectedPlan.amountInKobo) {
+      const { data: existingPayment } = await supabaseAdmin
+        .from("payments")
+        .select("id, status, business_id, owner_id, plan, amount")
+        .eq("reference", reference)
+        .maybeSingle();
+
+      const expectedAmountInKobo = await getExpectedAmountInKobo({
+        supabaseAdmin,
+        paymentAmount: existingPayment?.amount,
+        plan,
+      });
+
+      if (!expectedAmountInKobo) {
+        return NextResponse.json({
+          received: true,
+          ignored: true,
+          reason: "Invalid plan amount.",
+        });
+      }
+
+      if (amountInKobo !== expectedAmountInKobo) {
         await supabaseAdmin
           .from("payments")
           .update({
@@ -279,12 +229,6 @@ export async function POST(request: Request) {
       }
 
       const { now, expiresAt, graceEndsAt } = getSubscriptionDates();
-
-      const { data: existingPayment } = await supabaseAdmin
-        .from("payments")
-        .select("id, status, business_id, owner_id, plan")
-        .eq("reference", reference)
-        .maybeSingle();
 
       if (existingPayment?.status === "success") {
         return NextResponse.json({

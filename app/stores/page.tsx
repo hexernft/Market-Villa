@@ -468,7 +468,7 @@ function StoreCard({
 
       <div className="p-5">
         <div className="mb-4 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-2xl border border-[#7c3aed]/12 bg-[#f8f4ff] px-3 py-1.5 text-xs font-bold text-[#7c3aed]">
+          <span className="inline-flex items-center gap-1 rounded-2xl border border-[#7c3aed]/20 bg-[#f8f4ff] px-3 py-1.5 text-xs font-black uppercase tracking-[0.12em] text-[#5b21b6]">
             <Tag size={13} />
             {category}
           </span>
@@ -483,12 +483,12 @@ function StoreCard({
           {store.name || "Untitled store"}
         </h3>
 
-        <p className="mt-2 line-clamp-2 min-h-[48px] text-sm leading-6 text-[#241436]/62">
+        <p className="mt-2 line-clamp-2 min-h-[48px] text-sm font-semibold leading-6 text-[#241436]">
           {store.description ||
             `A Market Villa business page based in ${location}.`}
         </p>
 
-        <p className="mt-3 text-xs font-bold uppercase tracking-[0.16em] text-[#7c3aed]">
+        <p className="mt-3 text-xs font-black uppercase tracking-[0.16em] text-[#5b21b6]">
           {location}
         </p>
 
@@ -564,5 +564,6 @@ function EmptyStores() {
     </div>
   );
 }
+
 
 

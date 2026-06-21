@@ -48,7 +48,7 @@ export const MARKET_VILLA_PLANS: Record<
     displayName: "Premium",
     amount: 30000,
     amountInKobo: 3000000,
-    description: "For serious sellers, teams, and service businesses.",
+    description: "For serious sellers, teams, properties, and car dealers.",
     themeLimit: PLAN_THEME_LIMITS.pro,
   },
 };
