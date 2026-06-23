@@ -3158,3 +3158,219 @@ aside.admin-sidebar .admin-sidebar-link-active {
     font-size: clamp(1.8rem, 9vw, 2.8rem) !important;
   }
 }
+/* Store theme contrast safety fixes */
+.store-page-slim,
+.store-page-slim main {
+  color-scheme: light;
+}
+
+/* Dark hero / dark panels must use readable light text */
+.store-page-slim [class*="bg-[#241436]"],
+.store-page-slim [class*="bg-[#211331]"],
+.store-page-slim [class*="bg-[#26143d]"],
+.store-page-slim [class*="bg-[#2b1245]"],
+.store-page-slim [class*="bg-[#2b1206]"],
+.store-page-slim [class*="bg-[#201713]"],
+.store-page-slim [class*="bg-[#201a14]"],
+.store-page-slim [class*="bg-[#101714]"],
+.store-page-slim [class*="bg-[#031124]"],
+.store-page-slim [class*="bg-[#0c0e13]"],
+.store-page-slim [class*="bg-[#21190f]"],
+.store-page-slim [class*="bg-[#2c1608]"],
+.store-page-slim [class*="bg-black"],
+.store-page-slim [class*="bg-neutral"],
+.store-page-slim [class*="bg-slate-950"],
+.store-page-slim [class*="bg-slate-900"] {
+  color: #ffffff !important;
+}
+
+.store-page-slim [class*="bg-[#241436]"] h1,
+.store-page-slim [class*="bg-[#241436]"] h2,
+.store-page-slim [class*="bg-[#241436]"] h3,
+.store-page-slim [class*="bg-[#211331]"] h1,
+.store-page-slim [class*="bg-[#211331]"] h2,
+.store-page-slim [class*="bg-[#211331]"] h3,
+.store-page-slim [class*="bg-[#26143d]"] h1,
+.store-page-slim [class*="bg-[#26143d]"] h2,
+.store-page-slim [class*="bg-[#26143d]"] h3,
+.store-page-slim [class*="bg-black"] h1,
+.store-page-slim [class*="bg-black"] h2,
+.store-page-slim [class*="bg-black"] h3,
+.store-page-slim [class*="bg-slate-950"] h1,
+.store-page-slim [class*="bg-slate-950"] h2,
+.store-page-slim [class*="bg-slate-950"] h3,
+.store-page-slim [class*="bg-slate-900"] h1,
+.store-page-slim [class*="bg-slate-900"] h2,
+.store-page-slim [class*="bg-slate-900"] h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Paragraphs on dark panels should be soft white, not dark gray */
+.store-page-slim [class*="bg-[#241436]"] p,
+.store-page-slim [class*="bg-[#211331]"] p,
+.store-page-slim [class*="bg-[#26143d]"] p,
+.store-page-slim [class*="bg-black"] p,
+.store-page-slim [class*="bg-slate-950"] p,
+.store-page-slim [class*="bg-slate-900"] p {
+  color: rgba(255, 255, 255, 0.76) !important;
+}
+
+/* Light cards must use dark text */
+.store-page-slim [class*="bg-white"],
+.store-page-slim [class*="bg-[#fff"],
+.store-page-slim [class*="bg-[#f7"],
+.store-page-slim [class*="bg-[#fb"],
+.store-page-slim [class*="bg-[#f8"],
+.store-page-slim [class*="bg-[#f5"],
+.store-page-slim [class*="bg-purple-50"],
+.store-page-slim [class*="bg-slate-50"] {
+  color: #241436 !important;
+}
+
+.store-page-slim [class*="bg-white"] h1,
+.store-page-slim [class*="bg-white"] h2,
+.store-page-slim [class*="bg-white"] h3,
+.store-page-slim [class*="bg-[#fff"] h1,
+.store-page-slim [class*="bg-[#fff"] h2,
+.store-page-slim [class*="bg-[#fff"] h3 {
+  color: #241436 !important;
+  -webkit-text-fill-color: #241436 !important;
+}
+
+/* Bright CTA buttons should keep strong readable contrast */
+.store-page-slim a[class*="bg-[#22c55e]"],
+.store-page-slim button[class*="bg-[#22c55e]"],
+.store-page-slim a[class*="bg-[#fbbf24]"],
+.store-page-slim button[class*="bg-[#fbbf24]"],
+.store-page-slim a[class*="bg-[#fed7aa]"],
+.store-page-slim button[class*="bg-[#fed7aa]"] {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  font-weight: 800 !important;
+}
+
+/* Purple and dark CTA buttons should keep white text */
+.store-page-slim a[class*="bg-[#7c3aed]"],
+.store-page-slim button[class*="bg-[#7c3aed]"],
+.store-page-slim a[class*="bg-[#241436]"],
+.store-page-slim button[class*="bg-[#241436]"],
+.store-page-slim a[class*="bg-[#26143d]"],
+.store-page-slim button[class*="bg-[#26143d]"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Improve image overlay text contrast */
+.store-page-slim [class*="absolute"][class*="bg-white"] {
+  color: #241436 !important;
+}
+
+.store-page-slim [class*="absolute"][class*="bg-black"],
+.store-page-slim [class*="absolute"][class*="bg-[#241436]"],
+.store-page-slim [class*="absolute"][class*="bg-[#26143d]"] {
+  color: #ffffff !important;
+}
+
+/* Prevent muted Tailwind opacity text from becoming unreadable on dark sections */
+.store-page-slim [class*="text-[#241436]/"],
+.store-page-slim [class*="text-slate-500"],
+.store-page-slim [class*="text-slate-600"] {
+  color: inherit;
+}
+/* Premium Grid Theme forced contrast fix */
+.premium-grid-theme section[class*="bg-[#1f1230]"],
+.premium-grid-theme div[class*="bg-[#1f1230]"] {
+  color: #ffffff !important;
+}
+
+.premium-grid-theme section[class*="bg-[#1f1230]"] h1,
+.premium-grid-theme div[class*="bg-[#1f1230]"] h1,
+.premium-grid-theme section[class*="bg-[#1f1230]"] h2,
+.premium-grid-theme div[class*="bg-[#1f1230]"] h2,
+.premium-grid-theme section[class*="bg-[#1f1230]"] h3,
+.premium-grid-theme div[class*="bg-[#1f1230]"] h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.premium-grid-theme section[class*="bg-[#1f1230]"] p,
+.premium-grid-theme div[class*="bg-[#1f1230]"] p {
+  color: rgba(255, 255, 255, 0.76) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.76) !important;
+  opacity: 1 !important;
+}
+
+.premium-grid-theme section[class*="bg-[#1f1230]"] svg,
+.premium-grid-theme div[class*="bg-[#1f1230]"] svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.premium-grid-theme section[class*="bg-[#1f1230]"] [class*="bg-white/"],
+.premium-grid-theme div[class*="bg-[#1f1230]"] [class*="bg-white/"] {
+  color: #ffffff !important;
+}
+/* Compact Store Theme forced contrast fix */
+.compact-store-theme section[class*="bg-[#241436]"],
+.compact-store-theme div[class*="bg-[#241436]"],
+.compact-store-theme section[class*="bg-[#211331]"],
+.compact-store-theme div[class*="bg-[#211331]"],
+.compact-store-theme section[class*="bg-[#26143d]"],
+.compact-store-theme div[class*="bg-[#26143d]"] {
+  color: #ffffff !important;
+}
+
+.compact-store-theme section[class*="bg-[#241436]"] h1,
+.compact-store-theme div[class*="bg-[#241436]"] h1,
+.compact-store-theme section[class*="bg-[#241436]"] h2,
+.compact-store-theme div[class*="bg-[#241436]"] h2,
+.compact-store-theme section[class*="bg-[#241436]"] h3,
+.compact-store-theme div[class*="bg-[#241436]"] h3,
+.compact-store-theme section[class*="bg-[#211331]"] h1,
+.compact-store-theme div[class*="bg-[#211331]"] h1,
+.compact-store-theme section[class*="bg-[#211331]"] h2,
+.compact-store-theme div[class*="bg-[#211331]"] h2,
+.compact-store-theme section[class*="bg-[#211331]"] h3,
+.compact-store-theme div[class*="bg-[#211331]"] h3,
+.compact-store-theme section[class*="bg-[#26143d]"] h1,
+.compact-store-theme div[class*="bg-[#26143d]"] h1,
+.compact-store-theme section[class*="bg-[#26143d]"] h2,
+.compact-store-theme div[class*="bg-[#26143d]"] h2,
+.compact-store-theme section[class*="bg-[#26143d]"] h3,
+.compact-store-theme div[class*="bg-[#26143d]"] h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.compact-store-theme section[class*="bg-[#241436]"] p,
+.compact-store-theme div[class*="bg-[#241436]"] p,
+.compact-store-theme section[class*="bg-[#211331]"] p,
+.compact-store-theme div[class*="bg-[#211331]"] p,
+.compact-store-theme section[class*="bg-[#26143d]"] p,
+.compact-store-theme div[class*="bg-[#26143d]"] p {
+  color: rgba(255, 255, 255, 0.76) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.76) !important;
+  opacity: 1 !important;
+}
+
+.compact-store-theme section[class*="bg-[#241436]"] svg,
+.compact-store-theme div[class*="bg-[#241436]"] svg,
+.compact-store-theme section[class*="bg-[#211331]"] svg,
+.compact-store-theme div[class*="bg-[#211331]"] svg,
+.compact-store-theme section[class*="bg-[#26143d]"] svg,
+.compact-store-theme div[class*="bg-[#26143d]"] svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.compact-store-theme section[class*="bg-[#241436]"] [class*="bg-white/"],
+.compact-store-theme div[class*="bg-[#241436]"] [class*="bg-white/"],
+.compact-store-theme section[class*="bg-[#211331]"] [class*="bg-white/"],
+.compact-store-theme div[class*="bg-[#211331]"] [class*="bg-white/"],
+.compact-store-theme section[class*="bg-[#26143d]"] [class*="bg-white/"],
+.compact-store-theme div[class*="bg-[#26143d]"] [class*="bg-white/"] {
+  color: #ffffff !important;
+}
