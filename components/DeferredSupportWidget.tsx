@@ -16,7 +16,10 @@ export function DeferredSupportWidget() {
   const pathname = usePathname();
   const [shouldLoad, setShouldLoad] = useState(false);
 
+  const isStorePage = pathname?.startsWith("/store/");
+
   const isAppWorkspace =
+    isStorePage ||
     pathname?.startsWith("/dashboard") ||
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/admin-login");
