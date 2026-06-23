@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, MessageSquare, Send, X } from "lucide-react";
+import { Bot, MessageCircle, Send, X } from "lucide-react";
 
 type ChatMessage = {
   role: "assistant" | "user";
@@ -124,21 +124,21 @@ export function SupportWidget() {
           title="Support"
           whileHover={{ y: -2, scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="support-widget-trigger fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/50 bg-[#7c3aed] p-0 text-white shadow-[0_18px_55px_rgba(124,58,237,0.38)] ring-4 ring-[#7c3aed]/15 transition hover:-translate-y-0.5 hover:bg-[#6d28d9] md:h-16 md:w-16"
+          className="support-widget-trigger fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-[#7c3aed] p-0 text-white shadow-[0_16px_40px_rgba(124,58,237,0.4)] ring-4 ring-white/70 transition hover:-translate-y-0.5 hover:bg-[#6d28d9] md:h-14 md:w-14"
           style={{
-            width: "3.5rem",
-            height: "3.5rem",
+            width: "3rem",
+            height: "3rem",
             minHeight: 0,
             padding: 0,
-            border: "1px solid rgba(255,255,255,0.5)",
+            border: "1px solid rgba(255,255,255,0.7)",
             borderRadius: "9999px",
             backgroundColor: "#7c3aed",
-            boxShadow: "0 18px 55px rgba(124, 58, 237, 0.38)",
+            boxShadow: "0 16px 40px rgba(124, 58, 237, 0.4)",
           }}
         >
-          <MessageSquare
+          <MessageCircle
             aria-hidden="true"
-            className="h-5 w-5 md:h-6 md:w-6"
+            className="h-6 w-6 md:h-7 md:w-7"
             strokeWidth={2.35}
           />
         </motion.button>
