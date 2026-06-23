@@ -18,11 +18,7 @@ import {
 import { BRAND } from "@/lib/brand";
 import { supabase } from "@/lib/supabase";
 
-const navLinks = [
-  { label: "How it works", href: "/#how" },
-  { label: "Explore Stores", href: "/stores" },
-  { label: "Help", href: "/help" },
-];
+const navLinks: { label: string; href: string }[] = [];
 
 type StoreRow = Record<string, any>;
 type ProductRow = Record<string, any>;
