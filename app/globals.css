@@ -3059,3 +3059,43 @@ aside.admin-sidebar .admin-sidebar-link-active {
   stroke: #ffffff !important;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
+/* Compact Market Villa AI support panel */
+.support-widget-panel {
+  position: fixed !important;
+  right: 1.25rem !important;
+  bottom: 5.25rem !important;
+  top: auto !important;
+  left: auto !important;
+  width: min(22rem, calc(100vw - 2rem)) !important;
+  max-width: 22rem !important;
+  height: min(32rem, calc(100vh - 7rem)) !important;
+  max-height: 32rem !important;
+  border-radius: 1.35rem !important;
+  overflow: hidden !important;
+}
+
+.support-widget-panel > div:nth-child(2) {
+  max-height: 18rem !important;
+  min-height: 14rem !important;
+  overflow-y: auto !important;
+}
+
+.support-widget-panel p,
+.support-widget-panel button,
+.support-widget-panel input {
+  font-size: 13px !important;
+}
+
+.support-widget-panel .rounded-2xl {
+  border-radius: 1rem !important;
+}
+
+@media (max-width: 640px) {
+  .support-widget-panel {
+    right: 0.75rem !important;
+    bottom: 4.75rem !important;
+    width: calc(100vw - 1.5rem) !important;
+    max-width: calc(100vw - 1.5rem) !important;
+    height: min(30rem, calc(100vh - 6rem)) !important;
+  }
+}
