@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -40,7 +40,7 @@ const categories = [
   "Beauty & Wellness",
   "Apartment & Hospitality",
   "Retail Store",
-  "Car Dealership",
+  
   "Digital Products",
   "School / Education",
   "Church / Ministry",
@@ -492,18 +492,18 @@ export default function ProfilePage() {
               <p className="text-xs leading-5 text-slate-500">
                 This controls dashboard wording, inventory fields, customer
                 inquiry flow, and which themes are shown in the Theme Store.
-                Cars and Properties are available from Pro.
+                Advanced business sections are available from Pro.
               </p>
             </label>
 
             {!canUseSpecializedModes ? (
               <div className="rounded-[1.25rem] border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm font-semibold text-amber-950">
-                  Cars and Properties require Premium.
+                  Advanced business sections require Premium.
                 </p>
                 <p className="mt-2 text-sm leading-6 text-amber-900">
                   Keep using Products on your current plan, or upgrade to
-                  Premium to unlock property listings, vehicle inventory, car
+                  Premium to unlock property listings, advanced inventory,
                   themes, and property themes.
                 </p>
                 <Link

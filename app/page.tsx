@@ -91,17 +91,6 @@ export default function Home() {
                 Create a clean business page in minutes, add your details, and share your link with customers.
               </p>
             </div>
-
-            <div className="mt-7 flex flex-wrap items-center gap-3 lg:mt-0 lg:justify-end">
-              <Link href="/login" className="market-primary-button inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold text-white">
-                Create Business Page
-                <ArrowRight size={16} />
-              </Link>
-
-              <Link href="/stores" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#7c3aed]/15 bg-white/70 px-4 py-2.5 text-sm font-semibold text-[#241436] shadow-sm hover:bg-white/90">
-                Explore Stores
-              </Link>
-            </div>
           </div>
         </div>
       </section>

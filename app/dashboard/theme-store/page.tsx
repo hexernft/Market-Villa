@@ -282,7 +282,7 @@ export default function ThemeStorePage() {
 
             <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">
               Theme options are filtered by the selected business section:
-              Products, Properties, or Cars. Change the business mode from
+              Products, Properties, or advanced business sections. Change the business mode from
               Profile when a business belongs somewhere else.
             </p>
           </div>

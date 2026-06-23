@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -409,11 +409,11 @@ export default function BillingPage() {
               Pro Sections
             </p>
             <h2 className="mt-1 text-xl font-semibold tracking-[-0.04em] text-slate-950">
-              Cars and Properties unlock on Premium.
+              Advanced business sections unlock on Premium.
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
               After upgrading, open Profile and switch the business mode to
-              Products, Properties, or Cars. The dashboard, themes, and customer
+              Products, Properties, or other advanced sections. The dashboard, themes, and customer
               inquiry flow will adjust automatically.
             </p>
           </div>
@@ -510,8 +510,8 @@ export default function BillingPage() {
                     plan.storeLimit
                       ? `Up to ${plan.storeLimit} stores`
                       : "Unlimited stores",
-                    "Unlock Products, Properties, and Cars",
-                    "Property listing and car dealer tools",
+                    "Unlock Products, Properties, and advanced sections",
+                    "Property listing and advanced business tools",
                     "More premium themes for every section",
                   ];
 
