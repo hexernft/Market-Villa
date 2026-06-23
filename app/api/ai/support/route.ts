@@ -1,14 +1,36 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
 
 type SupportRequestBody = {
   message?: unknown;
 };
 
+function extractOutputText(result: any) {
+  if (typeof result.output_text === "string" && result.output_text.trim()) {
+    return result.output_text.trim();
+  }
+
+  const output = Array.isArray(result.output) ? result.output : [];
+
+  const text = output
+    .flatMap((item: any) => {
+      const content = Array.isArray(item.content) ? item.content : [];
+
+      return content.map((contentItem: any) => {
+        if (typeof contentItem.text === "string") return contentItem.text;
+        if (typeof contentItem.output_text === "string") return contentItem.output_text;
+        return "";
+      });
+    })
+    .join("")
+    .trim();
+
+  return text;
+}
+
 export async function POST(request: Request) {
   try {
     const openaiApiKey = process.env.OPENAI_API_KEY || "";
-    const model = process.env.OPENAI_MODEL || "gpt-5-mini";
+    const model = process.env.OPENAI_MODEL || "gpt-4.1-mini";
 
     if (!openaiApiKey) {
       return NextResponse.json(
@@ -28,37 +50,47 @@ export async function POST(request: Request) {
       );
     }
 
-    const message = String(body?.message || "").trim();
+    const message = String(body.message || "").trim();
 
     if (!message) {
       return NextResponse.json(
-        { error: "Message is required." },
+        { error: "Please enter a message." },
         { status: 400 },
       );
     }
 
-    const openai = new OpenAI({
-      apiKey: openaiApiKey,
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${openaiApiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        instructions:
+          "You are Market Villa Support Assistant. Market Villa helps small businesses create professional WhatsApp-ready storefront pages. Answer clearly, briefly, and practically. Help users with signup, onboarding, products, orders, billing, Paystack payments, custom domains, store publishing, visibility, pricing, and AI assistant requests. If a question requires account-specific action, tell the user to check their dashboard or contact support. Do not invent payment status, subscription status, or private account data.",
+        input: message,
+        max_output_tokens: 260,
+        store: false,
+      }),
     });
 
-    const response = await openai.responses.create({
-      model,
-      input: [
+    const result = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(
         {
-          role: "system",
-          content:
-            "You are Market Villa Support Assistant. Market Villa helps small businesses create professional WhatsApp-ready product pages. Answer clearly, briefly, and practically. Help users with signup, onboarding, products, orders, billing, Paystack payments, custom domains, and store publishing. If a question requires account-specific action, tell the user to contact support or check their dashboard. Do not invent payment status, subscription status, or private account data.",
+          error:
+            result.error?.message ||
+            "AI support is unavailable right now. Please try again shortly.",
         },
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-      max_output_tokens: 450,
-    });
+        { status: response.status },
+      );
+    }
 
     const reply =
-      response.output_text?.trim() || "I could not generate a response.";
+      extractOutputText(result) ||
+      "I can help with Market Villa setup, products, orders, billing, domains, publishing, visibility, and AI assistant requests. What would you like to do?";
 
     return NextResponse.json({
       success: true,
@@ -66,7 +98,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Unable to process AI request.";
+      error instanceof Error
+        ? error.message
+        : "Unable to contact AI support.";
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }

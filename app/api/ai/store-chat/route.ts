@@ -192,7 +192,6 @@ Important rules:
       `.trim(),
       input: prompt,
       max_output_tokens: 280,
-      temperature: 0.4,
       store: false,
     }),
   });

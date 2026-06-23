@@ -165,7 +165,7 @@ export function SupportWidget() {
               animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: 28, scale: 0.98, filter: "blur(10px)" }}
               transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-5 right-5 flex h-[min(620px,calc(100vh-2.5rem))] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[2rem] bg-white shadow-2xl ring-1 ring-slate-200"
+              className="absolute bottom-5 right-5 flex h-[min(620px,calc(100vh-2.5rem))] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[1.5rem] bg-white shadow-2xl ring-1 ring-slate-200"
             >
               <div className="bg-[#26143d] px-5 py-2.5 text-white">
                 <div className="flex items-center justify-between gap-4">
