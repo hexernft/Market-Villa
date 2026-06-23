@@ -130,11 +130,9 @@ export function SupportWidget() {
             height: "3.5rem",
             minHeight: 0,
             padding: 0,
-            border: 0,
-            borderRadius: 0,
-            background: "transparent",
-            backgroundImage: "none",
-            boxShadow: "none",
+            borderRadius: "9999px",
+            backgroundColor: "#7c3aed",
+            boxShadow: "0 18px 55px rgba(124, 58, 237, 0.38)",
           }}
         >
           <MessageSquare

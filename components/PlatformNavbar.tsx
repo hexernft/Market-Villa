@@ -397,6 +397,13 @@ export function PlatformNavbar() {
               <ArrowRight size={14} />
             </Link>
 
+            <Link
+              href="/stores"
+              className="desktop-navbar-explore-stores hidden rounded-2xl border border-[#7c3aed]/15 bg-white/70 px-4 py-2 text-[12px] font-semibold text-[#241436] transition hover:bg-white/90 sm:inline-flex"
+            >
+              Explore Stores
+            </Link>
+
             <button
               type="button"
               className="grid h-10 w-10 place-items-center rounded-2xl border border-[#7c3aed]/15 bg-white/70 text-[#241436] md:hidden"
@@ -503,6 +510,14 @@ export function PlatformNavbar() {
               >
                 Start your store
                 <ArrowRight size={15} />
+              </Link>
+
+              <Link
+                href="/stores"
+                className="mobile-navbar-explore-stores inline-flex items-center justify-center rounded-2xl border border-[#7c3aed]/15 bg-white/80 px-4 py-3 text-sm font-semibold text-[#241436] transition hover:bg-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Explore Stores
               </Link>
             </div>
           </nav>
