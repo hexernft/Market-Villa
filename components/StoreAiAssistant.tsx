@@ -93,7 +93,7 @@ export function StoreAiAssistant({
     <div className="fixed bottom-5 right-5 z-[80]">
       {isOpen ? (
         <div className="w-[calc(100vw-2.5rem)] max-w-sm overflow-hidden rounded-[1.5rem] border border-white/40 bg-white shadow-[0_24px_90px_rgba(36,20,54,0.24)]">
-          <div className="flex items-center justify-between bg-[#241436] px-4 py-3 text-white">
+          <div className="flex items-center justify-between bg-[#14532d] px-4 py-3 text-white">
             <div className="flex items-center gap-2">
               <span className="grid h-9 w-9 place-items-center rounded-2xl bg-white/12">
                 <Bot size={18} />
@@ -126,7 +126,7 @@ export function StoreAiAssistant({
                 <div
                   className={`max-w-[82%] rounded-2xl px-3 py-2 text-sm leading-6 ${
                     message.role === "user"
-                      ? "bg-[#7c3aed] text-white"
+                      ? "bg-[#16a34a] text-white"
                       : "bg-white text-[#241436] shadow-sm"
                   }`}
                 >
@@ -159,7 +159,7 @@ export function StoreAiAssistant({
             <button
               type="submit"
               disabled={isSending || !input.trim()}
-              className="grid h-11 w-11 place-items-center rounded-2xl bg-[#7c3aed] text-white transition hover:bg-[#6d28d9] disabled:cursor-not-allowed disabled:opacity-50"
+              className="grid h-11 w-11 place-items-center rounded-2xl bg-[#16a34a] text-white transition hover:bg-[#15803d] disabled:cursor-not-allowed disabled:opacity-50"
               aria-label="Send message"
             >
               <Send size={17} />
@@ -170,9 +170,9 @@ export function StoreAiAssistant({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex min-h-16 items-center gap-3 rounded-full border border-white/40 bg-[#7c3aed] px-5 py-3 text-sm font-bold text-white shadow-[0_18px_60px_rgba(124,58,237,0.38)] ring-4 ring-[#7c3aed]/15 transition hover:-translate-y-0.5 hover:bg-[#6d28d9]"
+          className="flex min-h-16 items-center gap-3 rounded-full border border-white/40 bg-[#16a34a] px-5 py-3 text-sm font-bold text-white shadow-[0_18px_60px_rgba(22,163,74,0.38)] ring-4 ring-[#16a34a]/15 transition hover:-translate-y-0.5 hover:bg-[#15803d]"
         >
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#7c3aed] shadow-sm">
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#16a34a] shadow-sm">
             <Bot size={20} />
           </span>
           <span className="leading-tight">Ask Store AI</span>

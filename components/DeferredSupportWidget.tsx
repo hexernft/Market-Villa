@@ -17,15 +17,12 @@ export function DeferredSupportWidget() {
   const [shouldLoad, setShouldLoad] = useState(false);
 
   const isStorePage = pathname?.startsWith("/store/");
+  const isAdminPage = pathname?.startsWith("/admin");
 
-  const isAppWorkspace =
-    isStorePage ||
-    pathname?.startsWith("/dashboard") ||
-    pathname?.startsWith("/admin") ||
-    pathname?.startsWith("/admin-login");
+  const shouldHideSupportWidget = isStorePage || isAdminPage;
 
   useEffect(() => {
-    if (isAppWorkspace) {
+    if (shouldHideSupportWidget) {
       setShouldLoad(false);
       return;
     }
@@ -41,7 +38,7 @@ export function DeferredSupportWidget() {
     const timeoutId = globalThis.setTimeout(loadWidget, 1400);
 
     return () => globalThis.clearTimeout(timeoutId);
-  }, [isAppWorkspace]);
+  }, [shouldHideSupportWidget]);
 
-  return shouldLoad && !isAppWorkspace ? <SupportWidget /> : null;
+  return shouldLoad && !shouldHideSupportWidget ? <SupportWidget /> : null;
 }
