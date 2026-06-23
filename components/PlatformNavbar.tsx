@@ -20,7 +20,7 @@ import { supabase } from "@/lib/supabase";
 
 const navLinks = [
   { label: "How it works", href: "/#how" },
-  { label: "Stores", href: "/stores" },
+  { label: "Explore Stores", href: "/stores" },
   { label: "Help", href: "/help" },
 ];
 
@@ -284,7 +284,7 @@ export function PlatformNavbar() {
           </Link>
 
           <nav
-            className="pointer-events-none hidden max-w-0 scale-95 items-center gap-7 text-[12px] font-semibold text-[#241436]/75 opacity-0 transition-all duration-300 md:flex"
+            className="hidden items-center gap-7 text-[12px] font-semibold text-[#241436]/75 transition-all duration-300 md:flex"
           >
             {navLinks.map((link) => (
               <Link
