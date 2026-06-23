@@ -170,10 +170,12 @@ export function StoreAiAssistant({
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="flex min-h-14 items-center gap-3 rounded-full bg-[#241436] px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_50px_rgba(36,20,54,0.28)] transition hover:-translate-y-0.5 hover:bg-[#321b52]"
+          className="flex min-h-16 items-center gap-3 rounded-full border border-white/40 bg-[#7c3aed] px-5 py-3 text-sm font-bold text-white shadow-[0_18px_60px_rgba(124,58,237,0.38)] ring-4 ring-[#7c3aed]/15 transition hover:-translate-y-0.5 hover:bg-[#6d28d9]"
         >
-          <MessageCircle size={18} />
-          Ask Store AI
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#7c3aed] shadow-sm">
+            <Bot size={20} />
+          </span>
+          <span className="leading-tight">Ask Store AI</span>
         </button>
       )}
     </div>

@@ -33,9 +33,7 @@ function buildProductReply(message: string, products: ProductRow[]) {
     (product) => product.is_available !== false,
   );
 
-  if (!availableProducts.length) {
-    return "";
-  }
+  if (!availableProducts.length) return "";
 
   const lowerMessage = normalize(message);
 
@@ -145,7 +143,39 @@ function buildPrompt({
       : "No previous messages.";
 
   return `
-You are the AI assistant for ${business.name || "this store"} on Market Villa.
+Store context:
+${storeContext}
+
+Recent chat history:
+${historyText}
+
+Customer message:
+${message}
+`.trim();
+}
+
+async function generateOpenAiReply({
+  businessName,
+  prompt,
+}: {
+  businessName: string;
+  prompt: string;
+}) {
+  const apiKey = process.env.OPENAI_API_KEY;
+  const model = process.env.OPENAI_MODEL || "gpt-4.1-mini";
+
+  if (!apiKey) return "";
+
+  const response = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      instructions: `
+You are the AI assistant for ${businessName || "this store"} on Market Villa.
 
 Your job:
 - Help customers understand this store's products, prices, availability, delivery, location, and how to order.
@@ -158,65 +188,22 @@ Important rules:
 - If the information is not in the store context, say you are not fully sure and ask the customer to contact the store directly.
 - Do not promise that an order is confirmed.
 - Do not claim payment has been received.
-- Do not make medical, legal, financial, or unsafe claims.
 - If a customer asks for something unrelated to the store, politely redirect them to store-related questions.
-
-Store context:
-${storeContext}
-
-Recent chat history:
-${historyText}
-
-Customer message:
-${message}
-
-Reply as the store assistant:
-`.trim();
-}
-
-async function generateGeminiReply(prompt: string) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || "gemini-1.5-flash";
-
-  if (!apiKey) {
-    return "";
-  }
-
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.4,
-          topP: 0.9,
-          maxOutputTokens: 280,
-        },
-      }),
-    },
-  );
+      `.trim(),
+      input: prompt,
+      max_output_tokens: 280,
+      temperature: 0.4,
+      store: false,
+    }),
+  });
 
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(result.error?.message || "AI provider error.");
+    throw new Error(result.error?.message || "OpenAI provider error.");
   }
 
-  return (
-    result.candidates?.[0]?.content?.parts
-      ?.map((part: { text?: string }) => part.text || "")
-      .join("")
-      .trim() || ""
-  );
+  return String(result.output_text || "").trim();
 }
 
 export async function POST(request: NextRequest) {
@@ -294,7 +281,10 @@ export async function POST(request: NextRequest) {
     let reply = "";
 
     try {
-      reply = await generateGeminiReply(prompt);
+      reply = await generateOpenAiReply({
+        businessName: business.name || "this store",
+        prompt,
+      });
     } catch {
       reply = "";
     }

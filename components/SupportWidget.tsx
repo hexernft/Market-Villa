@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { FormEvent, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -124,10 +124,10 @@ export function SupportWidget() {
           title="Support"
           whileHover={{ y: -2, scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="support-widget-trigger fixed bottom-5 right-5 z-50 inline-flex h-9 w-9 items-center justify-center bg-transparent p-0 text-[var(--mv-violet)] transition-colors duration-200 hover:text-[var(--mv-purple-hover)] md:h-11 md:w-11"
+          className="support-widget-trigger fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/50 bg-[#7c3aed] p-0 text-white shadow-[0_18px_55px_rgba(124,58,237,0.38)] ring-4 ring-[#7c3aed]/15 transition hover:-translate-y-0.5 hover:bg-[#6d28d9] md:h-16 md:w-16"
           style={{
-            width: "2rem",
-            height: "2rem",
+            width: "3.5rem",
+            height: "3.5rem",
             minHeight: 0,
             padding: 0,
             border: 0,
