@@ -9,6 +9,11 @@ type ProductRow = {
   is_available?: boolean | null;
 };
 
+type ChatHistoryItem = {
+  role?: "assistant" | "user";
+  content?: string;
+};
+
 function formatCurrency(value?: number | null) {
   if (!value) return "Price not provided";
 
@@ -24,7 +29,9 @@ function normalize(value: unknown) {
 }
 
 function buildProductReply(message: string, products: ProductRow[]) {
-  const availableProducts = products.filter((product) => product.is_available !== false);
+  const availableProducts = products.filter(
+    (product) => product.is_available !== false,
+  );
 
   if (!availableProducts.length) {
     return "";
@@ -36,11 +43,16 @@ function buildProductReply(message: string, products: ProductRow[]) {
     const name = normalize(product.name);
     const category = normalize(product.category);
 
-    return Boolean(name && lowerMessage.includes(name)) || Boolean(category && lowerMessage.includes(category));
+    return (
+      Boolean(name && lowerMessage.includes(name)) ||
+      Boolean(category && lowerMessage.includes(category))
+    );
   });
 
   if (matchedProduct) {
-    return `${matchedProduct.name} is available. ${matchedProduct.description || ""} Price: ${formatCurrency(
+    return `${matchedProduct.name} is available. ${
+      matchedProduct.description || ""
+    } Price: ${formatCurrency(
       matchedProduct.price,
     )}. Would you like to continue on WhatsApp?`;
   }
@@ -64,12 +76,158 @@ function buildProductReply(message: string, products: ProductRow[]) {
   return "";
 }
 
+function buildStoreContext({
+  business,
+  products,
+  aiRequest,
+}: {
+  business: any;
+  products: ProductRow[];
+  aiRequest: any;
+}) {
+  const productLines =
+    products.length > 0
+      ? products
+          .filter((product) => product.is_available !== false)
+          .slice(0, 30)
+          .map((product) => {
+            return `- ${product.name || "Unnamed item"} | ${
+              product.category || "No category"
+            } | ${formatCurrency(product.price)} | ${
+              product.description || "No description"
+            }`;
+          })
+          .join("\n")
+      : "No products have been added yet.";
+
+  return `
+Store name: ${business.name || "Store"}
+Description: ${business.description || business.tagline || "Not provided"}
+Location: ${business.location || "Not provided"}
+Opening hours: ${business.opening_hours || "Not provided"}
+WhatsApp/contact: ${
+    business.whatsapp ||
+    business.whatsapp_number ||
+    business.phone ||
+    "Use the contact button on the store page"
+  }
+
+AI tone requested by business: ${aiRequest?.business_tone || "friendly"}
+Business AI notes: ${
+    business.ai_assistant_notes || aiRequest?.training_notes || "Not provided"
+  }
+
+Common customer questions:
+${aiRequest?.common_questions || "Not provided"}
+
+Products/services:
+${productLines}
+`.trim();
+}
+
+function buildPrompt({
+  business,
+  message,
+  history,
+  storeContext,
+}: {
+  business: any;
+  message: string;
+  history: ChatHistoryItem[];
+  storeContext: string;
+}) {
+  const historyText =
+    history.length > 0
+      ? history
+          .slice(-8)
+          .map((item) => `${item.role || "user"}: ${item.content || ""}`)
+          .join("\n")
+      : "No previous messages.";
+
+  return `
+You are the AI assistant for ${business.name || "this store"} on Market Villa.
+
+Your job:
+- Help customers understand this store's products, prices, availability, delivery, location, and how to order.
+- Keep replies short, friendly, and useful.
+- Guide customers toward WhatsApp or the store contact button when they want to order.
+- Do not answer as Market Villa's platform assistant. You are answering for this store only.
+
+Important rules:
+- Do not invent prices, locations, delivery promises, opening hours, or availability.
+- If the information is not in the store context, say you are not fully sure and ask the customer to contact the store directly.
+- Do not promise that an order is confirmed.
+- Do not claim payment has been received.
+- Do not make medical, legal, financial, or unsafe claims.
+- If a customer asks for something unrelated to the store, politely redirect them to store-related questions.
+
+Store context:
+${storeContext}
+
+Recent chat history:
+${historyText}
+
+Customer message:
+${message}
+
+Reply as the store assistant:
+`.trim();
+}
+
+async function generateGeminiReply(prompt: string) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  const model = process.env.GEMINI_MODEL || "gemini-1.5-flash";
+
+  if (!apiKey) {
+    return "";
+  }
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.4,
+          topP: 0.9,
+          maxOutputTokens: 280,
+        },
+      }),
+    },
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error?.message || "AI provider error.");
+  }
+
+  return (
+    result.candidates?.[0]?.content?.parts
+      ?.map((part: { text?: string }) => part.text || "")
+      .join("")
+      .trim() || ""
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
     const businessId = String(body.businessId || "");
     const message = String(body.message || "");
+    const history = Array.isArray(body.history)
+      ? (body.history as ChatHistoryItem[])
+      : [];
 
     if (!businessId || !message.trim()) {
       return NextResponse.json(
@@ -90,51 +248,63 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Store not found." }, { status: 404 });
     }
 
-    if (!business.ai_assistant_enabled || business.ai_assistant_status !== "active") {
+    if (
+      !business.ai_assistant_enabled ||
+      business.ai_assistant_status !== "active"
+    ) {
       return NextResponse.json(
         { error: "AI assistant is not active for this store." },
         { status: 403 },
       );
     }
 
-    const { data: products } = await supabaseAdmin
-      .from("products")
-      .select("name,description,price,category,is_available")
-      .eq("business_id", businessId)
-      .order("created_at", { ascending: false })
-      .limit(30);
+    const [{ data: products }, { data: aiRequests }] = await Promise.all([
+      supabaseAdmin
+        .from("products")
+        .select("name,description,price,category,is_available")
+        .eq("business_id", businessId)
+        .order("created_at", { ascending: false })
+        .limit(30),
+      supabaseAdmin
+        .from("ai_assistant_requests")
+        .select(
+          "business_tone,common_questions,training_notes,budget,priority,status,admin_note",
+        )
+        .eq("business_id", businessId)
+        .order("created_at", { ascending: false })
+        .limit(1),
+    ]);
 
-    const lowerMessage = normalize(message);
-    const productReply = buildProductReply(message, (products || []) as ProductRow[]);
+    const productItems = (products || []) as ProductRow[];
+    const aiRequest = aiRequests?.[0] || null;
 
-    let reply = productReply;
+    const storeContext = buildStoreContext({
+      business,
+      products: productItems,
+      aiRequest,
+    });
 
-    if (!reply && (lowerMessage.includes("location") || lowerMessage.includes("where"))) {
-      reply = business.location
-        ? `${business.name} is located at ${business.location}.`
-        : `The store location has not been provided yet. Please contact ${business.name} directly on WhatsApp.`;
-    }
+    const prompt = buildPrompt({
+      business,
+      message,
+      history,
+      storeContext,
+    });
 
-    if (!reply && (lowerMessage.includes("open") || lowerMessage.includes("time") || lowerMessage.includes("hours"))) {
-      reply = business.opening_hours
-        ? `${business.name} opening hours: ${business.opening_hours}.`
-        : "Opening hours have not been provided yet. Please contact the store directly on WhatsApp.";
-    }
+    let reply = "";
 
-    if (!reply && (lowerMessage.includes("whatsapp") || lowerMessage.includes("contact") || lowerMessage.includes("order"))) {
-      const whatsapp = business.whatsapp || business.whatsapp_number || business.phone;
-
-      reply = whatsapp
-        ? `You can contact ${business.name} on WhatsApp here: ${whatsapp}.`
-        : `Please use the contact button on this store page to reach ${business.name}.`;
+    try {
+      reply = await generateGeminiReply(prompt);
+    } catch {
+      reply = "";
     }
 
     if (!reply) {
-      const storeDescription = business.description || business.tagline;
-
-      reply = storeDescription
-        ? `${business.name}: ${storeDescription} Please ask about products, prices, availability, delivery, or how to order.`
-        : `I can help with questions about ${business.name}. Please ask about products, prices, availability, delivery, or how to order.`;
+      reply =
+        buildProductReply(message, productItems) ||
+        `I can help with questions about ${
+          business.name || "this store"
+        }. Please ask about products, prices, availability, delivery, or how to order.`;
     }
 
     return NextResponse.json({ reply });
