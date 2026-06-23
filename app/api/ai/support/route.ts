@@ -11,7 +11,7 @@ function extractOutputText(result: any) {
 
   const output = Array.isArray(result.output) ? result.output : [];
 
-  const text = output
+  return output
     .flatMap((item: any) => {
       const content = Array.isArray(item.content) ? item.content : [];
 
@@ -23,14 +23,12 @@ function extractOutputText(result: any) {
     })
     .join("")
     .trim();
-
-  return text;
 }
 
 export async function POST(request: Request) {
   try {
     const openaiApiKey = process.env.OPENAI_API_KEY || "";
-    const model = process.env.OPENAI_MODEL || "gpt-4.1-mini";
+    const model = process.env.OPENAI_MODEL || "gpt-5-mini";
 
     if (!openaiApiKey) {
       return NextResponse.json(
@@ -71,6 +69,9 @@ export async function POST(request: Request) {
           "You are Market Villa Support Assistant. Market Villa helps small businesses create professional WhatsApp-ready storefront pages. Answer clearly, briefly, and practically. Help users with signup, onboarding, products, orders, billing, Paystack payments, custom domains, store publishing, visibility, pricing, and AI assistant requests. If a question requires account-specific action, tell the user to check their dashboard or contact support. Do not invent payment status, subscription status, or private account data.",
         input: message,
         max_output_tokens: 260,
+        reasoning: {
+          effort: "minimal",
+        },
         store: false,
       }),
     });
@@ -98,9 +99,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     const errorMessage =
-      error instanceof Error
-        ? error.message
-        : "Unable to contact AI support.";
+      error instanceof Error ? error.message : "Unable to contact AI support.";
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
