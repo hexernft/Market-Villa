@@ -3099,3 +3099,62 @@ aside.admin-sidebar .admin-sidebar-link-active {
     height: min(30rem, calc(100vh - 6rem)) !important;
   }
 }
+/* Slim hero sections for all public business store themes */
+.store-page-slim > section:first-of-type {
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+.store-page-slim > section:first-of-type > div {
+  border-radius: 1.1rem !important;
+}
+
+.store-page-slim > section:first-of-type [class*="min-h-[420px]"],
+.store-page-slim > section:first-of-type [class*="min-h-[460px]"],
+.store-page-slim > section:first-of-type [class*="min-h-[500px]"],
+.store-page-slim > section:first-of-type [class*="min-h-[520px]"],
+.store-page-slim > section:first-of-type [class*="min-h-[560px]"],
+.store-page-slim > section:first-of-type [class*="min-h-[600px]"],
+.store-page-slim > section:first-of-type [class*="min-h-[620px]"],
+.store-page-slim > section:first-of-type [class*="min-h-[640px]"] {
+  min-height: clamp(260px, 34vh, 390px) !important;
+}
+
+.store-page-slim > section:first-of-type h1 {
+  font-size: clamp(2rem, 4vw, 3.75rem) !important;
+  line-height: 0.98 !important;
+}
+
+.store-page-slim > section:first-of-type h2 {
+  font-size: clamp(1.65rem, 3vw, 2.75rem) !important;
+  line-height: 1.05 !important;
+}
+
+.store-page-slim > section:first-of-type p {
+  line-height: 1.6 !important;
+}
+
+.store-page-slim > section:first-of-type header {
+  padding-top: 0.85rem !important;
+  padding-bottom: 0.85rem !important;
+}
+
+.store-page-slim > section:first-of-type [class*="p-8"],
+.store-page-slim > section:first-of-type [class*="p-10"] {
+  padding: 1.35rem !important;
+}
+
+@media (max-width: 768px) {
+  .store-page-slim > section:first-of-type {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .store-page-slim > section:first-of-type [class*="min-h-"] {
+    min-height: 250px !important;
+  }
+
+  .store-page-slim > section:first-of-type h1 {
+    font-size: clamp(1.8rem, 9vw, 2.8rem) !important;
+  }
+}
