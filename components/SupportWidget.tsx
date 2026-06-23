@@ -165,12 +165,12 @@ export function SupportWidget() {
               animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
               exit={{ opacity: 0, y: 28, scale: 0.98, filter: "blur(10px)" }}
               transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute bottom-5 right-5 flex h-[min(620px,calc(100vh-2.5rem))] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[1.5rem] bg-white shadow-2xl ring-1 ring-slate-200"
+              className="absolute bottom-5 right-5 flex h-[min(620px,calc(100vh-2.5rem))] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[1.25rem] bg-white shadow-2xl ring-1 ring-slate-200"
             >
               <div className="bg-[#26143d] px-5 py-2.5 text-white">
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--mv-violet)] text-white">
+                    <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--mv-violet)] text-white">
                       <Bot size={20} />
                     </span>
 
@@ -195,7 +195,7 @@ export function SupportWidget() {
                 </div>
               </div>
 
-              <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-4 py-2.5">
+              <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-3 py-1.5.5">
                 {messages.map((chatMessage, index) => {
                   const isUser = chatMessage.role === "user";
 
@@ -208,7 +208,7 @@ export function SupportWidget() {
                       className={`flex ${isUser ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-6 ${
+                        className={`max-w-[85%] rounded-2xl px-3 py-1.5.5 text-[13px] leading-5 ${
                           isUser
                             ? "bg-[var(--mv-violet)] text-white"
                             : "bg-white text-slate-700 shadow-sm ring-1 ring-slate-200"
@@ -226,7 +226,7 @@ export function SupportWidget() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex justify-start"
                   >
-                    <div className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-sm text-slate-500 shadow-sm ring-1 ring-slate-200">
+                    <div className="inline-flex items-center gap-2 rounded-2xl bg-white px-3 py-1.5.5 text-sm text-slate-500 shadow-sm ring-1 ring-slate-200">
                       <span className="support-typing-dot" />
                       <span className="support-typing-dot animation-delay-150" />
                       <span className="support-typing-dot animation-delay-300" />
@@ -235,7 +235,7 @@ export function SupportWidget() {
                 ) : null}
               </div>
 
-              <div className="border-t border-slate-200 bg-white px-4 pt-3">
+              <div className="border-t border-slate-200 bg-white px-3 pt-3">
                 <div className="mb-3 flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
                   {suggestions.map((suggestion) => (
                     <button
@@ -243,7 +243,7 @@ export function SupportWidget() {
                       type="button"
                       onClick={() => sendSupportMessage(suggestion)}
                       disabled={isSending}
-                      className="shrink-0 rounded-full border border-purple-200 bg-purple-50 px-3 py-2 text-xs font-semibold text-[var(--mv-violet)] transition hover:bg-purple-100 disabled:opacity-50"
+                      className="shrink-0 rounded-full border border-purple-200 bg-purple-50 px-3 py-1.5 text-xs font-semibold text-[var(--mv-violet)] transition hover:bg-purple-100 disabled:opacity-50"
                     >
                       {suggestion}
                     </button>
@@ -251,12 +251,12 @@ export function SupportWidget() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="bg-white p-4 pt-0">
+              <form onSubmit={handleSubmit} className="bg-white p-3 pt-0">
                 <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-2 shadow-sm focus-within:border-[var(--mv-violet)]">
                   <input
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
-                    className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-slate-950 outline-none placeholder:text-slate-400"
+                    className="min-w-0 flex-1 bg-transparent px-3 py-1.5 text-sm text-slate-950 outline-none placeholder:text-slate-400"
                     placeholder="Ask support..."
                     disabled={isSending}
                   />
@@ -265,7 +265,7 @@ export function SupportWidget() {
                     type="submit"
                     disabled={isSending || !message.trim()}
                     whileTap={{ scale: 0.94 }}
-                    className="grid h-10 w-10 place-items-center rounded-full bg-[var(--mv-violet)] text-white transition hover:bg-[var(--mv-purple-hover)] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="grid h-9 w-9 place-items-center rounded-full bg-[var(--mv-violet)] text-white transition hover:bg-[var(--mv-purple-hover)] disabled:cursor-not-allowed disabled:opacity-50"
                     aria-label="Send support message"
                   >
                     <Send size={16} />
