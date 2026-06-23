@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { use, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { CartItem, WhatsAppCheckout } from "@/components/WhatsAppCheckout";
 import { PlatformNavbar } from "@/components/PlatformNavbar";
+import { StoreAiAssistant } from "@/components/StoreAiAssistant";
 import {
   createPropertyInquiry,
   createVehicleInquiry,
@@ -710,6 +711,11 @@ export default function StorePage({ params }: StorePageProps) {
   const specCars = visibleProducts.slice(0, 4);
   const inspectionCars = visibleProducts.slice(0, 3);
 
+  const storeAiAssistant =
+    (business as any).ai_assistant_enabled && (business as any).ai_assistant_status === "active" ? (
+      <StoreAiAssistant businessId={business.id} businessName={business.name} />
+    ) : null;
+
   if (theme.layout === "kids-play") {
     return (
       <>
@@ -1163,6 +1169,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -1587,6 +1594,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -2033,6 +2041,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -2497,6 +2506,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -2982,6 +2992,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -3327,6 +3338,7 @@ export default function StorePage({ params }: StorePageProps) {
             </div>
           </footer>
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -3844,6 +3856,7 @@ export default function StorePage({ params }: StorePageProps) {
             </footer>
           ) : null}
 
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -4295,6 +4308,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -4747,6 +4761,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -5203,6 +5218,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -5645,6 +5661,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -6042,6 +6059,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -6250,6 +6268,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeAiAssistant}
         </main>
       </>
     );
@@ -6622,6 +6641,7 @@ export default function StorePage({ params }: StorePageProps) {
           setCart={setCart}
         />
       ) : null}
+        {storeAiAssistant}
       </main>
     </>
   );
