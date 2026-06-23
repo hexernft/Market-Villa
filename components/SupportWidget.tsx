@@ -124,7 +124,7 @@ export function SupportWidget() {
           title="Support"
           whileHover={{ y: -2, scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="support-widget-trigger fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-[#7c3aed] p-0 text-white shadow-[0_16px_40px_rgba(124,58,237,0.4)] ring-4 ring-white/70 transition hover:-translate-y-0.5 hover:bg-[#6d28d9] md:h-14 md:w-14"
+          className="support-widget-trigger fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-black p-0 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] ring-4 ring-white/70 transition hover:-translate-y-0.5 hover:bg-[#241436] md:h-14 md:w-14"
           style={{
             width: "3rem",
             height: "3rem",
@@ -132,13 +132,13 @@ export function SupportWidget() {
             padding: 0,
             border: "1px solid rgba(255,255,255,0.7)",
             borderRadius: "9999px",
-            backgroundColor: "#7c3aed",
-            boxShadow: "0 16px 40px rgba(124, 58, 237, 0.4)",
+            backgroundColor: "#000000",
+            boxShadow: "0 16px 40px rgba(0, 0, 0, 0.35)",
           }}
         >
           <MessageCircle
             aria-hidden="true"
-            className="h-6 w-6 md:h-7 md:w-7"
+            className="h-6 w-6 fill-white text-white md:h-7 md:w-7"
             strokeWidth={2.35}
           />
         </motion.button>
