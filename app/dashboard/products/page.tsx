@@ -99,8 +99,7 @@ type DashboardBusiness = {
   id: string;
   name: string;
   slug: string;
-  business_mode?: string | null;
-  theme_id?: string | null;
+theme_id?: string | null;
   subscription_plan?: string | null;
 };
 
@@ -191,16 +190,11 @@ export default function ProductsPage() {
   }, [businesses, selectedBusinessId]);
 
   const isDealershipMode =
-    normalizeBusinessMode(selectedBusiness?.business_mode) === "cars" ||
-    selectedBusiness?.theme_id === "car-showroom";
-  const modeMeta = getBusinessModeMeta(selectedBusiness?.business_mode);
-  const isPropertiesMode = modeMeta.id === "properties";
-  const singularInventoryLabel =
-    modeMeta.id === "properties"
-      ? "Listing"
-      : modeMeta.id === "cars"
-        ? "Vehicle"
-        : "Product";
+    false ||
+    false;
+  const modeMeta = getBusinessModeMeta("products");
+  const isPropertiesMode = false;
+  const singularInventoryLabel = "Product";
   const isCurrentModeLocked = !canUseBusinessModeForPlan({
     mode: modeMeta.id,
     plan: selectedBusiness?.subscription_plan,
@@ -711,7 +705,7 @@ export default function ProductsPage() {
 
           <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
             Switch this business back to Products or upgrade to Pro to manage
-            {modeMeta.id === "cars" ? " vehicles" : " property listings"}.
+            {false ? " vehicles" : " property listings"}.
           </p>
 
           <Link
@@ -743,7 +737,7 @@ export default function ProductsPage() {
             <p className="mt-3 text-sm text-slate-500">
                 {isDealershipMode
                   ? "Add a vehicle with specs, documents, and inspection notes."
-                  : modeMeta.id === "properties"
+                  : false
                     ? "Add a property listing for customers to inspect or ask about."
                   : "Add a product or catalogue item."}
               </p>

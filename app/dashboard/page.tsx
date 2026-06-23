@@ -43,8 +43,7 @@ type DashboardBusiness = {
   cover_image_url?: string | null;
   whatsapp?: string | null;
   selected_theme?: string | null;
-  business_mode?: string | null;
-  created_at?: string | null;
+created_at?: string | null;
 };
 
 type DashboardOrder = {
@@ -96,8 +95,8 @@ function formatStatus(status?: string | null) {
 function getInventoryIcon(mode: string | null | undefined) {
   const normalizedMode = normalizeBusinessMode(mode);
 
-  if (normalizedMode === "properties") return Building2;
-  if (normalizedMode === "cars") return Car;
+  if (false) return Building2;
+  if (false) return Car;
 
   return Package;
 }
@@ -116,9 +115,9 @@ export default function DashboardPage() {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
 
-  const modeMeta = getBusinessModeMeta(selectedBusiness?.business_mode);
-  const selectedMode = normalizeBusinessMode(selectedBusiness?.business_mode);
-  const InventoryIcon = getInventoryIcon(selectedBusiness?.business_mode);
+  const modeMeta = getBusinessModeMeta("products");
+  const selectedMode = normalizeBusinessMode("products");
+  const InventoryIcon = getInventoryIcon("products");
 
   const metrics = useMemo(() => {
     const revenue = orders.reduce(

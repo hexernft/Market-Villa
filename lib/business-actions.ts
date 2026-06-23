@@ -452,8 +452,7 @@ export async function createBusiness(input: CreateBusinessInput) {
       location: input.location,
       instagram_url: input.instagramUrl,
       opening_hours: input.openingHours,
-      business_mode: businessMode,
-      theme_id: input.themeId,
+theme_id: input.themeId,
       is_published: true,
       subscription_plan: "starter",
       subscription_status: "trial",
@@ -557,7 +556,7 @@ export function mapSupabaseBusinessToStoreBusiness(business: any) {
 export async function createProduct(input: CreateProductInput) {
   const { data: business, error: businessError } = await supabase
     .from("businesses")
-    .select("business_mode,subscription_plan")
+    .select("subscription_plan")
     .eq("id", input.businessId)
     .single();
 
@@ -565,8 +564,8 @@ export async function createProduct(input: CreateProductInput) {
     throw businessError;
   }
 
-  const businessMode = normalizeBusinessMode(business?.business_mode);
-  const itemType = input.itemType || "product";
+  const businessMode = "products";
+  const itemType = "product";
 
   if (
     !canUseBusinessModeForPlan({
@@ -575,14 +574,6 @@ export async function createProduct(input: CreateProductInput) {
     })
   ) {
     throw new Error(getBusinessModePlanMessage(businessMode));
-  }
-
-  if (itemType === "vehicle" && businessMode !== "cars") {
-    throw new Error("Vehicle inventory is only available for car dealers.");
-  }
-
-  if (itemType === "property" && businessMode !== "properties") {
-    throw new Error("Property listings are only available for property businesses.");
   }
 
   const { data, error } = await supabase
@@ -629,7 +620,7 @@ export async function getProductsByBusinessId(businessId: string) {
 export async function updateProduct(input: UpdateProductInput) {
   const { data: existingProduct, error: productError } = await supabase
     .from("products")
-    .select("business_id,businesses (business_mode,subscription_plan)")
+    .select("business_id,businesses (subscription_plan)")
     .eq("id", input.productId)
     .single();
 
@@ -640,8 +631,8 @@ export async function updateProduct(input: UpdateProductInput) {
   const relatedBusiness = Array.isArray(existingProduct?.businesses)
     ? existingProduct?.businesses[0]
     : existingProduct?.businesses;
-  const businessMode = normalizeBusinessMode(relatedBusiness?.business_mode);
-  const itemType = input.itemType || "product";
+  const businessMode = "products";
+  const itemType = "product";
 
   if (
     !canUseBusinessModeForPlan({
@@ -650,14 +641,6 @@ export async function updateProduct(input: UpdateProductInput) {
     })
   ) {
     throw new Error(getBusinessModePlanMessage(businessMode));
-  }
-
-  if (itemType === "vehicle" && businessMode !== "cars") {
-    throw new Error("Vehicle inventory is only available for car dealers.");
-  }
-
-  if (itemType === "property" && businessMode !== "properties") {
-    throw new Error("Property listings are only available for property businesses.");
   }
 
   const { data, error } = await supabase
@@ -964,8 +947,7 @@ export async function updateBusinessProfile(input: UpdateBusinessProfileInput) {
       location: input.location,
       instagram_url: input.instagramUrl,
       opening_hours: input.openingHours,
-      business_mode: businessMode,
-      is_published: input.isPublished,
+is_published: input.isPublished,
       updated_at: new Date().toISOString(),
     })
     .eq("id", input.businessId)
@@ -988,7 +970,7 @@ export async function updateBusinessTheme({
 }) {
   const { data: business, error: businessError } = await supabase
     .from("businesses")
-    .select("id,business_mode,subscription_plan")
+    .select("id,subscription_plan")
     .eq("id", businessId)
     .single();
 
@@ -1003,7 +985,7 @@ export async function updateBusinessTheme({
   }
 
   const themeMode = getThemeBusinessMode(themeId);
-  const businessMode = normalizeBusinessMode(business?.business_mode);
+  const businessMode = "products";
 
   if (themeMode !== businessMode) {
     throw new Error(

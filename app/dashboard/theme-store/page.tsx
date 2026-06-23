@@ -30,12 +30,14 @@ type DashboardBusiness = {
   name: string;
   slug: string;
   theme_id: string;
-  business_mode?: string | null;
-  subscription_plan?: string | null;
+subscription_plan?: string | null;
 };
 
 const storeThemes = availableThemes.filter(
-  (theme) => theme.id !== "simple-one-page",
+  (theme) =>
+    theme.id !== "simple-one-page" &&
+    theme.id !== "apartment-stay" &&
+    theme.id !== "car-showroom",
 );
 
 const filters = [
@@ -100,11 +102,6 @@ function getFilter(theme: (typeof availableThemes)[number]) {
 }
 
 function getThemeModeLabel(themeId: string) {
-  const mode = getThemeBusinessMode(themeId);
-
-  if (mode === "cars") return "Car Theme";
-  if (mode === "properties") return "Property Theme";
-
   return "Product Theme";
 }
 
@@ -131,7 +128,7 @@ export default function ThemeStorePage() {
     return storeThemes.find((theme) => theme.id === selectedThemeId);
   }, [selectedThemeId]);
 
-  const selectedMode = normalizeBusinessMode(selectedBusiness?.business_mode);
+  const selectedMode = normalizeBusinessMode("products");
   const selectedModeMeta = getBusinessModeMeta(selectedMode);
   const isModeLocked = !canUseBusinessModeForPlan({
     mode: selectedMode,

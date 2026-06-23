@@ -1,5 +1,5 @@
 export type MarketVillaPlanId = "starter" | "growth" | "pro";
-export type PlanGatedBusinessMode = "products" | "properties" | "cars";
+export type PlanGatedBusinessMode = "products";
 export type LegacyMarketVillaPlanId =
   | MarketVillaPlanId
   | "basic"
@@ -48,7 +48,7 @@ export const MARKET_VILLA_PLANS: Record<
     displayName: "Premium",
     amount: 30000,
     amountInKobo: 3000000,
-    description: "For serious sellers, teams, properties, and car dealers.",
+    description: "For serious sellers, growing teams, and premium storefronts.",
     themeLimit: PLAN_THEME_LIMITS.pro,
   },
 };
@@ -100,25 +100,9 @@ export function canUseBusinessModeForPlan({
   mode: PlanGatedBusinessMode | string | null | undefined;
   plan: string | null | undefined;
 }) {
-  const cleanMode = String(mode || "products");
-
-  if (cleanMode === "products") return true;
-
-  const normalizedPlan = normalizePlanId(plan);
-
-  return normalizedPlan === "pro";
+  return true;
 }
 
 export function getBusinessModePlanMessage(mode: string | null | undefined) {
-  const cleanMode = String(mode || "products");
-
-  if (cleanMode === "cars") {
-    return "Cars are available from the Pro plan.";
-  }
-
-  if (cleanMode === "properties") {
-    return "Properties are available from the Pro plan.";
-  }
-
   return "";
 }

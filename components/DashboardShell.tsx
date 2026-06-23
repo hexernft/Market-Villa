@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -38,6 +38,7 @@ const navItems = [
   { label: "Profile", href: "/dashboard/profile", icon: UserRound },
   { label: "Theme", href: "/dashboard/theme", icon: Palette },
   { label: "Theme Store", href: "/dashboard/theme-store", icon: Sparkles },
+  { label: "Custom Requests", href: "/dashboard/custom-requests", icon: Sparkles },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
@@ -50,12 +51,7 @@ const mobileNavItems = [
   { label: "More", href: "/dashboard/settings", icon: Settings },
 ];
 
-function getInventoryIcon(mode: string | null | undefined) {
-  const normalizedMode = normalizeBusinessMode(mode);
-
-  if (normalizedMode === "properties") return Building2;
-  if (normalizedMode === "cars") return Car;
-
+function getInventoryIcon() {
   return Package;
 }
 
@@ -67,7 +63,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const [businessMode, setBusinessMode] = useState("products");
 
   const modeMeta = getBusinessModeMeta(businessMode);
-  const InventoryIcon = getInventoryIcon(businessMode);
+  const InventoryIcon = getInventoryIcon();
 
   useEffect(() => {
     let mounted = true;
@@ -185,5 +181,6 @@ export function DashboardShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
 
 

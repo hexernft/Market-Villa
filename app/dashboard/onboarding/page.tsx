@@ -37,24 +37,18 @@ const categories = [
 ];
 
 const categoriesByMode: Record<BusinessMode, string[]> = {
-  products: categories,
-  properties: [
-    "Shortlet / Apartment",
-    "Rental Property",
-    "Land Sales",
-    "Commercial Property",
-    "Real Estate Agency",
-    "Property Management",
-    "Other",
-  ],
-  cars: [
-    "Car Dealership",
-    "Vehicle Importer",
-    "Auto Broker",
-    "Used Cars",
-    "Luxury Cars",
-    "Commercial Vehicles",
-    "Other",
+  products: [
+    "Fashion",
+    "Food & Drinks",
+    "Beauty",
+    "Electronics",
+    "Furniture",
+    "Kids & Baby",
+    "Grocery",
+    "Pharmacy",
+    "Jewelry",
+    "Events & Catering",
+    "General Retail",
   ],
 };
 
@@ -259,9 +253,9 @@ export default function OnboardingPage() {
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <Store size={16} />
-                  {businessMode === "properties"
+                  {false
                     ? "Property category"
-                    : businessMode === "cars"
+                    : false
                       ? "Car business type"
                       : "Business category"}
                 </span>
@@ -377,9 +371,9 @@ export default function OnboardingPage() {
                 </p>
 
                 <p className="mt-1 text-xs leading-5 text-slate-500">
-                  Adds editable starter {businessMode === "cars"
+                  Adds editable starter {false
                     ? "vehicles"
-                    : businessMode === "properties"
+                    : false
                       ? "listings"
                       : "products"}.
                 </p>
@@ -436,9 +430,9 @@ export default function OnboardingPage() {
 
             <div className="mt-3 grid gap-2">
               <div className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
-                Add or edit {businessMode === "cars"
+                Add or edit {false
                   ? "vehicles"
-                  : businessMode === "properties"
+                  : false
                     ? "property listings"
                     : "products"}.
               </div>

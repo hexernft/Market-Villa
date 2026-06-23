@@ -49,24 +49,18 @@ const categories = [
 ];
 
 const categoriesByMode: Record<BusinessMode, string[]> = {
-  products: categories,
-  properties: [
-    "Shortlet / Apartment",
-    "Rental Property",
-    "Land Sales",
-    "Commercial Property",
-    "Real Estate Agency",
-    "Property Management",
-    "Other",
-  ],
-  cars: [
-    "Car Dealership",
-    "Vehicle Importer",
-    "Auto Broker",
-    "Used Cars",
-    "Luxury Cars",
-    "Commercial Vehicles",
-    "Other",
+  products: [
+    "Fashion",
+    "Food & Drinks",
+    "Beauty",
+    "Electronics",
+    "Furniture",
+    "Kids & Baby",
+    "Grocery",
+    "Pharmacy",
+    "Jewelry",
+    "Events & Catering",
+    "General Retail",
   ],
 };
 
@@ -86,8 +80,7 @@ type DashboardBusiness = {
   location: string | null;
   instagram_url: string | null;
   opening_hours: string | null;
-  business_mode?: string | null;
-  subscription_plan?: string | null;
+subscription_plan?: string | null;
   is_published: boolean;
 };
 
@@ -183,7 +176,7 @@ export default function ProfilePage() {
     setLocation(selectedBusiness.location || "");
     setInstagramUrl(selectedBusiness.instagram_url || "");
     setOpeningHours(selectedBusiness.opening_hours || "");
-    setBusinessMode(normalizeBusinessMode(selectedBusiness.business_mode));
+    setBusinessMode("products");
     setIsPublished(selectedBusiness.is_published);
   }, [selectedBusiness]);
 
@@ -196,7 +189,7 @@ export default function ProfilePage() {
   }
 
   function handleModeChange(mode: BusinessMode) {
-    const currentMode = normalizeBusinessMode(selectedBusiness?.business_mode);
+    const currentMode = normalizeBusinessMode("products");
 
     if (
       !canUseBusinessModeForPlan({
@@ -449,11 +442,7 @@ export default function ProfilePage() {
               <label className="grid gap-2">
                 <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <Store size={16} />
-                  {businessMode === "properties"
-                    ? "Property category"
-                    : businessMode === "cars"
-                      ? "Car business type"
-                      : "Category"}
+                  {"Category"}
                 </span>
 
                 <select

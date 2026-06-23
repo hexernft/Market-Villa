@@ -24,8 +24,7 @@ type DashboardBusiness = {
   id: string;
   name: string;
   slug: string;
-  business_mode?: string | null;
-  subscription_plan?: string | null;
+subscription_plan?: string | null;
 };
 
 type Lead = {
@@ -79,16 +78,10 @@ export default function LeadsPage() {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
 
-  const selectedMode = normalizeBusinessMode(selectedBusiness?.business_mode);
-  const modeMeta = getBusinessModeMeta(selectedBusiness?.business_mode);
+  const selectedMode = normalizeBusinessMode("products");
+  const modeMeta = getBusinessModeMeta("products");
   const isPro = normalizePlanId(selectedBusiness?.subscription_plan) === "pro";
-  const relevantLeads = leads.filter((lead) =>
-    selectedMode === "cars"
-      ? lead.kind === "vehicle"
-      : selectedMode === "properties"
-        ? lead.kind === "property"
-        : true
-  );
+  const relevantLeads = leads.filter((lead) => lead.kind !== "vehicle" && lead.kind !== "property");
 
   async function loadBusinesses() {
     const items = await getMyBusinesses();

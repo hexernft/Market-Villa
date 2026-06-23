@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import {
   Car,
   Home,
   Package,
+  Sparkles,
 } from "lucide-react";
 import {
   getAllBusinessesForAdmin,
@@ -42,8 +43,7 @@ type AdminBusiness = {
   custom_domain_status: string;
   subscription_plan: string;
   subscription_status: string;
-  business_mode?: string | null;
-  subscription_expires_at: string | null;
+subscription_expires_at: string | null;
   grace_period_ends_at: string | null;
   admin_override_active: boolean | null;
   created_at: string;
@@ -226,19 +226,15 @@ export default function AdminPage() {
   ).length;
 
   const productModeCount = businesses.filter(
-    (business) => normalizeBusinessMode(business.business_mode) === "products"
+    (business) => normalizeBusinessMode("products") === "products"
   ).length;
-  const propertyModeCount = businesses.filter(
-    (business) => normalizeBusinessMode(business.business_mode) === "properties"
-  ).length;
-  const carModeCount = businesses.filter(
-    (business) => normalizeBusinessMode(business.business_mode) === "cars"
-  ).length;
+  const propertyModeCount = 0;
+  const carModeCount = 0;
   const modeMismatchCount = businesses.filter((business) => {
-    const mode = normalizeBusinessMode(business.business_mode);
+    const mode = normalizeBusinessMode("products");
     const plan = normalizePlanId(business.subscription_plan);
 
-    return mode !== "products" && plan !== "pro";
+    return false;
   }).length;
   const pendingDomainCount = domainRequests.filter(
     (request) => request.status === "pending"
@@ -367,6 +363,14 @@ export default function AdminPage() {
           >
             <BadgeDollarSign size={18} />
             Pricing
+          </Link>
+
+          <Link
+            href="/admin/custom-requests"
+            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <Sparkles size={18} />
+            Custom Requests
           </Link>
 
           <a
@@ -565,13 +569,11 @@ export default function AdminPage() {
                   ) : null}
 
                   {filteredBusinesses.map((business) => {
-                    const mode = normalizeBusinessMode(business.business_mode);
+                    const mode = normalizeBusinessMode("products");
                     const modeMeta = getBusinessModeMeta(mode);
                     const isModeMismatch =
-                      mode !== "products" &&
-                      normalizePlanId(business.subscription_plan) !== "pro";
-                    const ModeIcon =
-                      mode === "cars" ? Car : mode === "properties" ? Home : Package;
+                      false;
+                    const ModeIcon = Package;
 
                     return (
                     <article

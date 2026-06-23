@@ -59,10 +59,15 @@ export default function SignupPage() {
         })
       );
 
-      router.push("/login");
+      router.push("/signup-success");
     } catch (error) {
-      const errorMessage =
+      const rawErrorMessage =
         error instanceof Error ? error.message : "Unable to create account.";
+
+      const errorMessage = rawErrorMessage.toLowerCase().includes("rate limit")
+        ? "Too many confirmation emails were requested recently. Please wait a few minutes, then try again."
+        : rawErrorMessage;
+
       setMessage(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -293,4 +298,6 @@ export default function SignupPage() {
     </main>
   );
 }
+
+
 
