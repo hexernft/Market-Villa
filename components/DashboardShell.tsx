@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
 import {
-  BarChart3,
-  Building2,
-  Car,
-  ClipboardList,
+  usePathname, useRouter } from "next/navigation";
+import {
+  ReactNode, useEffect, useState } from "react";
+import {
+  BarChart3,  ClipboardList,
   CreditCard,
   Globe2,
   LayoutDashboard,
@@ -20,43 +19,68 @@ import {
   Palette,
   Settings,
   Sparkles,
-  UserRound,
+  UserRound
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { BRAND } from "@/lib/brand";
-import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
+import {
+  supabase } from "@/lib/supabase";
+import {
+  BRAND } from "@/lib/brand";
+import {
+  getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
 
 const navItems = [
-  { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
-  { label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
-  { label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
-  { label: "Products", href: "/dashboard/products", icon: Package, modeAware: true },
-  { label: "Leads", href: "/dashboard/leads", icon: MessageCircle },
-  { label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
-  { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
-  { label: "Profile", href: "/dashboard/profile", icon: UserRound },
-  { label: "Theme", href: "/dashboard/theme", icon: Palette },
-  { label: "Theme Store", href: "/dashboard/theme-store", icon: Sparkles },
-  { label: "Customize Store", href: "/dashboard/customize", icon: Palette },
-  { label: "Custom Requests", href: "/dashboard/custom-requests", icon: Sparkles },
-  { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
+  {
+  label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  {
+  label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+  {
+  label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
+  {
+  label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
+  {
+  label: "Products", href: "/dashboard/products", icon: Package, modeAware: true },
+  {
+  label: "Leads", href: "/dashboard/leads", icon: MessageCircle },
+  {
+  label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
+  {
+  label: "Domain", href: "/dashboard/domain", icon: Globe2 },
+  {
+  label: "Profile", href: "/dashboard/profile", icon: UserRound },
+  {
+  label: "Theme", href: "/dashboard/theme", icon: Palette },
+  {
+  label: "Theme Store", href: "/dashboard/theme-store", icon: Sparkles },
+  {
+  label: "Customize Store", href: "/dashboard/customize", icon: Palette },
+  {
+  label: "Custom Requests", href: "/dashboard/custom-requests", icon: Sparkles },
+  {
+  label: "Billing", href: "/dashboard/billing", icon: CreditCard },
+  {
+  label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 const mobileNavItems = [
-  { label: "Home", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Products", href: "/dashboard/products", icon: Package, modeAware: true },
-  { label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
-  { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
-  { label: "More", href: "/dashboard/settings", icon: Settings },
+  {
+  label: "Home", href: "/dashboard", icon: LayoutDashboard },
+  {
+  label: "Products", href: "/dashboard/products", icon: Package, modeAware: true },
+  {
+  label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
+  {
+  label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+  {
+  label: "More", href: "/dashboard/settings", icon: Settings },
 ];
 
 function getInventoryIcon() {
   return Package;
 }
 
-export function DashboardShell({ children }: { children: ReactNode }) {
+export function DashboardShell({
+  children }: {
+  children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -67,18 +91,21 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   const InventoryIcon = getInventoryIcon();
 
   useEffect(() => {
-    let mounted = true;
+  let mounted = true;
     async function checkAuth() {
-      const { data } = await supabase.auth.getSession();
+  const {
+  data } = await supabase.auth.getSession();
       if (!mounted) return;
       setIsCheckingAuth(false);
       if (!data.session) router.push("/login");
 
       if (data.session) {
-        const { data: businesses } = await supabase
+  const {
+  data: businesses } = await supabase
           .from("businesses")
           .select("business_mode")
-          .order("created_at", { ascending: true })
+          .order("created_at", {
+  ascending: true })
           .limit(1);
 
         if (!mounted) return;
@@ -88,21 +115,22 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       }
     }
     checkAuth();
-    return () => { mounted = false; };
+    return () => {
+  mounted = false; };
   }, [router]);
 
   async function handleLogout() {
-    try {
-      setIsLoggingOut(true);
+  try {
+  setIsLoggingOut(true);
       await supabase.auth.signOut();
       router.push("/login");
     } finally {
-      setIsLoggingOut(false);
+  setIsLoggingOut(false);
     }
   }
 
   if (isCheckingAuth) {
-    return (
+  return (
       <main className="mv-page-shell grid min-h-screen place-items-center px-5 py-12">
         <div className="mv-soft-panel rounded-[2rem] p-8 text-center">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={30} />
@@ -128,7 +156,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
           <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-2.5">
             {navItems.map((item) => {
-              const Icon = item.modeAware ? InventoryIcon : item.icon;
+  const Icon = item.modeAware ? InventoryIcon : item.icon;
               const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
@@ -156,7 +184,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white px-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] pt-2 lg:hidden" aria-label="Mobile dashboard navigation">
         <div className="grid grid-cols-5 gap-1">
           {mobileNavItems.map((item) => {
-            const Icon = item.modeAware ? InventoryIcon : item.icon;
+  const Icon = item.modeAware ? InventoryIcon : item.icon;
             const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
             const isActive =
               pathname === item.href ||
@@ -167,7 +195,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={`flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-2xl px-1 text-[11px] font-semibold transition ${
-                  isActive
+  isActive
                     ? "bg-emerald-50 text-emerald-700"
                     : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
                 }`}

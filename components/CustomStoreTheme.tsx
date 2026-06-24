@@ -15,12 +15,13 @@ import { formatCurrency } from "@/lib/utils";
 
 type ThemeSettings = {
   colorTheme?: "market-purple" | "warm-boutique" | "neon-rail" | "editorial" | "edge-blue" | "baby-bloom";
-  heroStyle?: "split" | "edge" | "carousel" | "minimal" | "product-first";
+  heroStyle?: "split" | "edge" | "carousel" | "minimal" | "product-first" | "storefront-pro";
   heroSize?: "slim" | "medium" | "bold";
   productCardStyle?: "soft" | "bordered" | "shadow" | "dark" | "playful" | "editorial";
   navbarStyle?: "none" | "simple" | "centered" | "floating" | "pill";
-  footerStyle?: "simple" | "dark" | "branded" | "compact";
+  footerStyle?: "simple" | "dark" | "branded" | "compact" | "full";
   toggles?: {
+    showHero?: boolean;
     showNavbar?: boolean;
     showHomeLink?: boolean;
     showProductsLink?: boolean;
@@ -168,6 +169,16 @@ export function CustomStoreTheme({ business }: { business: Business }) {
     });
   }, [business.products, query]);
 
+  const categories = Array.from(
+    new Set(
+      (business.products || [])
+        .map((product) => product.category || "Products")
+        .filter(Boolean),
+    ),
+  ).slice(0, 6);
+
+  const featuredProducts = products.slice(0, 3);
+
   const heroImage = business.cover_image_url || "/main-hero.png";
 
   function addToCart(product: Product) {
@@ -205,9 +216,9 @@ export function CustomStoreTheme({ business }: { business: Business }) {
   ].filter(Boolean) as { label: string; href: string }[];
 
   const navbarStyle = settings.navbarStyle || "simple";
-  const heroStyle = settings.heroStyle || "split";
+  const heroStyle = (settings.heroStyle || "split") as NonNullable<ThemeSettings["heroStyle"]>;
   const productCardStyle = settings.productCardStyle || "soft";
-  const footerStyle = settings.footerStyle || "dark";
+  const footerStyle = (settings.footerStyle || "dark") as NonNullable<ThemeSettings["footerStyle"]>;
   const darkCards = productCardStyle === "dark";
 
   return (
@@ -289,7 +300,92 @@ export function CustomStoreTheme({ business }: { business: Business }) {
         </header>
       ) : null}
 
-      <section id="home" className="px-4 py-5">
+      {heroStyle === "storefront-pro" && toggles.showHero !== false ? (
+        <section id="home" className="px-0 py-0">
+          <div className="grid min-h-[420px] bg-white md:grid-cols-2">
+            <div className="flex flex-col items-center justify-center px-5 py-12 text-center">
+              <p className="text-sm font-black uppercase tracking-[0.18em]" style={{ color: palette.accent }}>
+                {business.category || "Featured Store"}
+              </p>
+
+              <h1 className="mt-4 max-w-xl text-[2.6rem] font-black leading-[0.95] tracking-[-0.065em] md:text-[4.5rem]" style={{ color: palette.text }}>
+                {business.name}
+              </h1>
+
+              <p className="mt-4 max-w-md text-base leading-7" style={{ color: palette.muted }}>
+                {business.tagline || business.description || "Shop products, ask questions, and send your order on WhatsApp."}
+              </p>
+
+              {toggles.showPrices !== false && featuredProducts[0] ? (
+                <div className="mt-5">
+                  <p className="text-sm" style={{ color: palette.muted }}>From</p>
+                  <p className="text-3xl font-black" style={{ color: palette.text }}>
+                    {formatCurrency(Number(featuredProducts[0].price || 0))}
+                  </p>
+                </div>
+              ) : null}
+
+              {toggles.showHeroButtons !== false ? (
+                <div className="mt-6 flex flex-wrap justify-center gap-3">
+                  <a
+                    href="#products"
+                    className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-black"
+                    style={{
+                      backgroundColor: palette.accent,
+                      color: settings.colorTheme === "neon-rail" ? "#050816" : "#ffffff",
+                    }}
+                  >
+                    <ShoppingBag size={16} />
+                    Shop now
+                  </a>
+
+                  <a
+                    href="#about"
+                    className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-black"
+                    style={{
+                      borderColor: palette.accent,
+                      color: palette.accent,
+                    }}
+                  >
+                    Learn more
+                  </a>
+                </div>
+              ) : null}
+            </div>
+
+            <div className="relative min-h-[320px] bg-[#f6f6f6]">
+              <Image
+                src={heroImage}
+                alt={business.name}
+                fill
+                sizes="50vw"
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
+
+          {categories.length > 0 ? (
+            <div className="mx-auto flex max-w-6xl gap-3 overflow-x-auto px-4 py-5">
+              {categories.map((category) => (
+                <a
+                  key={category}
+                  href="#products"
+                  className="shrink-0 rounded-2xl border bg-white px-5 py-3 text-sm font-black shadow-sm"
+                  style={{
+                    borderColor: palette.soft,
+                    color: palette.text,
+                  }}
+                >
+                  {category}
+                </a>
+              ))}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+      {heroStyle !== "storefront-pro" && toggles.showHero !== false ? (
+        <section id="home" className="px-4 py-5">
         <div
           className={`mx-auto grid max-w-6xl overflow-hidden rounded-[1.5rem] ${
             heroStyle === "edge" ? "" : "lg:grid-cols-[0.9fr_1.1fr]"
@@ -372,9 +468,15 @@ export function CustomStoreTheme({ business }: { business: Business }) {
             </div>
           ) : null}
         </div>
-      </section>
+        </section>
+      ) : null}
 
-      <section id="products" className="px-4 pb-6">
+      <section
+        id="products"
+        className={`px-4 ${
+          toggles.showHero === false ? "py-5" : "pb-6"
+        }`}
+      >
         <div
           className="mx-auto max-w-6xl rounded-[1.35rem] p-4"
           style={{
@@ -502,7 +604,60 @@ export function CustomStoreTheme({ business }: { business: Business }) {
         </section>
       ) : null}
 
-      {toggles.showFooter !== false ? (
+      {toggles.showFooter !== false && footerStyle === "full" ? (
+        <footer
+          id="contact"
+          className="px-4 py-10"
+          style={{
+            backgroundColor: "#171717",
+            color: "#ffffff",
+          }}
+        >
+          <div className="mx-auto grid max-w-6xl gap-8 border-b border-white/15 pb-8 md:grid-cols-4">
+            <div>
+              <p className="text-lg font-black">{business.name}</p>
+              <p className="mt-3 text-sm leading-6 text-white/65">
+                {business.description || "Shop products and send orders directly on WhatsApp."}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-sm font-black">Products</p>
+              <div className="mt-3 grid gap-2 text-sm text-white/70">
+                {categories.slice(0, 5).map((category) => (
+                  <a key={category} href="#products">{category}</a>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-black">Policies</p>
+              <div className="mt-3 grid gap-2 text-sm text-white/70">
+                <span>Terms of Service</span>
+                <span>Refund Policy</span>
+                <span>Delivery Policy</span>
+                <span>Privacy Policy</span>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-black">Contact</p>
+              <div className="mt-3 grid gap-2 text-sm text-white/70">
+                <span>{business.location || "Online"}</span>
+                <span>{business.phone || business.whatsapp || "Contact business"}</span>
+                <a href={`https://wa.me/${business.whatsapp || ""}`} className="mt-2 inline-flex w-fit rounded-full bg-white px-4 py-2 text-sm font-black text-black">
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 pt-5 text-xs text-white/50">
+            <p>© {new Date().getFullYear()} {business.name}</p>
+            {toggles.showMarketVillaBadge !== false ? <p>Powered by Market Villa</p> : null}
+          </div>
+        </footer>
+      ) : toggles.showFooter !== false ? (
         <footer
           id="contact"
           className="px-4 py-5"

@@ -1,7 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
 import {
-  ArrowRight,
   Clock3,
   MapPin,
   MessageCircle,
@@ -9,28 +7,28 @@ import {
   Phone,
   ShoppingBag,
   Sparkles,
-  Store,
+  Store
 } from "lucide-react";
 
 const products = [
   {
-    name: "Everyday Essential",
+  name: "Everyday Essential",
     price: "₦6,500",
     tag: "Fast seller",
-    description: "A simple product highlight for items customers buy often.",
-  },
+    description: "A simple product highlight for items customers buy often."
+},
   {
-    name: "Signature Choice",
+  name: "Signature Choice",
     price: "₦14,000",
     tag: "Recommended",
-    description: "Use this for your strongest product, bundle, or main offer.",
-  },
+    description: "Use this for your strongest product, bundle, or main offer."
+},
   {
-    name: "Premium Package",
+  name: "Premium Package",
     price: "₦25,000",
     tag: "Best value",
-    description: "Perfect for luxury items, service packages, or bulk orders.",
-  },
+    description: "Perfect for luxury items, service packages, or bulk orders."
+},
 ];
 
 export function MarketVillaPremiumGridTheme() {

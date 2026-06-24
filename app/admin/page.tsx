@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -15,21 +16,20 @@ import {
   Store,
   Megaphone,
   Banknote,
-  BadgeDollarSign,
-  Car,
-  Home,
-  Package,
-  Sparkles,
+  BadgeDollarSign,  Package,
+  Sparkles
 } from "lucide-react";
 import {
   getAllBusinessesForAdmin,
   getAllDomainRequestsForAdmin,
   updateBusinessPublishStatus,
   updateBusinessAdminOverride,
-  updateDomainRequestStatus,
+  updateDomainRequestStatus
 } from "@/lib/business-actions";
-import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
-import { normalizePlanId } from "@/lib/plans";
+import {
+  getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
+import {
+  normalizePlanId } from "@/lib/plans";
 
 type AdminBusiness = {
   id: string;
@@ -61,7 +61,7 @@ type AdminDomainRequest = {
   admin_note: string | null;
   created_at: string;
   businesses: {
-    name: string;
+  name: string;
     slug: string;
     owner_id: string;
   } | null;
@@ -94,8 +94,8 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   async function loadAdminData() {
-    try {
-      setIsLoading(true);
+  try {
+  setIsLoading(true);
 
       const [businessItems, requestItems] = await Promise.all([
         getAllBusinessesForAdmin(),
@@ -106,24 +106,24 @@ export default function AdminPage() {
       setDomainRequests(requestItems);
       setIsAuthorized(true);
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error ? error.message : "Unable to load admin data.";
 
       setMessage(errorMessage);
       setIsAuthorized(false);
     } finally {
-      setIsLoading(false);
+  setIsLoading(false);
       setAuthChecked(true);
     }
   }
 
   useEffect(() => {
-    loadAdminData();
+  loadAdminData();
   }, []);
 
   const filteredBusinesses = useMemo(() => {
-    return businesses.filter((business) => {
-      const search = query.toLowerCase();
+  return businesses.filter((business) => {
+  const search = query.toLowerCase();
 
       return (
         business.name.toLowerCase().includes(search) ||
@@ -135,25 +135,25 @@ export default function AdminPage() {
   }, [businesses, query]);
 
   async function handleStatusChange(requestId: string, status: string) {
-    setUpdatingId(requestId);
+  setUpdatingId(requestId);
     setMessage("");
 
     try {
-      await updateDomainRequestStatus({
-        requestId,
+  await updateDomainRequestStatus({
+  requestId,
         status,
-        adminNote,
-      });
+        adminNote
+});
 
       await loadAdminData();
       setAdminNote("");
       setMessage("Domain request updated successfully.");
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error ? error.message : "Unable to update request.";
       setMessage(errorMessage);
     } finally {
-      setUpdatingId("");
+  setUpdatingId("");
     }
   }
 
@@ -161,14 +161,14 @@ export default function AdminPage() {
     businessId: string,
     currentStatus: boolean
   ) {
-    setUpdatingBusinessId(businessId);
+  setUpdatingBusinessId(businessId);
     setMessage("");
 
     try {
-      await updateBusinessPublishStatus({
-        businessId,
-        isPublished: !currentStatus,
-      });
+  await updateBusinessPublishStatus({
+  businessId,
+        isPublished: !currentStatus
+});
 
       await loadAdminData();
 
@@ -178,14 +178,14 @@ export default function AdminPage() {
           : "Business published successfully."
       );
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error
           ? error.message
           : "Unable to update business status.";
 
       setMessage(errorMessage);
     } finally {
-      setUpdatingBusinessId("");
+  setUpdatingBusinessId("");
     }
   }
 
@@ -194,14 +194,14 @@ export default function AdminPage() {
     businessId: string,
     currentStatus: boolean | null
   ) {
-    setUpdatingOverrideBusinessId(businessId);
+  setUpdatingOverrideBusinessId(businessId);
     setMessage("");
 
     try {
-      await updateBusinessAdminOverride({
-        businessId,
-        isActive: !currentStatus,
-      });
+  await updateBusinessAdminOverride({
+  businessId,
+        isActive: !currentStatus
+});
 
       await loadAdminData();
 
@@ -211,14 +211,14 @@ export default function AdminPage() {
           : "Admin override enabled successfully."
       );
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error
           ? error.message
           : "Unable to update admin override.";
 
       setMessage(errorMessage);
     } finally {
-      setUpdatingOverrideBusinessId("");
+  setUpdatingOverrideBusinessId("");
     }
   }
   const publishedCount = businesses.filter(
@@ -231,7 +231,7 @@ export default function AdminPage() {
   const propertyModeCount = 0;
   const carModeCount = 0;
   const modeMismatchCount = businesses.filter((business) => {
-    const mode = normalizeBusinessMode("products");
+  const mode = normalizeBusinessMode("products");
     const plan = normalizePlanId(business.subscription_plan);
 
     return false;
@@ -241,7 +241,7 @@ export default function AdminPage() {
   ).length;
 
   if (!authChecked) {
-    return (
+  return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
         <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 text-center shadow-soft">
           <div className="mx-auto mb-6 grid h-11 w-14 place-items-center rounded-2xl bg-[#26143d] text-white">
@@ -262,7 +262,7 @@ export default function AdminPage() {
   }
 
   if (authChecked && !isAuthorized) {
-    return (
+  return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-5 py-12">
         <div className="w-full max-w-md rounded-[2rem] border border-slate-200 bg-white p-7 text-center shadow-soft">
           <div className="mx-auto mb-6 grid h-11 w-14 place-items-center rounded-2xl bg-red-50 text-red-700">
@@ -569,7 +569,7 @@ export default function AdminPage() {
                   ) : null}
 
                   {filteredBusinesses.map((business) => {
-                    const mode = normalizeBusinessMode("products");
+  const mode = normalizeBusinessMode("products");
                     const modeMeta = getBusinessModeMeta(mode);
                     const isModeMismatch =
                       false;
@@ -579,7 +579,7 @@ export default function AdminPage() {
                     <article
                       key={business.id}
                       className={`rounded-[1.5rem] border p-5 ${
-                        isModeMismatch
+  isModeMismatch
                           ? "border-amber-200 bg-amber-50"
                           : "border-slate-200"
                       }`}
@@ -593,7 +593,7 @@ export default function AdminPage() {
 
                             <span
                               className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                                business.is_published
+  business.is_published
                                   ? "bg-emerald-50 text-emerald-700"
                                   : "bg-purple-50 text-purple-700"
                               }`}
@@ -664,7 +664,7 @@ export default function AdminPage() {
                             }
                             disabled={updatingBusinessId === business.id}
                             className={`rounded-full px-5 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${
-                              business.is_published
+  business.is_published
                                 ? "bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100"
                                 : "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 hover:bg-emerald-100"
                             }`}
@@ -685,7 +685,7 @@ export default function AdminPage() {
                             }
                             disabled={updatingOverrideBusinessId === business.id}
                             className={`rounded-full px-5 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${
-                              business.admin_override_active
+  business.admin_override_active
                                 ? "bg-purple-700 text-white hover:bg-purple-800"
                                 : "bg-purple-50 text-purple-700 ring-1 ring-purple-200 hover:bg-purple-100"
                             }`}

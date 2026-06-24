@@ -1,6 +1,5 @@
 import Image from "next/image";
 import {
-  ArrowRight,
   Clock3,
   Heart,
   MapPin,
@@ -9,28 +8,28 @@ import {
   Phone,
   ShoppingBag,
   Sparkles,
-  Store,
+  Store
 } from "lucide-react";
 
 const products = [
   {
-    name: "Handpicked Item",
+  name: "Handpicked Item",
     price: "₦9,500",
     tag: "Fresh pick",
-    description: "A warm product card for everyday items, handmade goods, or fresh offers.",
-  },
+    description: "A warm product card for everyday items, handmade goods, or fresh offers."
+},
   {
-    name: "Signature Bundle",
+  name: "Signature Bundle",
     price: "₦16,000",
     tag: "Best seller",
-    description: "Use this for bundles, customer favourites, or your strongest offer.",
-  },
+    description: "Use this for bundles, customer favourites, or your strongest offer."
+},
   {
-    name: "Special Order",
+  name: "Special Order",
     price: "₦22,000",
     tag: "Premium",
-    description: "Perfect for custom orders, premium packages, or limited stock products.",
-  },
+    description: "Perfect for custom orders, premium packages, or limited stock products."
+},
 ];
 
 export function MarketVillaWarmBoutiqueTheme() {

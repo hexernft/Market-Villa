@@ -1,16 +1,16 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
-  Bot,
-  CheckCircle2,
-  Clock3,
-  Loader2,
+  FormEvent, useEffect, useMemo, useState } from "react";
+import {
+  Bot,  Loader2,
   MessageCircle,
-  Sparkles,
+  Sparkles
 } from "lucide-react";
-import { getMyBusinesses } from "@/lib/business-actions";
-import { supabase } from "@/lib/supabase";
+import {
+  getMyBusinesses } from "@/lib/business-actions";
+import {
+  supabase } from "@/lib/supabase";
 
 type DashboardBusiness = {
   id: string;
@@ -41,10 +41,10 @@ function formatDate(value?: string | null) {
   if (!value) return "Not available";
 
   return new Intl.DateTimeFormat("en-NG", {
-    month: "short",
+  month: "short",
     day: "numeric",
-    year: "numeric",
-  }).format(new Date(value));
+    year: "numeric"
+}).format(new Date(value));
 }
 
 function getStatusLabel(status?: string | null) {
@@ -55,15 +55,15 @@ function getStatusLabel(status?: string | null) {
 
 function getStatusClass(status?: string | null) {
   if (status === "active") {
-    return "bg-emerald-50 text-emerald-700 ring-emerald-200";
+  return "bg-emerald-50 text-emerald-700 ring-emerald-200";
   }
 
   if (status === "pending" || status === "reviewing" || status === "setup") {
-    return "bg-amber-50 text-amber-700 ring-amber-200";
+  return "bg-amber-50 text-amber-700 ring-amber-200";
   }
 
   if (status === "rejected" || status === "paused") {
-    return "bg-red-50 text-red-700 ring-red-200";
+  return "bg-red-50 text-red-700 ring-red-200";
   }
 
   return "bg-slate-100 text-slate-600 ring-slate-200";
@@ -86,61 +86,63 @@ export default function AiAssistantPage() {
   const [message, setMessage] = useState("");
 
   const selectedBusiness = useMemo(() => {
-    return businesses.find((business) => business.id === selectedBusinessId);
+  return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
 
   async function loadData() {
-    setIsLoading(true);
+  setIsLoading(true);
     setMessage("");
 
     try {
-      const businessItems = (await getMyBusinesses()) as DashboardBusiness[];
+  const businessItems = (await getMyBusinesses()) as DashboardBusiness[];
 
       setBusinesses(businessItems);
 
       if (businessItems.length > 0) {
-        setSelectedBusinessId((current) => current || businessItems[0].id);
+  setSelectedBusinessId((current) => current || businessItems[0].id);
 
         const businessIds = businessItems.map((business) => business.id);
 
-        const { data, error } = await supabase
+        const {
+  data, error } = await supabase
           .from("ai_assistant_requests")
           .select("*")
           .in("business_id", businessIds)
-          .order("created_at", { ascending: false });
+          .order("created_at", {
+  ascending: false });
 
         if (error) throw error;
 
         setRequests((data || []) as AiAssistantRequest[]);
       } else {
-        setRequests([]);
+  setRequests([]);
       }
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error
           ? error.message
           : "Unable to load AI assistant requests.";
 
       setMessage(errorMessage);
     } finally {
-      setIsLoading(false);
+  setIsLoading(false);
     }
   }
 
   useEffect(() => {
-    loadData();
+  loadData();
   }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  event.preventDefault();
 
     if (!selectedBusinessId) {
-      setMessage("Create a business first before requesting an AI assistant.");
+  setMessage("Create a business first before requesting an AI assistant.");
       return;
     }
 
     if (!title.trim() || !details.trim()) {
-      setMessage("Add a title and details for your AI assistant request.");
+  setMessage("Add a title and details for your AI assistant request.");
       return;
     }
 
@@ -148,8 +150,9 @@ export default function AiAssistantPage() {
     setMessage("");
 
     try {
-      const { error } = await supabase.from("ai_assistant_requests").insert({
-        business_id: selectedBusinessId,
+  const {
+  error } = await supabase.from("ai_assistant_requests").insert({
+  business_id: selectedBusinessId,
         request_type: "ai_assistant",
         title: title.trim(),
         details: details.trim(),
@@ -159,18 +162,18 @@ export default function AiAssistantPage() {
         training_notes: trainingNotes.trim() || null,
         budget: budget.trim() || null,
         priority,
-        status: "pending",
-      });
+        status: "pending"
+});
 
       if (error) throw error;
 
       await supabase
         .from("businesses")
         .update({
-          ai_assistant_status: "pending",
+  ai_assistant_status: "pending",
           ai_assistant_enabled: false,
-          updated_at: new Date().toISOString(),
-        })
+          updated_at: new Date().toISOString()
+})
         .eq("id", selectedBusinessId);
 
       setTitle("AI assistant setup for my store");
@@ -185,19 +188,19 @@ export default function AiAssistantPage() {
 
       await loadData();
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error
           ? error.message
           : "Unable to submit AI assistant request.";
 
       setMessage(errorMessage);
     } finally {
-      setIsSubmitting(false);
+  setIsSubmitting(false);
     }
   }
 
   if (isLoading) {
-    return (
+  return (
       <main className="grid min-h-[60vh] place-items-center">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={26} />

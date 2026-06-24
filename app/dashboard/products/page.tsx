@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import {
+  FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   BadgeCheck,
@@ -12,7 +13,7 @@ import {
   Star,
   ToggleRight,
   Trash2,
-  X,
+  X
 } from "lucide-react";
 import {
   createProduct,
@@ -20,15 +21,19 @@ import {
   getMyBusinesses,
   getProductsByBusinessId,
   toggleProductAvailability,
-  updateProduct,
+  updateProduct
 } from "@/lib/business-actions";
-import { uploadBusinessImage } from "@/lib/storage-actions";
-import { formatCurrency } from "@/lib/utils";
-import { ImageUploadField } from "@/components/ImageUploadField";
-import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
+import {
+  uploadBusinessImage } from "@/lib/storage-actions";
+import {
+  formatCurrency } from "@/lib/utils";
+import {
+  ImageUploadField } from "@/components/ImageUploadField";
+import {
+  getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
 import {
   canUseBusinessModeForPlan,
-  getBusinessModePlanMessage,
+  getBusinessModePlanMessage
 } from "@/lib/plans";
 
 const productCategories = [
@@ -66,19 +71,29 @@ const propertyCategories = [
 ];
 
 const vehicleStatuses = [
-  { label: "Available", value: "available" },
-  { label: "Reserved", value: "reserved" },
-  { label: "Sold", value: "sold" },
-  { label: "In transit", value: "in_transit" },
-  { label: "On request", value: "on_request" },
+  {
+  label: "Available", value: "available" },
+  {
+  label: "Reserved", value: "reserved" },
+  {
+  label: "Sold", value: "sold" },
+  {
+  label: "In transit", value: "in_transit" },
+  {
+  label: "On request", value: "on_request" },
 ] as const;
 
 const propertyStatuses = [
-  { label: "Available", value: "available" },
-  { label: "Reserved", value: "reserved" },
-  { label: "Rented", value: "rented" },
-  { label: "Sold", value: "sold" },
-  { label: "Unavailable", value: "unavailable" },
+  {
+  label: "Available", value: "available" },
+  {
+  label: "Reserved", value: "reserved" },
+  {
+  label: "Rented", value: "rented" },
+  {
+  label: "Sold", value: "sold" },
+  {
+  label: "Unavailable", value: "unavailable" },
 ] as const;
 
 function formatVehicleStatus(status?: string | null) {
@@ -186,7 +201,7 @@ export default function ProductsPage() {
   const [message, setMessage] = useState("");
 
   const selectedBusiness = useMemo(() => {
-    return businesses.find((business) => business.id === selectedBusinessId);
+  return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
 
   const isDealershipMode =
@@ -196,9 +211,9 @@ export default function ProductsPage() {
   const isPropertiesMode = false;
   const singularInventoryLabel = "Product";
   const isCurrentModeLocked = !canUseBusinessModeForPlan({
-    mode: modeMeta.id,
-    plan: selectedBusiness?.subscription_plan,
-  });
+  mode: modeMeta.id,
+    plan: selectedBusiness?.subscription_plan
+});
 
   const activeCategories = isDealershipMode
     ? vehicleCategories
@@ -207,14 +222,14 @@ export default function ProductsPage() {
     : productCategories;
 
   const filteredProducts = useMemo(() => {
-    const search = query.toLowerCase().trim();
+  const search = query.toLowerCase().trim();
 
     if (!search) {
-      return products;
+  return products;
     }
 
     return products.filter((product) => {
-      return (
+  return (
         product.name.toLowerCase().includes(search) ||
         (product.category || "").toLowerCase().includes(search) ||
         (product.description || "").toLowerCase().includes(search)
@@ -231,11 +246,11 @@ export default function ProductsPage() {
   ).length;
 
   useEffect(() => {
-    let mounted = true;
+  let mounted = true;
 
     async function loadBusinesses() {
-      try {
-        setIsLoading(true);
+  try {
+  setIsLoading(true);
 
         const items = await getMyBusinesses();
 
@@ -244,15 +259,15 @@ export default function ProductsPage() {
         setBusinesses(items);
 
         if (items.length > 0) {
-          setSelectedBusinessId(items[0].id);
+  setSelectedBusinessId(items[0].id);
         }
       } catch (error) {
-        const errorMessage =
+  const errorMessage =
           error instanceof Error ? error.message : "Unable to load businesses.";
         setMessage(errorMessage);
       } finally {
-        if (mounted) {
-          setIsLoading(false);
+  if (mounted) {
+  setIsLoading(false);
         }
       }
     }
@@ -260,27 +275,27 @@ export default function ProductsPage() {
     loadBusinesses();
 
     return () => {
-      mounted = false;
+  mounted = false;
     };
   }, []);
 
   useEffect(() => {
-    let mounted = true;
+  let mounted = true;
 
     async function loadProducts() {
-      if (!selectedBusinessId) {
-        setProducts([]);
+  if (!selectedBusinessId) {
+  setProducts([]);
         return;
       }
 
       try {
-        const items = await getProductsByBusinessId(selectedBusinessId);
+  const items = await getProductsByBusinessId(selectedBusinessId);
 
         if (!mounted) return;
 
         setProducts(items);
       } catch (error) {
-        const errorMessage =
+  const errorMessage =
           error instanceof Error ? error.message : "Unable to load products.";
         setMessage(errorMessage);
       }
@@ -289,12 +304,12 @@ export default function ProductsPage() {
     loadProducts();
 
     return () => {
-      mounted = false;
+  mounted = false;
     };
   }, [selectedBusinessId]);
 
   function clearFormFields() {
-    setName("");
+  setName("");
     setPrice("");
     setCategory(activeCategories[0]);
     setImageUrl("");
@@ -343,18 +358,18 @@ export default function ProductsPage() {
   }
 
   function resetForm() {
-    clearFormFields();
+  clearFormFields();
     setIsProductFormOpen(false);
   }
 
   function openNewProductForm() {
-    clearFormFields();
+  clearFormFields();
     setMessage("");
     setIsProductFormOpen(true);
   }
 
   function startEditing(product: DashboardProduct) {
-    const details = product.vehicle_details || {};
+  const details = product.vehicle_details || {};
     const propertyDetails = product.property_details || {};
 
     setEditingProductId(product.id);
@@ -416,17 +431,17 @@ export default function ProductsPage() {
   }
 
   async function reloadProducts() {
-    if (!selectedBusinessId) return;
+  if (!selectedBusinessId) return;
 
     const updatedProducts = await getProductsByBusinessId(selectedBusinessId);
     setProducts(updatedProducts);
   }
 
   async function handleSubmitProduct(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  event.preventDefault();
 
     if (!selectedBusinessId) {
-      setMessage(`Create a business page first before adding ${modeMeta.inventoryLabel.toLowerCase()}.`);
+  setMessage(`Create a business page first before adding ${modeMeta.inventoryLabel.toLowerCase()}.`);
       return;
     }
 
@@ -434,9 +449,9 @@ export default function ProductsPage() {
     setIsSaving(true);
 
     try {
-      let finalImageUrl = imageUrl;
+  let finalImageUrl = imageUrl;
       const vehicleDetails = {
-        make: vehicleMake,
+  make: vehicleMake,
         model: vehicleModel,
         year: vehicleYear,
         trim: vehicleTrim,
@@ -453,10 +468,10 @@ export default function ProductsPage() {
         vehicleLocation,
         documents: vehicleDocuments,
         financingAvailable: vehicleFinancingAvailable,
-        priceNegotiable: vehiclePriceNegotiable,
-      };
+        priceNegotiable: vehiclePriceNegotiable
+};
       const propertyDetails = {
-        propertyType,
+  propertyType,
         bedrooms: propertyBedrooms,
         bathrooms: propertyBathrooms,
         toilets: propertyToilets,
@@ -472,8 +487,8 @@ export default function ProductsPage() {
         amenities: propertyAmenities,
         agencyFee: propertyAgencyFee,
         cautionFee: propertyCautionFee,
-        isNegotiable: propertyIsNegotiable,
-      };
+        isNegotiable: propertyIsNegotiable
+};
       const itemType = isDealershipMode
         ? "vehicle"
         : isPropertiesMode
@@ -481,18 +496,18 @@ export default function ProductsPage() {
           : "product";
 
       if (compressedImageFile) {
-        const uploadedImage = await uploadBusinessImage({
-          file: compressedImageFile,
+  const uploadedImage = await uploadBusinessImage({
+  file: compressedImageFile,
           businessId: selectedBusinessId,
-          folder: "products",
-        });
+          folder: "products"
+});
 
         finalImageUrl = uploadedImage.publicUrl;
       }
 
       if (editingProductId) {
-        await updateProduct({
-          productId: editingProductId,
+  await updateProduct({
+  productId: editingProductId,
           name,
           description,
           price: Number(price),
@@ -504,8 +519,8 @@ export default function ProductsPage() {
           vehicleStatus: isDealershipMode ? vehicleStatus : "available",
           vehicleDetails: isDealershipMode ? vehicleDetails : {},
           propertyStatus: isPropertiesMode ? propertyStatus : "available",
-          propertyDetails: isPropertiesMode ? propertyDetails : {},
-        });
+          propertyDetails: isPropertiesMode ? propertyDetails : {}
+});
 
         setMessage(
           isDealershipMode
@@ -515,8 +530,8 @@ export default function ProductsPage() {
               : "Product updated successfully."
         );
       } else {
-        await createProduct({
-          businessId: selectedBusinessId,
+  await createProduct({
+  businessId: selectedBusinessId,
           name,
           description,
           price: Number(price),
@@ -528,8 +543,8 @@ export default function ProductsPage() {
           vehicleStatus: isDealershipMode ? vehicleStatus : "available",
           vehicleDetails: isDealershipMode ? vehicleDetails : {},
           propertyStatus: isPropertiesMode ? propertyStatus : "available",
-          propertyDetails: isPropertiesMode ? propertyDetails : {},
-        });
+          propertyDetails: isPropertiesMode ? propertyDetails : {}
+});
 
         setMessage(
           isDealershipMode
@@ -543,41 +558,41 @@ export default function ProductsPage() {
       await reloadProducts();
       resetForm();
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error ? error.message : "Unable to save product.";
 
       setMessage(errorMessage);
     } finally {
-      setIsSaving(false);
+  setIsSaving(false);
     }
   }
 
   async function handleToggleAvailability(product: DashboardProduct) {
-    setBusyProductId(product.id);
+  setBusyProductId(product.id);
     setMessage("");
 
     try {
-      await toggleProductAvailability({
-        productId: product.id,
-        isAvailable: !product.is_available,
-      });
+  await toggleProductAvailability({
+  productId: product.id,
+        isAvailable: !product.is_available
+});
 
       await reloadProducts();
       setMessage(`${singularInventoryLabel} visibility updated.`);
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error
           ? error.message
           : "Unable to update product availability.";
 
       setMessage(errorMessage);
     } finally {
-      setBusyProductId("");
+  setBusyProductId("");
     }
   }
 
   async function handleDeleteProduct(productId: string) {
-    const confirmed = window.confirm(
+  const confirmed = window.confirm(
       `Delete this ${singularInventoryLabel.toLowerCase()}? This cannot be undone.`
     );
 
@@ -587,11 +602,11 @@ export default function ProductsPage() {
     setMessage("");
 
     try {
-      await deleteProduct(productId);
+  await deleteProduct(productId);
       await reloadProducts();
 
       if (editingProductId === productId) {
-        resetForm();
+  resetForm();
       }
 
       setMessage(
@@ -602,12 +617,12 @@ export default function ProductsPage() {
             : `${singularInventoryLabel} deleted successfully.`
       );
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error ? error.message : "Unable to delete product.";
 
       setMessage(errorMessage);
     } finally {
-      setBusyProductId("");
+  setBusyProductId("");
     }
   }
 
@@ -619,7 +634,7 @@ export default function ProductsPage() {
             <select
               value={selectedBusinessId}
               onChange={(event) => {
-                setSelectedBusinessId(event.target.value);
+  setSelectedBusinessId(event.target.value);
                 resetForm();
               }}
               className="min-h-10 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 md:min-w-80"
@@ -718,7 +733,7 @@ export default function ProductsPage() {
       ) : (
         <section
           className={`grid gap-6 ${
-            isProductFormOpen
+  isProductFormOpen
               ? "xl:grid-cols-[0.9fr_1.1fr]"
               : "xl:grid-cols-[0.35fr_1fr]"
           }`}
@@ -771,7 +786,7 @@ export default function ProductsPage() {
                     onChange={(event) => setName(event.target.value)}
                     className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                     placeholder={
-                      isDealershipMode
+  isDealershipMode
                         ? "Toyota Camry 2018 XLE"
                         : isPropertiesMode
                           ? "2-bedroom apartment in Wuse"
@@ -821,7 +836,7 @@ export default function ProductsPage() {
 
                 <ImageUploadField
                   label={
-                    editingProductId
+  editingProductId
                       ? isDealershipMode
                         ? "Replace vehicle image"
                         : isPropertiesMode
@@ -834,7 +849,7 @@ export default function ProductsPage() {
                         : "Upload product image"
                   }
                   helper={
-                    isDealershipMode
+  isDealershipMode
                       ? "Use a clean exterior or hero image. Large images will be compressed."
                       : isPropertiesMode
                         ? "Use a clean property hero image. Large images will be compressed."
@@ -884,7 +899,7 @@ export default function ProductsPage() {
                     rows={4}
                     className="rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100"
                     placeholder={
-                      isDealershipMode
+  isDealershipMode
                         ? "Add mileage, condition, documents, location, and inspection notes."
                         : isPropertiesMode
                           ? "Add bedrooms, bathrooms, location, inspection notes, and availability."
@@ -1413,13 +1428,13 @@ export default function ProductsPage() {
               <article
                 key={product.id}
                 className={`overflow-hidden rounded-[1.25rem] border bg-white shadow-sm transition ${
-                  editingProductId === product.id
+  editingProductId === product.id
                     ? "border-slate-950 ring-4 ring-slate-100"
                     : "border-slate-200 hover:-translate-y-0.5 hover:shadow-md"
                 }`}
               >
                 {(() => {
-                  const vehicleDetails = product.vehicle_details || {};
+  const vehicleDetails = product.vehicle_details || {};
                   const vehicleSpecs = [
                     vehicleDetails.year,
                     vehicleDetails.make,
@@ -1464,11 +1479,11 @@ export default function ProductsPage() {
                   <div
                     className="min-h-48 bg-cover bg-center md:min-h-full"
                     style={{
-                      backgroundImage: `url(${
-                        product.image_url ||
+  backgroundImage: `url(${
+  product.image_url ||
                         "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop"
-                      })`,
-                    }}
+                      })`
+}}
                   />
 
                   <div className="p-4">

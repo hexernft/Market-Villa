@@ -1,24 +1,37 @@
-import { TestimonialsSection } from "@/components/TestimonialsSection";
+import {
+  TestimonialsSection } from "@/components/TestimonialsSection";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, CakeSlice, CheckCircle2, Clock3, ExternalLink, Globe2, MapPin, MessageCircle, Store } from "lucide-react";
-import { PlatformNavbar } from "@/components/PlatformNavbar";
-import { PlatformFooter } from "@/components/PlatformFooter";
-import { MotionReveal } from "@/components/MotionReveal";
-import { HomeCommerceExperiences } from "@/components/HomeCommerceExperiences";
-import { RotatingHeroPromise } from "@/components/RotatingHeroPromise";
+import {
+  CakeSlice, CheckCircle2, Clock3, ExternalLink, Globe2, MapPin, MessageCircle, Store } from "lucide-react";
+import {
+  PlatformNavbar } from "@/components/PlatformNavbar";
+import {
+  PlatformFooter } from "@/components/PlatformFooter";
+import {
+  MotionReveal } from "@/components/MotionReveal";
+import {
+  HomeCommerceExperiences } from "@/components/HomeCommerceExperiences";
+import {
+  RotatingHeroPromise } from "@/components/RotatingHeroPromise";
 
 const features = [
-  { title: "A polished business page", description: "Give customers one clean place to view your brand, offers, contact details, and order options.", icon: Store },
-  { title: "WhatsApp-ready selling", description: "Customers can browse your page and start a clear order or inquiry conversation on WhatsApp.", icon: MessageCircle },
-  { title: "Custom domain option", description: "Upgrade from a Market Villa link to a professional domain when the business is ready.", icon: Globe2 },
+  {
+  title: "A polished business page", description: "Give customers one clean place to view your brand, offers, contact details, and order options.", icon: Store },
+  {
+  title: "WhatsApp-ready selling", description: "Customers can browse your page and start a clear order or inquiry conversation on WhatsApp.", icon: MessageCircle },
+  {
+  title: "Custom domain option", description: "Upgrade from a Market Villa link to a professional domain when the business is ready.", icon: Globe2 },
 ];
 
 const faqItems = [
-  { question: "Do I need technical skills?", answer: "No. Market Villa is built so a business owner can create and manage a simple page without writing code." },
-  { question: "Can customers order through the page?", answer: "Yes. Customers can view your products and start a clear WhatsApp order or inquiry." },
-  { question: "Can I use my own domain?", answer: "Yes. Custom domain setup can be requested as an add-on when the business is ready." },
-  { question: "What kind of businesses can use Market Villa?", answer: "Food vendors, fashion brands, beauty businesses, apartments, and retail stores can all use it." },
+  {
+  question: "Do I need technical skills?", answer: "No. Market Villa is built so a business owner can create and manage a simple page without writing code." },
+  {
+  question: "Can customers order through the page?", answer: "Yes. Customers can view your products and start a clear WhatsApp order or inquiry." },
+  {
+  question: "Can I use my own domain?", answer: "Yes. Custom domain setup can be requested as an add-on when the business is ready." },
+  {
+  question: "What kind of businesses can use Market Villa?", answer: "Food vendors, fashion brands, beauty businesses, apartments, and retail stores can all use it." },
 ];
 
 const zcasTreats = [
@@ -38,7 +51,8 @@ export default function Home() {
           <div className="market-hero-carousel home-hero-visual relative min-h-[520px] overflow-hidden rounded-[2.5rem] border border-white/65 shadow-[0_30px_100px_rgba(55,31,83,0.18)] md:min-h-[640px]">
             <div
               className="market-hero-carousel-slide"
-              style={{ animationDelay: "0s" }}
+              style={{
+  animationDelay: "0s" }}
             >
               <Image
                 src="/main-hero.png"
@@ -51,7 +65,8 @@ export default function Home() {
             </div>
             <div
               className="market-hero-carousel-slide"
-              style={{ animationDelay: "5s" }}
+              style={{
+  animationDelay: "5s" }}
             >
               <Image
                 src="/phone-shop.png"
@@ -63,7 +78,8 @@ export default function Home() {
             </div>
             <div
               className="market-hero-carousel-slide"
-              style={{ animationDelay: "10s" }}
+              style={{
+  animationDelay: "10s" }}
             >
               <Image
                 src="/phone-hub.png"
@@ -309,7 +325,7 @@ export default function Home() {
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {features.map((feature, index) => {
-              const Icon = feature.icon;
+  const Icon = feature.icon;
               const glowClass =
                 index === 0
                   ? "mv-empty-feature-card-1"

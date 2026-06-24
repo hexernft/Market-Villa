@@ -6,30 +6,28 @@ import {
   Package,
   Phone,
   ShieldCheck,
-  ShoppingBag,
-  Sparkles,
-  Store,
+  ShoppingBag,  Store
 } from "lucide-react";
 
 const products = [
   {
-    name: "Hero Product",
+  name: "Hero Product",
     price: "₦12,500",
     tag: "Featured",
-    description: "A product card for the first item customers should notice.",
-  },
+    description: "A product card for the first item customers should notice."
+},
   {
-    name: "Popular Item",
+  name: "Popular Item",
     price: "₦18,000",
     tag: "Popular",
-    description: "Use this for best sellers, frequent orders, or common requests.",
-  },
+    description: "Use this for best sellers, frequent orders, or common requests."
+},
   {
-    name: "Premium Package",
+  name: "Premium Package",
     price: "₦32,000",
     tag: "Premium",
-    description: "Great for bundles, premium services, or high-value offers.",
-  },
+    description: "Great for bundles, premium services, or high-value offers."
+},
 ];
 
 const navItems = ["Home", "Products", "About", "Contact"];

@@ -20,10 +20,11 @@ export type CartItem = {
   name: string;
   price: number;
   quantity: number;
+  image?: string;
 };
 
 type Props = {
-  businessId?: string;
+  businessId: string;
   businessName: string;
   whatsapp: string;
   cart: CartItem[];
@@ -37,44 +38,49 @@ export function WhatsAppCheckout({
   cart,
   setCart,
 }: Props) {
-  const summaryRef = useRef<HTMLDivElement>(null);
-
   const [isOpen, setIsOpen] = useState(false);
-
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
   const [customerNote, setCustomerNote] = useState("");
-
-  const [isSavingOrder, setIsSavingOrder] = useState(false);
-  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [message, setMessage] = useState("");
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [isSendingOrder, setIsSendingOrder] = useState(false);
+
+  const summaryRef = useRef<HTMLDivElement | null>(null);
 
   const total = useMemo(() => {
     return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   }, [cart]);
 
-  function updateQuantity(id: string, quantity: number) {
-    if (quantity <= 0) {
-      setCart((items) => items.filter((item) => item.id !== id));
-      return;
-    }
+  function updateQuantity(itemId: string, direction: "increase" | "decrease") {
+    setCart((current) =>
+      current
+        .map((item) => {
+          if (item.id !== itemId) return item;
 
-    setCart((items) =>
-      items.map((item) => (item.id === id ? { ...item, quantity } : item))
+          const nextQuantity =
+            direction === "increase" ? item.quantity + 1 : item.quantity - 1;
+
+          return {
+            ...item,
+            quantity: nextQuantity,
+          };
+        })
+        .filter((item) => item.quantity > 0),
     );
   }
 
   function buildOrderMessage(orderId?: string) {
-    const lines = cart.map(
-      (item) =>
-        `- ${item.name} x${item.quantity} = ${formatCurrency(
-          item.price * item.quantity
-        )}`
-    );
+    const lines = cart.map((item, index) => {
+      return `${index + 1}. ${item.name} — ${formatCurrency(
+        item.price,
+      )} x ${item.quantity} = ${formatCurrency(item.price * item.quantity)}`;
+    });
 
     return [
-      `Hello ${businessName}, I want to place an order.`,
+      `Hello ${businessName}, I want to place this order.`,
+      "",
       orderId ? `Order ID: ${orderId}` : "",
       "",
       "Customer Details:",
@@ -87,24 +93,19 @@ export function WhatsAppCheckout({
       ...lines,
       "",
       `Total: ${formatCurrency(total)}`,
-      "",
-      "I have also downloaded the order summary image.",
     ]
       .filter(Boolean)
       .join("\n");
   }
 
   async function downloadOrderSummaryImage() {
-    if (!summaryRef.current) return;
-
-    setMessage("");
-
-    if (!customerName || !customerPhone) {
-      setMessage("Please enter your name and phone number before generating the image.");
+    if (!summaryRef.current) {
+      setMessage("Order summary is not ready yet.");
       return;
     }
 
     setIsGeneratingImage(true);
+    setMessage("");
 
     try {
       const dataUrl = await toPng(summaryRef.current, {
@@ -116,88 +117,69 @@ export function WhatsAppCheckout({
       const link = document.createElement("a");
       link.download = `${businessName
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")}-order-summary.png`;
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")}-order-summary.png`;
       link.href = dataUrl;
       link.click();
 
-      setMessage("Order summary image downloaded.");
+      setMessage("Order summary downloaded. You can now send the order.");
     } catch (error) {
       const errorMessage =
         error instanceof Error
           ? error.message
           : "Unable to generate order summary image.";
+
       setMessage(errorMessage);
     } finally {
       setIsGeneratingImage(false);
     }
   }
 
-  async function handleCheckout() {
+  async function handleSendOrder() {
     if (cart.length === 0) return;
 
     setMessage("");
 
-    if (!customerName || !customerPhone) {
-      setMessage("Please enter your name and phone number before checkout.");
+    if (!customerName.trim() || !customerPhone.trim()) {
+      setMessage("Please enter your name and phone number before sending.");
       return;
     }
 
-    setIsSavingOrder(true);
+    setIsSendingOrder(true);
 
     try {
-      let orderId = "";
-
-      if (businessId) {
-        const order = await createOrder({
-          businessId,
-          customerName,
-          customerPhone,
-          customerAddress,
-          customerNote,
-          items: cart,
-        });
-
-        orderId = order.id;
-      }
-
-      if (summaryRef.current) {
-        try {
-          const dataUrl = await toPng(summaryRef.current, {
-            cacheBust: true,
-            pixelRatio: 2,
-            backgroundColor: "#ffffff",
-          });
-
-          const link = document.createElement("a");
-          link.download = `${businessName
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")}-order-summary.png`;
-          link.href = dataUrl;
-          link.click();
-        } catch {
-          // Checkout should continue even if image generation fails.
-        }
-      }
+      const order = await createOrder({
+        businessId,
+        customerName: customerName.trim(),
+        customerPhone: customerPhone.trim(),
+        customerAddress: customerAddress.trim(),
+        customerNote: customerNote.trim(),
+        items: cart.map((item) => ({
+          productId: item.id,
+          productName: item.name,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+      } as any);
 
       const whatsappUrl = buildWhatsAppLink(
         whatsapp,
-        buildOrderMessage(orderId)
+        buildOrderMessage(order?.id),
       );
 
-      window.open(whatsappUrl, "_blank");
+      window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 
-      setIsOpen(false);
+      setMessage("Order sent to WhatsApp.");
       setCart([]);
-      setCustomerName("");
-      setCustomerPhone("");
-      setCustomerAddress("");
-      setCustomerNote("");
+      setIsOpen(false);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Unable to save order.";
+        error instanceof Error ? error.message : "Unable to send order.";
+
       setMessage(errorMessage);
     } finally {
-      setIsSavingOrder(false);
+      setIsSendingOrder(false);
     }
   }
 
@@ -208,11 +190,12 @@ export function WhatsAppCheckout({
   return (
     <>
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
-        className="mv-checkout-trigger fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_18px_45px_rgba(38,20,61,0.28)] hover:bg-[#3b1b5d]"
+        className="mv-checkout-trigger fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-full bg-[#26143d] px-4 py-2 text-sm font-semibold text-white shadow-[0_18px_45px_rgba(38,20,61,0.28)] hover:bg-[#3b1b5d]"
       >
-        <ShoppingBag size={18} />
-        Checkout
+        <ShoppingBag size={17} />
+        Cart
         <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-950">
           {cart.length}
         </span>
@@ -220,93 +203,93 @@ export function WhatsAppCheckout({
 
       {isOpen ? (
         <div className="mv-checkout-ui fixed inset-0 z-[90] bg-[#26143d]/45 px-3 py-4 backdrop-blur-sm md:px-4 md:py-5">
-          <div className="ml-auto flex h-full w-full max-w-xl flex-col overflow-hidden rounded-[1.65rem] border border-[#e8e1f4] bg-[#f7f3fb] text-[#241436] shadow-[0_28px_80px_rgba(36,20,54,0.24)]">
-            <div className="flex items-center justify-between border-b border-[#e8e1f4] bg-[#f4eefb] p-4">
+          <div className="ml-auto flex h-full max-h-[calc(100vh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-[1.25rem] border border-[#e8e1f4] bg-[#f7f3fb] text-[#241436] shadow-[0_28px_80px_rgba(36,20,54,0.24)]">
+            <div className="flex items-center justify-between border-b border-[#e8e1f4] bg-[#f4eefb] px-4 py-3">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.22em] text-[#8b5cf6]">
                   Checkout
                 </p>
-                <h3 className="text-lg font-black tracking-[-0.04em] text-[#241436]">
+                <h3 className="text-base font-black tracking-[-0.04em] text-[#241436]">
                   Your order
                 </h3>
               </div>
 
               <button
+                type="button"
                 onClick={() => setIsOpen(false)}
-                className="grid h-10 w-10 place-items-center rounded-full bg-slate-100 text-slate-700"
+                className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#241436] shadow-sm"
+                aria-label="Close checkout"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4">
-              <div className="grid gap-4">
-                <div>
-                  <div className="grid gap-3">
-                    {cart.map((item) => (
-                      <div
-                        key={item.id}
-                        className="rounded-[1.25rem] border border-[#e8e1f4] bg-white p-4 text-[#241436] shadow-sm"
-                      >
-                        <div className="flex justify-between gap-4">
-                          <div>
-                            <p className="font-semibold text-slate-950">
-                              {item.name}
-                            </p>
-                            <p className="mt-1 text-sm text-slate-500">
-                              {formatCurrency(item.price)}
-                            </p>
-                          </div>
-
-                          <p className="font-semibold text-slate-950">
-                            {formatCurrency(item.price * item.quantity)}
+            <div className="flex-1 overflow-y-auto px-4 py-3">
+              <div className="grid gap-3">
+                <div className="grid gap-2">
+                  {cart.map((item) => (
+                    <div
+                      key={item.id}
+                      className="rounded-2xl border border-[#e8e1f4] bg-white p-3 text-[#241436] shadow-sm"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-black">
+                            {item.name}
+                          </p>
+                          <p className="mt-1 text-xs font-semibold text-[#7c728d]">
+                            {formatCurrency(item.price)}
                           </p>
                         </div>
 
-                        <div className="mt-4 flex items-center gap-2">
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity - 1)
-                            }
-                            className="grid h-9 w-9 place-items-center rounded-full bg-slate-100 text-slate-700"
-                          >
-                            <Minus size={15} />
-                          </button>
-
-                          <span className="min-w-8 text-center text-sm font-semibold">
-                            {item.quantity}
-                          </span>
-
-                          <button
-                            onClick={() =>
-                              updateQuantity(item.id, item.quantity + 1)
-                            }
-                            className="grid h-9 w-9 place-items-center rounded-full bg-[#26143d] text-white"
-                          >
-                            <Plus size={15} />
-                          </button>
-                        </div>
+                        <p className="shrink-0 text-sm font-black">
+                          {formatCurrency(item.price * item.quantity)}
+                        </p>
                       </div>
-                    ))}
-                  </div>
 
-                  <div className="mt-5 grid gap-3 rounded-[1.5rem] bg-slate-50 p-4">
-                    <p className="text-sm font-semibold text-slate-950">
-                      Customer details
-                    </p>
+                      <div className="mt-3 flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => updateQuantity(item.id, "decrease")}
+                          className="grid h-9 w-9 place-items-center rounded-full bg-[#eef2f7] text-[#241436]"
+                          aria-label={`Reduce ${item.name}`}
+                        >
+                          <Minus size={16} />
+                        </button>
 
+                        <span className="min-w-6 text-center text-sm font-black">
+                          {item.quantity}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={() => updateQuantity(item.id, "increase")}
+                          className="grid h-9 w-9 place-items-center rounded-full bg-[#32154f] text-white"
+                          aria-label={`Increase ${item.name}`}
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="rounded-2xl border border-[#e8e1f4] bg-white p-3 shadow-sm">
+                  <p className="text-sm font-black">Customer details</p>
+
+                  <div className="mt-3 grid gap-2">
                     <input
                       value={customerName}
                       onChange={(event) => setCustomerName(event.target.value)}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
                       placeholder="Your name"
+                      className="h-10 w-full rounded-xl border border-[#ddd3f0] bg-white px-3 text-sm text-[#241436] outline-none placeholder:text-[#9a93ad] focus:border-[#8b5cf6] focus:ring-4 focus:ring-[#8b5cf6]/12"
                     />
 
                     <input
                       value={customerPhone}
                       onChange={(event) => setCustomerPhone(event.target.value)}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
                       placeholder="Your phone number"
+                      className="h-10 w-full rounded-xl border border-[#ddd3f0] bg-white px-3 text-sm text-[#241436] outline-none placeholder:text-[#9a93ad] focus:border-[#8b5cf6] focus:ring-4 focus:ring-[#8b5cf6]/12"
                     />
 
                     <input
@@ -314,155 +297,126 @@ export function WhatsAppCheckout({
                       onChange={(event) =>
                         setCustomerAddress(event.target.value)
                       }
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
-                      placeholder="Delivery address / location"
+                      placeholder="Delivery address optional"
+                      className="h-10 w-full rounded-xl border border-[#ddd3f0] bg-white px-3 text-sm text-[#241436] outline-none placeholder:text-[#9a93ad] focus:border-[#8b5cf6] focus:ring-4 focus:ring-[#8b5cf6]/12"
                     />
 
                     <textarea
                       value={customerNote}
                       onChange={(event) => setCustomerNote(event.target.value)}
-                      rows={3}
-                      className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--mv-violet)]"
-                      placeholder="Extra note"
+                      placeholder="Note optional"
+                      rows={2}
+                      className="max-h-16 min-h-10 w-full resize-none rounded-xl border border-[#ddd3f0] bg-white px-3 py-2 text-sm text-[#241436] outline-none placeholder:text-[#9a93ad] focus:border-[#8b5cf6] focus:ring-4 focus:ring-[#8b5cf6]/12"
                     />
                   </div>
-
-                  {message ? (
-                    <div className="mt-4 rounded-2xl bg-slate-100 p-4 text-sm text-slate-700">
-                      {message}
-                    </div>
-                  ) : null}
                 </div>
 
-                <aside>
-                  <div
-                    ref={summaryRef}
-                    className="sticky top-4 overflow-hidden rounded-[1.75rem] border border-slate-200 bg-[#26143d] text-white shadow-sm"
-                  >
-                    <div className="store-pattern bg-gradient-to-br from-[#241436] via-teal-950 to-slate-900 p-5">
-                      <div className="mb-8 flex items-center justify-between">
-                        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
-                          <ReceiptText size={20} />
-                        </div>
-
-                        <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold ring-1 ring-white/15">
-                          Order Summary
-                        </span>
-                      </div>
-
-                      <p className="text-sm font-semibold uppercase tracking-[0.22em] text-teal-200">
-                        {businessName}
-                      </p>
-
-                      <h4 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">
-                        Customer Order
-                      </h4>
-                    </div>
-
-                    <div className="bg-white p-5 text-slate-950">
-                      <div className="mb-5 grid gap-2 rounded-2xl bg-slate-50 p-4 text-sm">
-                        <div className="flex justify-between gap-4">
-                          <span className="text-slate-500">Name</span>
-                          <span className="font-semibold text-slate-950">
-                            {customerName || "Not provided"}
-                          </span>
-                        </div>
-
-                        <div className="flex justify-between gap-4">
-                          <span className="text-slate-500">Phone</span>
-                          <span className="font-semibold text-slate-950">
-                            {customerPhone || "Not provided"}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="grid gap-3">
-                        {cart.map((item) => (
-                          <div
-                            key={item.id}
-                            className="flex items-start justify-between gap-4 border-b border-slate-100 pb-3 text-sm"
-                          >
-                            <div>
-                              <p className="font-semibold text-slate-950">
-                                {item.name}
-                              </p>
-
-                              <p className="mt-1 text-xs text-slate-500">
-                                {formatCurrency(item.price)} Ã— {item.quantity}
-                              </p>
-                            </div>
-
-                            <p className="font-semibold text-slate-950">
-                              {formatCurrency(item.price * item.quantity)}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-5 rounded-2xl bg-[#26143d] p-4 text-white">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-slate-300">Total</span>
-                          <span className="text-2xl font-semibold tracking-[-0.04em]">
-                            {formatCurrency(total)}
-                          </span>
-                        </div>
-                      </div>
-
-                      {customerAddress ? (
-                        <p className="mt-4 text-xs leading-5 text-slate-500">
-                          Delivery/location: {customerAddress}
-                        </p>
-                      ) : null}
-
-                      {customerNote ? (
-                        <p className="mt-2 text-xs leading-5 text-slate-500">
-                          Note: {customerNote}
-                        </p>
-                      ) : null}
-
-                      <p className="mt-5 border-t border-slate-100 pt-4 text-center text-xs font-medium text-slate-400">
-                        Generated with Market Villa
-                      </p>
-                    </div>
-                  </div>
-                </aside>
+                {message ? (
+                  <p className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-[#6f6785]">
+                    {message}
+                  </p>
+                ) : null}
               </div>
             </div>
 
-            <div className="border-t border-slate-200 p-5">
-              <div className="mb-4 flex items-center justify-between">
-                <span className="text-sm text-slate-500">Total</span>
-                <span className="text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+            <div className="border-t border-[#e8e1f4] bg-[#f3eefb] px-4 py-3">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-sm text-[#6f6785]">Total</p>
+                <p className="text-2xl font-black text-[#241436]">
                   {formatCurrency(total)}
-                </span>
+                </p>
               </div>
 
-              <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-2 md:grid-cols-2">
                 <button
+                  type="button"
                   onClick={downloadOrderSummaryImage}
-                  disabled={isGeneratingImage || isSavingOrder}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-[#ddd3f0] bg-white px-4 text-sm font-bold text-[#241436] hover:bg-[#faf8fe] disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={isGeneratingImage || isSendingOrder}
+                  className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-[#ddd3f0] bg-white px-4 text-sm font-bold text-[#241436] hover:bg-[#faf8fe] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isGeneratingImage ? (
-                    <Loader2 size={18} className="animate-spin" />
+                    <Loader2 size={17} className="animate-spin" />
                   ) : (
-                    <Download size={18} />
+                    <Download size={17} />
                   )}
-                  {isGeneratingImage ? "Generating..." : "Download Summary"}
+                  {isGeneratingImage ? "Preparing..." : "Download"}
                 </button>
 
                 <button
-                  onClick={handleCheckout}
-                  disabled={isSavingOrder || isGeneratingImage}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-[#4c1d95] px-4 text-sm font-bold text-white shadow-[0_12px_30px_rgba(76,29,149,0.22)] hover:bg-[#5b21b6] disabled:cursor-not-allowed disabled:opacity-60"
+                  type="button"
+                  onClick={handleSendOrder}
+                  disabled={isSendingOrder || isGeneratingImage}
+                  className="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#4c1d95] px-4 text-sm font-bold text-white shadow-[0_12px_30px_rgba(76,29,149,0.22)] hover:bg-[#5b21b6] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {isSavingOrder ? (
-                    <Loader2 size={18} className="animate-spin" />
+                  {isSendingOrder ? (
+                    <Loader2 size={17} className="animate-spin" />
                   ) : (
-                    <MessageCircle size={18} />
+                    <MessageCircle size={17} />
                   )}
-                  {isSavingOrder ? "Saving order..." : "Save and Send"}
+                  {isSendingOrder ? "Sending..." : "Send Order"}
                 </button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            ref={summaryRef}
+            data-order-summary-preview="true"
+            className="pointer-events-none fixed -left-[9999px] top-0 w-[420px] bg-white p-6 text-[#241436]"
+          >
+            <div className="rounded-[1.5rem] border border-[#e8e1f4] bg-white p-5 shadow-sm">
+              <div className="flex items-center justify-between gap-3 border-b border-[#e8e1f4] pb-4">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-[#8b5cf6]">
+                    Order Summary
+                  </p>
+                  <h2 className="mt-1 text-2xl font-black">{businessName}</h2>
+                </div>
+
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#f4eefb] text-[#4c1d95]">
+                  <ReceiptText size={22} />
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-2xl bg-[#f7f3fb] p-4">
+                <div className="flex justify-between gap-3 text-sm">
+                  <span className="text-[#6f6785]">Name</span>
+                  <strong>{customerName || "Not provided"}</strong>
+                </div>
+                <div className="mt-2 flex justify-between gap-3 text-sm">
+                  <span className="text-[#6f6785]">Phone</span>
+                  <strong>{customerPhone || "Not provided"}</strong>
+                </div>
+                {customerAddress ? (
+                  <div className="mt-2 flex justify-between gap-3 text-sm">
+                    <span className="text-[#6f6785]">Address</span>
+                    <strong className="text-right">{customerAddress}</strong>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="mt-4 grid gap-3">
+                {cart.map((item) => (
+                  <div
+                    key={item.id}
+                    className="border-b border-[#e8e1f4] pb-3 last:border-0 last:pb-0"
+                  >
+                    <div className="flex justify-between gap-3">
+                      <p className="font-black">{item.name}</p>
+                      <p className="font-black">
+                        {formatCurrency(item.price * item.quantity)}
+                      </p>
+                    </div>
+                    <p className="mt-1 text-xs text-[#6f6785]">
+                      {formatCurrency(item.price)} × {item.quantity}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 flex items-center justify-between rounded-2xl bg-[#241436] px-4 py-3 text-white">
+                <span className="text-sm font-semibold">Total</span>
+                <strong className="text-xl">{formatCurrency(total)}</strong>
               </div>
             </div>
           </div>
@@ -471,4 +425,3 @@ export function WhatsAppCheckout({
     </>
   );
 }
-

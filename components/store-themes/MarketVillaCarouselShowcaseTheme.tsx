@@ -6,49 +6,47 @@ import {
   MessageCircle,
   Package,
   Phone,
-  ShoppingBag,
-  Sparkles,
-  Star,
-  Store,
+  ShoppingBag,  Star,
+  Store
 } from "lucide-react";
 
 const carouselItems = [
   {
-    label: "Featured",
+  label: "Featured",
     title: "Your best offer, shown first.",
-    description: "Use the carousel to highlight new arrivals, best sellers, or seasonal offers.",
-  },
+    description: "Use the carousel to highlight new arrivals, best sellers, or seasonal offers."
+},
   {
-    label: "Trusted",
+  label: "Trusted",
     title: "A storefront that feels active.",
-    description: "Rotate between products, services, brand messages, and customer-focused actions.",
-  },
+    description: "Rotate between products, services, brand messages, and customer-focused actions."
+},
   {
-    label: "Ready",
+  label: "Ready",
     title: "Customers can act quickly.",
-    description: "Products are visible immediately, with WhatsApp actions placed close to the offer.",
-  },
+    description: "Products are visible immediately, with WhatsApp actions placed close to the offer."
+},
 ];
 
 const products = [
   {
-    name: "Carousel Feature",
+  name: "Carousel Feature",
     price: "₦10,500",
     tag: "Featured",
-    description: "A clean slot for a product, service, or offer you want customers to notice first.",
-  },
+    description: "A clean slot for a product, service, or offer you want customers to notice first."
+},
   {
-    name: "Popular Choice",
+  name: "Popular Choice",
     price: "₦17,000",
     tag: "Popular",
-    description: "Use this for items customers often ask for or purchase repeatedly.",
-  },
+    description: "Use this for items customers often ask for or purchase repeatedly."
+},
   {
-    name: "Premium Set",
+  name: "Premium Set",
     price: "₦30,000",
     tag: "Premium",
-    description: "Perfect for bundles, special orders, packages, or high-value products.",
-  },
+    description: "Perfect for bundles, special orders, packages, or high-value products."
+},
 ];
 
 const navItems = ["Home", "Products", "About", "Contact"];
@@ -104,7 +102,8 @@ export function MarketVillaCarouselShowcaseTheme() {
                   <div
                     key={item.title}
                     className="carousel-showcase-slide absolute inset-0"
-                    style={{ animationDelay: `${index * 5}s` }}
+                    style={{
+  animationDelay: `${index * 5}s` }}
                   >
                     <Image
                       src="/main-hero.png"

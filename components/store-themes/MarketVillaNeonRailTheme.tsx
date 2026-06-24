@@ -1,6 +1,5 @@
 import Image from "next/image";
 import {
-  ArrowRight,
   BadgeCheck,
   Boxes,
   MapPin,
@@ -10,28 +9,28 @@ import {
   ShoppingCart,
   Sparkles,
   Store,
-  Zap,
+  Zap
 } from "lucide-react";
 
 const products = [
   {
-    name: "Flash Product",
+  name: "Flash Product",
     price: "₦7,500",
     tag: "Hot",
-    description: "A bold product slot for fast-moving offers and limited deals.",
-  },
+    description: "A bold product slot for fast-moving offers and limited deals."
+},
   {
-    name: "Core Item",
+  name: "Core Item",
     price: "₦13,000",
     tag: "Core",
-    description: "Use this for your main product, service, package, or offer.",
-  },
+    description: "Use this for your main product, service, package, or offer."
+},
   {
-    name: "Elite Pick",
+  name: "Elite Pick",
     price: "₦29,000",
     tag: "Elite",
-    description: "Best for premium items, featured bundles, or high-value products.",
-  },
+    description: "Best for premium items, featured bundles, or high-value products."
+},
 ];
 
 export function MarketVillaNeonRailTheme() {
@@ -89,14 +88,15 @@ export function MarketVillaNeonRailTheme() {
                     <ScanLine
                       size={18}
                       className="shrink-0 text-cyan-200"
-                      style={{ color: "#a5f3fc", stroke: "#a5f3fc" }}
+                      style={{
+  color: "#a5f3fc", stroke: "#a5f3fc" }}
                     />
                     <p
                       className="text-xs font-bold"
                       style={{
-                        color: "rgba(236, 254, 255, 0.92)",
-                        WebkitTextFillColor: "rgba(236, 254, 255, 0.92)",
-                      }}
+  color: "rgba(236, 254, 255, 0.92)",
+                        WebkitTextFillColor: "rgba(236, 254, 255, 0.92)"
+}}
                     >
                       Products appear without long scrolling
                     </p>
@@ -106,14 +106,15 @@ export function MarketVillaNeonRailTheme() {
                     <BadgeCheck
                       size={18}
                       className="shrink-0 text-lime-200"
-                      style={{ color: "#d9f99d", stroke: "#d9f99d" }}
+                      style={{
+  color: "#d9f99d", stroke: "#d9f99d" }}
                     />
                     <p
                       className="text-xs font-bold"
                       style={{
-                        color: "rgba(236, 254, 255, 0.92)",
-                        WebkitTextFillColor: "rgba(236, 254, 255, 0.92)",
-                      }}
+  color: "rgba(236, 254, 255, 0.92)",
+                        WebkitTextFillColor: "rgba(236, 254, 255, 0.92)"
+}}
                     >
                       Great for bold modern businesses
                     </p>

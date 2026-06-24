@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -8,10 +9,10 @@ import {
   CheckCircle2,
   Loader2,
   PauseCircle,
-  RefreshCw,
-  XCircle,
+  RefreshCw
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import {
+  supabase } from "@/lib/supabase";
 
 type AiRequest = {
   id: string;
@@ -29,7 +30,7 @@ type AiRequest = {
   admin_note?: string | null;
   created_at?: string | null;
   businesses?: {
-    name?: string | null;
+  name?: string | null;
     slug?: string | null;
     ai_assistant_enabled?: boolean | null;
     ai_assistant_status?: string | null;
@@ -50,10 +51,10 @@ function formatDate(value?: string | null) {
   if (!value) return "Not available";
 
   return new Intl.DateTimeFormat("en-NG", {
-    month: "short",
+  month: "short",
     day: "numeric",
-    year: "numeric",
-  }).format(new Date(value));
+    year: "numeric"
+}).format(new Date(value));
 }
 
 function getStatusLabel(status?: string | null) {
@@ -63,15 +64,15 @@ function getStatusLabel(status?: string | null) {
 
 function getStatusClass(status?: string | null) {
   if (status === "active") {
-    return "bg-emerald-50 text-emerald-700 ring-emerald-200";
+  return "bg-emerald-50 text-emerald-700 ring-emerald-200";
   }
 
   if (status === "pending" || status === "reviewing" || status === "setup") {
-    return "bg-amber-50 text-amber-700 ring-amber-200";
+  return "bg-amber-50 text-amber-700 ring-amber-200";
   }
 
   if (status === "paused" || status === "rejected") {
-    return "bg-red-50 text-red-700 ring-red-200";
+  return "bg-red-50 text-red-700 ring-red-200";
   }
 
   return "bg-slate-100 text-slate-600 ring-slate-200";
@@ -85,11 +86,12 @@ export default function AdminAiRequestsPage() {
   const [message, setMessage] = useState("");
 
   async function loadRequests() {
-    setIsLoading(true);
+  setIsLoading(true);
     setMessage("");
 
     try {
-      const { data, error } = await supabase
+  const {
+  data, error } = await supabase
         .from("ai_assistant_requests")
         .select(
           `
@@ -115,7 +117,8 @@ export default function AdminAiRequestsPage() {
           )
         `
         )
-        .order("created_at", { ascending: false });
+        .order("created_at", {
+  ascending: false });
 
       if (error) throw error;
 
@@ -126,50 +129,52 @@ export default function AdminAiRequestsPage() {
       const notes: Record<string, string> = {};
 
       items.forEach((request) => {
-        notes[request.id] = request.admin_note || "";
+  notes[request.id] = request.admin_note || "";
       });
 
       setAdminNotes(notes);
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error ? error.message : "Unable to load AI requests.";
 
       setMessage(errorMessage);
     } finally {
-      setIsLoading(false);
+  setIsLoading(false);
     }
   }
 
   useEffect(() => {
-    loadRequests();
+  loadRequests();
   }, []);
 
   async function updateRequest(request: AiRequest, status: string) {
-    setProcessingId(request.id);
+  setProcessingId(request.id);
     setMessage("");
 
     try {
-      const isActive = status === "active";
+  const isActive = status === "active";
 
-      const { error: requestError } = await supabase
+      const {
+  error: requestError } = await supabase
         .from("ai_assistant_requests")
         .update({
-          status,
+  status,
           admin_note: adminNotes[request.id] || null,
-          updated_at: new Date().toISOString(),
-        })
+          updated_at: new Date().toISOString()
+})
         .eq("id", request.id);
 
       if (requestError) throw requestError;
 
-      const { error: businessError } = await supabase
+      const {
+  error: businessError } = await supabase
         .from("businesses")
         .update({
-          ai_assistant_status: status,
+  ai_assistant_status: status,
           ai_assistant_enabled: isActive,
           ai_assistant_notes: adminNotes[request.id] || null,
-          updated_at: new Date().toISOString(),
-        })
+          updated_at: new Date().toISOString()
+})
         .eq("id", request.business_id);
 
       if (businessError) throw businessError;
@@ -182,25 +187,25 @@ export default function AdminAiRequestsPage() {
 
       await loadRequests();
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error ? error.message : "Unable to update AI request.";
 
       setMessage(errorMessage);
     } finally {
-      setProcessingId("");
+  setProcessingId("");
     }
   }
 
   async function quickPause(request: AiRequest) {
-    await updateRequest(request, "paused");
+  await updateRequest(request, "paused");
   }
 
   async function quickActivate(request: AiRequest) {
-    await updateRequest(request, "active");
+  await updateRequest(request, "active");
   }
 
   if (isLoading) {
-    return (
+  return (
       <main className="grid min-h-screen place-items-center bg-[#f7f1ff] px-5">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={28} />
@@ -357,9 +362,9 @@ export default function AdminAiRequestsPage() {
                         value={adminNotes[request.id] || ""}
                         onChange={(event) =>
                           setAdminNotes((notes) => ({
-                            ...notes,
-                            [request.id]: event.target.value,
-                          }))
+  ...notes,
+                            [request.id]: event.target.value
+}))
                         }
                         rows={5}
                         className="border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none focus:border-[#7c3aed]"
@@ -397,7 +402,7 @@ export default function AdminAiRequestsPage() {
                           onClick={() => updateRequest(request, status)}
                           disabled={processingId === request.id}
                           className={`rounded-full px-4 py-2.5 text-xs font-semibold capitalize transition disabled:cursor-not-allowed disabled:opacity-60 ${
-                            request.status === status
+  request.status === status
                               ? "bg-[#7c3aed] text-white"
                               : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                           }`}

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -93,7 +93,7 @@ function formatStatus(status?: string | null) {
 }
 
 function getInventoryIcon(mode: string | null | undefined) {
-  const normalizedMode = normalizeBusinessMode(mode);
+  const _normalizedMode = normalizeBusinessMode(mode);
 
   if (false) return Building2;
   if (false) return Car;

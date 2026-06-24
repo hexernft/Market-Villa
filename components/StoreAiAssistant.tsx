@@ -1,7 +1,9 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
-import { Bot, Loader2, MessageCircle, Send, X } from "lucide-react";
+import {
+  FormEvent, useMemo, useState } from "react";
+import {
+  Bot, Loader2, Send, X } from "lucide-react";
 
 type ChatMessage = {
   role: "assistant" | "user";
@@ -15,64 +17,65 @@ type StoreAiAssistantProps = {
 
 export function StoreAiAssistant({
   businessId,
-  businessName,
+  businessName
 }: StoreAiAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      role: "assistant",
+  role: "assistant",
       content:
-        "Hi, I can help answer questions about this store. What would you like to know?",
-    },
+        "Hi, I can help answer questions about this store. What would you like to know?"
+},
   ]);
   const [isSending, setIsSending] = useState(false);
 
   const title = useMemo(() => {
-    return businessName ? `${businessName} Assistant` : "Store Assistant";
+  return businessName ? `${businessName} Assistant` : "Store Assistant";
   }, [businessName]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  event.preventDefault();
 
     const message = input.trim();
 
     if (!message || isSending) return;
 
     setInput("");
-    setMessages((items) => [...items, { role: "user", content: message }]);
+    setMessages((items) => [...items, {
+  role: "user", content: message }]);
     setIsSending(true);
 
     try {
-      const response = await fetch("/api/ai/store-chat", {
-        method: "POST",
+  const response = await fetch("/api/ai/store-chat", {
+  method: "POST",
         headers: {
-          "Content-Type": "application/json",
-        },
+  "Content-Type": "application/json"
+},
         body: JSON.stringify({
-          businessId,
+  businessId,
           message,
-          history: messages.slice(-8),
-        }),
-      });
+          history: messages.slice(-8)
+})
+});
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Unable to get AI response.");
+  throw new Error(result.error || "Unable to get AI response.");
       }
 
       setMessages((items) => [
         ...items,
         {
-          role: "assistant",
+  role: "assistant",
           content:
             result.reply ||
-            "I’m not fully sure about that. Please contact the store directly on WhatsApp.",
-        },
+            "I’m not fully sure about that. Please contact the store directly on WhatsApp."
+},
       ]);
     } catch (error) {
-      const errorMessage =
+  const errorMessage =
         error instanceof Error
           ? error.message
           : "Unable to reach the store assistant.";
@@ -80,12 +83,12 @@ export function StoreAiAssistant({
       setMessages((items) => [
         ...items,
         {
-          role: "assistant",
-          content: errorMessage,
-        },
+  role: "assistant",
+          content: errorMessage
+},
       ]);
     } finally {
-      setIsSending(false);
+  setIsSending(false);
     }
   }
 
@@ -120,12 +123,12 @@ export function StoreAiAssistant({
               <div
                 key={`${message.role}-${index}`}
                 className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
+  message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
                   className={`max-w-[82%] rounded-2xl px-3 py-2 text-sm leading-6 ${
-                    message.role === "user"
+  message.role === "user"
                       ? "bg-[#16a34a] text-white"
                       : "bg-white text-[#241436] shadow-sm"
                   }`}

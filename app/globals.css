@@ -3602,3 +3602,53 @@ aside.admin-sidebar .admin-sidebar-link-active {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
 }
+/* Compact checkout layout */
+.mv-checkout-ui {
+  font-size: 14px;
+}
+
+.mv-checkout-ui h3 {
+  line-height: 1.1 !important;
+}
+
+.mv-checkout-ui input,
+.mv-checkout-ui textarea {
+  min-height: 2.5rem !important;
+}
+
+.mv-checkout-ui textarea {
+  max-height: 4.5rem !important;
+}
+
+.mv-checkout-ui button {
+  min-height: 2.5rem;
+}
+
+.mv-checkout-ui .rounded-\[1\.25rem\] {
+  border-radius: 1rem !important;
+}
+/* Compact checkout final cleanup */
+.mv-checkout-ui {
+  font-size: 14px;
+}
+
+.mv-checkout-ui input,
+.mv-checkout-ui textarea {
+  min-height: 2.5rem !important;
+}
+
+.mv-checkout-ui textarea {
+  max-height: 4rem !important;
+}
+
+.mv-checkout-ui button {
+  min-height: 2.5rem !important;
+}
+
+.mv-checkout-ui [data-order-summary-preview="true"] {
+  position: fixed !important;
+  left: -9999px !important;
+  top: 0 !important;
+  width: 420px !important;
+  pointer-events: none !important;
+}

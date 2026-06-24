@@ -15,12 +15,13 @@ import { supabase } from "@/lib/supabase";
 
 type ThemeSettings = {
   colorTheme?: "market-purple" | "warm-boutique" | "neon-rail" | "editorial" | "edge-blue" | "baby-bloom";
-  heroStyle?: "split" | "edge" | "carousel" | "minimal" | "product-first";
+  heroStyle?: "split" | "edge" | "carousel" | "minimal" | "product-first" | "storefront-pro";
   heroSize?: "slim" | "medium" | "bold";
-  productCardStyle?: "soft" | "bordered" | "shadow" | "dark" | "playful" | "editorial";
-  navbarStyle?: "none" | "simple" | "centered" | "floating" | "pill";
-  footerStyle?: "simple" | "dark" | "branded" | "compact";
+  productCardStyle?: "soft" | "bordered" | "shadow" | "dark" | "playful" | "editorial" | "retail-grid";
+  navbarStyle?: "none" | "simple" | "centered" | "floating" | "pill" | "ecommerce";
+  footerStyle?: "simple" | "dark" | "branded" | "compact" | "full";
   toggles?: {
+    showHero?: boolean;
     showNavbar?: boolean;
     showHomeLink?: boolean;
     showProductsLink?: boolean;
@@ -51,6 +52,7 @@ const defaultSettings: ThemeSettings = {
   navbarStyle: "simple",
   footerStyle: "dark",
   toggles: {
+    showHero: true,
     showNavbar: true,
     showHomeLink: true,
     showProductsLink: true,
@@ -111,6 +113,7 @@ const heroStyles = [
   { id: "carousel", name: "Carousel Hero", description: "Rotating image/offer section." },
   { id: "minimal", name: "Minimal Hero", description: "Small intro with products pushed up." },
   { id: "product-first", name: "Product First", description: "Products appear immediately." },
+  { id: "storefront-pro", name: "Storefront Pro", description: "Ecommerce-style hero with shop structure." },
 ] as const;
 
 const productCardStyles = [
@@ -120,6 +123,7 @@ const productCardStyles = [
   { id: "dark", name: "Dark Cards" },
   { id: "playful", name: "Playful Cards" },
   { id: "editorial", name: "Editorial Cards" },
+  { id: "retail-grid", name: "Retail Grid" },
 ] as const;
 
 const navbarStyles = [
@@ -128,6 +132,7 @@ const navbarStyles = [
   { id: "centered", name: "Centered" },
   { id: "floating", name: "Floating" },
   { id: "pill", name: "Pill Navbar" },
+  { id: "ecommerce", name: "Ecommerce Navbar" },
 ] as const;
 
 const footerStyles = [
@@ -135,6 +140,7 @@ const footerStyles = [
   { id: "dark", name: "Dark Footer" },
   { id: "branded", name: "Branded Footer" },
   { id: "compact", name: "Compact Footer" },
+  { id: "full", name: "Full Footer" },
 ] as const;
 
 function mergeSettings(settings?: ThemeSettings | null): ThemeSettings {
@@ -513,6 +519,11 @@ export default function CustomizeStorePage() {
             </h2>
 
             <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <ToggleRow
+                label="Show hero section"
+                checked={settings.toggles?.showHero !== false}
+                onChange={(value) => updateToggle("showHero", value)}
+              />
               <ToggleRow
                 label="Show navbar"
                 checked={settings.toggles?.showNavbar !== false}

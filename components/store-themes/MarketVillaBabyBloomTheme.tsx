@@ -8,29 +8,28 @@ import {
   Phone,
   ShoppingBag,
   Sparkles,
-  Star,
-  Store,
+  Star
 } from "lucide-react";
 
 const products = [
   {
-    name: "Tiny Baby Set",
+  name: "Tiny Baby Set",
     price: "₦9,500",
     tag: "Cute Pick",
-    description: "Perfect for baby clothes, soft items, gift packs, or newborn essentials.",
-  },
+    description: "Perfect for baby clothes, soft items, gift packs, or newborn essentials."
+},
   {
-    name: "Little Joy Bundle",
+  name: "Little Joy Bundle",
     price: "₦16,000",
     tag: "Popular",
-    description: "A playful card for bundles, toys, baby care products, or kids packages.",
-  },
+    description: "A playful card for bundles, toys, baby care products, or kids packages."
+},
   {
-    name: "Premium Baby Box",
+  name: "Premium Baby Box",
     price: "₦28,000",
     tag: "Gift Box",
-    description: "Use this for premium baby hampers, birthday packs, or special orders.",
-  },
+    description: "Use this for premium baby hampers, birthday packs, or special orders."
+},
 ];
 
 const navItems = ["Home", "Products", "About", "Contact"];
