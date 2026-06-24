@@ -3719,3 +3719,62 @@ aside.admin-sidebar .admin-sidebar-link-active {
   color: #241436 !important;
   -webkit-text-fill-color: #241436 !important;
 }
+/* Final dashboard light sidebar */
+.dashboard-light-sidebar,
+[data-dashboard-sidebar="true"] {
+  background: #ffffff !important;
+  color: #241436 !important;
+  border: 1px solid #e8e1f4 !important;
+  box-shadow: 0 18px 45px rgba(36, 20, 54, 0.08) !important;
+}
+
+.dashboard-light-sidebar *,
+[data-dashboard-sidebar="true"] * {
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
+}
+
+.dashboard-light-sidebar nav a,
+.dashboard-light-sidebar nav button,
+[data-dashboard-sidebar="true"] nav a,
+[data-dashboard-sidebar="true"] nav button {
+  background: transparent !important;
+  color: #241436 !important;
+  -webkit-text-fill-color: #241436 !important;
+}
+
+.dashboard-light-sidebar nav a:hover,
+.dashboard-light-sidebar nav button:hover,
+[data-dashboard-sidebar="true"] nav a:hover,
+[data-dashboard-sidebar="true"] nav button:hover {
+  background: #f4efff !important;
+}
+
+.dashboard-light-sidebar nav a[aria-current="page"],
+.dashboard-light-sidebar nav button[aria-current="page"],
+[data-dashboard-sidebar="true"] nav a[aria-current="page"],
+[data-dashboard-sidebar="true"] nav button[aria-current="page"] {
+  background: #7c3aed !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.dashboard-light-sidebar nav a[aria-current="page"] *,
+.dashboard-light-sidebar nav button[aria-current="page"] *,
+[data-dashboard-sidebar="true"] nav a[aria-current="page"] *,
+[data-dashboard-sidebar="true"] nav button[aria-current="page"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.dashboard-light-sidebar button,
+[data-dashboard-sidebar="true"] button {
+  border-color: #e8e1f4 !important;
+}
+
+.dashboard-light-sidebar > button:last-child,
+[data-dashboard-sidebar="true"] > button:last-child {
+  background: #ffffff !important;
+  color: #241436 !important;
+  -webkit-text-fill-color: #241436 !important;
+}
