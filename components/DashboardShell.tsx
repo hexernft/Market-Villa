@@ -48,9 +48,7 @@ const navItems = [
   {
   label: "Profile", href: "/dashboard/profile", icon: UserRound },
   {
-  label: "Theme", href: "/dashboard/theme", icon: Palette },
-  {
-  label: "Theme Store", href: "/dashboard/theme-store", icon: Sparkles },
+  label: "Themes", href: "/dashboard/theme-store", icon: Sparkles },
   {
   label: "Customize Store", href: "/dashboard/customize", icon: Palette },
   {
@@ -143,13 +141,13 @@ export function DashboardShell({
   return (
     <div className="mv-page-shell dashboard-mobile-light min-h-screen text-[#241436]">
       <aside className="dashboard-sidebar fixed inset-y-0 left-0 z-50 hidden w-72 p-3 lg:block">
-        <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-[linear-gradient(160deg,#241436_0%,#2f174b_70%,#412064_100%)] text-white shadow-[0_26px_70px_rgba(36,20,54,0.22)]">
+        <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-[#e8e1f4] bg-[linear-gradient(160deg,#241436_0%,#2f174b_70%,#412064_100%)] text-[#241436] shadow-[0_26px_70px_rgba(36,20,54,0.22)]">
           <div className="flex items-center px-5 py-5">
             <Link href="/dashboard" className="flex items-center gap-3">
               <Image src="/market-villa-logo.png" alt="Market Villa" width={72} height={72} className="h-16 w-16 object-contain" priority />
               <div>
-                <p className="text-sm font-semibold tracking-[-0.04em] text-white">{BRAND.name}</p>
-                <p className="text-xs font-medium text-white/50">Brand studio</p>
+                <p className="text-sm font-semibold tracking-[-0.04em] text-[#241436]">{BRAND.name}</p>
+                <p className="text-xs font-medium text-[#241436]/50">Brand studio</p>
               </div>
             </Link>
           </div>
@@ -160,7 +158,7 @@ export function DashboardShell({
               const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
-                <Link key={item.href} href={item.href} className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition ${isActive ? "bg-[#7c3aed] text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-white/68 hover:bg-white/10 hover:text-white"}`}>
+                <Link key={item.href} href={item.href} className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition ${isActive ? "bg-[#7c3aed] text-[#241436] shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
                   <Icon size={17} />
                   {label}
                 </Link>
@@ -169,7 +167,7 @@ export function DashboardShell({
           </nav>
 
           <div className="p-4">
-            <button type="button" onClick={handleLogout} disabled={isLoggingOut} className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-semibold text-white/80 transition hover:bg-white/12 hover:text-white disabled:cursor-not-allowed disabled:opacity-60">
+            <button type="button" onClick={handleLogout} disabled={isLoggingOut} className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#e8e1f4] bg-white px-4 py-2.5 text-sm font-semibold text-[#241436]/80 transition hover:bg-[#f1eaff] hover:text-[#241436] disabled:cursor-not-allowed disabled:opacity-60">
               {isLoggingOut ? <Loader2 size={17} className="animate-spin" /> : <LogOut size={17} />}
               {isLoggingOut ? "Logging out..." : "Logout"}
             </button>
