@@ -3652,3 +3652,70 @@ aside.admin-sidebar .admin-sidebar-link-active {
   width: 420px !important;
   pointer-events: none !important;
 }
+/* Professional dashboard sidebar override */
+[data-dashboard-sidebar="true"] {
+  background: #fbf9ff !important;
+  color: #241436 !important;
+  border: 1px solid #e8e1f4 !important;
+  box-shadow: 0 18px 50px rgba(36, 20, 54, 0.08) !important;
+}
+
+[data-dashboard-sidebar="true"] * {
+  color: inherit;
+}
+
+[data-dashboard-sidebar="true"] a,
+[data-dashboard-sidebar="true"] button {
+  color: #241436 !important;
+  -webkit-text-fill-color: #241436 !important;
+}
+
+[data-dashboard-sidebar="true"] a[href],
+[data-dashboard-sidebar="true"] nav a,
+[data-dashboard-sidebar="true"] nav button {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+[data-dashboard-sidebar="true"] a[href]:hover,
+[data-dashboard-sidebar="true"] nav a:hover,
+[data-dashboard-sidebar="true"] nav button:hover {
+  background: #f1eaff !important;
+}
+
+[data-dashboard-sidebar="true"] a[aria-current="page"],
+[data-dashboard-sidebar="true"] .active,
+[data-dashboard-sidebar="true"] [data-active="true"] {
+  background: #7c3aed !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+[data-dashboard-sidebar="true"] a[aria-current="page"] *,
+[data-dashboard-sidebar="true"] .active *,
+[data-dashboard-sidebar="true"] [data-active="true"] * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+[data-dashboard-sidebar="true"] svg {
+  color: currentColor !important;
+}
+
+[data-dashboard-sidebar="true"] [class*="bg-[#2b1245]"],
+[data-dashboard-sidebar="true"] [class*="bg-[#241436]"],
+[data-dashboard-sidebar="true"] [class*="bg-[#211331]"] {
+  background: #fbf9ff !important;
+}
+
+[data-dashboard-sidebar="true"] [class*="text-white"] {
+  color: #241436 !important;
+  -webkit-text-fill-color: #241436 !important;
+}
+
+[data-dashboard-sidebar="true"] button:last-child {
+  background: #ffffff !important;
+  border: 1px solid #e2d8f3 !important;
+  color: #241436 !important;
+  -webkit-text-fill-color: #241436 !important;
+}

@@ -268,15 +268,15 @@ export default function ThemeStorePage() {
 
   return (
     <div className="grid gap-5">
-      <section className="overflow-hidden rounded-[1.75rem] border border-[#e6d9f2] bg-[linear-gradient(135deg,#fff7ed,#f7f1ff,#ede9fe)] text-white shadow-[0_24px_70px_rgba(36,20,54,0.18)]">
+      <section className="overflow-hidden rounded-[1.75rem] border border-[#e6d9f2] bg-[linear-gradient(135deg,#fff7ed,#f7f1ff,#ede9fe)] text-[#241436] shadow-[0_24px_70px_rgba(36,20,54,0.18)]">
         <div className="grid gap-6 p-5 md:p-7 xl:grid-cols-[1fr_0.72fr] xl:items-end">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-white/75 ring-1 ring-white/15">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#6f6785] ring-1 ring-white/15">
               <Crown size={14} />
               Theme Store
             </span>
 
-            <h1 className="mt-5 max-w-2xl text-4xl font-semibold leading-tight tracking-[-0.055em] md:text-5xl">
+            <h1 className="mt-5 max-w-2xl text-4xl font-black leading-tight tracking-[-0.055em] md:text-5xl">
               {selectedModeMeta.themeLabel} for businesses that need more presence.
             </h1>
 
@@ -291,17 +291,17 @@ export default function ThemeStorePage() {
             <div className="grid grid-cols-3 gap-2">
               <div className="rounded-2xl bg-white/12 p-3">
                 <p className="text-2xl font-semibold">{visibleThemes.length}</p>
-                <p className="mt-1 text-xs text-white/60">Themes</p>
+                <p className="mt-1 text-xs text-[#241436]/60">Themes</p>
               </div>
               <div className="rounded-2xl bg-white/12 p-3">
                 <p className="text-2xl font-semibold">
                   {selectedModeMeta.shortLabel}
                 </p>
-                <p className="mt-1 text-xs text-white/60">Section</p>
+                <p className="mt-1 text-xs text-[#241436]/60">Section</p>
               </div>
               <div className="rounded-2xl bg-white/12 p-3">
                 <p className="text-2xl font-semibold">Soon</p>
-                <p className="mt-1 text-xs text-white/60">Pricing</p>
+                <p className="mt-1 text-xs text-[#241436]/60">Pricing</p>
               </div>
             </div>
 
@@ -348,7 +348,7 @@ export default function ThemeStorePage() {
             type="button"
             onClick={handleSaveTheme}
             disabled={isSaving || !selectedThemeId}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-[#241436] transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSaving ? (
               <Loader2 size={17} className="animate-spin" />
@@ -377,7 +377,7 @@ export default function ThemeStorePage() {
           </p>
           <Link
             href="/dashboard/billing"
-            className="mt-4 inline-flex min-h-10 items-center justify-center rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white"
+            className="mt-4 inline-flex min-h-10 items-center justify-center rounded-full bg-[#26143d] px-5 text-sm font-semibold text-[#241436]"
           >
             View Pro Plan
           </Link>
@@ -407,7 +407,7 @@ export default function ThemeStorePage() {
                 onClick={() => setActiveFilter(filter.value)}
                 className={`whitespace-nowrap rounded-xl border px-4 py-2 text-sm font-semibold transition ${
                   activeFilter === filter.value
-                    ? "border-[#7c3aed] bg-[#7c3aed] text-white"
+                    ? "border-[#7c3aed] bg-[#7c3aed] text-[#241436]"
                     : "border-slate-200 bg-white text-slate-700 hover:border-[#7c3aed]/40"
                 }`}
               >
@@ -473,7 +473,7 @@ export default function ThemeStorePage() {
               </div>
 
               {isLocked ? (
-                <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-xl bg-[#26143d] px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-xl bg-[#26143d] px-3 py-1 text-xs font-semibold text-[#241436] shadow-sm">
                   <Lock size={12} />
                   Pro
                 </span>

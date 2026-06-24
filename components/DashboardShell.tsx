@@ -140,7 +140,7 @@ export function DashboardShell({
 
   return (
     <div className="mv-page-shell dashboard-mobile-light min-h-screen text-[#241436]">
-      <aside className="dashboard-sidebar fixed inset-y-0 left-0 z-50 hidden w-72 p-3 lg:block">
+      <aside data-dashboard-sidebar="true" className="dashboard-sidebar fixed inset-y-0 left-0 z-50 hidden w-72 p-3 lg:block">
         <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-[#e8e1f4] bg-[linear-gradient(160deg,#241436_0%,#2f174b_70%,#412064_100%)] text-[#241436] shadow-[0_26px_70px_rgba(36,20,54,0.22)]">
           <div className="flex items-center px-5 py-5">
             <Link href="/dashboard" className="flex items-center gap-3">
