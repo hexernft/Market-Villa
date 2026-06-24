@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { CartItem, WhatsAppCheckout } from "@/components/WhatsAppCheckout";
 import { StoreAiAssistant } from "@/components/StoreAiAssistant";
+import { StoreThemeCustomizationStyles } from "@/components/StoreThemeCustomizationStyles";
+import { CustomStoreTheme } from "@/components/CustomStoreTheme";
 import {
   createPropertyInquiry,
   createVehicleInquiry,
@@ -68,6 +70,7 @@ type PublicBusiness = {
   instagram_url: string | null;
   opening_hours: string | null;
   theme_id: string | null;
+  theme_settings?: Record<string, any> | null;
   theme_sections: string[] | null;
   business_mode?: string | null;
   is_published: boolean;
@@ -184,7 +187,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (isLoading) {
     return (
       <>
-        <main className="store-page-slim grid min-h-screen place-items-center bg-slate-100 px-5 py-10 md:py-12">
+        <main className="market-villa-customized-store store-page-slim grid min-h-screen place-items-center bg-slate-100 px-5 py-10 md:py-12">
           <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
             <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-[#26143d] text-white">
               <Store size={22} />
@@ -206,7 +209,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (!business) {
     return (
       <>
-        <main className="store-page-slim grid min-h-screen place-items-center bg-slate-100 px-5 py-10 md:py-12">
+        <main className="market-villa-customized-store store-page-slim grid min-h-screen place-items-center bg-slate-100 px-5 py-10 md:py-12">
           <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
             <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-red-50 text-red-700">
               <Store size={22} />
@@ -235,7 +238,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (!business.is_published) {
     return (
       <>
-        <main className="store-page-slim grid min-h-screen place-items-center bg-slate-100 px-5 py-10 md:py-12">
+        <main className="market-villa-customized-store store-page-slim grid min-h-screen place-items-center bg-slate-100 px-5 py-10 md:py-12">
           <div className="w-full max-w-sm rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-soft">
             <div className="mx-auto mb-5 grid h-10 w-12 place-items-center rounded-2xl bg-purple-50 text-purple-700">
               <Store size={22} />
@@ -707,15 +710,30 @@ export default function StorePage({ params }: StorePageProps) {
   const specCars = visibleProducts.slice(0, 4);
   const inspectionCars = visibleProducts.slice(0, 3);
 
+  const storeCustomizationStyles = (
+    <StoreThemeCustomizationStyles settings={(business as any).theme_settings} />
+  );
+
   const storeAiAssistant =
     (business as any).ai_assistant_enabled && (business as any).ai_assistant_status === "active" ? (
       <StoreAiAssistant businessId={business.id} businessName={business.name} />
     ) : null;
 
+  const hasCustomThemeSettings = Boolean((business as any).theme_settings?.colorTheme);
+
+  if (hasCustomThemeSettings) {
+    return (
+      <>
+        <CustomStoreTheme business={business as any} />
+        {storeAiAssistant}
+      </>
+    );
+  }
+
   if (theme.layout === "kids-play") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#fff7fb] pt-24 text-[#25112f] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#fff7fb] pt-24 text-[#25112f] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] bg-[#2b1245] text-white shadow-[0_24px_80px_rgba(43,18,69,0.2)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -1164,6 +1182,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -1173,7 +1192,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "grocery-fresh") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#fbfff7] pt-24 text-[#102315] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#fbfff7] pt-24 text-[#102315] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] border border-lime-100 bg-white shadow-[0_20px_70px_rgba(16,35,21,0.1)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-lime-100 px-5 py-4">
@@ -1588,6 +1607,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -1597,7 +1617,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "pharmacy-care") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#f7ffff] pt-24 text-[#0f2530] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#f7ffff] pt-24 text-[#0f2530] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] border border-cyan-100 bg-white shadow-[0_20px_70px_rgba(15,37,48,0.1)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan-100 px-5 py-4">
@@ -2034,6 +2054,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -2043,7 +2064,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "jewelry-gallery") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#fbf7ef] pt-24 text-[#21190f] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#fbf7ef] pt-24 text-[#21190f] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden bg-[#21190f] text-[#fffaf0] shadow-[0_24px_80px_rgba(33,25,15,0.18)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -2498,6 +2519,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -2507,7 +2529,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "event-catering") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#fff8f1] pt-24 text-[#2c1608] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#fff8f1] pt-24 text-[#2c1608] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] bg-[#2c1608] text-white shadow-[0_24px_80px_rgba(44,22,8,0.18)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -2983,6 +3005,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -2992,7 +3015,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "apartment-stay") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#f8f4ef] pt-24 text-[#201713] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#f8f4ef] pt-24 text-[#201713] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto grid overflow-hidden rounded-[1.25rem] bg-[#201713] text-white shadow-[0_24px_80px_rgba(32,23,19,0.18)] md:max-w-7xl lg:grid-cols-[0.95fr_1.05fr]">
               <div className="flex flex-col justify-between gap-10 p-5 md:p-8">
@@ -3328,6 +3351,7 @@ export default function StorePage({ params }: StorePageProps) {
             </div>
           </footer>
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -3337,7 +3361,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "car-showroom") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#f6f7f5] pt-24 text-[#101714] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#f6f7f5] pt-24 text-[#101714] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] bg-[#101714] text-white shadow-[0_24px_80px_rgba(16,23,20,0.18)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -3845,6 +3869,7 @@ export default function StorePage({ params }: StorePageProps) {
             </footer>
           ) : null}
 
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -3854,7 +3879,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "home-furniture") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#f5f2ec] pt-24 text-[#201a14] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#f5f2ec] pt-24 text-[#201a14] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] bg-[#201a14] text-white shadow-[0_24px_80px_rgba(32,26,20,0.2)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -4296,6 +4321,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -4305,7 +4331,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "tech-catalog") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#eef6ff] pt-24 text-[#08111f] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#eef6ff] pt-24 text-[#08111f] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] bg-[#031124] text-white shadow-[0_24px_80px_rgba(3,17,36,0.22)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -4748,6 +4774,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -4757,7 +4784,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "beauty-shop") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#fff7fb] pt-24 text-[#2c1020] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#fff7fb] pt-24 text-[#2c1020] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] border border-[#f5c8d7] bg-white shadow-[0_24px_80px_rgba(59,16,32,0.16)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-[#f5c8d7] px-5 py-4">
@@ -5204,6 +5231,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -5213,7 +5241,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "daily-menu") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#fff8f0] pt-24 text-[#221207] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#fff8f0] pt-24 text-[#221207] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] bg-[#2b1206] text-white shadow-[0_24px_80px_rgba(43,18,6,0.2)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -5646,6 +5674,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -5655,7 +5684,7 @@ export default function StorePage({ params }: StorePageProps) {
   if (theme.layout === "mono-runway") {
     return (
       <>
-        <main className="store-page-slim min-h-screen bg-[#f4f5f7] pt-24 text-[#0c0e13] md:pt-28">
+        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#f4f5f7] pt-24 text-[#0c0e13] md:pt-28">
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] border border-[#d8dce2] bg-[#0c0e13] text-white shadow-[0_24px_80px_rgba(12,14,19,0.22)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -6043,6 +6072,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -6251,6 +6281,7 @@ export default function StorePage({ params }: StorePageProps) {
               setCart={setCart}
             />
           ) : null}
+          {storeCustomizationStyles}
           {storeAiAssistant}
         </main>
       </>
@@ -6623,7 +6654,8 @@ export default function StorePage({ params }: StorePageProps) {
           setCart={setCart}
         />
       ) : null}
-        {storeAiAssistant}
+        {storeCustomizationStyles}
+          {storeAiAssistant}
       </main>
     </>
   );

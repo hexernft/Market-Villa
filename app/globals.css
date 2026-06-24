@@ -3533,3 +3533,72 @@ aside.admin-sidebar .admin-sidebar-link-active {
   color: #241436 !important;
   -webkit-text-fill-color: #241436 !important;
 }
+/* Baby Bloom cute interactive theme */
+.baby-bloom-theme .baby-bloom-pop,
+.baby-bloom-theme .baby-bloom-product {
+  position: relative;
+}
+
+.baby-bloom-theme .baby-bloom-pop::after,
+.baby-bloom-theme .baby-bloom-product::after {
+  content: "";
+  position: absolute;
+  right: 0.8rem;
+  top: 0.75rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: rgba(236, 72, 153, 0.35);
+  box-shadow:
+    -0.75rem 0.7rem rgba(196, 181, 253, 0.32),
+    -1.55rem -0.15rem rgba(251, 207, 232, 0.85);
+}
+
+.baby-bloom-theme .baby-bloom-pop:hover,
+.baby-bloom-theme .baby-bloom-product:hover {
+  transform: translateY(-4px) rotate(-0.4deg);
+}
+/* Market Villa checkout isolation */
+.mv-checkout-ui,
+.mv-checkout-ui * {
+  color-scheme: light;
+}
+
+.mv-checkout-ui {
+  color: #241436 !important;
+}
+
+.mv-checkout-ui h1,
+.mv-checkout-ui h2,
+.mv-checkout-ui h3,
+.mv-checkout-ui p,
+.mv-checkout-ui span,
+.mv-checkout-ui label {
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.mv-checkout-ui input,
+.mv-checkout-ui textarea {
+  background: #ffffff !important;
+  color: #241436 !important;
+  -webkit-text-fill-color: #241436 !important;
+  border-color: #ddd3f0 !important;
+}
+
+.mv-checkout-ui input::placeholder,
+.mv-checkout-ui textarea::placeholder {
+  color: #9a93ad !important;
+  -webkit-text-fill-color: #9a93ad !important;
+}
+
+.mv-checkout-ui article,
+.mv-checkout-ui [data-checkout-card] {
+  background: #ffffff !important;
+  color: #241436 !important;
+}
+
+.mv-checkout-trigger,
+.mv-checkout-trigger * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}

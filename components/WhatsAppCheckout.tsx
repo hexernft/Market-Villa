@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { toPng } from "html-to-image";
@@ -209,7 +209,7 @@ export function WhatsAppCheckout({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white shadow-soft hover:bg-slate-800"
+        className="mv-checkout-trigger fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_18px_45px_rgba(38,20,61,0.28)] hover:bg-[#3b1b5d]"
       >
         <ShoppingBag size={18} />
         Checkout
@@ -219,14 +219,14 @@ export function WhatsAppCheckout({
       </button>
 
       {isOpen ? (
-        <div className="fixed inset-0 z-50 bg-[#26143d]/50 px-4 py-6 backdrop-blur-sm">
-          <div className="ml-auto flex h-full max-w-2xl flex-col overflow-hidden rounded-[2rem] bg-white shadow-soft">
-            <div className="flex items-center justify-between border-b border-slate-200 p-5">
+        <div className="mv-checkout-ui fixed inset-0 z-[90] bg-[#26143d]/45 px-3 py-4 backdrop-blur-sm md:px-4 md:py-5">
+          <div className="ml-auto flex h-full w-full max-w-xl flex-col overflow-hidden rounded-[1.65rem] border border-[#e8e1f4] bg-[#f7f3fb] text-[#241436] shadow-[0_28px_80px_rgba(36,20,54,0.24)]">
+            <div className="flex items-center justify-between border-b border-[#e8e1f4] bg-[#f4eefb] p-4">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700">
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-[#8b5cf6]">
                   Checkout
                 </p>
-                <h3 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
+                <h3 className="text-lg font-black tracking-[-0.04em] text-[#241436]">
                   Your order
                 </h3>
               </div>
@@ -239,14 +239,14 @@ export function WhatsAppCheckout({
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-5">
-              <div className="grid gap-5 lg:grid-cols-[1fr_0.9fr]">
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="grid gap-4">
                 <div>
                   <div className="grid gap-3">
                     {cart.map((item) => (
                       <div
                         key={item.id}
-                        className="rounded-[1.25rem] border border-slate-200 p-4"
+                        className="rounded-[1.25rem] border border-[#e8e1f4] bg-white p-4 text-[#241436] shadow-sm"
                       >
                         <div className="flex justify-between gap-4">
                           <div>
@@ -441,7 +441,7 @@ export function WhatsAppCheckout({
                 <button
                   onClick={downloadOrderSummaryImage}
                   disabled={isGeneratingImage || isSavingOrder}
-                  className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl border border-[#ddd3f0] bg-white px-4 text-sm font-bold text-[#241436] hover:bg-[#faf8fe] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isGeneratingImage ? (
                     <Loader2 size={18} className="animate-spin" />
@@ -454,7 +454,7 @@ export function WhatsAppCheckout({
                 <button
                   onClick={handleCheckout}
                   disabled={isSavingOrder || isGeneratingImage}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-[#4c1d95] px-4 text-sm font-bold text-white shadow-[0_12px_30px_rgba(76,29,149,0.22)] hover:bg-[#5b21b6] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isSavingOrder ? (
                     <Loader2 size={18} className="animate-spin" />

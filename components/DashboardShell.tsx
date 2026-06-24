@@ -38,6 +38,7 @@ const navItems = [
   { label: "Profile", href: "/dashboard/profile", icon: UserRound },
   { label: "Theme", href: "/dashboard/theme", icon: Palette },
   { label: "Theme Store", href: "/dashboard/theme-store", icon: Sparkles },
+  { label: "Customize Store", href: "/dashboard/customize", icon: Palette },
   { label: "Custom Requests", href: "/dashboard/custom-requests", icon: Sparkles },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
