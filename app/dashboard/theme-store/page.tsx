@@ -348,7 +348,7 @@ export default function ThemeStorePage() {
             type="button"
             onClick={handleSaveTheme}
             disabled={isSaving || !selectedThemeId}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-[#241436] transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSaving ? (
               <Loader2 size={17} className="animate-spin" />
@@ -461,28 +461,6 @@ export default function ThemeStorePage() {
                   selected={selectedThemeId === theme.id}
                 />
               </button>
-
-              <div className="pointer-events-none absolute left-3 top-3 flex gap-2">
-                <span className="inline-flex items-center gap-1 rounded-xl bg-white px-3 py-1 text-xs font-semibold text-[#211331] shadow-sm">
-                  <Store size={12} />
-                  {themeModeLabel}
-                </span>
-                <span className="inline-flex rounded-xl bg-[#d9fff3] px-3 py-1 text-xs font-semibold text-[#032f2a] shadow-sm">
-                  {getThemePriceLabel(theme)}
-                </span>
-              </div>
-
-              {isLocked ? (
-                <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-xl bg-[#26143d] px-3 py-1 text-xs font-semibold text-[#241436] shadow-sm">
-                  <Lock size={12} />
-                  Pro
-                </span>
-              ) : null}
-
-              <span className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-xs font-semibold text-slate-950 shadow-sm ring-1 ring-slate-200">
-                <Store size={14} />
-                Select
-              </span>
             </div>
           );
         })}

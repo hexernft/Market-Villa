@@ -129,7 +129,7 @@ export function DashboardShell({
 
   if (isCheckingAuth) {
   return (
-      <main className="mv-page-shell grid min-h-screen place-items-center px-5 py-12">
+      <main data-dashboard-main="true" className="mv-page-shell grid min-h-screen place-items-center px-5 py-12">
         <div className="mv-soft-panel rounded-[2rem] p-8 text-center">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={30} />
           <p className="mt-4 text-sm text-[#241436]/60">Loading your dashboard...</p>
@@ -139,9 +139,9 @@ export function DashboardShell({
   }
 
   return (
-    <div className="mv-page-shell dashboard-mobile-light min-h-screen text-[#241436]">
-      <aside data-dashboard-sidebar="true" className="dashboard-light-sidebar dashboard-sidebar fixed inset-y-0 left-0 z-50 hidden w-72 p-3 lg:block">
-        <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-[#e8e1f4] bg-[linear-gradient(160deg,#241436_0%,#2f174b_70%,#412064_100%)] text-[#241436] shadow-[0_26px_70px_rgba(36,20,54,0.22)]">
+    <div className="mv-page-shell dashboard-mobile-light min-h-screen bg-[#fbf8ff] text-[#241436] lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
+      <aside data-dashboard-sidebar="true" className="dashboard-linear-sidebar dashboard-light-sidebar dashboard-sidebar sticky top-0 z-40 hidden h-screen w-full self-start overflow-hidden p-3 lg:block">
+        <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-[#e7e5ee] bg-[#f7f7fb] text-[#171421] shadow-[0_18px_45px_rgba(15,12,25,0.08)]">
           <div className="flex items-center px-5 py-5">
             <Link href="/dashboard" className="flex items-center gap-3">
               <Image src="/market-villa-logo.png" alt="Market Villa" width={72} height={72} className="h-16 w-16 object-contain" priority />
@@ -175,8 +175,8 @@ export function DashboardShell({
         </div>
       </aside>
 
-      <main className="min-h-screen pb-24 lg:pb-0 lg:pl-72">
-        <div className="mv-dashboard-content px-4 py-5 pt-20 md:px-4 lg:px-5 lg:pt-5">{children}</div>
+      <main data-dashboard-main="true" className="min-h-screen min-w-0 pb-24 lg:pb-0">
+        <div className="mv-dashboard-content px-4 py-4 md:px-5 lg:px-5 lg:py-4">{children}</div>
       </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white px-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] pt-2 lg:hidden" aria-label="Mobile dashboard navigation">
