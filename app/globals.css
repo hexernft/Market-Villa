@@ -3443,3 +3443,93 @@ aside.admin-sidebar .admin-sidebar-link-active {
   -webkit-text-fill-color: rgba(236, 254, 255, 0.92) !important;
   opacity: 1 !important;
 }
+/* Carousel Showcase Theme animation */
+.carousel-showcase-slide {
+  opacity: 0;
+  animation: carouselShowcaseFade 15s infinite;
+}
+
+.carousel-showcase-slide:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.carousel-showcase-slide:nth-child(2) {
+  animation-delay: 5s;
+}
+
+.carousel-showcase-slide:nth-child(3) {
+  animation-delay: 10s;
+}
+
+@keyframes carouselShowcaseFade {
+  0% {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+
+  6% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  36% {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+}
+/* Carousel Showcase Theme contrast safety */
+.carousel-showcase-theme {
+  color: #241436 !important;
+}
+
+.carousel-showcase-theme [class*="bg-[#241436]"],
+.carousel-showcase-theme [class*="rgba(36,20,54"] {
+  color: #ffffff !important;
+}
+
+.carousel-showcase-theme [class*="bg-[#241436]"] h1,
+.carousel-showcase-theme [class*="bg-[#241436]"] h2,
+.carousel-showcase-theme [class*="bg-[#241436]"] h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.carousel-showcase-theme [class*="bg-[#241436]"] p {
+  color: rgba(255, 255, 255, 0.78) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.carousel-showcase-theme article,
+.carousel-showcase-theme header,
+.carousel-showcase-theme footer,
+.carousel-showcase-theme [class*="bg-white"],
+.carousel-showcase-theme [class*="bg-[#f8f3ff]"],
+.carousel-showcase-theme [class*="bg-[#efe5ff]"] {
+  color: #241436 !important;
+}
+
+.carousel-showcase-theme article h3,
+.carousel-showcase-theme article p,
+.carousel-showcase-theme footer p {
+  -webkit-text-fill-color: currentColor !important;
+}
+
+.carousel-showcase-theme a[class*="bg-[#241436]"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.carousel-showcase-theme a[class*="bg-white"] {
+  color: #241436 !important;
+  -webkit-text-fill-color: #241436 !important;
+}
