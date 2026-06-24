@@ -3374,3 +3374,72 @@ aside.admin-sidebar .admin-sidebar-link-active {
 .compact-store-theme div[class*="bg-[#26143d]"] [class*="bg-white/"] {
   color: #ffffff !important;
 }
+/* Neon Rail Theme contrast force */
+.neon-rail-theme article {
+  background: #08111f !important;
+  color: #ffffff !important;
+  border-color: rgba(103, 232, 249, 0.22) !important;
+}
+
+.neon-rail-theme article h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.neon-rail-theme article p {
+  color: rgba(236, 254, 255, 0.72) !important;
+}
+
+.neon-rail-theme article p[class*="text-lime"] {
+  color: #d9f99d !important;
+  -webkit-text-fill-color: #d9f99d !important;
+}
+
+.neon-rail-theme article a {
+  background: #bef264 !important;
+  color: #050816 !important;
+  -webkit-text-fill-color: #050816 !important;
+}
+/* Neon Rail header brand exact fix */
+.neon-rail-theme header > div:first-child {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.neon-rail-theme header > div:first-child > div:last-child {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.neon-rail-theme header > div:first-child > div:last-child p:first-child {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.neon-rail-theme header > div:first-child > div:last-child p:last-child {
+  color: rgba(207, 250, 254, 0.78) !important;
+  -webkit-text-fill-color: rgba(207, 250, 254, 0.78) !important;
+}
+/* Neon Rail feature strip exact fix */
+.neon-rail-theme .neon-rail-feature-strip {
+  background: rgba(255, 255, 255, 0.065) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #ecfeff !important;
+}
+
+.neon-rail-theme .neon-rail-feature-strip svg {
+  color: inherit !important;
+  stroke: currentColor !important;
+}
+
+.neon-rail-theme .neon-rail-feature-text {
+  color: rgba(236, 254, 255, 0.92) !important;
+  -webkit-text-fill-color: rgba(236, 254, 255, 0.92) !important;
+  opacity: 1 !important;
+}
