@@ -3843,3 +3843,28 @@ aside.admin-sidebar .admin-sidebar-link-active {
   bottom: 5.75rem !important;
   right: 1.25rem !important;
 }
+
+/* Theme Store bounded zoom/pan preview */
+.theme-preview-stage {
+  position: relative !important;
+  width: 100% !important;
+  background: #ffffff !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  touch-action: none !important;
+}
+
+.theme-preview-canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 1180px !important;
+  max-width: none !important;
+  transform-origin: top left !important;
+  will-change: transform !important;
+}
+
+.theme-preview-canvas * {
+  user-select: none !important;
+  overscroll-behavior: contain !important;
+}
