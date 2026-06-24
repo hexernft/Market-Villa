@@ -268,7 +268,7 @@ export default function ThemeStorePage() {
 
   return (
     <div className="grid gap-5">
-      <section className="overflow-hidden rounded-[1.75rem] border border-[#e6d9f2] bg-[#211331] text-white shadow-[0_24px_70px_rgba(36,20,54,0.18)]">
+      <section className="overflow-hidden rounded-[1.75rem] border border-[#e6d9f2] bg-[linear-gradient(135deg,#fff7ed,#f7f1ff,#ede9fe)] text-white shadow-[0_24px_70px_rgba(36,20,54,0.18)]">
         <div className="grid gap-6 p-5 md:p-7 xl:grid-cols-[1fr_0.72fr] xl:items-end">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-white/75 ring-1 ring-white/15">
@@ -280,7 +280,7 @@ export default function ThemeStorePage() {
               {selectedModeMeta.themeLabel} for businesses that need more presence.
             </h1>
 
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#6f6785]">
               Theme options are filtered by the selected business section:
               Products, Properties, or advanced business sections. Change the business mode from
               Profile when a business belongs somewhere else.
