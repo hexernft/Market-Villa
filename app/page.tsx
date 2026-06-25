@@ -1,6 +1,7 @@
 import {
   TestimonialsSection } from "@/components/TestimonialsSection";
 import Image from "next/image";
+import Link from "next/link";
 import {
   CakeSlice, CheckCircle2, Clock3, ExternalLink, Globe2, MapPin, MessageCircle, Store } from "lucide-react";
 import {
@@ -437,19 +438,19 @@ export default function Home() {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
+              <Link
                 href="/login"
                 className="market-primary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-bold text-white"
               >
                 Create Business Page
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="/stores"
                 className="mobile-showcase-secondary inline-flex items-center justify-center rounded-2xl border border-white/22 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/16"
               >
                 Explore Stores
-              </a>
+              </Link>
             </div>
           </div>
 

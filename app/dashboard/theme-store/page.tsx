@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import Link from "next/link";
 import {
@@ -213,10 +213,10 @@ export default function ThemeStorePage() {
 
   const previewScale = previewZoom / 100;
 
-  function clampPreviewPan(
+  const clampPreviewPan = useCallback((
     nextPan: { x: number; y: number },
     scale = previewScale,
-  ) {
+  ) => {
     const stage = previewStageRef.current;
     const canvas = previewCanvasRef.current;
 
@@ -245,7 +245,7 @@ export default function ThemeStorePage() {
           ? 0
           : Math.min(maxY, Math.max(minY, nextPan.y)),
     };
-  }
+  }, [previewScale]);
 
   function resetPreviewView() {
     setPreviewZoom(75);
@@ -288,7 +288,7 @@ export default function ThemeStorePage() {
 
   useEffect(() => {
     setPreviewPan((current) => clampPreviewPan(current, previewScale));
-  }, [previewScale]);
+  }, [clampPreviewPan, previewScale]);
 
   async function handleSaveTheme() {
     if (!selectedBusinessId) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limit";
 
 type ProductRow = {
   name?: string | null;
@@ -209,11 +210,27 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    const businessId = String(body.businessId || "");
-    const message = String(body.message || "");
+    const businessId = String(body.businessId || "").trim();
+    const message = String(body.message || "").trim().slice(0, 1200);
     const history = Array.isArray(body.history)
-      ? (body.history as ChatHistoryItem[])
+      ? (body.history as ChatHistoryItem[]).slice(-8).map((item) => ({
+          role: item.role === "assistant" ? ("assistant" as const) : ("user" as const),
+          content: String(item.content || "").slice(0, 800),
+        }))
       : [];
+    const clientId = getClientIdentifier(request);
+    const rateLimit = checkRateLimit({
+      key: `store-chat:${clientId}:${businessId || "missing"}`,
+      limit: 12,
+      windowMs: 60_000,
+    });
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many messages. Please try again shortly." },
+        { status: 429 },
+      );
+    }
 
     if (!businessId || !message.trim()) {
       return NextResponse.json(
@@ -225,13 +242,20 @@ export async function POST(request: NextRequest) {
     const { data: business, error: businessError } = await supabaseAdmin
       .from("businesses")
       .select(
-        "id,name,description,tagline,location,phone,whatsapp,whatsapp_number,opening_hours,ai_assistant_enabled,ai_assistant_status,ai_assistant_notes",
+        "id,name,description,tagline,location,phone,whatsapp,whatsapp_number,opening_hours,is_published,ai_assistant_enabled,ai_assistant_status,ai_assistant_notes",
       )
       .eq("id", businessId)
       .single();
 
     if (businessError || !business) {
       return NextResponse.json({ error: "Store not found." }, { status: 404 });
+    }
+
+    if (!business.is_published) {
+      return NextResponse.json(
+        { error: "Store is not published." },
+        { status: 403 },
+      );
     }
 
     if (

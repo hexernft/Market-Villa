@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limit";
 
 type SupportRequestBody = {
   message?: unknown;
@@ -27,6 +28,20 @@ function extractOutputText(result: any) {
 
 export async function POST(request: Request) {
   try {
+    const clientId = getClientIdentifier(request);
+    const rateLimit = checkRateLimit({
+      key: `support-chat:${clientId}`,
+      limit: 10,
+      windowMs: 60_000,
+    });
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many support messages. Please try again shortly." },
+        { status: 429 },
+      );
+    }
+
     const openaiApiKey = process.env.OPENAI_API_KEY || "";
     const model = process.env.OPENAI_MODEL || "gpt-5-mini";
 
@@ -48,7 +63,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const message = String(body.message || "").trim();
+    const message = String(body.message || "").trim().slice(0, 1200);
 
     if (!message) {
       return NextResponse.json(

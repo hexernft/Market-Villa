@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limit";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
@@ -10,6 +11,30 @@ const allowedEvents = new Set([
   "copy_link",
   "share_click",
 ]);
+
+function sanitizeSource(value: unknown) {
+  return (
+    String(value || "web")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]/g, "")
+      .slice(0, 32) || "web"
+  );
+}
+
+function sanitizeMetadata(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+
+  const encoded = JSON.stringify(value);
+
+  if (encoded.length > 2048) {
+    return { truncated: true };
+  }
+
+  return value;
+}
 
 export async function POST(request: Request) {
   try {
@@ -24,7 +49,20 @@ export async function POST(request: Request) {
 
     const businessId = String(body?.business_id || "").trim();
     const eventType = String(body?.event_type || "").trim();
-    const source = String(body?.source || "web").trim();
+    const source = sanitizeSource(body?.source);
+    const clientId = getClientIdentifier(request);
+    const rateLimit = checkRateLimit({
+      key: `store-track:${clientId}:${businessId || "missing"}`,
+      limit: 60,
+      windowMs: 60_000,
+    });
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many tracking events. Please try again shortly." },
+        { status: 429 }
+      );
+    }
 
     if (!businessId) {
       return NextResponse.json(
@@ -44,11 +82,28 @@ export async function POST(request: Request) {
       auth: { persistSession: false },
     });
 
+    const { data: business, error: businessError } = await supabaseAdmin
+      .from("businesses")
+      .select("id,is_published")
+      .eq("id", businessId)
+      .single();
+
+    if (businessError || !business) {
+      return NextResponse.json({ error: "Store not found." }, { status: 404 });
+    }
+
+    if (!business.is_published) {
+      return NextResponse.json(
+        { error: "Store is not published." },
+        { status: 403 }
+      );
+    }
+
     await supabaseAdmin.from("store_events").insert({
       business_id: businessId,
       event_type: eventType,
       source,
-      metadata: body?.metadata || {},
+      metadata: sanitizeMetadata(body?.metadata),
     });
 
     if (eventType === "store_view") {

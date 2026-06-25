@@ -158,7 +158,7 @@ export function DashboardShell({
               const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
-                <Link key={item.href} href={item.href} className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition ${isActive ? "bg-[#7c3aed] text-[#241436] shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
+                <Link key={item.href} href={item.href} className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition ${isActive ? "bg-[#7c3aed] text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
                   <Icon size={17} />
                   {label}
                 </Link>

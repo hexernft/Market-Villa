@@ -107,7 +107,7 @@ button:not(:disabled):active, a[class*="rounded"]:active, a[class*="inline-flex"
 button:disabled, a[aria-disabled="true"] { cursor: not-allowed !important; opacity: .58 !important; }
 
 /* Primary CTA feel from selected concept */
-a[href="/login"].inline-flex, a[href="/login"].inline-flex,
+a[href="/login"].inline-flex,
 .market-primary-button,
 button[type="submit"] {
   background: linear-gradient(135deg, #8b5cf6, #7c3aed 62%, #6d28d9) !important;
@@ -115,7 +115,7 @@ button[type="submit"] {
   border: 1px solid rgba(255,255,255,.18) !important;
   box-shadow: 0 14px 30px rgba(124,58,237,.22), inset 0 1px 0 rgba(255,255,255,.24) !important;
 }
-a[href="/login"].inline-flex:hover, a[href="/login"].inline-flex:hover, .market-primary-button:hover, button[type="submit"]:hover { transform: translateY(-1px); }
+a[href="/login"].inline-flex:hover, .market-primary-button:hover, button[type="submit"]:hover { transform: translateY(-1px); }
 
 input, select, textarea {
   min-height: 2.55rem;
@@ -195,15 +195,6 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(124,58,23
 .bg-\[\#241436\], .bg-\[\#26143d\], .bg-\[\#06110f\], .bg-\[\#151b18\] { background: linear-gradient(160deg, #241436, #321b4d 70%, #412064) !important; }
 .text-white\/60 { color: rgba(255,255,255,.68) !important; }
 .text-white\/45 { color: rgba(255,255,255,.52) !important; }
-
-/* Compact readable scale */
-.text-2xl { font-size: 3.75rem !important; }
-.text-2xl { font-size: 3.35rem !important; }
-.text-2xl { font-size: 2.85rem !important; }
-.text-2xl { font-size: 2.25rem !important; }
-.text-2xl { font-size: 1.85rem !important; }
-.text-2xl { font-size: 1.45rem !important; }
-
 
 /* Compact UI + purple/black dark surfaces. Orange stays for logo/accent only. */
 :root {

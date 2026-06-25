@@ -20,7 +20,14 @@ function verifyPaystackSignature(rawBody: string, signature: string) {
     .update(rawBody)
     .digest("hex");
 
-  return hash === signature;
+  const hashBuffer = Buffer.from(hash, "hex");
+  const signatureBuffer = Buffer.from(signature, "hex");
+
+  if (hashBuffer.length !== signatureBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(hashBuffer, signatureBuffer);
 }
 
 function getPlanFromMetadata(data: any) {
