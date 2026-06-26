@@ -52,6 +52,8 @@ const navItems = [
   {
   label: "Customize Store", href: "/dashboard/customize", icon: Palette },
   {
+  label: "Home Builder", href: "/dashboard/home-builder", icon: LayoutDashboard },
+  {
   label: "Custom Requests", href: "/dashboard/custom-requests", icon: Sparkles },
   {
   label: "Billing", href: "/dashboard/billing", icon: CreditCard },

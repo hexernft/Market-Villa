@@ -517,6 +517,9 @@ export default function CustomizeStorePage() {
             <h2 className="text-xl font-black tracking-[-0.04em] text-slate-950">
               3. Show / hide items
             </h2>
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Turning a page off hides it from the store navbar and disables its public URL.
+            </p>
 
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               <ToggleRow
@@ -535,17 +538,17 @@ export default function CustomizeStorePage() {
                 onChange={(value) => updateToggle("showHomeLink", value)}
               />
               <ToggleRow
-                label="Navbar: Products"
+                label="Products page"
                 checked={settings.toggles?.showProductsLink !== false}
                 onChange={(value) => updateToggle("showProductsLink", value)}
               />
               <ToggleRow
-                label="Navbar: About"
+                label="About page"
                 checked={settings.toggles?.showAboutLink !== false}
                 onChange={(value) => updateToggle("showAboutLink", value)}
               />
               <ToggleRow
-                label="Navbar: Contact"
+                label="Contact page"
                 checked={settings.toggles?.showContactLink !== false}
                 onChange={(value) => updateToggle("showContactLink", value)}
               />

@@ -1,16 +1,28 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   Clock,
+  Mail,
   MapPin,
   MessageCircle,
+  Phone,
   Search,
   ShoppingBag,
   Store,
 } from "lucide-react";
 import { CartItem, WhatsAppCheckout } from "@/components/WhatsAppCheckout";
+import {
+  getEnabledStorePages,
+  getStorePagePath,
+  isStorePageEnabled,
+} from "@/lib/store-pages";
+import { getEnabledHomeSections } from "@/lib/home-builder";
+import { StoreHomeBuilderSections } from "@/components/StoreHomeBuilderSections";
+import type { StorePageId } from "@/lib/store-pages";
+import type { HomeBuilderSection } from "@/lib/home-builder";
 import { formatCurrency } from "@/lib/utils";
 
 type ThemeSettings = {
@@ -20,6 +32,7 @@ type ThemeSettings = {
   productCardStyle?: "soft" | "bordered" | "shadow" | "dark" | "playful" | "editorial";
   navbarStyle?: "none" | "simple" | "centered" | "floating" | "pill";
   footerStyle?: "simple" | "dark" | "branded" | "compact" | "full";
+  homeSections?: HomeBuilderSection[];
   toggles?: {
     showHero?: boolean;
     showNavbar?: boolean;
@@ -60,6 +73,7 @@ type Business = {
   cover_image_url?: string | null;
   whatsapp?: string | null;
   phone?: string | null;
+  email?: string | null;
   location?: string | null;
   opening_hours?: string | null;
   theme_settings?: ThemeSettings | null;
@@ -148,7 +162,13 @@ function getCardClass(style?: string) {
   return "border shadow-[0_12px_35px_rgba(36,20,54,0.08)]";
 }
 
-export function CustomStoreTheme({ business }: { business: Business }) {
+export function CustomStoreTheme({
+  business,
+  page = "home",
+}: {
+  business: Business;
+  page?: StorePageId;
+}) {
   const settings = business.theme_settings || {};
   const palette = getPalette(settings);
   const toggles = settings.toggles || {};
@@ -208,18 +228,23 @@ export function CustomStoreTheme({ business }: { business: Business }) {
     });
   }
 
-  const navLinks = [
-    toggles.showHomeLink === false ? null : { label: "Home", href: "#home" },
-    toggles.showProductsLink === false ? null : { label: "Products", href: "#products" },
-    toggles.showAboutLink === false ? null : { label: "About", href: "#about" },
-    toggles.showContactLink === false ? null : { label: "Contact", href: "#contact" },
-  ].filter(Boolean) as { label: string; href: string }[];
+  const navLinks = getEnabledStorePages(business).map((storePage) => ({
+    ...storePage,
+    href: getStorePagePath(business.slug, storePage.id),
+  }));
+  const isCurrentPageEnabled =
+    page === "home" || isStorePageEnabled(business, page);
+  const productsHref = getStorePagePath(business.slug, "products");
+  const aboutHref = getStorePagePath(business.slug, "about");
+  const contactHref = getStorePagePath(business.slug, "contact");
 
   const navbarStyle = settings.navbarStyle || "simple";
   const heroStyle = (settings.heroStyle || "split") as NonNullable<ThemeSettings["heroStyle"]>;
   const productCardStyle = settings.productCardStyle || "soft";
   const footerStyle = (settings.footerStyle || "dark") as NonNullable<ThemeSettings["footerStyle"]>;
   const darkCards = productCardStyle === "dark";
+  const enabledHomeSections = getEnabledHomeSections(settings);
+  const hasCustomHomeSections = page === "home" && enabledHomeSections.length > 0;
 
   return (
     <main
@@ -244,7 +269,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
             border: `1px solid ${palette.soft}`,
           }}
         >
-          <a href="#home" className="flex items-center gap-3">
+          <Link href={getStorePagePath(business.slug, "home")} className="flex items-center gap-3">
             <span
               className="grid h-10 w-10 place-items-center rounded-2xl"
               style={{
@@ -260,7 +285,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
                 {business.category || "Storefront"}
               </span>
             </span>
-          </a>
+          </Link>
 
           {navLinks.length > 0 ? (
             <nav
@@ -269,25 +294,32 @@ export function CustomStoreTheme({ business }: { business: Business }) {
               }`}
             >
               {navLinks.map((link) => (
-                <a
-                  key={link.href}
+                <Link
+                  key={link.id}
                   href={link.href}
                   className={`px-3 py-2 ${
                     navbarStyle === "pill" ? "rounded-full" : "rounded-xl"
                   }`}
                   style={{
-                    backgroundColor: navbarStyle === "pill" ? palette.soft : "transparent",
+                    backgroundColor:
+                      link.id === page || navbarStyle === "pill"
+                        ? palette.soft
+                        : "transparent",
                     color: palette.text,
                   }}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </nav>
           ) : null}
 
           <a
-            href={`https://wa.me/${business.whatsapp || ""}`}
+            href={
+              isStorePageEnabled(business, "contact")
+                ? contactHref
+                : `https://wa.me/${business.whatsapp || ""}`
+            }
             className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-black"
             style={{
               backgroundColor: palette.accent,
@@ -300,7 +332,50 @@ export function CustomStoreTheme({ business }: { business: Business }) {
         </header>
       ) : null}
 
-      {heroStyle === "storefront-pro" && toggles.showHero !== false ? (
+      {!isCurrentPageEnabled ? (
+        <section className="px-4 py-10">
+          <div
+            className="mx-auto max-w-3xl rounded-[1.35rem] p-6 text-center"
+            style={{
+              backgroundColor: palette.surface,
+              border: `1px solid ${palette.soft}`,
+            }}
+          >
+            <p
+              className="text-xs font-black uppercase tracking-[0.18em]"
+              style={{ color: palette.accent }}
+            >
+              Page unavailable
+            </p>
+            <h1 className="mt-3 text-2xl font-black tracking-[-0.04em]">
+              This page is currently turned off.
+            </h1>
+            <p className="mx-auto mt-2 max-w-xl text-sm leading-6" style={{ color: palette.muted }}>
+              {business.name} has not enabled this page or has not added enough content for it yet.
+            </p>
+            <Link
+              href={getStorePagePath(business.slug, "home")}
+              className="mt-5 inline-flex rounded-full px-5 py-3 text-sm font-black"
+              style={{
+                backgroundColor: palette.accent,
+                color: settings.colorTheme === "neon-rail" ? "#050816" : "#ffffff",
+              }}
+            >
+              Back to store
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
+      {isCurrentPageEnabled && hasCustomHomeSections ? (
+        <StoreHomeBuilderSections
+          business={business}
+          sections={enabledHomeSections}
+          palette={palette}
+        />
+      ) : null}
+
+      {isCurrentPageEnabled && page === "home" && !hasCustomHomeSections && heroStyle === "storefront-pro" && toggles.showHero !== false ? (
         <section id="home" className="px-0 py-0">
           <div className="grid min-h-[420px] bg-white md:grid-cols-2">
             <div className="flex flex-col items-center justify-center px-5 py-12 text-center">
@@ -328,7 +403,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
               {toggles.showHeroButtons !== false ? (
                 <div className="mt-6 flex flex-wrap justify-center gap-3">
                   <a
-                    href="#products"
+                    href={productsHref}
                     className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-black"
                     style={{
                       backgroundColor: palette.accent,
@@ -340,7 +415,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
                   </a>
 
                   <a
-                    href="#about"
+                    href={aboutHref}
                     className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-black"
                     style={{
                       borderColor: palette.accent,
@@ -370,7 +445,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
               {categories.map((category) => (
                 <a
                   key={category}
-                  href="#products"
+                  href={productsHref}
                   className="shrink-0 rounded-2xl border bg-white px-5 py-3 text-sm font-black shadow-sm"
                   style={{
                     borderColor: palette.soft,
@@ -384,7 +459,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
           ) : null}
         </section>
       ) : null}
-      {heroStyle !== "storefront-pro" && toggles.showHero !== false ? (
+      {isCurrentPageEnabled && page === "home" && !hasCustomHomeSections && heroStyle !== "storefront-pro" && toggles.showHero !== false ? (
         <section id="home" className="px-4 py-5">
         <div
           className={`mx-auto grid max-w-6xl overflow-hidden rounded-[1.5rem] ${
@@ -445,7 +520,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
               {toggles.showHeroButtons !== false ? (
                 <div className="mt-6 flex flex-wrap gap-3">
                   <a
-                    href="#products"
+                    href={productsHref}
                     className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black"
                     style={{
                       backgroundColor: palette.accent,
@@ -471,6 +546,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
         </section>
       ) : null}
 
+      {isCurrentPageEnabled && (page === "products" || (page === "home" && !hasCustomHomeSections)) ? (
       <section
         id="products"
         className={`px-4 ${
@@ -581,8 +657,9 @@ export function CustomStoreTheme({ business }: { business: Business }) {
           </div>
         </div>
       </section>
+      ) : null}
 
-      {toggles.showAboutSection !== false ? (
+      {isCurrentPageEnabled && (page === "about" || (page === "home" && !hasCustomHomeSections && toggles.showAboutSection !== false)) ? (
         <section id="about" className="px-4 pb-6">
           <div
             className="mx-auto max-w-6xl rounded-[1.35rem] p-5"
@@ -600,6 +677,84 @@ export function CustomStoreTheme({ business }: { business: Business }) {
             <p className="mt-2 max-w-3xl text-sm leading-7 opacity-70">
               {business.description || "Add business description, delivery notes, opening hours, and customer trust details here."}
             </p>
+          </div>
+        </section>
+      ) : null}
+
+      {isCurrentPageEnabled && page === "contact" ? (
+        <section id="contact-page" className="px-4 pb-6 pt-5">
+          <div
+            className="mx-auto grid max-w-6xl gap-5 rounded-[1.35rem] p-5 md:grid-cols-[1fr_0.9fr]"
+            style={{
+              backgroundColor: palette.surface,
+              border: `1px solid ${palette.soft}`,
+            }}
+          >
+            <div>
+              <p
+                className="text-xs font-black uppercase tracking-[0.2em]"
+                style={{ color: palette.accent }}
+              >
+                Contact
+              </p>
+              <h1 className="mt-3 text-3xl font-black tracking-[-0.05em]">
+                Contact {business.name}
+              </h1>
+              <p className="mt-3 max-w-xl text-sm leading-7" style={{ color: palette.muted }}>
+                Send a message, ask about availability, or confirm an order directly with this business.
+              </p>
+            </div>
+
+            <div className="grid gap-3 text-sm font-semibold">
+              {business.whatsapp ? (
+                <a
+                  href={`https://wa.me/${business.whatsapp}`}
+                  className="inline-flex items-center gap-3 rounded-2xl p-4"
+                  style={{ backgroundColor: palette.soft, color: palette.text }}
+                >
+                  <MessageCircle size={17} />
+                  WhatsApp: {business.whatsapp}
+                </a>
+              ) : null}
+              {business.phone ? (
+                <a
+                  href={`tel:${business.phone}`}
+                  className="inline-flex items-center gap-3 rounded-2xl p-4"
+                  style={{ backgroundColor: palette.soft, color: palette.text }}
+                >
+                  <Phone size={17} />
+                  Phone: {business.phone}
+                </a>
+              ) : null}
+              {business.email ? (
+                <a
+                  href={`mailto:${business.email}`}
+                  className="inline-flex items-center gap-3 rounded-2xl p-4"
+                  style={{ backgroundColor: palette.soft, color: palette.text }}
+                >
+                  <Mail size={17} />
+                  Email: {business.email}
+                </a>
+              ) : null}
+              {business.location ? (
+                <div
+                  className="inline-flex items-center gap-3 rounded-2xl p-4"
+                  style={{ backgroundColor: palette.soft, color: palette.text }}
+                >
+                  <MapPin size={17} />
+                  {business.location}
+                </div>
+              ) : null}
+              {business.opening_hours ? (
+                <div
+                  className="inline-flex items-center gap-3 rounded-2xl p-4"
+                  style={{ backgroundColor: palette.soft, color: palette.text }}
+                >
+                  <Clock size={17} />
+                  {business.opening_hours}
+                </div>
+              ) : null}
+            </div>
           </div>
         </section>
       ) : null}
@@ -625,7 +780,7 @@ export function CustomStoreTheme({ business }: { business: Business }) {
               <p className="text-sm font-black">Products</p>
               <div className="mt-3 grid gap-2 text-sm text-white/70">
                 {categories.slice(0, 5).map((category) => (
-                  <a key={category} href="#products">{category}</a>
+                  <Link key={category} href={productsHref}>{category}</Link>
                 ))}
               </div>
             </div>
