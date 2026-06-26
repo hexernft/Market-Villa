@@ -3269,6 +3269,143 @@ aside.admin-sidebar .admin-sidebar-link-active {
 .store-page-slim [class*="text-slate-600"] {
   color: inherit;
 }
+
+/* Translucent white chips on dark store panels are not light cards. */
+.market-villa-customized-store :is(
+  [class*="bg-[#241436]"],
+  [class*="bg-[#211331]"],
+  [class*="bg-[#26143d]"],
+  [class*="bg-[#2b1245]"],
+  [class*="bg-[#2b1206]"],
+  [class*="bg-[#201713]"],
+  [class*="bg-[#201a14]"],
+  [class*="bg-[#101714]"],
+  [class*="bg-[#031124]"],
+  [class*="bg-[#0c0e13]"],
+  [class*="bg-[#0f2530]"],
+  [class*="bg-[#3b1020]"],
+  [class*="bg-black"],
+  [class*="bg-slate-950"],
+  [class*="bg-slate-900"]
+) [class*="bg-white/"],
+.store-page-slim :is(
+  [class*="bg-[#241436]"],
+  [class*="bg-[#211331]"],
+  [class*="bg-[#26143d]"],
+  [class*="bg-[#2b1245]"],
+  [class*="bg-[#2b1206]"],
+  [class*="bg-[#201713]"],
+  [class*="bg-[#201a14]"],
+  [class*="bg-[#101714]"],
+  [class*="bg-[#031124]"],
+  [class*="bg-[#0c0e13]"],
+  [class*="bg-[#0f2530]"],
+  [class*="bg-[#3b1020]"],
+  [class*="bg-black"],
+  [class*="bg-slate-950"],
+  [class*="bg-slate-900"]
+) [class*="bg-white/"],
+.premium-grid-theme [class*="bg-[#1f1230]"] [class*="bg-white/"],
+.compact-store-theme :is([class*="bg-[#241436]"], [class*="bg-[#211331]"], [class*="bg-[#26143d]"]) [class*="bg-white/"],
+.warm-boutique-theme [class*="bg-[#431407]"] [class*="bg-white/"],
+.edge-hero-theme [class*="bg-[#0f172a]"] [class*="bg-white/"],
+.editorial-store-theme [class*="bg-[#201711]"] [class*="bg-white/"],
+.neon-rail-theme :is([class*="bg-[#050816]"], [class*="bg-[#08111f]"]) [class*="bg-white/"] {
+  color: rgba(255, 255, 255, 0.92) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+.market-villa-customized-store :is(
+  [class*="bg-[#241436]"],
+  [class*="bg-[#211331]"],
+  [class*="bg-[#26143d]"],
+  [class*="bg-[#2b1245]"],
+  [class*="bg-[#2b1206]"],
+  [class*="bg-[#201713]"],
+  [class*="bg-[#201a14]"],
+  [class*="bg-[#101714]"],
+  [class*="bg-[#031124]"],
+  [class*="bg-[#0c0e13]"],
+  [class*="bg-[#0f2530]"],
+  [class*="bg-[#3b1020]"],
+  [class*="bg-black"],
+  [class*="bg-slate-950"],
+  [class*="bg-slate-900"]
+) [class*="bg-white/"] svg,
+.store-page-slim :is(
+  [class*="bg-[#241436]"],
+  [class*="bg-[#211331]"],
+  [class*="bg-[#26143d]"],
+  [class*="bg-[#2b1245]"],
+  [class*="bg-[#2b1206]"],
+  [class*="bg-[#201713]"],
+  [class*="bg-[#201a14]"],
+  [class*="bg-[#101714]"],
+  [class*="bg-[#031124]"],
+  [class*="bg-[#0c0e13]"],
+  [class*="bg-[#0f2530]"],
+  [class*="bg-[#3b1020]"],
+  [class*="bg-black"],
+  [class*="bg-slate-950"],
+  [class*="bg-slate-900"]
+) [class*="bg-white/"] svg,
+.premium-grid-theme [class*="bg-[#1f1230]"] [class*="bg-white/"] svg,
+.compact-store-theme :is([class*="bg-[#241436]"], [class*="bg-[#211331]"], [class*="bg-[#26143d]"]) [class*="bg-white/"] svg,
+.warm-boutique-theme [class*="bg-[#431407]"] [class*="bg-white/"] svg,
+.edge-hero-theme [class*="bg-[#0f172a]"] [class*="bg-white/"] svg,
+.editorial-store-theme [class*="bg-[#201711]"] [class*="bg-white/"] svg,
+.neon-rail-theme :is([class*="bg-[#050816]"], [class*="bg-[#08111f]"]) [class*="bg-white/"] svg {
+  color: rgba(255, 255, 255, 0.92) !important;
+  stroke: currentColor !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.market-villa-customized-store :is(
+  [class*="bg-[#241436]"],
+  [class*="bg-[#211331]"],
+  [class*="bg-[#26143d]"],
+  [class*="bg-[#2b1245]"],
+  [class*="bg-[#2b1206]"],
+  [class*="bg-[#201713]"],
+  [class*="bg-[#201a14]"],
+  [class*="bg-[#101714]"],
+  [class*="bg-[#031124]"],
+  [class*="bg-[#0c0e13]"],
+  [class*="bg-[#0f2530]"],
+  [class*="bg-[#3b1020]"],
+  [class*="bg-black"],
+  [class*="bg-slate-950"],
+  [class*="bg-slate-900"]
+) [class*="bg-white/"] p,
+.store-page-slim :is(
+  [class*="bg-[#241436]"],
+  [class*="bg-[#211331]"],
+  [class*="bg-[#26143d]"],
+  [class*="bg-[#2b1245]"],
+  [class*="bg-[#2b1206]"],
+  [class*="bg-[#201713]"],
+  [class*="bg-[#201a14]"],
+  [class*="bg-[#101714]"],
+  [class*="bg-[#031124]"],
+  [class*="bg-[#0c0e13]"],
+  [class*="bg-[#0f2530]"],
+  [class*="bg-[#3b1020]"],
+  [class*="bg-black"],
+  [class*="bg-slate-950"],
+  [class*="bg-slate-900"]
+) [class*="bg-white/"] p,
+.premium-grid-theme [class*="bg-[#1f1230]"] [class*="bg-white/"] p,
+.compact-store-theme :is([class*="bg-[#241436]"], [class*="bg-[#211331]"], [class*="bg-[#26143d]"]) [class*="bg-white/"] p,
+.warm-boutique-theme [class*="bg-[#431407]"] [class*="bg-white/"] p,
+.edge-hero-theme [class*="bg-[#0f172a]"] [class*="bg-white/"] p,
+.editorial-store-theme [class*="bg-[#201711]"] [class*="bg-white/"] p,
+.neon-rail-theme :is([class*="bg-[#050816]"], [class*="bg-[#08111f]"]) [class*="bg-white/"] p {
+  color: rgba(255, 255, 255, 0.82) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.82) !important;
+  opacity: 1 !important;
+}
 /* Premium Grid Theme forced contrast fix */
 .premium-grid-theme section[class*="bg-[#1f1230]"],
 .premium-grid-theme div[class*="bg-[#1f1230]"] {

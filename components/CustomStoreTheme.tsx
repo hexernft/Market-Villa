@@ -248,7 +248,7 @@ export function CustomStoreTheme({
 
   return (
     <main
-      className="market-villa-customized-store min-h-screen"
+      className="market-villa-customized-store store-page-slim min-h-screen"
       style={{
         backgroundColor: palette.page,
         color: palette.text,
