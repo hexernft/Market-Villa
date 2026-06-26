@@ -328,31 +328,15 @@ export default function CustomizeStorePage() {
 
   return (
     <div className="grid gap-5">
-      <section className="rounded-[1.75rem] border border-[#e6d9f2] bg-[#211331] p-5 text-white shadow-[0_24px_70px_rgba(36,20,54,0.18)] md:p-7">
-        <div className="grid gap-5 xl:grid-cols-[1fr_0.7fr] xl:items-end">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-white/75">
-              <Palette size={14} />
-              Controlled Store Customizer
-            </span>
-
-            <h1 className="mt-5 max-w-2xl text-4xl font-semibold leading-tight tracking-[-0.055em] md:text-5xl">
-              Build a custom-looking store from premium blocks.
-            </h1>
-
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">
-              Choose a color theme, hero style, product cards, navbar style,
-              footer style, and section toggles. No messy manual color picking.
-            </p>
-          </div>
-
-          <div className="rounded-[1.35rem] border border-white/12 bg-white/10 p-4">
-            <p className="text-sm font-semibold">Selected store</p>
+      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
+          <label className="grid gap-2 text-sm font-black text-slate-700">
+            Selected store
 
             <select
               value={selectedBusinessId}
               onChange={(event) => handleBusinessChange(event.target.value)}
-              className="mt-3 min-h-11 w-full rounded-2xl border border-white/15 bg-white px-4 text-sm font-semibold text-slate-900 outline-none"
+              className="min-h-11 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-900 outline-none focus:border-[#7c3aed]"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -360,19 +344,19 @@ export default function CustomizeStorePage() {
                 </option>
               ))}
             </select>
+          </label>
 
-            {selectedBusiness ? (
-              <a
-                href={`/store/${selectedBusiness.slug}`}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-3 inline-flex items-center gap-2 rounded-full bg-white/12 px-3 py-2 text-xs font-semibold text-white hover:bg-white/18"
-              >
-                <Eye size={14} />
-                Preview live store
-              </a>
-            ) : null}
-          </div>
+          {selectedBusiness ? (
+            <a
+              href={`/store/${selectedBusiness.slug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#241436] px-5 text-sm font-black text-white transition hover:bg-[#321b52]"
+            >
+              <Eye size={16} />
+              Preview live store
+            </a>
+          ) : null}
         </div>
       </section>
 

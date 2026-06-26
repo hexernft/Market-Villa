@@ -5,12 +5,10 @@ import type { PointerEvent } from "react";
 import Link from "next/link";
 import {
   CheckCircle2,
-  Crown,
   Loader2,
   Lock,
   Palette,
   Search,
-  Store,
 } from "lucide-react";
 import { ThemePreviewCard } from "@/components/ThemePreviewCard";
 import { ThemeStoreLivePreview } from "@/components/ThemeStoreLivePreview";
@@ -360,53 +358,6 @@ export default function ThemeStorePage() {
 
   return (
     <div className="grid gap-5">
-      <section className="overflow-hidden rounded-[1.75rem] border border-[#e6d9f2] bg-[linear-gradient(135deg,#fff7ed,#f7f1ff,#ede9fe)] text-[#241436] shadow-[0_24px_70px_rgba(36,20,54,0.18)]">
-        <div className="grid gap-6 p-5 md:p-7 xl:grid-cols-[1fr_0.72fr] xl:items-end">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#6f6785] ring-1 ring-white/15">
-              <Crown size={14} />
-              Theme Store
-            </span>
-
-            <h1 className="mt-5 max-w-2xl text-4xl font-black leading-tight tracking-[-0.055em] md:text-5xl">
-              {selectedModeMeta.themeLabel} for businesses that need more presence.
-            </h1>
-
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#6f6785]">
-              Theme options are filtered by the selected business section:
-              Products, Properties, or advanced business sections. Change the business mode from
-              Profile when a business belongs somewhere else.
-            </p>
-          </div>
-
-          <div className="grid gap-3 rounded-[1.35rem] border border-white/12 bg-white/10 p-4 backdrop-blur">
-            <div className="grid grid-cols-3 gap-2">
-              <div className="rounded-2xl bg-white/12 p-3">
-                <p className="text-2xl font-semibold">{visibleThemes.length}</p>
-                <p className="mt-1 text-xs text-[#241436]/60">Themes</p>
-              </div>
-              <div className="rounded-2xl bg-white/12 p-3">
-                <p className="text-2xl font-semibold">
-                  {selectedModeMeta.shortLabel}
-                </p>
-                <p className="mt-1 text-xs text-[#241436]/60">Section</p>
-              </div>
-              <div className="rounded-2xl bg-white/12 p-3">
-                <p className="text-2xl font-semibold">Soon</p>
-                <p className="mt-1 text-xs text-[#241436]/60">Pricing</p>
-              </div>
-            </div>
-
-            <Link
-              href="/dashboard/theme"
-              className="inline-flex min-h-10 items-center justify-center rounded-full bg-white px-5 text-sm font-semibold text-[#211331]"
-            >
-              Back to Default Theme
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
         <div className="grid gap-3 lg:grid-cols-[1fr_0.75fr_auto] lg:items-end">
           <label className="grid gap-2">

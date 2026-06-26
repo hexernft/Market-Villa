@@ -14,7 +14,6 @@ import {
   Loader2,
   LogOut,
   Megaphone,
-  MessageCircle,
   Package,
   Palette,
   Settings,
@@ -40,8 +39,6 @@ const navItems = [
   {
   label: "Products", href: "/dashboard/products", icon: Package, modeAware: true },
   {
-  label: "Leads", href: "/dashboard/leads", icon: MessageCircle },
-  {
   label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
   {
   label: "Domain", href: "/dashboard/domain", icon: Globe2 },
@@ -50,9 +47,9 @@ const navItems = [
   {
   label: "Themes", href: "/dashboard/theme-store", icon: Sparkles },
   {
-  label: "Customize Store", href: "/dashboard/customize", icon: Palette },
-  {
   label: "Home Builder", href: "/dashboard/home-builder", icon: LayoutDashboard },
+  {
+  label: "Customize Store", href: "/dashboard/customize", icon: Palette },
   {
   label: "Custom Requests", href: "/dashboard/custom-requests", icon: Sparkles },
   {

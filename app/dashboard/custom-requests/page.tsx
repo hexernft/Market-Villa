@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Loader2, Palette, Sparkles } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { CheckCircle2, Loader2, Palette } from "lucide-react";
 import { getMyBusinesses } from "@/lib/business-actions";
 import { supabase } from "@/lib/supabase";
 
@@ -50,10 +50,6 @@ export default function CustomRequestsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
-
-  const selectedBusiness = useMemo(() => {
-    return businesses.find((business) => business.id === selectedBusinessId);
-  }, [businesses, selectedBusinessId]);
 
   async function loadData() {
     setIsLoading(true);
@@ -155,35 +151,6 @@ export default function CustomRequestsPage() {
 
   return (
     <div className="grid gap-5">
-      <section className="overflow-hidden rounded-[1.75rem] border border-[#e6d9f2] bg-[#211331] p-5 text-white shadow-[0_24px_70px_rgba(36,20,54,0.18)] md:p-7">
-        <div className="grid gap-5 xl:grid-cols-[1fr_0.75fr] xl:items-end">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-white/75 ring-1 ring-white/15">
-              <Sparkles size={14} />
-              Custom Work
-            </span>
-
-            <h1 className="mt-5 max-w-2xl text-4xl font-semibold leading-tight tracking-[-0.055em] md:text-5xl">
-              Request a custom theme or shop customization.
-            </h1>
-
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">
-              Send Market Villa a request when you need a unique storefront,
-              layout adjustment, new section, design change, or done-for-you
-              shop improvement.
-            </p>
-          </div>
-
-          <div className="rounded-[1.35rem] border border-white/12 bg-white/10 p-4 backdrop-blur">
-            <p className="text-sm font-semibold">Selected business</p>
-            <p className="mt-2 text-sm text-white/70">
-              {selectedBusiness
-                ? `${selectedBusiness.name} — /store/${selectedBusiness.slug}`
-                : "No business selected"}
-            </p>
-          </div>
-        </div>
-      </section>
 
       {message ? (
         <div className="rounded-2xl bg-white p-3 text-sm text-slate-700 shadow-sm">
