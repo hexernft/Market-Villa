@@ -218,6 +218,27 @@ export function ThemePreviewCard({ theme, selected }: Props) {
               <div className="h-10 rounded-lg bg-[#101714]" />
             </div>
           </div>
+        ) : theme.id === "bush-market-pro" ? (
+          <div className="rounded-[1.35rem] bg-[#fffaf0] p-3 text-[#24160a] ring-1 ring-[#d8b879]">
+            <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+              <div>
+                <div className="h-3 w-28 rounded-full bg-[#24160a]" />
+                <div className="mt-2 h-2 w-20 rounded-full bg-[#d8b879]" />
+              </div>
+              <div className="grid h-10 w-10 place-items-center rounded-full bg-[#31572c] text-[10px] font-bold text-[#fff8e8]">
+                PRO
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <div className="h-12 rounded-2xl bg-[#ead6a8]" />
+              <div className="h-12 rounded-2xl bg-[#d89a2b]" />
+              <div className="h-12 rounded-2xl bg-[#f5e3bd]" />
+            </div>
+            <div className="mt-3 grid gap-2">
+              <div className="h-8 rounded-xl bg-[#24160a]" />
+              <div className="h-8 rounded-xl bg-[#31572c]" />
+            </div>
+          </div>
         ) : theme.layout === "daily-menu" ? (
           <div className="rounded-[1.35rem] bg-white/95 p-3 text-[#2b1206]">
             <div className="grid grid-cols-[1fr_auto] items-center gap-3">

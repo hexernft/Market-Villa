@@ -19,7 +19,8 @@
   | "mono-runway"
   | "daily-menu"
   | "beauty-shop"
-  | "home-furniture";
+  | "home-furniture"
+  | "bush-market-pro";
 
 export type ThemeSectionId =
   | "feature-strip"
@@ -970,6 +971,34 @@ export const businessThemes: BusinessTheme[] = [
     features: ["Daily menu blocks", "Tray/package section", "Delivery notes"],
     storefrontSections: ["Menu", "Trays & Packages", "Delivery Notes"],
     configurableSections: dailyMenuSections,
+  },
+  {
+    id: "bush-market-pro",
+    name: "Bush Market Pro",
+    description:
+      "Rustic local-market food theme for palm oil, grains, spices, fresh produce, foodstuff, and farm-to-table sellers.",
+    layout: "daily-menu",
+    page: "bg-[#f8f1df] text-[#24160a]",
+    hero: "from-[#24160a] via-[#5b3516] to-[#a15c1b]",
+    card: "bg-[#fffaf0] text-[#24160a]",
+    mutedCard: "bg-[#24160a] text-[#fff8e8]",
+    text: "text-[#fff8e8]",
+    mutedText: "text-[#f6dfb8]",
+    accent: "bg-[#d89a2b]",
+    accentText: "text-[#f7c873]",
+    button: "bg-[#31572c] text-[#fff8e8] hover:bg-[#24421f]",
+    secondaryButton:
+      "bg-[#fff8e8] text-[#24160a] ring-1 ring-[#d8b879] hover:bg-[#f5e3bd]",
+    chip: "bg-[#fff8e8]/14 text-[#fff8e8] ring-1 ring-[#f7c873]/24",
+    border: "border-[#d8b879]",
+    productCard: "rounded-[1.15rem] bg-[#fffaf0] text-[#24160a] shadow-sm",
+    sectionLabel: "text-[#7a4314]",
+    bestFor: "Palm oil, grains, spices, farm produce, foodstuff sellers",
+    features: ["Local market feel", "Bulk foodstuff sections", "Farm-fresh ordering"],
+    storefrontSections: ["Market Stalls", "Bulk Sacks", "Pickup & Delivery"],
+    configurableSections: dailyMenuSections,
+    priceLabel: "Pro",
+    pricingNote: "Premium local food market theme",
   },
   {
     id: "beauty-shop",

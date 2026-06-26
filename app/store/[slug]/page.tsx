@@ -5239,9 +5239,32 @@ export default function StorePage({ params }: StorePageProps) {
   }
 
   if (theme.layout === "daily-menu") {
+    const isBushMarketPro = theme.id === "bush-market-pro";
+    const foodThemeLabel = isBushMarketPro ? "Bush Market Pro" : "Daily Menu";
+    const foodCategoryFallback = isBushMarketPro ? "Local Food Market" : "Food Vendor";
+    const foodDescriptionFallback = isBushMarketPro
+      ? "Browse palm oil, grains, spices, foodstuff, farm produce, and pickup notes before placing a WhatsApp order."
+      : "Browse today's meals, trays, packs, drinks, and delivery notes before placing a WhatsApp order.";
+    const foodCtaLabel = isBushMarketPro ? "Shop Foodstuff" : "Order Food";
+    const foodWhatsAppMessage = isBushMarketPro
+      ? `Hello ${business.name}, I want to order foodstuff.`
+      : `Hello ${business.name}, I want to place a food order.`;
+    const foodSearchPlaceholder = isBushMarketPro
+      ? "Search palm oil, rice, spices"
+      : "Search meals, trays, drinks";
+    const foodContactFallback = isBushMarketPro
+      ? "Contact this local food market directly for pickup, delivery, and bulk orders."
+      : "Contact this food business directly for availability, delivery, and orders.";
+
     return (
       <>
-        <main className="market-villa-customized-store store-page-slim min-h-screen bg-[#fff8f0] pt-24 text-[#221207] md:pt-28">
+        <main
+          className={`market-villa-customized-store store-page-slim min-h-screen pt-24 md:pt-28 ${
+            isBushMarketPro
+              ? "bush-market-pro-theme bg-[#f8f1df] text-[#24160a]"
+              : "bg-[#fff8f0] text-[#221207]"
+          }`}
+        >
           <section className="px-4 py-4 md:px-5">
             <div className="mx-auto overflow-hidden rounded-[1.25rem] bg-[#2b1206] text-white shadow-[0_24px_80px_rgba(43,18,6,0.2)] md:max-w-7xl">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-5 py-4">
@@ -5263,7 +5286,7 @@ export default function StorePage({ params }: StorePageProps) {
                       {business.name}
                     </span>
                     <span className="block text-xs text-white/55">
-                      {business.category || "Food Vendor"}
+                      {business.category || foodCategoryFallback}
                     </span>
                   </span>
                 </Link>
@@ -5310,7 +5333,7 @@ export default function StorePage({ params }: StorePageProps) {
                 <div className="flex flex-col justify-between gap-8">
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.24em] text-white drop-shadow-[0_3px_10px_rgba(0,0,0,0.75)]">
-                      Daily Menu
+                      {foodThemeLabel}
                     </p>
                     <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-[0.95] tracking-[-0.06em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.85)] md:text-7xl">
                       {business.name}
@@ -5324,7 +5347,7 @@ export default function StorePage({ params }: StorePageProps) {
 
                     <p className="mt-4 max-w-xl text-sm font-medium leading-7 text-white/90 drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)]">
                       {business.description ||
-                        "Browse today's meals, trays, packs, drinks, and delivery notes before placing a WhatsApp order."}
+                        foodDescriptionFallback}
                     </p>
                   </div>
 
@@ -5340,14 +5363,14 @@ export default function StorePage({ params }: StorePageProps) {
                       className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#fbbf24] px-5 text-sm font-semibold text-[#2b1206] transition hover:bg-[#fed7aa]"
                     >
                       <ShoppingBag size={17} />
-                      Order Food
+                      {foodCtaLabel}
                     </a>
 
                     {whatsapp ? (
                       <a
                         href={buildWhatsAppLink(
                           whatsapp,
-                          `Hello ${business.name}, I want to place a food order.`
+                          foodWhatsAppMessage
                         )}
                         target="_blank"
                         rel="noreferrer"
@@ -5394,10 +5417,12 @@ export default function StorePage({ params }: StorePageProps) {
               <div className="mx-auto grid gap-4 md:max-w-7xl lg:grid-cols-[0.75fr_1fr]">
                 <div className="rounded-[1.25rem] bg-white p-5 shadow-sm">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#c2410c]">
-                    Menu Groups
+                    {isBushMarketPro ? "Market Stalls" : "Menu Groups"}
                   </p>
                   <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em]">
-                    Fast scan for hungry customers.
+                    {isBushMarketPro
+                      ? "Foodstuff, produce, and local staples."
+                      : "Fast scan for hungry customers."}
                   </h2>
                   <div className="mt-5 grid gap-2">
                     {foodCategories.map((category, index) => (
@@ -5455,15 +5480,18 @@ export default function StorePage({ params }: StorePageProps) {
                 <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#fed7aa]">
-                      Trays & Packages
+                      {isBushMarketPro ? "Bulk Sacks & Tubs" : "Trays & Packages"}
                     </p>
                     <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em]">
-                      Built for office orders, parties, and weekend trays.
+                      {isBushMarketPro
+                        ? "Built for cartons, bottles, bags, and market-day bundles."
+                        : "Built for office orders, parties, and weekend trays."}
                     </h2>
                   </div>
                   <p className="max-w-sm text-sm leading-6 text-white/60">
-                    Highlight bundles customers can order quickly without
-                    scrolling through the full menu.
+                    {isBushMarketPro
+                      ? "Highlight bulk foodstuff and produce bundles customers can order quickly without walking the full market."
+                      : "Highlight bundles customers can order quickly without scrolling through the full menu."}
                   </p>
                 </div>
 
@@ -5511,18 +5539,22 @@ export default function StorePage({ params }: StorePageProps) {
                     title: "Order window",
                     body:
                       business.opening_hours ||
-                      "Confirm daily availability before placing an order.",
+                      (isBushMarketPro
+                        ? "Confirm market-day availability before placing an order."
+                        : "Confirm daily availability before placing an order."),
                   },
                   {
-                    title: "Delivery area",
+                    title: isBushMarketPro ? "Pickup or delivery" : "Delivery area",
                     body:
                       business.location ||
                       "Share your address on WhatsApp for delivery confirmation.",
                   },
                   {
-                    title: "Fresh prep",
+                    title: isBushMarketPro ? "Fresh from market" : "Fresh prep",
                     body:
-                      "Meals and trays can include preparation notes, pickup timing, and custom requests.",
+                      isBushMarketPro
+                        ? "Foodstuff, oils, grains, spices, and produce can include sizing, pickup timing, and custom requests."
+                        : "Meals and trays can include preparation notes, pickup timing, and custom requests.",
                   },
                 ].map((note) => (
                   <div
@@ -5550,7 +5582,7 @@ export default function StorePage({ params }: StorePageProps) {
                       Order Items
                     </p>
                     <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em]">
-                      Full Menu
+                      {isBushMarketPro ? "Full Market List" : "Full Menu"}
                     </h2>
                   </div>
 
@@ -5562,7 +5594,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <input
                       value={query}
                       onChange={(event) => setQuery(event.target.value)}
-                      placeholder="Search meals, trays, drinks"
+                      placeholder={foodSearchPlaceholder}
                       className="min-h-11 w-full rounded-full border border-[#f2d8bd] bg-[#fff8f0] px-11 text-sm text-[#221207] outline-none focus:border-[#c2410c]"
                     />
                   </div>
@@ -5585,7 +5617,7 @@ export default function StorePage({ params }: StorePageProps) {
                         />
                         <div className="p-4">
                           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#c2410c]">
-                            {product.category || "Food"}
+                            {product.category || (isBushMarketPro ? "Foodstuff" : "Food")}
                           </p>
                           <h3 className="mt-2 text-base font-semibold">
                             {product.name}
@@ -5630,7 +5662,7 @@ export default function StorePage({ params }: StorePageProps) {
                     <h2 className="text-xl font-semibold">{business.name}</h2>
                     <p className="mt-2 max-w-xl text-sm leading-6 text-[#8a5a35]">
                       {business.tagline ||
-                        "Contact this food business directly for availability, delivery, and orders."}
+                        foodContactFallback}
                     </p>
                   </div>
 

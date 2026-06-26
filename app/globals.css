@@ -4042,3 +4042,65 @@ aside.admin-sidebar .admin-sidebar-link-active {
   stroke: currentColor !important;
   -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
 }
+
+/* Bush Market Pro food theme */
+.bush-market-pro-theme {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(216, 154, 43, 0.16), transparent 30%),
+    radial-gradient(circle at 88% 12%, rgba(49, 87, 44, 0.12), transparent 24%),
+    linear-gradient(180deg, #f8f1df 0%, #f3e3bf 100%) !important;
+  color: #24160a !important;
+  -webkit-text-fill-color: #24160a !important;
+}
+
+.bush-market-pro-theme [class*="bg-[#2b1206]"] {
+  background-color: #24160a !important;
+}
+
+.bush-market-pro-theme [class*="bg-[#fff8f0]"],
+.bush-market-pro-theme [class*="bg-[#fff3e4]"] {
+  background-color: #fff7e8 !important;
+}
+
+.bush-market-pro-theme [class*="bg-[#fbbf24]"] {
+  background-color: #d89a2b !important;
+  color: #24160a !important;
+  -webkit-text-fill-color: #24160a !important;
+}
+
+.bush-market-pro-theme [class*="text-[#2b1206]"],
+.bush-market-pro-theme [class*="text-[#221207]"] {
+  color: #24160a !important;
+  -webkit-text-fill-color: #24160a !important;
+}
+
+.bush-market-pro-theme [class*="text-[#c2410c]"],
+.bush-market-pro-theme [class*="text-[#8a5a35]"],
+.bush-market-pro-theme [class*="text-[#6b4227]"] {
+  color: #7a4314 !important;
+  -webkit-text-fill-color: #7a4314 !important;
+}
+
+.bush-market-pro-theme [class*="border-[#f2d8bd]"] {
+  border-color: #d8b879 !important;
+}
+
+.bush-market-pro-theme input {
+  background-color: #fffaf0 !important;
+  border-color: #d8b879 !important;
+  color: #24160a !important;
+  -webkit-text-fill-color: #24160a !important;
+}
+
+.bush-market-pro-theme button[class*="bg-[#2b1206]"],
+.bush-market-pro-theme a[class*="bg-[#2b1206]"] {
+  background-color: #31572c !important;
+  color: #fff8e8 !important;
+  -webkit-text-fill-color: #fff8e8 !important;
+}
+
+.bush-market-pro-theme [class*="text-white"],
+.bush-market-pro-theme [class*="text-white/"] {
+  color: #fff8e8 !important;
+  -webkit-text-fill-color: #fff8e8 !important;
+}

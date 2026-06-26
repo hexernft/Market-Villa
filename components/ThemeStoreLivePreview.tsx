@@ -80,6 +80,20 @@ function getPalette(themeId: string): Palette {
     };
   }
 
+  if (id.includes("bush-market") || id.includes("local-market")) {
+    return {
+      page: "#f8f1df",
+      surface: "#fffaf0",
+      brand: "#24160a",
+      brandSoft: "#ead6a8",
+      accent: "#d89a2b",
+      text: "#24160a",
+      muted: "#76512b",
+      footer: "#24160a",
+      footerText: "#fff8e8",
+    };
+  }
+
   if (id.includes("warm") || id.includes("boutique") || id.includes("food")) {
     return {
       page: "#fff7ed",
