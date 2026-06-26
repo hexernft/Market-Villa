@@ -495,7 +495,7 @@ export default function BillingPage() {
             href="#plan-features"
             className="text-sm font-semibold text-white underline underline-offset-4 transition hover:text-[#95bf47]"
           >
-            Compare all features
+            Compare plan features
           </a>
         </div>
 
@@ -677,4 +677,5 @@ export default function BillingPage() {
     </div>
   );
 }
+
 
