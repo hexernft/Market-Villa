@@ -1,9 +1,13 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import {
+  BILLING_CYCLES,
+  getPlanBillingAmountInKobo,
   isValidPlanAlias,
-  MarketVillaPlanId,
+  normalizeBillingCycle,
   normalizePlanId,
+  type BillingCycle,
+  type MarketVillaPlanId,
 } from "@/lib/plans";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -29,11 +33,12 @@ async function readJsonSafely(response: Response) {
   }
 }
 
-function addOneMonthWithGrace() {
+function addSubscriptionPeriodWithGrace(billingCycle: BillingCycle) {
   const now = new Date();
+  const cycle = BILLING_CYCLES[billingCycle];
 
   const expiresAt = new Date(now);
-  expiresAt.setMonth(expiresAt.getMonth() + 1);
+  expiresAt.setMonth(expiresAt.getMonth() + cycle.months);
 
   const graceEndsAt = new Date(expiresAt);
   graceEndsAt.setDate(graceEndsAt.getDate() + 5);
@@ -42,17 +47,30 @@ function addOneMonthWithGrace() {
     now,
     expiresAt,
     graceEndsAt,
+    months: cycle.months,
   };
 }
 
-async function getExpectedAmountInKobo({
-  serviceClient,
+function getPaymentBillingCycle(payment: any): BillingCycle {
+  const rawResponse = payment?.raw_response || {};
+  const marketVilla = rawResponse?.market_villa || {};
+
+  return normalizeBillingCycle(
+    marketVilla.billing_cycle ||
+      rawResponse?.data?.metadata?.billing_cycle ||
+      rawResponse?.metadata?.billing_cycle ||
+      "quarterly",
+  );
+}
+
+function getExpectedAmountInKobo({
   paymentAmount,
   plan,
+  billingCycle,
 }: {
-  serviceClient: any;
   paymentAmount: unknown;
   plan: MarketVillaPlanId;
+  billingCycle: BillingCycle;
 }) {
   const storedAmount = Number(paymentAmount || 0);
 
@@ -60,19 +78,11 @@ async function getExpectedAmountInKobo({
     return Math.round(storedAmount * 100);
   }
 
-  const { data: pricingItem, error } = await serviceClient
-    .from("pricing_items")
-    .select("amount_in_kobo")
-    .eq("pricing_type", "subscription")
-    .eq("pricing_key", plan)
-    .eq("is_active", true)
-    .maybeSingle();
-
-  if (error || !pricingItem) {
-    return 0;
-  }
-
-  return Number(pricingItem.amount_in_kobo || 0);
+  return getPlanBillingAmountInKobo({
+    plan,
+    billingCycle,
+    isIntro: true,
+  });
 }
 
 export async function POST(request: Request) {
@@ -80,21 +90,21 @@ export async function POST(request: Request) {
     if (!supabaseUrl || !supabaseAnonKey) {
       return NextResponse.json(
         { error: "Supabase public environment variables are not configured." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     if (!supabaseServiceRoleKey) {
       return NextResponse.json(
         { error: "SUPABASE_SERVICE_ROLE_KEY is not configured." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     if (!paystackSecretKey) {
       return NextResponse.json(
         { error: "PAYSTACK_SECRET_KEY is not configured." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -103,7 +113,7 @@ export async function POST(request: Request) {
     if (!token) {
       return NextResponse.json(
         { error: "Authentication token missing." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -130,7 +140,7 @@ export async function POST(request: Request) {
     if (userError || !user) {
       return NextResponse.json(
         { error: "You must be logged in to verify payment." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -140,7 +150,7 @@ export async function POST(request: Request) {
     if (!reference) {
       return NextResponse.json(
         { error: "Payment reference is required." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -153,14 +163,14 @@ export async function POST(request: Request) {
     if (paymentError || !payment) {
       return NextResponse.json(
         { error: "Payment record not found." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (payment.owner_id !== user.id) {
       return NextResponse.json(
         { error: "You cannot verify this payment." },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -169,21 +179,23 @@ export async function POST(request: Request) {
     if (!isValidPlanAlias(rawPlan)) {
       return NextResponse.json(
         { error: "Invalid plan on payment record." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const plan = normalizePlanId(rawPlan) as MarketVillaPlanId;
-    const expectedAmountInKobo = await getExpectedAmountInKobo({
-      serviceClient,
+    const plan = normalizePlanId(rawPlan);
+    const billingCycle = getPaymentBillingCycle(payment);
+
+    const expectedAmountInKobo = getExpectedAmountInKobo({
       paymentAmount: payment.amount,
       plan,
+      billingCycle,
     });
 
     if (!expectedAmountInKobo) {
       return NextResponse.json(
         { error: "Selected plan amount is invalid." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -193,6 +205,7 @@ export async function POST(request: Request) {
         status: "success",
         message: "Payment already verified.",
         plan,
+        billingCycle,
         businessId: payment.business_id,
         reference,
       });
@@ -200,14 +213,14 @@ export async function POST(request: Request) {
 
     const verifyResponse = await fetch(
       `https://api.paystack.co/transaction/verify/${encodeURIComponent(
-        reference
+        reference,
       )}`,
       {
         method: "GET",
         headers: {
           Authorization: `Bearer ${paystackSecretKey}`,
         },
-      }
+      },
     );
 
     const verifyData = await readJsonSafely(verifyResponse);
@@ -218,7 +231,7 @@ export async function POST(request: Request) {
           error:
             verifyData.message || "Unable to verify Paystack transaction.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -251,14 +264,14 @@ export async function POST(request: Request) {
     if (transactionCurrency !== "NGN") {
       return NextResponse.json(
         { error: "Payment currency does not match this subscription." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (transactionAmount !== expectedAmountInKobo) {
       return NextResponse.json(
         { error: "Payment amount does not match the selected plan." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -270,32 +283,56 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         { error: "Payment business metadata does not match." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (metadata.owner_id && String(metadata.owner_id) !== String(user.id)) {
       return NextResponse.json(
         { error: "Payment owner metadata does not match." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (metadata.plan && normalizePlanId(String(metadata.plan)) !== plan) {
       return NextResponse.json(
         { error: "Payment plan metadata does not match." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const { now, expiresAt, graceEndsAt } = addOneMonthWithGrace();
+    if (
+      metadata.billing_cycle &&
+      normalizeBillingCycle(String(metadata.billing_cycle)) !== billingCycle
+    ) {
+      return NextResponse.json(
+        { error: "Payment billing cycle metadata does not match." },
+        { status: 400 },
+      );
+    }
+
+    const { now, expiresAt, graceEndsAt, months } =
+      addSubscriptionPeriodWithGrace(billingCycle);
+
+    const mergedRawResponse = {
+      ...verifyData,
+      market_villa: {
+        ...(payment.raw_response?.market_villa || {}),
+        verified_at: now.toISOString(),
+        plan,
+        billing_cycle: billingCycle,
+        billing_cycle_months: months,
+        subscription_expires_at: expiresAt.toISOString(),
+        subscription_grace_until: graceEndsAt.toISOString(),
+      },
+    };
 
     const { error: updatePaymentError } = await serviceClient
       .from("payments")
       .update({
         status: "success",
         paid_at: now.toISOString(),
-        raw_response: verifyData,
+        raw_response: mergedRawResponse,
         updated_at: now.toISOString(),
       })
       .eq("reference", reference);
@@ -303,7 +340,7 @@ export async function POST(request: Request) {
     if (updatePaymentError) {
       return NextResponse.json(
         { error: updatePaymentError.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -314,7 +351,7 @@ export async function POST(request: Request) {
         subscription_status: "active",
         subscription_started_at: now.toISOString(),
         subscription_expires_at: expiresAt.toISOString(),
-        grace_period_ends_at: graceEndsAt.toISOString(),
+        subscription_grace_until: graceEndsAt.toISOString(),
         is_published: true,
         updated_at: now.toISOString(),
       })
@@ -324,7 +361,7 @@ export async function POST(request: Request) {
     if (updateBusinessError) {
       return NextResponse.json(
         { error: updateBusinessError.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -333,9 +370,12 @@ export async function POST(request: Request) {
       status: "success",
       message: "Payment verified successfully.",
       plan,
+      billingCycle,
       businessId: payment.business_id,
       amount: Math.round(expectedAmountInKobo / 100),
       paidAt: now.toISOString(),
+      expiresAt: expiresAt.toISOString(),
+      graceUntil: graceEndsAt.toISOString(),
       reference,
     });
   } catch (error) {
@@ -345,4 +385,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
-

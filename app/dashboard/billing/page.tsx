@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -9,8 +9,17 @@ import {
   updateBusinessPublishStatus,
 } from "@/lib/business-actions";
 import { initializePlanPayment, verifyPlanPayment } from "@/lib/payment-actions";
-import { normalizePlanId } from "@/lib/plans";
-import { supabase } from "@/lib/supabase";
+import {
+  BILLING_CYCLES,
+  MARKET_VILLA_PLANS,
+  type BillingCycle,
+  type MarketVillaPlanId,
+  getPlanBillingAmount,
+  isPlanDowngrade,
+  isSubscriptionDateStillActive,
+  normalizeBillingCycle,
+  normalizePlanId,
+} from "@/lib/plans";
 
 type DashboardBusiness = {
   id: string;
@@ -19,17 +28,19 @@ type DashboardBusiness = {
   is_published: boolean;
   custom_domain: string | null;
   custom_domain_status: string;
-  subscription_plan: string;
-  subscription_status: string;
+  subscription_plan: string | null;
+  subscription_status: string | null;
+  subscription_started_at?: string | null;
+  subscription_expires_at?: string | null;
+  subscription_grace_until?: string | null;
 };
 
 type BillingPlan = {
-  id: string;
+  id: MarketVillaPlanId;
   name: string;
   description: string;
-  amount: number;
-  amountInKobo: number;
-  priceLabel: string;
+  introMonthlyAmount: number;
+  regularMonthlyAmount: number;
   productLimit?: number | null;
   storeLimit?: number | null;
   sortOrder?: number | null;
@@ -38,36 +49,32 @@ type BillingPlan = {
 const fallbackBillingPlans: BillingPlan[] = [
   {
     id: "starter",
-    name: "Starter",
-    description: "For small businesses starting online.",
-    amount: 10000,
-    amountInKobo: 1000000,
-    priceLabel: "\u20A610,000/month",
+    name: MARKET_VILLA_PLANS.starter.name,
+    description: MARKET_VILLA_PLANS.starter.description,
+    introMonthlyAmount: MARKET_VILLA_PLANS.starter.introMonthlyAmount,
+    regularMonthlyAmount: MARKET_VILLA_PLANS.starter.regularMonthlyAmount,
     productLimit: 20,
     storeLimit: 1,
     sortOrder: 10,
   },
   {
     id: "growth",
-    name: "Growth",
-    description: "For growing product businesses that need more room.",
-    amount: 20000,
-    amountInKobo: 2000000,
-    priceLabel: "\u20A620,000/month",
+    name: MARKET_VILLA_PLANS.growth.name,
+    description: MARKET_VILLA_PLANS.growth.description,
+    introMonthlyAmount: MARKET_VILLA_PLANS.growth.introMonthlyAmount,
+    regularMonthlyAmount: MARKET_VILLA_PLANS.growth.regularMonthlyAmount,
     productLimit: 100,
-    storeLimit: 3,
+    storeLimit: 1,
     sortOrder: 20,
   },
   {
     id: "pro",
-    name: "Premium",
-    description:
-      "For established businesses that need more stores, inventory, and stronger visibility.",
-    amount: 30000,
-    amountInKobo: 3000000,
-    priceLabel: "\u20A630,000/month",
+    name: MARKET_VILLA_PLANS.pro.name,
+    description: MARKET_VILLA_PLANS.pro.description,
+    introMonthlyAmount: MARKET_VILLA_PLANS.pro.introMonthlyAmount,
+    regularMonthlyAmount: MARKET_VILLA_PLANS.pro.regularMonthlyAmount,
     productLimit: 500,
-    storeLimit: 10,
+    storeLimit: 1,
     sortOrder: 30,
   },
 ];
@@ -80,26 +87,72 @@ function normalizeSubscriptionPlan(plan: string | null | undefined) {
   return normalizePlanId(plan);
 }
 
+function formatDate(value: string | null | undefined) {
+  if (!value) return "Not set";
+
+  try {
+    return new Intl.DateTimeFormat("en-NG", {
+      dateStyle: "medium",
+    }).format(new Date(value));
+  } catch {
+    return "Not set";
+  }
+}
+
+function isStarterFreeTrialActive(business: DashboardBusiness | undefined) {
+  if (!business) return false;
+
+  const plan = normalizePlanId(business.subscription_plan);
+  const status = String(business.subscription_status || "").toLowerCase();
+
+  if (plan !== "starter") return false;
+
+  if (status === "trial" || status === "free_trial") {
+    return true;
+  }
+
+  return false;
+}
+
+function isDowngradeBlockedForBusiness({
+  business,
+  targetPlan,
+}: {
+  business: DashboardBusiness | undefined;
+  targetPlan: MarketVillaPlanId;
+}) {
+  if (!business) return false;
+
+  return (
+    isSubscriptionDateStillActive(business.subscription_expires_at) &&
+    isPlanDowngrade({
+      currentPlan: business.subscription_plan,
+      targetPlan,
+    })
+  );
+}
+
 export default function BillingPage() {
   const searchParams = useSearchParams();
 
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
-  const [plans, setPlans] = useState<BillingPlan[]>([]);
+  const [plans, setPlans] = useState<BillingPlan[]>(fallbackBillingPlans);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
+  const [selectedBillingCycle, setSelectedBillingCycle] =
+    useState<BillingCycle>("quarterly");
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdatingPublishStatus, setIsUpdatingPublishStatus] = useState(false);
   const [payingPlanId, setPayingPlanId] = useState("");
   const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
   const [verifiedReference, setVerifiedReference] = useState("");
   const [message, setMessage] = useState("");
-  const [isYearly, setIsYearly] = useState(false);
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
 
   const selectedBusinessPlanId = normalizeSubscriptionPlan(
-    selectedBusiness?.subscription_plan
+    selectedBusiness?.subscription_plan,
   );
 
   const currentPlan =
@@ -108,8 +161,10 @@ export default function BillingPage() {
     plans[0] ||
     null;
 
+  const starterFreeTrialActive = isStarterFreeTrialActive(selectedBusiness);
+
   async function loadBillingData() {
-    const items = await getMyBusinesses();
+    const items = (await getMyBusinesses()) as DashboardBusiness[];
 
     setBusinesses(items);
 
@@ -117,50 +172,7 @@ export default function BillingPage() {
       setSelectedBusinessId((current) => current || items[0].id);
     }
 
-    const { data: pricingItems, error: pricingError } = await supabase
-      .from("pricing_items")
-      .select(
-        "pricing_key,name,description,price_label,amount,amount_in_kobo,product_limit,store_limit,sort_order"
-      )
-      .eq("pricing_type", "subscription")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true });
-
-    if (pricingError) {
-      console.error("Unable to load pricing items:", pricingError);
-      setPlans(fallbackBillingPlans);
-      return;
-    }
-
-    const mappedPlansById = new Map<string, BillingPlan>();
-
-    (pricingItems || [])
-      .filter((item: any) =>
-        ["starter", "growth", "pro", "premium"].includes(
-          String(item.pricing_key),
-        )
-      )
-      .forEach((item: any) => {
-        const id = normalizePlanId(String(item.pricing_key));
-
-        mappedPlansById.set(id, {
-          id,
-          name: String(item.name || ""),
-          description: String(item.description || ""),
-          amount: Number(item.amount || 0),
-          amountInKobo: Number(item.amount_in_kobo || 0),
-          priceLabel: String(item.price_label || ""),
-          productLimit: item.product_limit,
-          storeLimit: item.store_limit,
-          sortOrder: item.sort_order,
-        });
-      });
-
-    const mappedPlans = Array.from(mappedPlansById.values()).sort(
-      (a, b) => Number(a.sortOrder || 0) - Number(b.sortOrder || 0),
-    );
-
-    setPlans(mappedPlans.length > 0 ? mappedPlans : fallbackBillingPlans);
+    setPlans(fallbackBillingPlans);
   }
 
   useEffect(() => {
@@ -250,7 +262,7 @@ export default function BillingPage() {
       setMessage(
         selectedBusiness.is_published
           ? "Business page unpublished successfully."
-          : "Business page published successfully."
+          : "Business page published successfully.",
       );
     } catch (error) {
       const errorMessage =
@@ -264,9 +276,28 @@ export default function BillingPage() {
     }
   }
 
-  async function handlePayForPlan(planId: string) {
+  async function handlePayForPlan(planId: MarketVillaPlanId) {
     if (!selectedBusiness) {
       setMessage("Select a business before paying for a plan.");
+      return;
+    }
+
+    if (planId === "starter" && starterFreeTrialActive) {
+      setMessage(
+        "Starter is already active on this store. Billing starts after the free trial and grace period.",
+      );
+      return;
+    }
+
+    if (
+      isDowngradeBlockedForBusiness({
+        business: selectedBusiness,
+        targetPlan: planId,
+      })
+    ) {
+      setMessage(
+        "This store already has a higher active plan. You can downgrade only after the current plan expires.",
+      );
       return;
     }
 
@@ -276,8 +307,8 @@ export default function BillingPage() {
     try {
       const payment = await initializePlanPayment({
         businessId: selectedBusiness.id,
-        plan: planId as any,
-        billingCycle: isYearly ? "yearly" : "monthly",
+        plan: planId,
+        billingCycle: selectedBillingCycle,
       });
 
       window.location.href = payment.authorizationUrl;
@@ -353,8 +384,8 @@ export default function BillingPage() {
               {isUpdatingPublishStatus
                 ? "Updating..."
                 : selectedBusiness?.is_published
-                ? "Unpublish Store"
-                : "Publish Store"}
+                  ? "Unpublish Store"
+                  : "Publish Store"}
             </button>
           </div>
 
@@ -362,7 +393,7 @@ export default function BillingPage() {
             <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
               <p className="text-xs text-slate-500">Plan</p>
               <p className="mt-1 truncate text-sm font-semibold text-slate-950">
-                {currentPlan?.name || "No plan"}
+                {currentPlan?.name || "Starter"}
               </p>
             </div>
 
@@ -374,9 +405,9 @@ export default function BillingPage() {
             </div>
 
             <div className="rounded-2xl bg-purple-50 px-3 py-2.5">
-              <p className="text-xs text-purple-700">Domain</p>
+              <p className="text-xs text-purple-700">Trial ends</p>
               <p className="mt-1 truncate text-sm font-semibold text-purple-950">
-                {selectedBusiness?.custom_domain_status || "None"}
+                {formatDate(selectedBusiness?.subscription_expires_at)}
               </p>
             </div>
 
@@ -389,6 +420,14 @@ export default function BillingPage() {
           </div>
         </div>
       </section>
+
+      {starterFreeTrialActive ? (
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium leading-6 text-emerald-900">
+          Starter is active for free on this store. Billing starts only after
+          the free month and grace period ends, unless you upgrade to Grow or
+          Pro before then.
+        </div>
+      ) : null}
 
       {isVerifyingPayment ? (
         <div className="rounded-2xl bg-blue-50 p-3 text-sm font-medium text-blue-700">
@@ -406,15 +445,15 @@ export default function BillingPage() {
         <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7c3aed]">
-              Pro Sections
+              Premium sections
             </p>
             <h2 className="mt-1 text-xl font-semibold tracking-[-0.04em] text-slate-950">
-              Advanced business sections unlock on Premium.
+              Advanced business sections unlock on Pro.
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
               After upgrading, open Profile and switch the business mode to
-              Products, Properties, or other advanced sections. The dashboard, themes, and customer
-              inquiry flow will adjust automatically.
+              Products, Properties, or other advanced sections. The dashboard,
+              themes, and customer inquiry flow will adjust automatically.
             </p>
           </div>
 
@@ -429,33 +468,28 @@ export default function BillingPage() {
 
       <section className="overflow-hidden rounded-[1.75rem] bg-[#06110f] p-4 text-white shadow-sm md:p-6">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <button
-            type="button"
-            onClick={() => setIsYearly((value) => !value)}
-            className="flex w-fit items-center gap-3 rounded-full transition"
-          >
-            <span
-              className={`relative inline-flex h-7 w-12 items-center rounded-xl border border-white/10 p-1 transition ${
-                isYearly ? "bg-white/10" : "bg-white/5"
-              }`}
-            >
-              <span
-                className={`h-5 w-5 rounded-lg transition ${
-                  isYearly ? "translate-x-5 bg-[#95bf47]" : "translate-x-0 bg-white/45"
-                }`}
-              />
-            </span>
+          <div className="inline-flex w-fit flex-wrap rounded-full border border-white/10 bg-white/5 p-1">
+            {Object.values(BILLING_CYCLES).map((cycle) => {
+              const isActive = selectedBillingCycle === cycle.id;
 
-            <span className="text-sm font-semibold text-white">
-              Pay yearly
-            </span>
-
-            {isYearly ? (
-              <span className="rounded-full bg-[#95bf47]/15 px-2.5 py-1 text-xs font-semibold text-[#95bf47]">
-                Save 20%
-              </span>
-            ) : null}
-          </button>
+              return (
+                <button
+                  key={cycle.id}
+                  type="button"
+                  onClick={() =>
+                    setSelectedBillingCycle(normalizeBillingCycle(cycle.id))
+                  }
+                  className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
+                    isActive
+                      ? "bg-white text-[#06110f]"
+                      : "text-white/65 hover:text-white"
+                  }`}
+                >
+                  {cycle.label}
+                </button>
+              );
+            })}
+          </div>
 
           <a
             href="#plan-features"
@@ -468,16 +502,43 @@ export default function BillingPage() {
         <div className="grid gap-4 xl:grid-cols-3">
           {plans.map((plan) => {
             const isCurrent = plan.id === currentPlan?.id;
-            const monthlyAmount = plan.amount;
-            const yearlyAmount = Math.round(monthlyAmount * 12 * 0.8);
-            const displayAmount = isYearly ? yearlyAmount : monthlyAmount;
+            const cycle = BILLING_CYCLES[selectedBillingCycle];
+
+            const firstBillingAmount =
+              plan.id === "starter" && starterFreeTrialActive
+                ? 0
+                : getPlanBillingAmount({
+                    plan: plan.id,
+                    billingCycle: selectedBillingCycle,
+                    isIntro: true,
+                  });
+
+            const regularBillingAmount = getPlanBillingAmount({
+              plan: plan.id,
+              billingCycle: selectedBillingCycle,
+              isIntro: false,
+            });
+
+            const downgradeBlocked = isDowngradeBlockedForBusiness({
+              business: selectedBusiness,
+              targetPlan: plan.id,
+            });
 
             const subtitle =
               plan.id === "starter"
                 ? "For solo entrepreneurs"
                 : plan.id === "growth"
-                ? "For multi-category sellers"
-                : "For scaling businesses";
+                  ? "For growing sellers"
+                  : "For scaling businesses";
+
+            const introText =
+              plan.id === "starter"
+                ? starterFreeTrialActive
+                  ? "Free for the first month. Grace period included after expiry."
+                  : "First month free, then \u20A62k/month for 3 months."
+                : plan.id === "growth"
+                  ? "Intro: \u20A63k/month for the first 3 months."
+                  : "Intro: \u20A67k/month for the first 3 months.";
 
             const features =
               plan.id === "starter"
@@ -489,36 +550,33 @@ export default function BillingPage() {
                     "WhatsApp order flow",
                     "Dashboard management",
                     "Public store link",
+                    "Regular price: \u20A63k/month",
                   ]
                 : plan.id === "growth"
-                ? [
-                    "Everything in Starter",
-                    plan.productLimit
-                      ? `Up to ${plan.productLimit} inventory items`
-                      : "Unlimited inventory items",
-                    plan.storeLimit
-                      ? `Up to ${plan.storeLimit} stores`
-                      : "Unlimited stores",
-                    "More product themes and inventory room",
-                    "For product-heavy businesses",
-                  ]
-                : [
-                    "Everything in Growth",
-                    plan.productLimit
-                      ? `Up to ${plan.productLimit} inventory items`
-                      : "Unlimited inventory items",
-                    plan.storeLimit
-                      ? `Up to ${plan.storeLimit} stores`
-                      : "Unlimited stores",
-                    "Unlock Products, Properties, and advanced sections",
-                    "Property listing and advanced business tools",
-                    "More premium themes for every section",
-                  ];
+                  ? [
+                      "Everything in Starter",
+                      plan.productLimit
+                        ? `Up to ${plan.productLimit} inventory items`
+                        : "Unlimited inventory items",
+                      "More product themes and inventory room",
+                      "For product-heavy businesses",
+                      "Regular price: \u20A65k/month",
+                    ]
+                  : [
+                      "Everything in Grow",
+                      plan.productLimit
+                        ? `Up to ${plan.productLimit} inventory items`
+                        : "Unlimited inventory items",
+                      "Unlock Products, Properties, and advanced sections",
+                      "Property listing and advanced business tools",
+                      "More premium themes for every section",
+                      "Regular price: \u20A610k/month",
+                    ];
 
             return (
               <div
                 key={plan.id}
-                className="flex min-h-[470px] flex-col rounded-[1.65rem] bg-[#151b18] px-5 py-6 text-white ring-1 ring-white/5 transition hover:-translate-y-1 hover:ring-white/15"
+                className="flex min-h-[470px] flex-col rounded-[1.65rem] bg-[#2a1540] px-5 py-6 text-white ring-1 ring-white/5 transition hover:-translate-y-1 hover:ring-white/15"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -533,30 +591,34 @@ export default function BillingPage() {
 
                   <div className="text-right">
                     <p className="whitespace-nowrap text-[21px] font-semibold leading-none tracking-[-0.06em] text-white">
-                      {formatNaira(displayAmount)}
+                      {firstBillingAmount === 0
+                        ? "Free"
+                        : formatNaira(firstBillingAmount)}
                     </p>
 
                     <p className="mt-1 text-[11px] font-semibold text-white/70">
-                      /{isYearly ? "yr" : "mo"}
+                      /{cycle.shortLabel}
                     </p>
                   </div>
                 </div>
 
-                {isYearly ? (
-                  <p className="mt-4 text-xs font-medium text-white/45">
-                    Billed yearly. You save {formatNaira(monthlyAmount * 12 - yearlyAmount)}.
-                  </p>
-                ) : (
-                  <p className="mt-4 text-xs font-medium text-white/45">
-                    Billed monthly. Switch to yearly to save 20%.
-                  </p>
-                )}
+                <p className="mt-4 text-xs font-medium text-white/55">
+                  {introText}
+                </p>
+
+                <p className="mt-2 text-xs font-medium text-white/55">
+                  Regular renewal: {formatNaira(regularBillingAmount)} every{" "}
+                  {cycle.shortLabel}.
+                </p>
 
                 <button
                   type="button"
                   onClick={() => handlePayForPlan(plan.id)}
                   disabled={
-                    isCurrent || Boolean(payingPlanId) || isVerifyingPayment
+                    isCurrent ||
+                    downgradeBlocked ||
+                    Boolean(payingPlanId) ||
+                    isVerifyingPayment
                   }
                   className="mt-6 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-[#06110f] disabled:cursor-not-allowed disabled:opacity-60"
                 >
@@ -565,12 +627,14 @@ export default function BillingPage() {
                   ) : null}
 
                   {isCurrent
-                    ? "Current plan"
-                    : payingPlanId === plan.id
-                    ? "Opening payment..."
-                    : isYearly
-                    ? `Choose ${plan.name} yearly`
-                    : `Choose ${plan.name}`}
+                    ? plan.id === "starter" && starterFreeTrialActive
+                      ? "Free trial active"
+                      : "Current plan"
+                    : downgradeBlocked
+                      ? "Available after current plan expires"
+                      : payingPlanId === plan.id
+                        ? "Opening payment..."
+                        : `Choose ${plan.name}`}
                 </button>
 
                 <div
@@ -613,7 +677,4 @@ export default function BillingPage() {
     </div>
   );
 }
-
-
-
 

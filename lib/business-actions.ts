@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+﻿import { supabase } from "@/lib/supabase";
 
 import {
   canUseBusinessModeForPlan,
@@ -1157,7 +1157,7 @@ export async function updateBusinessSubscriptionControls({
       subscription_plan: normalizePlanId(plan),
       subscription_status: status,
       subscription_expires_at: expiresAt || null,
-      grace_period_ends_at: graceEndsAt || null,
+      subscription_grace_until: graceEndsAt || null,
       admin_override_active: adminOverrideActive,
       is_published: isPublished,
       updated_at: new Date().toISOString(),
@@ -1462,6 +1462,7 @@ export function getComputedSubscriptionStatus(business: {
     shouldBePublished: false,
   };
 }
+
 
 
 

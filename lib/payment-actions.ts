@@ -1,7 +1,5 @@
-﻿import { supabase } from "@/lib/supabase";
-import { MarketVillaPlanId } from "@/lib/plans";
-
-export type BillingCycle = "monthly" | "yearly";
+import { supabase } from "@/lib/supabase";
+import type { BillingCycle, MarketVillaPlanId } from "@/lib/plans";
 
 type InitializePlanPaymentResponse = {
   authorizationUrl: string;
@@ -43,7 +41,7 @@ async function readResponseJson(response: Response) {
 export async function initializePlanPayment({
   businessId,
   plan,
-  billingCycle = "monthly",
+  billingCycle = "quarterly",
 }: {
   businessId: string;
   plan: MarketVillaPlanId;
@@ -72,7 +70,7 @@ export async function initializePlanPayment({
 
   if (!data.authorizationUrl || !data.reference) {
     throw new Error(
-      "Payment started, but Paystack did not return a checkout link."
+      "Payment started, but Paystack did not return a checkout link.",
     );
   }
 
@@ -105,4 +103,3 @@ export async function verifyPlanPayment(reference: string) {
 
   return data as VerifyPlanPaymentResponse;
 }
-

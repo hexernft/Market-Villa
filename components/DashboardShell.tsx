@@ -29,33 +29,76 @@ import {
 
 const navItems = [
   {
-  label: "Overview", href: "/dashboard", icon: LayoutDashboard },
+    label: "Overview",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+  },
   {
-  label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+    label: "Analytics",
+    href: "/dashboard/analytics",
+    icon: BarChart3,
+  },
   {
-  label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
+    label: "Visibility",
+    href: "/dashboard/visibility",
+    icon: Megaphone,
+  },
   {
-  label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
+    label: "Onboarding",
+    href: "/dashboard/onboarding",
+    icon: Sparkles,
+  },
   {
-  label: "Products", href: "/dashboard/products", icon: Package, modeAware: true },
+    label: "Products",
+    href: "/dashboard/products",
+    icon: Package,
+    modeAware: true,
+  },
   {
-  label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
+    label: "Orders",
+    href: "/dashboard/orders",
+    icon: ClipboardList,
+  },
   {
-  label: "Domain", href: "/dashboard/domain", icon: Globe2 },
+    label: "Domain",
+    href: "/dashboard/domain",
+    icon: Globe2,
+  },
   {
-  label: "Profile", href: "/dashboard/profile", icon: UserRound },
+    label: "Profile",
+    href: "/dashboard/profile",
+    icon: UserRound,
+  },
   {
-  label: "Themes", href: "/dashboard/theme-store", icon: Sparkles },
+    label: "Themes",
+    href: "/dashboard/theme-store",
+    icon: Sparkles,
+  },
   {
-  label: "Home Builder", href: "/dashboard/home-builder", icon: LayoutDashboard },
+    label: "Home Builder",
+    href: "/dashboard/home-builder",
+    icon: LayoutDashboard,
+  },
   {
-  label: "Customize Store", href: "/dashboard/customize", icon: Palette },
+    label: "Customize Store",
+    href: "/dashboard/customize",
+    icon: Palette,
+  },
   {
-  label: "Custom Requests", href: "/dashboard/custom-requests", icon: Sparkles },
+    label: "Custom Requests",
+    href: "/dashboard/custom-requests",
+    icon: Sparkles,
+  },
   {
-  label: "Billing", href: "/dashboard/billing", icon: CreditCard },
+    label: "Billing",
+    href: "/dashboard/billing",
+    icon: CreditCard,
+  },
   {
-  label: "Settings", href: "/dashboard/settings", icon: Settings },
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: Settings,
+  },
 ];
 
 const mobileNavItems = [
@@ -207,6 +250,7 @@ export function DashboardShell({
     </div>
   );
 }
+
 
 
 

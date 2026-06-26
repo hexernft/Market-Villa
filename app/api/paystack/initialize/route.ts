@@ -1,13 +1,23 @@
 ﻿import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import {
+  BILLING_CYCLES,
+  MARKET_VILLA_PLANS,
+  getPlanBillingAmount,
+  getPlanBillingAmountInKobo,
+  isPlanDowngrade,
+  isSubscriptionDateStillActive,
+  isValidPlanAlias,
+  normalizeBillingCycle,
+  normalizePlanId,
+  type BillingCycle,
+} from "@/lib/plans";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const paystackSecretKey = process.env.PAYSTACK_SECRET_KEY || "";
 const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")
   .replace(/\/$/, "");
-
-type BillingCycle = "monthly" | "yearly";
 
 function getBearerToken(request: Request) {
   const authHeader = request.headers.get("authorization") || "";
@@ -25,24 +35,6 @@ async function readJsonSafely(response: Response) {
   } catch {
     return {};
   }
-}
-
-function normalizeBillingCycle(value: unknown): BillingCycle {
-  return value === "yearly" ? "yearly" : "monthly";
-}
-
-function calculatePayableAmountInKobo({
-  monthlyAmountInKobo,
-  billingCycle,
-}: {
-  monthlyAmountInKobo: number;
-  billingCycle: BillingCycle;
-}) {
-  if (billingCycle === "yearly") {
-    return Math.round(monthlyAmountInKobo * 12 * 0.8);
-  }
-
-  return monthlyAmountInKobo;
 }
 
 function createPaymentReference({
@@ -68,14 +60,14 @@ export async function POST(request: Request) {
     if (!supabaseUrl || !supabaseAnonKey) {
       return NextResponse.json(
         { error: "Supabase environment variables are not configured." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     if (!paystackSecretKey) {
       return NextResponse.json(
         { error: "PAYSTACK_SECRET_KEY is not configured." },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -84,7 +76,7 @@ export async function POST(request: Request) {
     if (!token) {
       return NextResponse.json(
         { error: "Authentication token missing." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -104,100 +96,137 @@ export async function POST(request: Request) {
     if (userError || !user) {
       return NextResponse.json(
         { error: "You must be logged in to make payment." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     if (!user.email) {
       return NextResponse.json(
         { error: "Your account needs an email address before payment." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const body = await request.json();
 
     const businessId = String(body.businessId || "").trim();
-    const planId = String(body.plan || "").trim();
+    const rawPlanId = String(body.plan || "").toLowerCase().trim();
     const billingCycle = normalizeBillingCycle(body.billingCycle);
 
-    if (!businessId || !planId) {
+    if (!businessId || !rawPlanId) {
       return NextResponse.json(
         { error: "Invalid business or plan." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const { data: pricingItem, error: pricingError } = await supabase
-      .from("pricing_items")
-      .select("pricing_key,name,amount,amount_in_kobo,price_label,is_active")
-      .eq("pricing_type", "subscription")
-      .eq("pricing_key", planId)
-      .eq("is_active", true)
-      .single();
-
-    if (pricingError || !pricingItem) {
+    if (!isValidPlanAlias(rawPlanId)) {
       return NextResponse.json(
         { error: "Selected subscription plan is not available." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const monthlyAmount = Number(pricingItem.amount || 0);
-    const monthlyAmountInKobo = Number(pricingItem.amount_in_kobo || 0);
+    const planId = normalizePlanId(rawPlanId);
+    const selectedPlan = MARKET_VILLA_PLANS[planId];
+    const selectedCycle = BILLING_CYCLES[billingCycle];
 
-    if (!monthlyAmountInKobo || monthlyAmountInKobo < 100) {
-      return NextResponse.json(
-        { error: "Selected plan has an invalid payment amount." },
-        { status: 400 }
-      );
-    }
-
-    const payableAmountInKobo = calculatePayableAmountInKobo({
-      monthlyAmountInKobo,
+    const payableAmount = getPlanBillingAmount({
+      plan: planId,
       billingCycle,
+      isIntro: true,
     });
 
-    const payableAmount = Math.round(payableAmountInKobo / 100);
+    const payableAmountInKobo = getPlanBillingAmountInKobo({
+      plan: planId,
+      billingCycle,
+      isIntro: true,
+    });
+
+    const regularRenewalAmount = getPlanBillingAmount({
+      plan: planId,
+      billingCycle,
+      isIntro: false,
+    });
+
+    const regularRenewalAmountInKobo = getPlanBillingAmountInKobo({
+      plan: planId,
+      billingCycle,
+      isIntro: false,
+    });
+
+    if (!payableAmountInKobo || payableAmountInKobo < 100) {
+      return NextResponse.json(
+        { error: "Selected plan has an invalid payment amount." },
+        { status: 400 },
+      );
+    }
 
     const plan = {
-      id: String(pricingItem.pricing_key),
-      name: String(pricingItem.name),
-      monthlyAmount,
-      monthlyAmountInKobo,
+      id: planId,
+      name: selectedPlan.name,
+      introMonthlyAmount: selectedPlan.introMonthlyAmount,
+      regularMonthlyAmount: selectedPlan.regularMonthlyAmount,
+      freeMonths: selectedPlan.freeMonths,
+      introPaidMonths: selectedPlan.introPaidMonths,
+      billingCycle,
+      billingCycleLabel: selectedCycle.label,
+      billingCycleMonths: selectedCycle.months,
       payableAmount,
       payableAmountInKobo,
-      priceLabel: String(pricingItem.price_label || ""),
+      regularRenewalAmount,
+      regularRenewalAmountInKobo,
     };
 
     const { data: business, error: businessError } = await supabase
       .from("businesses")
-      .select("id, owner_id, name")
+      .select("id, owner_id, name, subscription_plan, subscription_status, subscription_expires_at")
       .eq("id", businessId)
       .single();
 
     if (businessError || !business) {
       return NextResponse.json(
         { error: "Business not found." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (business.owner_id !== user.id) {
       return NextResponse.json(
         { error: "You cannot pay for this business." },
-        { status: 403 }
+        { status: 403 },
+      );
+    }
+
+    const currentSubscriptionStillActive = isSubscriptionDateStillActive(
+      business.subscription_expires_at,
+    );
+
+    const downgradeBlocked =
+      currentSubscriptionStillActive &&
+      isPlanDowngrade({
+        currentPlan: business.subscription_plan,
+        targetPlan: plan.id,
+      });
+
+    if (downgradeBlocked) {
+      return NextResponse.json(
+        {
+          error:
+            "This store already has a higher active plan. You can downgrade only after the current plan expires.",
+        },
+        { status: 400 },
       );
     }
 
     const reference = createPaymentReference({
-      planId,
+      planId: plan.id,
       businessId,
       billingCycle,
     });
 
     const callbackUrl = `${appUrl}/dashboard/billing?payment_reference=${encodeURIComponent(
-      reference
+      reference,
     )}`;
 
     const paystackResponse = await fetch(
@@ -218,15 +247,21 @@ export async function POST(request: Request) {
             business_id: businessId,
             owner_id: user.id,
             plan: plan.id,
+            plan_name: plan.name,
             billing_cycle: billingCycle,
-            monthly_amount: plan.monthlyAmount,
+            billing_cycle_label: plan.billingCycleLabel,
+            billing_cycle_months: plan.billingCycleMonths,
+            intro_monthly_amount: plan.introMonthlyAmount,
+            regular_monthly_amount: plan.regularMonthlyAmount,
+            free_months: plan.freeMonths,
+            intro_paid_months: plan.introPaidMonths,
             payable_amount: plan.payableAmount,
-            yearly_discount_percent: billingCycle === "yearly" ? 20 : 0,
+            regular_renewal_amount: plan.regularRenewalAmount,
             business_name: business.name,
             source: "market_villa_subscription",
           },
         }),
-      }
+      },
     );
 
     const paystackData = await readJsonSafely(paystackResponse);
@@ -238,7 +273,7 @@ export async function POST(request: Request) {
             paystackData.message ||
             "Unable to initialize Paystack transaction.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -248,7 +283,7 @@ export async function POST(request: Request) {
     if (!authorizationUrl) {
       return NextResponse.json(
         { error: "Paystack did not return a checkout link." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -265,11 +300,18 @@ export async function POST(request: Request) {
         ...paystackData,
         market_villa: {
           plan: plan.id,
+          plan_name: plan.name,
           billing_cycle: billingCycle,
-          monthly_amount: plan.monthlyAmount,
+          billing_cycle_label: plan.billingCycleLabel,
+          billing_cycle_months: plan.billingCycleMonths,
+          intro_monthly_amount: plan.introMonthlyAmount,
+          regular_monthly_amount: plan.regularMonthlyAmount,
+          free_months: plan.freeMonths,
+          intro_paid_months: plan.introPaidMonths,
           payable_amount: plan.payableAmount,
           payable_amount_in_kobo: plan.payableAmountInKobo,
-          yearly_discount_percent: billingCycle === "yearly" ? 20 : 0,
+          regular_renewal_amount: plan.regularRenewalAmount,
+          regular_renewal_amount_in_kobo: plan.regularRenewalAmountInKobo,
         },
       },
     });
@@ -277,7 +319,7 @@ export async function POST(request: Request) {
     if (paymentError) {
       return NextResponse.json(
         { error: paymentError.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -287,6 +329,8 @@ export async function POST(request: Request) {
       billingCycle,
       amount: plan.payableAmount,
       amountInKobo: plan.payableAmountInKobo,
+      regularRenewalAmount: plan.regularRenewalAmount,
+      regularRenewalAmountInKobo: plan.regularRenewalAmountInKobo,
     });
   } catch (error) {
     const errorMessage =
@@ -295,5 +339,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
-
 
