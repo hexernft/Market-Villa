@@ -6245,7 +6245,7 @@ export default function StorePage({ params }: StorePageProps) {
                         target="_blank"
                         rel="noreferrer"
                         onClick={() => handleWhatsAppClick("store_whatsapp_link")}
-                        className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10"
+                        className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10"
                       >
                         <Phone size={16} />
                         {whatsapp}
@@ -6253,14 +6253,14 @@ export default function StorePage({ params }: StorePageProps) {
                     ) : null}
 
                     {business.location ? (
-                      <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                      <div className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
                         <MapPin size={16} />
                         {business.location}
                       </div>
                     ) : null}
 
                     {business.opening_hours ? (
-                      <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                      <div className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
                         <Clock size={16} />
                         {business.opening_hours}
                       </div>
@@ -6565,7 +6565,7 @@ export default function StorePage({ params }: StorePageProps) {
                       href={business.instagram_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2.5 text-sm font-semibold ring-1 ring-white/10"
+                      className="store-dark-chip inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold ring-1 ring-white/10"
                     >
                       <Instagram size={16} />
                       Instagram
@@ -6581,7 +6581,7 @@ export default function StorePage({ params }: StorePageProps) {
 
                 <div className="mt-4 grid gap-2">
                   {business.opening_hours ? (
-                    <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                    <div className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
                       <Clock size={17} className="opacity-70" />
                       <span className="text-sm font-medium">
                         {business.opening_hours}
@@ -6590,7 +6590,7 @@ export default function StorePage({ params }: StorePageProps) {
                   ) : null}
 
                   {business.location ? (
-                    <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                    <div className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
                       <MapPin size={17} className="opacity-70" />
                       <span className="text-sm font-medium">
                         {business.location}
@@ -6599,7 +6599,7 @@ export default function StorePage({ params }: StorePageProps) {
                   ) : null}
 
                   {business.phone ? (
-                    <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                    <div className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
                       <Phone size={17} className="opacity-70" />
                       <span className="text-sm font-medium">
                         {business.phone}
@@ -6615,7 +6615,7 @@ export default function StorePage({ params }: StorePageProps) {
                 </p>
 
                 <div className="mt-4 grid gap-2">
-                  <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 ring-1 ring-white/10">
+                  <div className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
                     <Store size={17} className="opacity-70" />
                     <span className="text-sm font-medium">
                       
@@ -6624,7 +6624,7 @@ export default function StorePage({ params }: StorePageProps) {
 
                   <a
                     href="#products"
-                    className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 text-sm font-semibold ring-1 ring-white/10"
+                    className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 text-sm font-semibold ring-1 ring-white/10"
                   >
                     <ShoppingBag size={17} className="opacity-70" />
                     View Products
