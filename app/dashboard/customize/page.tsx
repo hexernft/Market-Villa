@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -190,18 +190,35 @@ function ToggleRow({
   label,
   checked,
   onChange,
+  disabled = false,
 }: {
   label: string;
   checked: boolean;
   onChange: (value: boolean) => void;
+  disabled?: boolean;
 }) {
   return (
-    <label className="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3">
-      <span className="text-sm font-semibold text-slate-700">{label}</span>
+    <label
+      className={`flex items-center justify-between gap-3 rounded-2xl px-4 py-3 transition ${
+        disabled
+          ? "cursor-not-allowed bg-slate-100 opacity-45 grayscale"
+          : "bg-slate-50"
+      }`}
+    >
+      <span
+        className={`text-sm font-semibold ${
+          disabled ? "text-slate-400" : "text-slate-700"
+        }`}
+      >
+        {label}
+      </span>
+
       <input
         type="checkbox"
         checked={checked}
+        disabled={disabled}
         onChange={(event) => onChange(event.target.checked)}
+        className="h-5 w-5 accent-[#7c3aed] disabled:cursor-not-allowed"
       />
     </label>
   );
@@ -340,7 +357,7 @@ export default function CustomizeStorePage() {
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} — /store/{business.slug}
+                  {business.name} â€” /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -519,21 +536,25 @@ export default function CustomizeStorePage() {
               <ToggleRow
                 label="Navbar: Home"
                 checked={settings.toggles?.showHomeLink !== false}
+                disabled={settings.toggles?.showNavbar === false}
                 onChange={(value) => updateToggle("showHomeLink", value)}
               />
               <ToggleRow
                 label="Products page"
                 checked={settings.toggles?.showProductsLink !== false}
+                disabled={settings.toggles?.showNavbar === false}
                 onChange={(value) => updateToggle("showProductsLink", value)}
               />
               <ToggleRow
                 label="About page"
                 checked={settings.toggles?.showAboutLink !== false}
+                disabled={settings.toggles?.showNavbar === false}
                 onChange={(value) => updateToggle("showAboutLink", value)}
               />
               <ToggleRow
                 label="Contact page"
                 checked={settings.toggles?.showContactLink !== false}
+                disabled={settings.toggles?.showNavbar === false}
                 onChange={(value) => updateToggle("showContactLink", value)}
               />
               <ToggleRow
@@ -603,7 +624,7 @@ export default function CustomizeStorePage() {
                 {settings.heroStyle} hero
               </h3>
               <p className="mt-2 text-sm opacity-75">
-                {settings.productCardStyle} product cards · {settings.navbarStyle} navbar
+                {settings.productCardStyle} product cards Â· {settings.navbarStyle} navbar
               </p>
             </div>
 
@@ -618,7 +639,7 @@ export default function CustomizeStorePage() {
                       className="mt-1 text-xs font-black"
                       style={{ color: selectedColorTheme.swatches[1] }}
                     >
-                      ₦10,000
+                      â‚¦10,000
                     </p>
                   ) : null}
                 </div>
@@ -651,3 +672,7 @@ export default function CustomizeStorePage() {
     </div>
   );
 }
+
+
+
+
