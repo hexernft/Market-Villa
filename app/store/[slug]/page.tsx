@@ -6225,7 +6225,7 @@ export default function StorePage({ params }: StorePageProps) {
               ) : null}
 
               {hasSection("contact") ? (
-              <footer className="rounded-[1.5rem] bg-[#211331] p-5 text-white shadow-sm">
+              <footer className="simple-one-page-contact-footer rounded-[1.5rem] bg-[#211331] p-5 text-white shadow-sm">
                 <div className="grid gap-5 md:grid-cols-[1fr_1fr] md:items-start">
                   <div>
                     <h3 className="text-base font-semibold">{business.name}</h3>
@@ -6245,7 +6245,7 @@ export default function StorePage({ params }: StorePageProps) {
                         target="_blank"
                         rel="noreferrer"
                         onClick={() => handleWhatsAppClick("store_whatsapp_link")}
-                        className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10"
+                        className="simple-one-page-contact-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10"
                       >
                         <Phone size={16} />
                         {whatsapp}
@@ -6253,14 +6253,14 @@ export default function StorePage({ params }: StorePageProps) {
                     ) : null}
 
                     {business.location ? (
-                      <div className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
+                      <div className="simple-one-page-contact-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
                         <MapPin size={16} />
                         {business.location}
                       </div>
                     ) : null}
 
                     {business.opening_hours ? (
-                      <div className="store-dark-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
+                      <div className="simple-one-page-contact-chip flex items-center gap-3 rounded-2xl p-3 ring-1 ring-white/10">
                         <Clock size={16} />
                         {business.opening_hours}
                       </div>

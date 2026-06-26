@@ -4010,3 +4010,35 @@ aside.admin-sidebar .admin-sidebar-link-active {
   user-select: none !important;
   overscroll-behavior: contain !important;
 }
+
+/* Simple One Page exact contrast fix */
+.simple-one-page-contact-footer {
+  background: #211331 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.simple-one-page-contact-footer h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.simple-one-page-contact-footer p {
+  color: rgba(255, 255, 255, 0.78) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.78) !important;
+  opacity: 1 !important;
+}
+
+.simple-one-page-contact-chip {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.simple-one-page-contact-chip *,
+.simple-one-page-contact-chip svg {
+  color: rgba(255, 255, 255, 0.92) !important;
+  stroke: currentColor !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.92) !important;
+}
