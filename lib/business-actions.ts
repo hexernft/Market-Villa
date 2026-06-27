@@ -879,6 +879,50 @@ export async function getAllDomainRequestsForAdmin() {
   return data || [];
 }
 
+export async function getAdminPlatformMetrics() {
+  await requireSuperAdmin();
+
+  const [
+    vehicleInquiryResult,
+    propertyInquiryResult,
+    successfulPaymentResult,
+    activePricingResult,
+  ] = await Promise.all([
+    supabase
+      .from("vehicle_inquiries")
+      .select("id", { count: "exact", head: true }),
+    supabase
+      .from("property_inquiries")
+      .select("id", { count: "exact", head: true }),
+    supabase
+      .from("payments")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "success"),
+    supabase
+      .from("pricing_items")
+      .select("id", { count: "exact", head: true })
+      .eq("pricing_type", "subscription")
+      .eq("is_active", true),
+  ]);
+
+  const firstError =
+    vehicleInquiryResult.error ||
+    propertyInquiryResult.error ||
+    successfulPaymentResult.error ||
+    activePricingResult.error;
+
+  if (firstError) {
+    throw firstError;
+  }
+
+  return {
+    vehicleInquiries: vehicleInquiryResult.count || 0,
+    propertyInquiries: propertyInquiryResult.count || 0,
+    successfulPayments: successfulPaymentResult.count || 0,
+    activeSubscriptionPrices: activePricingResult.count || 0,
+  };
+}
+
 export async function updateDomainRequestStatus({
   requestId,
   status,

@@ -12,6 +12,11 @@ import {
   Save,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import {
+  getMarketVillaPlan,
+  getPlanPricingOverrideFromMetadata,
+  normalizePlanId,
+} from "@/lib/plans";
 
 type PricingItem = {
   id: string;
@@ -33,7 +38,34 @@ type PricingItem = {
 };
 
 function formatNaira(value?: number | null) {
-  return `â‚¦${Number(value || 0).toLocaleString()}`;
+  return `₦${Number(value || 0).toLocaleString("en-NG")}`;
+}
+
+function getMetadataNumber(
+  metadata: Record<string, unknown> | null,
+  key: string,
+  fallback: number,
+) {
+  const value = Number(metadata?.[key]);
+
+  return Number.isFinite(value) && value >= 0 ? value : fallback;
+}
+
+function getSubscriptionPlanForItem(item: PricingItem) {
+  return getMarketVillaPlan(
+    normalizePlanId(item.pricing_key),
+    getPlanPricingOverrideFromMetadata(item.metadata),
+  );
+}
+
+function getSubscriptionAmountLabel(item: PricingItem) {
+  if (item.pricing_type !== "subscription") {
+    return formatNaira(item.amount);
+  }
+
+  const plan = getSubscriptionPlanForItem(item);
+
+  return `Intro ${formatNaira(plan.introMonthlyAmount)}/mo`;
 }
 
 export default function AdminPricingPage() {
@@ -78,15 +110,45 @@ export default function AdminPricingPage() {
 
     const formData = new FormData(event.currentTarget);
 
-    const amount = Number(formData.get("amount") || 0);
+    const formAmount = Number(formData.get("amount") || 0);
     const durationDaysValue = String(formData.get("durationDays") || "").trim();
     const productLimitValue = String(formData.get("productLimit") || "").trim();
     const storeLimitValue = String(formData.get("storeLimit") || "").trim();
+    const introMonthlyAmount = Number(formData.get("introMonthlyAmount") || 0);
+    const regularMonthlyAmount = Number(
+      formData.get("regularMonthlyAmount") || 0,
+    );
+    const freeMonths = Number(formData.get("freeMonths") || 0);
+    const introPaidMonths = Number(formData.get("introPaidMonths") || 0);
 
     try {
-      if (amount < 0) {
+      if (formAmount < 0) {
         throw new Error("Amount cannot be negative.");
       }
+
+      if (
+        item.pricing_type === "subscription" &&
+        (introMonthlyAmount < 0 ||
+          regularMonthlyAmount < 0 ||
+          freeMonths < 0 ||
+          introPaidMonths < 0)
+      ) {
+        throw new Error("Subscription pricing values cannot be negative.");
+      }
+
+      const metadata =
+        item.pricing_type === "subscription"
+          ? {
+              ...(item.metadata || {}),
+              intro_monthly_amount: introMonthlyAmount,
+              regular_monthly_amount: regularMonthlyAmount,
+              free_months: freeMonths,
+              intro_paid_months: introPaidMonths,
+            }
+          : item.metadata;
+
+      const amount =
+        item.pricing_type === "subscription" ? introMonthlyAmount : formAmount;
 
       const { error } = await supabase
         .from("pricing_items")
@@ -101,6 +163,7 @@ export default function AdminPricingPage() {
           store_limit: storeLimitValue ? Number(storeLimitValue) : null,
           is_active: formData.get("isActive") === "on",
           sort_order: Number(formData.get("sortOrder") || 0),
+          metadata,
           updated_at: new Date().toISOString(),
         })
         .eq("id", item.id);
@@ -256,6 +319,31 @@ export default function AdminPricingPage() {
               onSubmit={(event) => updatePricingItem(event, item)}
               className="border border-slate-200 bg-white p-5 shadow-sm"
             >
+              {(() => {
+                const subscriptionPlan = getSubscriptionPlanForItem(item);
+                const isSubscription = item.pricing_type === "subscription";
+                const introMonthlyAmount = getMetadataNumber(
+                  item.metadata,
+                  "intro_monthly_amount",
+                  subscriptionPlan.introMonthlyAmount,
+                );
+                const regularMonthlyAmount = getMetadataNumber(
+                  item.metadata,
+                  "regular_monthly_amount",
+                  subscriptionPlan.regularMonthlyAmount,
+                );
+                const freeMonths = getMetadataNumber(
+                  item.metadata,
+                  "free_months",
+                  subscriptionPlan.freeMonths,
+                );
+                const introPaidMonths = getMetadataNumber(
+                  item.metadata,
+                  "intro_paid_months",
+                  subscriptionPlan.introPaidMonths,
+                );
+
+                return (
               <div className="grid gap-5 xl:grid-cols-[1fr_0.8fr]">
                 <div>
                   <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -274,7 +362,7 @@ export default function AdminPricingPage() {
                     </span>
 
                     <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-500 ring-1 ring-slate-200">
-                      {formatNaira(item.amount)}
+                      {getSubscriptionAmountLabel(item)}
                     </span>
                   </div>
 
@@ -312,31 +400,111 @@ export default function AdminPricingPage() {
                 </div>
 
                 <div className="grid gap-4">
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                      Amount
-                      <input
-                        name="amount"
-                        type="number"
-                        min="0"
-                        defaultValue={item.amount}
-                        className="min-h-10 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#7c3aed]"
-                        required
-                      />
-                    </label>
+                  {isSubscription ? (
+                    <input
+                      type="hidden"
+                      name="amount"
+                      value={introMonthlyAmount}
+                    />
+                  ) : null}
 
-                    <label className="grid gap-2 text-sm font-semibold text-slate-700">
-                      Duration days
-                      <input
-                        name="durationDays"
-                        type="number"
-                        min="0"
-                        defaultValue={item.duration_days || ""}
-                        className="min-h-10 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#7c3aed]"
-                        placeholder="Empty for permanent"
-                      />
-                    </label>
-                  </div>
+                  {isSubscription ? (
+                    <div className="grid gap-4 rounded-[1rem] border border-purple-100 bg-purple-50/60 p-4">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7c3aed]">
+                          Subscription price model
+                        </p>
+                        <p className="mt-1 text-xs leading-5 text-slate-500">
+                          These fields are used by the billing page and Paystack
+                          checkout for this plan.
+                        </p>
+                      </div>
+
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <label className="grid gap-2 text-sm font-semibold text-slate-700">
+                          Intro monthly amount
+                          <input
+                            name="introMonthlyAmount"
+                            type="number"
+                            min="0"
+                            defaultValue={introMonthlyAmount}
+                            className="min-h-10 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#7c3aed]"
+                            required
+                          />
+                        </label>
+
+                        <label className="grid gap-2 text-sm font-semibold text-slate-700">
+                          Regular monthly amount
+                          <input
+                            name="regularMonthlyAmount"
+                            type="number"
+                            min="0"
+                            defaultValue={regularMonthlyAmount}
+                            className="min-h-10 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#7c3aed]"
+                            required
+                          />
+                        </label>
+
+                        <label className="grid gap-2 text-sm font-semibold text-slate-700">
+                          Free months
+                          <input
+                            name="freeMonths"
+                            type="number"
+                            min="0"
+                            defaultValue={freeMonths}
+                            className="min-h-10 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#7c3aed]"
+                            required
+                          />
+                        </label>
+
+                        <label className="grid gap-2 text-sm font-semibold text-slate-700">
+                          Intro paid months
+                          <input
+                            name="introPaidMonths"
+                            type="number"
+                            min="0"
+                            defaultValue={introPaidMonths}
+                            className="min-h-10 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#7c3aed]"
+                            required
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <label className="grid gap-2 text-sm font-semibold text-slate-700">
+                        Amount
+                        <input
+                          name="amount"
+                          type="number"
+                          min="0"
+                          defaultValue={item.amount}
+                          className="min-h-10 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#7c3aed]"
+                          required
+                        />
+                      </label>
+
+                      <label className="grid gap-2 text-sm font-semibold text-slate-700">
+                        Duration days
+                        <input
+                          name="durationDays"
+                          type="number"
+                          min="0"
+                          defaultValue={item.duration_days || ""}
+                          className="min-h-10 border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none focus:border-[#7c3aed]"
+                          placeholder="Empty for permanent"
+                        />
+                      </label>
+                    </div>
+                  )}
+
+                  {isSubscription ? (
+                    <input
+                      type="hidden"
+                      name="durationDays"
+                      value={item.duration_days || ""}
+                    />
+                  ) : null}
 
                   <div className="grid gap-4 md:grid-cols-3">
                     <label className="grid gap-2 text-sm font-semibold text-slate-700">
@@ -400,6 +568,8 @@ export default function AdminPricingPage() {
                   </div>
                 </div>
               </div>
+                );
+              })()}
             </form>
           ))}
 

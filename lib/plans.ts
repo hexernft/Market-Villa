@@ -95,6 +95,87 @@ export const MARKET_VILLA_PLANS: Record<
   },
 };
 
+export type PlanPricingOverride = {
+  name?: string | null;
+  displayName?: string | null;
+  description?: string | null;
+  introMonthlyAmount?: number | string | null;
+  regularMonthlyAmount?: number | string | null;
+  freeMonths?: number | string | null;
+  introPaidMonths?: number | string | null;
+  themeLimit?: number | string | null;
+};
+
+function readPositiveNumber(value: unknown, fallback: number) {
+  const numberValue = Number(value);
+
+  if (!Number.isFinite(numberValue) || numberValue < 0) {
+    return fallback;
+  }
+
+  return numberValue;
+}
+
+function readMetadataOverrideValue(
+  metadata: Record<string, unknown> | null | undefined,
+  key: string,
+) {
+  const value = metadata?.[key];
+
+  return typeof value === "string" || typeof value === "number" || value === null
+    ? value
+    : undefined;
+}
+
+export function getMarketVillaPlan(
+  plan: string | null | undefined,
+  override?: PlanPricingOverride | null,
+) {
+  const planId = normalizePlanId(plan);
+  const basePlan = MARKET_VILLA_PLANS[planId];
+
+  if (!override) return basePlan;
+
+  return {
+    ...basePlan,
+    name: String(override.name || basePlan.name),
+    displayName: String(override.displayName || basePlan.displayName),
+    description: String(override.description || basePlan.description),
+    introMonthlyAmount: readPositiveNumber(
+      override.introMonthlyAmount,
+      basePlan.introMonthlyAmount,
+    ),
+    regularMonthlyAmount: readPositiveNumber(
+      override.regularMonthlyAmount,
+      basePlan.regularMonthlyAmount,
+    ),
+    freeMonths: readPositiveNumber(override.freeMonths, basePlan.freeMonths),
+    introPaidMonths: readPositiveNumber(
+      override.introPaidMonths,
+      basePlan.introPaidMonths,
+    ),
+    themeLimit: readPositiveNumber(override.themeLimit, basePlan.themeLimit),
+  };
+}
+
+export function getPlanPricingOverrideFromMetadata(
+  metadata: Record<string, unknown> | null | undefined,
+): PlanPricingOverride {
+  return {
+    introMonthlyAmount: readMetadataOverrideValue(
+      metadata,
+      "intro_monthly_amount",
+    ),
+    regularMonthlyAmount: readMetadataOverrideValue(
+      metadata,
+      "regular_monthly_amount",
+    ),
+    freeMonths: readMetadataOverrideValue(metadata, "free_months"),
+    introPaidMonths: readMetadataOverrideValue(metadata, "intro_paid_months"),
+    themeLimit: readMetadataOverrideValue(metadata, "theme_limit"),
+  };
+}
+
 export function normalizePlanId(
   plan: string | null | undefined,
 ): MarketVillaPlanId {
@@ -179,14 +260,16 @@ export function getPlanBillingAmount({
   plan,
   billingCycle,
   isIntro = true,
+  override,
 }: {
   plan: string | null | undefined;
   billingCycle: string | null | undefined;
   isIntro?: boolean;
+  override?: PlanPricingOverride | null;
 }) {
   const planId = normalizePlanId(plan);
   const cycleId = normalizeBillingCycle(billingCycle);
-  const selectedPlan = MARKET_VILLA_PLANS[planId];
+  const selectedPlan = getMarketVillaPlan(planId, override);
   const selectedCycle = BILLING_CYCLES[cycleId];
 
   if (!isIntro) {
@@ -215,12 +298,14 @@ export function getPlanBillingAmountInKobo({
   plan,
   billingCycle,
   isIntro = true,
+  override,
 }: {
   plan: string | null | undefined;
   billingCycle: string | null | undefined;
   isIntro?: boolean;
+  override?: PlanPricingOverride | null;
 }) {
-  return getPlanBillingAmount({ plan, billingCycle, isIntro }) * 100;
+  return getPlanBillingAmount({ plan, billingCycle, isIntro, override }) * 100;
 }
 
 export function canUseThemeForPlan({

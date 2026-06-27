@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import {
   BILLING_CYCLES,
   getPlanBillingAmountInKobo,
+  getPlanPricingOverrideFromMetadata,
   isValidPlanAlias,
   normalizeBillingCycle,
   normalizePlanId,
@@ -63,11 +64,13 @@ function getPaymentBillingCycle(payment: any): BillingCycle {
   );
 }
 
-function getExpectedAmountInKobo({
+async function getExpectedAmountInKobo({
+  serviceClient,
   paymentAmount,
   plan,
   billingCycle,
 }: {
+  serviceClient: any;
   paymentAmount: unknown;
   plan: MarketVillaPlanId;
   billingCycle: BillingCycle;
@@ -78,10 +81,19 @@ function getExpectedAmountInKobo({
     return Math.round(storedAmount * 100);
   }
 
+  const { data: pricingItem } = await serviceClient
+    .from("pricing_items")
+    .select("metadata")
+    .eq("pricing_type", "subscription")
+    .eq("pricing_key", plan)
+    .eq("is_active", true)
+    .maybeSingle();
+
   return getPlanBillingAmountInKobo({
     plan,
     billingCycle,
     isIntro: true,
+    override: getPlanPricingOverrideFromMetadata(pricingItem?.metadata || null),
   });
 }
 
@@ -186,7 +198,8 @@ export async function POST(request: Request) {
     const plan = normalizePlanId(rawPlan);
     const billingCycle = getPaymentBillingCycle(payment);
 
-    const expectedAmountInKobo = getExpectedAmountInKobo({
+    const expectedAmountInKobo = await getExpectedAmountInKobo({
+      serviceClient,
       paymentAmount: payment.amount,
       plan,
       billingCycle,

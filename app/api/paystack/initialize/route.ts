@@ -2,9 +2,10 @@
 import { createClient } from "@supabase/supabase-js";
 import {
   BILLING_CYCLES,
-  MARKET_VILLA_PLANS,
+  getMarketVillaPlan,
   getPlanBillingAmount,
   getPlanBillingAmountInKobo,
+  getPlanPricingOverrideFromMetadata,
   isPlanDowngrade,
   isSubscriptionDateStillActive,
   isValidPlanAlias,
@@ -128,31 +129,59 @@ export async function POST(request: Request) {
     }
 
     const planId = normalizePlanId(rawPlanId);
-    const selectedPlan = MARKET_VILLA_PLANS[planId];
     const selectedCycle = BILLING_CYCLES[billingCycle];
+
+    const { data: pricingItem, error: pricingError } = await supabase
+      .from("pricing_items")
+      .select("pricing_key,name,description,metadata,is_active")
+      .eq("pricing_type", "subscription")
+      .eq("pricing_key", planId)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (pricingError || !pricingItem) {
+      return NextResponse.json(
+        { error: "Selected subscription plan is not available for payment." },
+        { status: 400 },
+      );
+    }
+
+    const pricingOverride = {
+      ...getPlanPricingOverrideFromMetadata(
+        pricingItem.metadata as Record<string, unknown> | null,
+      ),
+      name: pricingItem.name || undefined,
+      description: pricingItem.description || undefined,
+    };
+
+    const selectedPlan = getMarketVillaPlan(planId, pricingOverride);
 
     const payableAmount = getPlanBillingAmount({
       plan: planId,
       billingCycle,
       isIntro: true,
+      override: pricingOverride,
     });
 
     const payableAmountInKobo = getPlanBillingAmountInKobo({
       plan: planId,
       billingCycle,
       isIntro: true,
+      override: pricingOverride,
     });
 
     const regularRenewalAmount = getPlanBillingAmount({
       plan: planId,
       billingCycle,
       isIntro: false,
+      override: pricingOverride,
     });
 
     const regularRenewalAmountInKobo = getPlanBillingAmountInKobo({
       plan: planId,
       billingCycle,
       isIntro: false,
+      override: pricingOverride,
     });
 
     if (!payableAmountInKobo || payableAmountInKobo < 100) {

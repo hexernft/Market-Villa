@@ -2,8 +2,14 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import {
+  BILLING_CYCLES,
+  getPlanBillingAmountInKobo,
+  getPlanPricingOverrideFromMetadata,
   isValidPlanAlias,
+  normalizeBillingCycle,
   normalizePlanId,
+  type BillingCycle,
+  type MarketVillaPlanId,
 } from "@/lib/plans";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -62,11 +68,16 @@ function getAmountInNaira(data: any) {
   return Math.round(amountInKobo / 100);
 }
 
-function getSubscriptionDates() {
+function getBillingCycleFromMetadata(data: any): BillingCycle {
+  return normalizeBillingCycle(data?.metadata?.billing_cycle || "quarterly");
+}
+
+function getSubscriptionDates(billingCycle: BillingCycle) {
   const now = new Date();
+  const cycle = BILLING_CYCLES[billingCycle];
 
   const expiresAt = new Date(now);
-  expiresAt.setMonth(expiresAt.getMonth() + 1);
+  expiresAt.setMonth(expiresAt.getMonth() + cycle.months);
 
   const graceEndsAt = new Date(expiresAt);
   graceEndsAt.setDate(graceEndsAt.getDate() + 5);
@@ -75,6 +86,7 @@ function getSubscriptionDates() {
     now,
     expiresAt,
     graceEndsAt,
+    months: cycle.months,
   };
 }
 
@@ -82,10 +94,14 @@ async function getExpectedAmountInKobo({
   supabaseAdmin,
   paymentAmount,
   plan,
+  billingCycle,
+  transactionMetadata,
 }: {
   supabaseAdmin: any;
   paymentAmount: unknown;
-  plan: string;
+  plan: MarketVillaPlanId;
+  billingCycle: BillingCycle;
+  transactionMetadata: Record<string, unknown>;
 }) {
   const storedAmount = Number(paymentAmount || 0);
 
@@ -93,9 +109,17 @@ async function getExpectedAmountInKobo({
     return Math.round(storedAmount * 100);
   }
 
+  const metadataAmountInKobo = Number(
+    transactionMetadata?.payable_amount_in_kobo || 0,
+  );
+
+  if (metadataAmountInKobo > 0) {
+    return Math.round(metadataAmountInKobo);
+  }
+
   const { data: pricingItem, error } = await supabaseAdmin
     .from("pricing_items")
-    .select("amount_in_kobo")
+    .select("metadata")
     .eq("pricing_type", "subscription")
     .eq("pricing_key", plan)
     .eq("is_active", true)
@@ -105,7 +129,12 @@ async function getExpectedAmountInKobo({
     return 0;
   }
 
-  return Number(pricingItem.amount_in_kobo || 0);
+  return getPlanBillingAmountInKobo({
+    plan,
+    billingCycle,
+    isIntro: true,
+    override: getPlanPricingOverrideFromMetadata(pricingItem.metadata || null),
+  });
 }
 export async function POST(request: Request) {
   try {
@@ -160,6 +189,7 @@ export async function POST(request: Request) {
       const businessId = getBusinessIdFromMetadata(data);
       const ownerId = getOwnerIdFromMetadata(data);
       const plan = getPlanFromMetadata(data);
+      const billingCycle = getBillingCycleFromMetadata(data);
       const amount = getAmountInNaira(data);
       const amountInKobo = Number(data?.amount || 0);
       const currency = String(data?.currency || "");
@@ -208,6 +238,8 @@ export async function POST(request: Request) {
         supabaseAdmin,
         paymentAmount: existingPayment?.amount,
         plan,
+        billingCycle,
+        transactionMetadata: data?.metadata || {},
       });
 
       if (!expectedAmountInKobo) {
@@ -235,7 +267,19 @@ export async function POST(request: Request) {
         });
       }
 
-      const { now, expiresAt, graceEndsAt } = getSubscriptionDates();
+      const { now, expiresAt, graceEndsAt, months } =
+        getSubscriptionDates(billingCycle);
+      const rawResponseWithMarketVilla = {
+        ...event,
+        market_villa: {
+          ...(event?.market_villa || {}),
+          plan,
+          billing_cycle: billingCycle,
+          billing_cycle_months: months,
+          subscription_expires_at: expiresAt.toISOString(),
+          subscription_grace_until: graceEndsAt.toISOString(),
+        },
+      };
 
       if (existingPayment?.status === "success") {
         return NextResponse.json({
@@ -288,7 +332,7 @@ export async function POST(request: Request) {
             currency: "NGN",
             status: "success",
             paid_at: now.toISOString(),
-            raw_response: event,
+            raw_response: rawResponseWithMarketVilla,
             updated_at: now.toISOString(),
           })
           .eq("reference", reference);
@@ -308,7 +352,7 @@ export async function POST(request: Request) {
             reference,
             status: "success",
             paid_at: now.toISOString(),
-            raw_response: event,
+            raw_response: rawResponseWithMarketVilla,
             updated_at: now.toISOString(),
           });
 

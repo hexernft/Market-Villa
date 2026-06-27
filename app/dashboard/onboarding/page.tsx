@@ -50,6 +50,22 @@ const categoriesByMode: Record<BusinessMode, string[]> = {
     "Events & Catering",
     "General Retail",
   ],
+  properties: [
+    "Shortlet Apartment",
+    "Rental Property",
+    "Land",
+    "Commercial Property",
+    "Real Estate Agency",
+    "Property Management",
+  ],
+  cars: [
+    "Car Dealership",
+    "Vehicle Broker",
+    "Imported Cars",
+    "Auto Lot",
+    "Car Rentals",
+    "Spare Parts",
+  ],
 };
 
 export default function OnboardingPage() {

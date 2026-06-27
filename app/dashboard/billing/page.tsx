@@ -9,12 +9,15 @@ import {
   updateBusinessPublishStatus,
 } from "@/lib/business-actions";
 import { initializePlanPayment, verifyPlanPayment } from "@/lib/payment-actions";
+import { supabase } from "@/lib/supabase";
 import {
   BILLING_CYCLES,
   MARKET_VILLA_PLANS,
   type BillingCycle,
   type MarketVillaPlanId,
+  getMarketVillaPlan,
   getPlanBillingAmount,
+  getPlanPricingOverrideFromMetadata,
   isPlanDowngrade,
   isSubscriptionDateStillActive,
   normalizeBillingCycle,
@@ -41,6 +44,8 @@ type BillingPlan = {
   description: string;
   introMonthlyAmount: number;
   regularMonthlyAmount: number;
+  freeMonths: number;
+  introPaidMonths: number;
   productLimit?: number | null;
   storeLimit?: number | null;
   sortOrder?: number | null;
@@ -53,6 +58,8 @@ const fallbackBillingPlans: BillingPlan[] = [
     description: MARKET_VILLA_PLANS.starter.description,
     introMonthlyAmount: MARKET_VILLA_PLANS.starter.introMonthlyAmount,
     regularMonthlyAmount: MARKET_VILLA_PLANS.starter.regularMonthlyAmount,
+    freeMonths: MARKET_VILLA_PLANS.starter.freeMonths,
+    introPaidMonths: MARKET_VILLA_PLANS.starter.introPaidMonths,
     productLimit: 20,
     storeLimit: 1,
     sortOrder: 10,
@@ -63,6 +70,8 @@ const fallbackBillingPlans: BillingPlan[] = [
     description: MARKET_VILLA_PLANS.growth.description,
     introMonthlyAmount: MARKET_VILLA_PLANS.growth.introMonthlyAmount,
     regularMonthlyAmount: MARKET_VILLA_PLANS.growth.regularMonthlyAmount,
+    freeMonths: MARKET_VILLA_PLANS.growth.freeMonths,
+    introPaidMonths: MARKET_VILLA_PLANS.growth.introPaidMonths,
     productLimit: 100,
     storeLimit: 1,
     sortOrder: 20,
@@ -73,11 +82,23 @@ const fallbackBillingPlans: BillingPlan[] = [
     description: MARKET_VILLA_PLANS.pro.description,
     introMonthlyAmount: MARKET_VILLA_PLANS.pro.introMonthlyAmount,
     regularMonthlyAmount: MARKET_VILLA_PLANS.pro.regularMonthlyAmount,
+    freeMonths: MARKET_VILLA_PLANS.pro.freeMonths,
+    introPaidMonths: MARKET_VILLA_PLANS.pro.introPaidMonths,
     productLimit: 500,
     storeLimit: 1,
     sortOrder: 30,
   },
 ];
+
+type PricingItem = {
+  pricing_key: string;
+  name: string | null;
+  description: string | null;
+  product_limit: number | null;
+  store_limit: number | null;
+  sort_order: number | null;
+  metadata: Record<string, unknown> | null;
+};
 
 function formatNaira(amount: number) {
   return `\u20A6${Number(amount || 0).toLocaleString("en-NG")}`;
@@ -85,6 +106,59 @@ function formatNaira(amount: number) {
 
 function normalizeSubscriptionPlan(plan: string | null | undefined) {
   return normalizePlanId(plan);
+}
+
+function getPlanOverrideFromBillingPlan(plan: BillingPlan) {
+  return {
+    introMonthlyAmount: plan.introMonthlyAmount,
+    regularMonthlyAmount: plan.regularMonthlyAmount,
+    freeMonths: plan.freeMonths,
+    introPaidMonths: plan.introPaidMonths,
+  };
+}
+
+async function loadSubscriptionPricingPlans() {
+  const { data, error } = await supabase
+    .from("pricing_items")
+    .select(
+      "pricing_key,name,description,product_limit,store_limit,sort_order,metadata",
+    )
+    .eq("pricing_type", "subscription")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  if (error || !data?.length) {
+    return fallbackBillingPlans;
+  }
+
+  const mappedPlans = (data as PricingItem[])
+    .map((item) => {
+      const planId = normalizePlanId(item.pricing_key);
+      const basePlan = getMarketVillaPlan(planId, {
+        ...getPlanPricingOverrideFromMetadata(item.metadata),
+        name: item.name || undefined,
+        description: item.description || undefined,
+      });
+
+      return {
+        id: planId,
+        name: basePlan.name,
+        description: basePlan.description,
+        introMonthlyAmount: basePlan.introMonthlyAmount,
+        regularMonthlyAmount: basePlan.regularMonthlyAmount,
+        freeMonths: basePlan.freeMonths,
+        introPaidMonths: basePlan.introPaidMonths,
+        productLimit: item.product_limit,
+        storeLimit: item.store_limit,
+        sortOrder: item.sort_order,
+      };
+    })
+    .filter(
+      (plan, index, list) =>
+        list.findIndex((candidate) => candidate.id === plan.id) === index,
+    );
+
+  return mappedPlans.length ? mappedPlans : fallbackBillingPlans;
 }
 
 function formatDate(value: string | null | undefined) {
@@ -164,7 +238,10 @@ export default function BillingPage() {
   const starterFreeTrialActive = isStarterFreeTrialActive(selectedBusiness);
 
   async function loadBillingData() {
-    const items = (await getMyBusinesses()) as DashboardBusiness[];
+    const [items, activePlans] = await Promise.all([
+      getMyBusinesses() as Promise<DashboardBusiness[]>,
+      loadSubscriptionPricingPlans(),
+    ]);
 
     setBusinesses(items);
 
@@ -172,7 +249,7 @@ export default function BillingPage() {
       setSelectedBusinessId((current) => current || items[0].id);
     }
 
-    setPlans(fallbackBillingPlans);
+    setPlans(activePlans);
   }
 
   useEffect(() => {
@@ -503,6 +580,7 @@ export default function BillingPage() {
           {plans.map((plan) => {
             const isCurrent = plan.id === currentPlan?.id;
             const cycle = BILLING_CYCLES[selectedBillingCycle];
+            const planOverride = getPlanOverrideFromBillingPlan(plan);
 
             const firstBillingAmount =
               plan.id === "starter" && starterFreeTrialActive
@@ -511,12 +589,14 @@ export default function BillingPage() {
                     plan: plan.id,
                     billingCycle: selectedBillingCycle,
                     isIntro: true,
+                    override: planOverride,
                   });
 
             const regularBillingAmount = getPlanBillingAmount({
               plan: plan.id,
               billingCycle: selectedBillingCycle,
               isIntro: false,
+              override: planOverride,
             });
 
             const downgradeBlocked = isDowngradeBlockedForBusiness({
@@ -535,10 +615,10 @@ export default function BillingPage() {
               plan.id === "starter"
                 ? starterFreeTrialActive
                   ? "Free for the first month. Grace period included after expiry."
-                  : "First month free, then \u20A62k/month for 3 months."
+                  : `First month free, then ${formatNaira(plan.introMonthlyAmount)}/month for ${plan.introPaidMonths} months.`
                 : plan.id === "growth"
-                  ? "Intro: \u20A63k/month for the first 3 months."
-                  : "Intro: \u20A67k/month for the first 3 months.";
+                  ? `Intro: ${formatNaira(plan.introMonthlyAmount)}/month for the first ${plan.introPaidMonths} months.`
+                  : `Intro: ${formatNaira(plan.introMonthlyAmount)}/month for the first ${plan.introPaidMonths} months.`;
 
             const features =
               plan.id === "starter"
@@ -550,7 +630,7 @@ export default function BillingPage() {
                     "WhatsApp order flow",
                     "Dashboard management",
                     "Public store link",
-                    "Regular price: \u20A63k/month",
+                    `Regular price: ${formatNaira(plan.regularMonthlyAmount)}/month`,
                   ]
                 : plan.id === "growth"
                   ? [
@@ -560,7 +640,7 @@ export default function BillingPage() {
                         : "Unlimited inventory items",
                       "More product themes and inventory room",
                       "For product-heavy businesses",
-                      "Regular price: \u20A65k/month",
+                      `Regular price: ${formatNaira(plan.regularMonthlyAmount)}/month`,
                     ]
                   : [
                       "Everything in Grow",
@@ -570,7 +650,7 @@ export default function BillingPage() {
                       "Unlock Products, Properties, and advanced sections",
                       "Property listing and advanced business tools",
                       "More premium themes for every section",
-                      "Regular price: \u20A610k/month",
+                      `Regular price: ${formatNaira(plan.regularMonthlyAmount)}/month`,
                     ];
 
             return (

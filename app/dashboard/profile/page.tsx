@@ -62,6 +62,22 @@ const categoriesByMode: Record<BusinessMode, string[]> = {
     "Events & Catering",
     "General Retail",
   ],
+  properties: [
+    "Shortlet Apartment",
+    "Rental Property",
+    "Land",
+    "Commercial Property",
+    "Real Estate Agency",
+    "Property Management",
+  ],
+  cars: [
+    "Car Dealership",
+    "Vehicle Broker",
+    "Imported Cars",
+    "Auto Lot",
+    "Car Rentals",
+    "Spare Parts",
+  ],
 };
 
 type DashboardBusiness = {
@@ -81,6 +97,7 @@ type DashboardBusiness = {
   instagram_url: string | null;
   opening_hours: string | null;
 subscription_plan?: string | null;
+  business_mode?: string | null;
   is_published: boolean;
 };
 
@@ -176,7 +193,7 @@ export default function ProfilePage() {
     setLocation(selectedBusiness.location || "");
     setInstagramUrl(selectedBusiness.instagram_url || "");
     setOpeningHours(selectedBusiness.opening_hours || "");
-    setBusinessMode("products");
+    setBusinessMode(normalizeBusinessMode(selectedBusiness.business_mode));
     setIsPublished(selectedBusiness.is_published);
   }, [selectedBusiness]);
 
@@ -189,7 +206,7 @@ export default function ProfilePage() {
   }
 
   function handleModeChange(mode: BusinessMode) {
-    const currentMode = normalizeBusinessMode("products");
+    const currentMode = normalizeBusinessMode(selectedBusiness?.business_mode);
 
     if (
       !canUseBusinessModeForPlan({

@@ -16,10 +16,14 @@ import {
   Store,
   Megaphone,
   Banknote,
-  BadgeDollarSign,  Package,
+  BadgeDollarSign,
+  Car,
+  Home,
+  Package,
   Sparkles
 } from "lucide-react";
 import {
+  getAdminPlatformMetrics,
   getAllBusinessesForAdmin,
   getAllDomainRequestsForAdmin,
   updateBusinessPublishStatus,
@@ -43,6 +47,7 @@ type AdminBusiness = {
   custom_domain_status: string;
   subscription_plan: string;
   subscription_status: string;
+  business_mode?: string | null;
 subscription_expires_at: string | null;
   grace_period_ends_at: string | null;
   admin_override_active: boolean | null;
@@ -67,6 +72,13 @@ type AdminDomainRequest = {
   } | null;
 };
 
+type AdminPlatformMetrics = {
+  vehicleInquiries: number;
+  propertyInquiries: number;
+  successfulPayments: number;
+  activeSubscriptionPrices: number;
+};
+
 const statusOptions = [
   "pending",
   "checking",
@@ -84,6 +96,12 @@ export default function AdminPage() {
   const [domainRequests, setDomainRequests] = useState<AdminDomainRequest[]>(
     []
   );
+  const [platformMetrics, setPlatformMetrics] = useState<AdminPlatformMetrics>({
+    vehicleInquiries: 0,
+    propertyInquiries: 0,
+    successfulPayments: 0,
+    activeSubscriptionPrices: 0,
+  });
 
   const [query, setQuery] = useState("");
   const [adminNote, setAdminNote] = useState("");
@@ -97,13 +115,15 @@ export default function AdminPage() {
   try {
   setIsLoading(true);
 
-      const [businessItems, requestItems] = await Promise.all([
+      const [businessItems, requestItems, metrics] = await Promise.all([
         getAllBusinessesForAdmin(),
         getAllDomainRequestsForAdmin(),
+        getAdminPlatformMetrics(),
       ]);
 
       setBusinesses(businessItems);
       setDomainRequests(requestItems);
+      setPlatformMetrics(metrics);
       setIsAuthorized(true);
     } catch (error) {
   const errorMessage =
@@ -226,16 +246,22 @@ export default function AdminPage() {
   ).length;
 
   const productModeCount = businesses.filter(
-    (business) => normalizeBusinessMode("products") === "products"
+    (business) => normalizeBusinessMode(business.business_mode) === "products"
   ).length;
-  const propertyModeCount = 0;
-  const carModeCount = 0;
+  const propertyModeCount = businesses.filter(
+    (business) => normalizeBusinessMode(business.business_mode) === "properties"
+  ).length;
+  const carModeCount = businesses.filter(
+    (business) => normalizeBusinessMode(business.business_mode) === "cars"
+  ).length;
   const modeMismatchCount = businesses.filter((business) => {
-  const mode = normalizeBusinessMode("products");
+  const mode = normalizeBusinessMode(business.business_mode);
     const plan = normalizePlanId(business.subscription_plan);
 
-    return false;
+    return mode !== "products" && plan !== "pro";
   }).length;
+  const leadCount =
+    platformMetrics.vehicleInquiries + platformMetrics.propertyInquiries;
   const pendingDomainCount = domainRequests.filter(
     (request) => request.status === "pending"
   ).length;
@@ -373,6 +399,14 @@ export default function AdminPage() {
             Custom Requests
           </Link>
 
+          <Link
+            href="/admin/ai-requests"
+            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          >
+            <Sparkles size={18} />
+            AI Requests
+          </Link>
+
           <a
             href="#domains"
             className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
@@ -426,12 +460,13 @@ export default function AdminPage() {
                 </p>
 
                 <h2 className="mt-3 max-w-3xl text-2xl font-semibold tracking-[-0.05em]">
-                  Track businesses, subscriptions, and custom domain requests.
+                  Track businesses, subscriptions, leads, and custom domain requests.
                 </h2>
 
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
                   This admin area gives you a simple view of Market Villa
-                  activity, businesses, and platform requests from one place.
+                  products, properties, cars, paid plans, and platform requests
+                  from one place.
                 </p>
               </div>
 
@@ -457,6 +492,18 @@ export default function AdminPage() {
                   </div>
                   <span className="text-2xl font-semibold">
                     {pendingDomainCount}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between rounded-2xl bg-white/10 p-4">
+                  <div>
+                    <p className="text-sm font-semibold">Buyer Leads</p>
+                    <p className="text-xs text-slate-300">
+                      Vehicle and property inquiries
+                    </p>
+                  </div>
+                  <span className="text-2xl font-semibold">
+                    {leadCount}
                   </span>
                 </div>
               </div>
@@ -531,6 +578,27 @@ export default function AdminPage() {
                     {modeMismatchCount}
                   </p>
                 </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm text-slate-500">Leads</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
+                    {leadCount}
+                  </p>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm text-slate-500">Paid Plans</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
+                    {platformMetrics.successfulPayments}
+                  </p>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
+                  <p className="text-sm text-slate-500">Active Prices</p>
+                  <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
+                    {platformMetrics.activeSubscriptionPrices}
+                  </p>
+                </div>
               </section>
 
               <section
@@ -569,11 +637,13 @@ export default function AdminPage() {
                   ) : null}
 
                   {filteredBusinesses.map((business) => {
-  const mode = normalizeBusinessMode("products");
+                    const mode = normalizeBusinessMode(business.business_mode);
                     const modeMeta = getBusinessModeMeta(mode);
                     const isModeMismatch =
-                      false;
-                    const ModeIcon = Package;
+                      mode !== "products" &&
+                      normalizePlanId(business.subscription_plan) !== "pro";
+                    const ModeIcon =
+                      mode === "cars" ? Car : mode === "properties" ? Home : Package;
 
                     return (
                     <article
