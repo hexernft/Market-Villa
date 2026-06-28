@@ -492,19 +492,6 @@ export default function BillingPage() {
         </div>
       </section>
 
-      <div className="rounded-2xl border border-purple-200 bg-purple-50 p-4 text-sm font-semibold leading-6 text-[#241436]">
-        Own a business website with 1 month free. N1000 for the next 3 months /
-        N3000 monthly subsequently.
-      </div>
-
-      {starterFreeTrialActive ? (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium leading-6 text-emerald-900">
-          Starter is active for free on this store. After the free month, it is
-          N1000 for the next 3 months / N3000 monthly subsequently unless you
-          upgrade to Grow or Pro before then.
-        </div>
-      ) : null}
-
       {isVerifyingPayment ? (
         <div className="rounded-2xl bg-blue-50 p-3 text-sm font-medium text-blue-700">
           Verifying Paystack payment...
@@ -673,15 +660,6 @@ export default function BillingPage() {
                   </div>
                 </div>
 
-                <p className="mt-4 text-xs font-medium text-white/55">
-                  {introText}
-                </p>
-
-                <p className="mt-2 text-xs font-medium text-white/55">
-                  Regular renewal: {formatNaira(regularBillingAmount)} every{" "}
-                  {cycle.shortLabel}.
-                </p>
-
                 <button
                   type="button"
                   onClick={() => handlePayForPlan(plan.id)}
@@ -728,13 +706,6 @@ export default function BillingPage() {
                     <p className="mt-1 truncate text-sm font-semibold text-white">
                       {selectedBusiness?.name}
                     </p>
-
-                    <p className="mt-2 text-xs font-medium text-white/45">
-                      Status:{" "}
-                      <span className="text-white">
-                        {selectedBusiness?.subscription_status || "trial"}
-                      </span>
-                    </p>
                   </div>
                 </div>
               </div>
@@ -745,6 +716,7 @@ export default function BillingPage() {
     </div>
   );
 }
+
 
 
 

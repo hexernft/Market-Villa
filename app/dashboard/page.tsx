@@ -380,12 +380,6 @@ export default function DashboardPage() {
             <h1 className="mt-2 truncate text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Hi, {selectedBusiness?.name || "there"}
             </h1>
-
-            <p className="mt-1 text-sm text-slate-500">
-              {selectedBusiness?.is_published
-                ? "Your store is live. Keep it fresh."
-                : "Finish setup and share your store link."}
-            </p>
           </div>
 
           <span
@@ -625,6 +619,7 @@ export default function DashboardPage() {
     </div>
   );
 }
+
 
 
 

@@ -102,12 +102,12 @@ const colorThemes = [
 ] as const;
 
 const heroStyles = [
-  { id: "split", name: "Split Hero", description: "Text and image side by side." },
-  { id: "edge", name: "End-to-End Hero", description: "Wide banner image, not too tall." },
-  { id: "carousel", name: "Carousel Hero", description: "Rotating image/offer section." },
-  { id: "minimal", name: "Minimal Hero", description: "Small intro with products pushed up." },
-  { id: "product-first", name: "Product First", description: "Products appear immediately." },
-  { id: "storefront-pro", name: "Storefront Pro", description: "Ecommerce-style hero with shop structure." },
+  { id: "split", name: "Split Hero" },
+  { id: "edge", name: "End-to-End Hero" },
+  { id: "carousel", name: "Carousel Hero" },
+  { id: "minimal", name: "Minimal Hero" },
+  { id: "product-first", name: "Product First" },
+  { id: "storefront-pro", name: "Storefront Pro" },
 ] as const;
 
 const productCardStyles = [
@@ -151,13 +151,11 @@ function mergeSettings(settings?: ThemeSettings | null): ThemeSettings {
 function OptionCard({
   active,
   title,
-  description,
   onClick,
   children,
 }: {
   active: boolean;
   title: string;
-  description?: string;
   onClick: () => void;
   children?: React.ReactNode;
 }) {
@@ -173,9 +171,6 @@ function OptionCard({
     >
       {children}
       <p className="mt-3 text-sm font-black text-slate-950">{title}</p>
-      {description ? (
-        <p className="mt-1 text-xs leading-5 text-slate-500">{description}</p>
-      ) : null}
     </button>
   );
 }
@@ -609,9 +604,6 @@ export default function CustomizeStorePage() {
               <h3 className="mt-2 text-2xl font-black leading-tight">
                 {settings.heroStyle} hero
               </h3>
-              <p className="mt-2 text-sm opacity-75">
-                {settings.productCardStyle} product cards Â· {settings.navbarStyle} navbar
-              </p>
             </div>
 
             <div className="grid gap-2 p-3">
@@ -658,6 +650,7 @@ export default function CustomizeStorePage() {
     </div>
   );
 }
+
 
 
 

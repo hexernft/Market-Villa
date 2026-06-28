@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   FormEvent, useEffect, useMemo, useState } from "react";
@@ -645,7 +645,7 @@ export default function ProductsPage() {
 
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} — /store/{business.slug}
+                  {business.name} â€” /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -707,20 +707,11 @@ export default function ProductsPage() {
           <p className="text-sm font-semibold text-purple-950">
             Create a business page first
           </p>
-
-          <p className="mt-2 text-sm text-purple-900">
-            Add your business profile before adding products.
-          </p>
         </section>
       ) : isCurrentModeLocked ? (
         <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center shadow-sm">
           <p className="text-sm font-semibold text-amber-950">
             {getBusinessModePlanMessage(modeMeta.id)}
-          </p>
-
-          <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-amber-900">
-            Switch this business back to Products or upgrade to Pro to manage
-            {false ? " vehicles" : " property listings"}.
           </p>
 
           <Link
@@ -748,14 +739,6 @@ export default function ProductsPage() {
                 <Plus size={18} />
                 Add {singularInventoryLabel}
               </button>
-
-            <p className="mt-3 text-sm text-slate-500">
-                {isDealershipMode
-                  ? "Add a vehicle with specs, documents, and inspection notes."
-                  : false
-                    ? "Add a property listing for customers to inspect or ask about."
-                  : "Add a product or catalogue item."}
-              </p>
             </div>
           ) : null}
 
@@ -913,10 +896,6 @@ export default function ProductsPage() {
                     <div>
                       <p className="text-sm font-semibold text-slate-900">
                         Vehicle details
-                      </p>
-                      <p className="mt-1 text-xs leading-5 text-slate-500">
-                        These details power the showroom specs, inspection
-                        notes, financing prompts, and buyer inquiry messages.
                       </p>
                     </div>
 
@@ -1125,10 +1104,6 @@ export default function ProductsPage() {
                       <p className="text-sm font-semibold text-slate-900">
                         Property details
                       </p>
-                      <p className="mt-1 text-xs leading-5 text-slate-500">
-                        These details power listing specs, inspection prompts,
-                        and WhatsApp inquiry messages.
-                      </p>
                     </div>
 
                     <div className="grid gap-4 md:grid-cols-3">
@@ -1306,10 +1281,6 @@ export default function ProductsPage() {
                       <p className="text-sm font-semibold text-slate-800">
                         Available
                       </p>
-
-                      <p className="mt-1 text-xs text-slate-500">
-                        Show on storefront.
-                      </p>
                     </div>
 
                     <input
@@ -1323,10 +1294,6 @@ export default function ProductsPage() {
                     <div>
                       <p className="text-sm font-semibold text-slate-800">
                         Featured
-                      </p>
-
-                      <p className="mt-1 text-xs text-slate-500">
-                        Highlight this item.
                       </p>
                     </div>
 
@@ -1395,16 +1362,6 @@ export default function ProductsPage() {
                       : isPropertiesMode
                         ? "No matching listings"
                         : "No matching products"}
-                </p>
-
-                <p className="mx-auto mt-2 max-w-sm text-sm text-slate-500">
-                  {products.length === 0
-                    ? isDealershipMode
-                      ? "Start by adding the first car customers can inspect or ask about on WhatsApp."
-                      : isPropertiesMode
-                        ? "Start by adding the first property customers can inspect or ask about on WhatsApp."
-                        : "Start by adding the first item customers can ask about on WhatsApp."
-                    : "Try another search term or clear the search field."}
                 </p>
 
                 {products.length === 0 ? (
@@ -1529,10 +1486,6 @@ export default function ProductsPage() {
                           {product.name}
                         </p>
 
-                        <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
-                          {product.description || "No description added."}
-                        </p>
-
                         {isDealershipMode && vehicleSpecs.length ? (
                           <div className="mt-3 flex max-w-xl flex-wrap gap-2">
                             {vehicleSpecs.slice(0, 6).map((spec) => (
@@ -1620,4 +1573,5 @@ export default function ProductsPage() {
     </div>
   );
 }
+
 

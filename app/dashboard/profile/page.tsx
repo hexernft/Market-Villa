@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -337,10 +337,6 @@ export default function ProfilePage() {
           Create your business page first
         </p>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
-          Complete onboarding before editing a business profile.
-        </p>
-
         <Link
           href="/dashboard/onboarding"
           className="mt-5 inline-flex rounded-full bg-purple-300 px-5 py-2.5 text-sm font-semibold text-purple-950 transition hover:-translate-y-0.5 hover:bg-purple-200"
@@ -505,23 +501,12 @@ export default function ProfilePage() {
                   );
                 })}
               </select>
-
-              <p className="text-xs leading-5 text-slate-500">
-                This controls dashboard wording, inventory fields, customer
-                inquiry flow, and which themes are shown in the Theme Store.
-                Advanced business sections are available from Pro.
-              </p>
             </label>
 
             {!canUseSpecializedModes ? (
               <div className="rounded-[1.25rem] border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm font-semibold text-amber-950">
                   Advanced business sections require Premium.
-                </p>
-                <p className="mt-2 text-sm leading-6 text-amber-900">
-                  Keep using Products on your current plan, or upgrade to
-                  Premium to unlock property listings, advanced inventory,
-                  themes, and property themes.
                 </p>
                 <Link
                   href="/dashboard/billing"
@@ -735,10 +720,6 @@ export default function ProfilePage() {
                 <p className="text-sm font-semibold text-slate-800">
                   Publish store
                 </p>
-
-                <p className="mt-1 text-xs leading-5 text-slate-500">
-                  Turn this off to hide the public store page.
-                </p>
               </div>
 
               <input
@@ -794,10 +775,6 @@ export default function ProfilePage() {
                   {name || "Business Name"}
                 </p>
 
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  {tagline || description || "Business preview"}
-                </p>
-
                 <div className="mt-4 grid gap-2 text-xs text-slate-500">
                   <span>{location || "Location not added"}</span>
                   <span>{openingHours || "Opening hours not added"}</span>
@@ -813,14 +790,11 @@ export default function ProfilePage() {
             <p className="mt-2 break-all text-sm leading-6 text-purple-900">
               /store/{slug || selectedBusiness?.slug}
             </p>
-
-            <p className="mt-2 text-xs leading-5 text-purple-800">
-              Changing the slug changes the public store link.
-            </p>
           </div>
         </aside>
       </section>
     </div>
   );
 }
+
 

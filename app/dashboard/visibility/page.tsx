@@ -563,9 +563,6 @@ export default function VisibilityPage() {
                       <p className="text-sm font-semibold text-white">
                         {item.name}
                       </p>
-                      <p className="mt-1 text-xs leading-5 text-white/55">
-                        {item.description}
-                      </p>
                     </div>
 
                     <span
@@ -729,5 +726,6 @@ export default function VisibilityPage() {
     </div>
   );
 }
+
 
 
