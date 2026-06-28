@@ -53,9 +53,6 @@ export function CustomStorePageRoute({ params, page }: Props) {
           <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
             Loading store
           </h1>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Please wait while this business page loads.
-          </p>
         </div>
       </main>
     );
@@ -71,9 +68,6 @@ export function CustomStorePageRoute({ params, page }: Props) {
           <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
             Store not found
           </h1>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            This store does not exist or the link may be incorrect.
-          </p>
           <Link
             href="/"
             className="mt-6 inline-flex rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
@@ -95,9 +89,6 @@ export function CustomStorePageRoute({ params, page }: Props) {
           <h1 className="text-xl font-semibold tracking-[-0.04em] text-slate-950">
             Store currently unavailable
           </h1>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            {business.name} is not currently available to the public.
-          </p>
           <Link
             href="/"
             className="mt-6 inline-flex rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
