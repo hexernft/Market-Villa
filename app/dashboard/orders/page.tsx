@@ -215,7 +215,6 @@ export default function OrdersPage() {
       <main className="grid min-h-[60vh] place-items-center">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={28} />
-          <p className="mt-4 text-sm text-slate-500">Loading orders...</p>
         </div>
       </main>
     );
@@ -226,11 +225,6 @@ export default function OrdersPage() {
       <div className="rounded-[2rem] border border-purple-200 bg-purple-50 p-8 text-center">
         <p className="text-2xl font-semibold tracking-[-0.04em] text-purple-950">
           Create your business page first
-        </p>
-
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
-          Orders will appear here after customers place orders from your
-          business page.
         </p>
 
         <Link
@@ -277,7 +271,6 @@ export default function OrdersPage() {
 
           <div className="grid grid-cols-4 gap-3">
             <div className="rounded-2xl bg-slate-50 px-4 py-2.5">
-              <p className="text-xs text-slate-500">Orders</p>
               <p className="mt-1 text-xl font-semibold text-slate-950">
                 {orders.length}
               </p>
@@ -319,14 +312,6 @@ export default function OrdersPage() {
             <div className="mx-auto mb-5 grid h-11 w-14 place-items-center rounded-2xl bg-slate-50 text-slate-500">
               <ClipboardList size={24} />
             </div>
-
-            <p className="text-sm font-medium text-slate-600">
-              No orders found.
-            </p>
-
-            <p className="mt-2 text-xs text-slate-400">
-              New customer orders will appear here.
-            </p>
           </div>
         ) : null}
 
@@ -409,7 +394,6 @@ export default function OrdersPage() {
 
                 <div className="grid gap-3">
                   <div className="rounded-2xl bg-slate-50 p-4">
-                    <p className="text-xs text-slate-500">Total</p>
 
                     <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
                       {formatCurrency(Number(order.total_amount || 0))}
@@ -472,4 +456,5 @@ export default function OrdersPage() {
     </div>
   );
 }
+
 

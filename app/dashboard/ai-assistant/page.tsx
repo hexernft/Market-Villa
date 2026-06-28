@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   FormEvent, useEffect, useMemo, useState } from "react";
@@ -204,9 +204,6 @@ export default function AiAssistantPage() {
       <main className="grid min-h-[60vh] place-items-center">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={26} />
-          <p className="mt-3 text-sm text-slate-500">
-            Loading AI assistant...
-          </p>
         </div>
       </main>
     );
@@ -225,12 +222,6 @@ export default function AiAssistantPage() {
             <h1 className="mt-5 max-w-2xl text-4xl font-semibold leading-tight tracking-[-0.055em] md:text-5xl">
               Request an AI assistant for your store.
             </h1>
-
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">
-              Let customers ask questions, get product guidance, confirm store
-              details, and start better WhatsApp conversations from your public
-              store page.
-            </p>
           </div>
 
           <div className="rounded-[1.35rem] border border-white/12 bg-white/10 p-4 backdrop-blur">
@@ -253,7 +244,7 @@ export default function AiAssistantPage() {
 
             <p className="mt-3 text-sm text-white/65">
               {selectedBusiness
-                ? `${selectedBusiness.name} — /store/${selectedBusiness.slug}`
+                ? `${selectedBusiness.name} â€” /store/${selectedBusiness.slug}`
                 : "No business selected"}
             </p>
           </div>
@@ -272,9 +263,6 @@ export default function AiAssistantPage() {
           className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm"
         >
           <div className="mb-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7c3aed]">
-              New AI Request
-            </p>
             <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Tell us how the AI should help.
             </h2>
@@ -290,7 +278,7 @@ export default function AiAssistantPage() {
               >
                 {businesses.map((business) => (
                   <option key={business.id} value={business.id}>
-                    {business.name} — /store/{business.slug}
+                    {business.name} â€” /store/{business.slug}
                   </option>
                 ))}
               </select>
@@ -372,7 +360,7 @@ export default function AiAssistantPage() {
                 <input
                   value={budget}
                   onChange={(event) => setBudget(event.target.value)}
-                  placeholder="Example: ₦10,000/month"
+                  placeholder="Example: â‚¦10,000/month"
                   className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-800 outline-none focus:border-[#7c3aed]"
                 />
               </label>
@@ -409,9 +397,6 @@ export default function AiAssistantPage() {
         <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7c3aed]">
-                History
-              </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
                 AI requests
               </h2>

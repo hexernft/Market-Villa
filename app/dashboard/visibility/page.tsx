@@ -320,9 +320,6 @@ export default function VisibilityPage() {
       <main className="grid min-h-[55vh] place-items-center">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
-            Loading visibility dashboard...
-          </p>
         </div>
       </main>
     );
@@ -338,10 +335,6 @@ export default function VisibilityPage() {
         <h2 className="mt-5 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
           Create a business page first
         </h2>
-
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-500">
-          Once your store is published, visibility insights will appear here.
-        </p>
 
         <Link
           href="/dashboard/onboarding"
@@ -396,18 +389,10 @@ export default function VisibilityPage() {
       <section className="border border-slate-200 bg-white p-5 shadow-sm">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7c3aed]">
-              Visibility
-            </p>
 
             <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Store visibility dashboard
             </h2>
-
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Track how people discover your store, copy your link, and move to
-              WhatsApp.
-            </p>
           </div>
 
           <select
@@ -461,9 +446,6 @@ export default function VisibilityPage() {
         <div className="border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7c3aed]">
-                Discovery status
-              </p>
 
               <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">
                 {selectedBusiness?.name}
@@ -556,18 +538,10 @@ export default function VisibilityPage() {
         </div>
 
         <aside className="border border-slate-200 bg-[#26143d] p-5 text-white shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/40">
-            Visibility products
-          </p>
 
           <h3 className="mt-3 text-2xl font-semibold tracking-[-0.05em]">
             Get more eyes on your store.
           </h3>
-
-          <p className="mt-3 text-sm leading-7 text-white/65">
-            Choose a visibility package. We will review your store and confirm
-            payment/setup details before placement goes live.
-          </p>
 
           <div className="mt-6 grid gap-3">
             {visibilityPackages.map((item) => {
@@ -622,27 +596,16 @@ export default function VisibilityPage() {
               ? "Opening Paystack..."
               : "Pay for selected package"}
           </button>
-
-          <p className="mt-4 text-center text-xs leading-5 text-white/40">
-            After successful Paystack payment, the selected visibility package is activated automatically.
-          </p>
         </aside>
       </section>
 
       <section className="border border-slate-200 bg-white p-5 shadow-sm">
         <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7c3aed]">
-              Purchase history
-            </p>
 
             <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950">
               Visibility package history
             </h3>
-
-            <p className="mt-2 text-sm leading-6 text-slate-500">
-              Track paid visibility packages, activation status, and expiry dates.
-            </p>
           </div>
 
           <span className="rounded-full bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-500 ring-1 ring-slate-200">
@@ -737,7 +700,6 @@ export default function VisibilityPage() {
                   })()}
 
                   <div>
-                    <p className="font-semibold text-slate-500">Reference</p>
                     <p className="mt-1 max-w-[240px] truncate">
                       {purchase.payment_reference || "No reference"}
                     </p>
@@ -761,13 +723,11 @@ export default function VisibilityPage() {
             <p className="text-sm font-semibold text-slate-700">
               No visibility purchases yet
             </p>
-            <p className="mt-2 text-sm text-slate-500">
-              Paid visibility packages will appear here after payment.
-            </p>
           </div>
         )}
       </section>
     </div>
   );
 }
+
 

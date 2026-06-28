@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -210,7 +210,6 @@ export default function LeadsPage() {
       <main className="grid min-h-[55vh] place-items-center">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
-          <p className="mt-3 text-sm text-slate-500">Loading leads...</p>
         </div>
       </main>
     );
@@ -221,10 +220,6 @@ export default function LeadsPage() {
       <section className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-6 text-center">
         <p className="text-xl font-semibold tracking-[-0.04em] text-purple-950">
           Create your business page first
-        </p>
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
-          Leads will appear here after customers request property inspections or
-          vehicle test drives.
         </p>
         <Link
           href="/dashboard/onboarding"
@@ -241,16 +236,9 @@ export default function LeadsPage() {
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
         <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
-              Leads
-            </p>
             <h1 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Inspection and inquiry tracker
             </h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Track property inspection requests and vehicle buyer inquiries in
-              one compact workspace.
-            </p>
           </div>
 
           <select
@@ -322,13 +310,6 @@ export default function LeadsPage() {
         {!isLoadingLeads && relevantLeads.length === 0 ? (
           <div className="rounded-[1.5rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
             <MessageCircle className="mx-auto text-slate-400" size={28} />
-            <p className="mt-3 text-sm font-semibold text-slate-950">
-              No leads yet
-            </p>
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-              When customers request inspections, availability checks, documents,
-              or test drives, those inquiries will appear here.
-            </p>
           </div>
         ) : null}
 
@@ -422,3 +403,4 @@ export default function LeadsPage() {
     </div>
   );
 }
+

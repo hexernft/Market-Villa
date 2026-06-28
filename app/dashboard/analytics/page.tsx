@@ -202,9 +202,6 @@ export default function AnalyticsPage() {
       <main className="grid min-h-[60vh] place-items-center">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
-            Loading analytics...
-          </p>
         </div>
       </main>
     );
@@ -216,11 +213,6 @@ export default function AnalyticsPage() {
         <h2 className="text-2xl font-semibold tracking-[-0.04em] text-purple-950">
           Create your business page first
         </h2>
-
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
-          Analytics will become available once you create and publish a business
-          page.
-        </p>
 
         <Link
           href="/dashboard/onboarding"
@@ -265,9 +257,6 @@ export default function AnalyticsPage() {
       <section className="border border-slate-200 bg-white p-6 shadow-sm">
         <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-              Analytics
-            </p>
 
             <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Business performance
@@ -332,9 +321,6 @@ export default function AnalyticsPage() {
         <div className="border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-6 flex items-start justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-                Recent orders
-              </p>
 
               <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
                 Latest customer activity
@@ -384,20 +370,11 @@ export default function AnalyticsPage() {
           ) : (
             <div className="border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
               <BarChart3 className="mx-auto text-slate-400" size={28} />
-              <p className="mt-3 text-sm font-semibold text-slate-950">
-                No orders yet
-              </p>
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Once customers start ordering, recent activity will appear here.
-              </p>
             </div>
           )}
         </div>
 
         <aside className="border border-slate-200 bg-[#26143d] p-6 text-white shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Quick insight
-          </p>
 
           <h3 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">
             {selectedBusiness?.name || "Your business"}
@@ -430,4 +407,5 @@ export default function AnalyticsPage() {
     </div>
   );
 }
+
 

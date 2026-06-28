@@ -72,37 +72,31 @@ const colorThemes = [
   {
     id: "market-purple",
     name: "Market Purple",
-    description: "Clean lavender, deep purple, and premium white.",
     swatches: ["#241436", "#7c3aed", "#f7f1ff"],
   },
   {
     id: "warm-boutique",
     name: "Warm Boutique",
-    description: "Cream, terracotta, and soft brown.",
     swatches: ["#431407", "#9a3412", "#fff7ed"],
   },
   {
     id: "neon-rail",
     name: "Neon Rail",
-    description: "Dark modern style with cyan and lime accents.",
     swatches: ["#050816", "#67e8f9", "#bef264"],
   },
   {
     id: "editorial",
     name: "Editorial Gold",
-    description: "Ivory, charcoal, and muted gold.",
     swatches: ["#201711", "#8b5e25", "#fffaf2"],
   },
   {
     id: "edge-blue",
     name: "Edge Blue",
-    description: "Slate, sky blue, and clean white.",
     swatches: ["#0f172a", "#0284c7", "#eef6fb"],
   },
   {
     id: "baby-bloom",
     name: "Baby Bloom",
-    description: "Cute pink, cream, and lavender.",
     swatches: ["#3b1020", "#ec4899", "#fff1f8"],
   },
 ] as const;
@@ -397,7 +391,6 @@ export default function CustomizeStorePage() {
                   key={theme.id}
                   active={settings.colorTheme === theme.id}
                   title={theme.name}
-                  description={theme.description}
                   onClick={() =>
                     updateSettings({
                       colorTheme: theme.id,
@@ -433,7 +426,6 @@ export default function CustomizeStorePage() {
                       key={style.id}
                       active={settings.heroStyle === style.id}
                       title={style.name}
-                      description={style.description}
                       onClick={() => updateSettings({ heroStyle: style.id })}
                     />
                   ))}
@@ -518,9 +510,6 @@ export default function CustomizeStorePage() {
             <h2 className="text-xl font-black tracking-[-0.04em] text-slate-950">
               3. Show / hide items
             </h2>
-            <p className="mt-2 text-sm leading-6 text-slate-500">
-              Turning a page off hides it from the store navbar and disables its public URL.
-            </p>
 
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               <ToggleRow
@@ -606,9 +595,6 @@ export default function CustomizeStorePage() {
               <h2 className="text-lg font-black tracking-[-0.04em] text-slate-950">
                 Style summary
               </h2>
-              <p className="text-sm text-slate-500">
-                What this store will use.
-              </p>
             </div>
           </div>
 
@@ -672,6 +658,8 @@ export default function CustomizeStorePage() {
     </div>
   );
 }
+
+
 
 
 

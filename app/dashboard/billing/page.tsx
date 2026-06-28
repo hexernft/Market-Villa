@@ -404,7 +404,6 @@ export default function BillingPage() {
       <main className="grid min-h-[60vh] place-items-center">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
-          <p className="mt-3 text-sm text-slate-500">Loading billing...</p>
         </div>
       </main>
     );
@@ -415,10 +414,6 @@ export default function BillingPage() {
       <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-6 text-center">
         <p className="text-xl font-semibold tracking-[-0.04em] text-purple-950">
           Create your business page first
-        </p>
-
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
-          Complete onboarding before managing billing.
         </p>
 
         <Link
@@ -468,7 +463,6 @@ export default function BillingPage() {
 
           <div className="grid grid-cols-4 gap-2">
             <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
-              <p className="text-xs text-slate-500">Plan</p>
               <p className="mt-1 truncate text-sm font-semibold text-slate-950">
                 {currentPlan?.name || "Starter"}
               </p>
@@ -526,17 +520,9 @@ export default function BillingPage() {
       <section className="rounded-[1.5rem] border border-[#d8c8ee] bg-white p-4 shadow-sm">
         <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7c3aed]">
-              Premium sections
-            </p>
             <h2 className="mt-1 text-xl font-semibold tracking-[-0.04em] text-slate-950">
               Advanced business sections unlock on Pro.
             </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              After upgrading, open Profile and switch the business mode to
-              Products, Properties, or other advanced sections. The dashboard,
-              themes, and customer inquiry flow will adjust automatically.
-            </p>
           </div>
 
           <Link
@@ -738,9 +724,6 @@ export default function BillingPage() {
 
                 <div className="mt-auto pt-5">
                   <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
-                    <p className="text-xs font-semibold text-white/45">
-                      Current store
-                    </p>
 
                     <p className="mt-1 truncate text-sm font-semibold text-white">
                       {selectedBusiness?.name}
@@ -762,5 +745,6 @@ export default function BillingPage() {
     </div>
   );
 }
+
 
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -291,8 +291,6 @@ export default function DashboardPage() {
       <main className="grid min-h-[60vh] place-items-center">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
-
-          <p className="mt-3 text-sm text-slate-500">Loading dashboard...</p>
         </div>
       </main>
     );
@@ -309,11 +307,6 @@ export default function DashboardPage() {
           Create your first business page
         </h2>
 
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500">
-          Set up your storefront, add your inventory, and publish your
-          page.
-        </p>
-
         <Link
           href="/dashboard/onboarding"
           className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
@@ -329,7 +322,7 @@ export default function DashboardPage() {
     {
       label: "Revenue",
       value: metrics.revenue,
-      prefix: "₦",
+      prefix: "â‚¦",
       icon: Wallet,
     },
     {
@@ -383,9 +376,6 @@ export default function DashboardPage() {
       <section className="dashboard-hero-card rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Business Dashboard
-            </p>
 
             <h1 className="mt-2 truncate text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Hi, {selectedBusiness?.name || "there"}
@@ -466,7 +456,6 @@ export default function DashboardPage() {
       <section className="dashboard-setup-card rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm text-slate-500">Complete your setup</p>
             <h2 className="mt-1 text-lg font-semibold tracking-[-0.03em] text-slate-950">
               {completedSetupCount}/{setupItems.length} steps done
             </h2>
@@ -563,9 +552,6 @@ export default function DashboardPage() {
         <div className="rounded-[1.5rem] border border-slate-200 bg-white shadow-sm">
           <div className="flex items-center justify-between gap-4 border-b border-slate-200 p-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-                Recent Orders
-              </p>
 
               <h3 className="mt-1 text-sm font-semibold tracking-[-0.03em] text-slate-950">
                 Customer Activity
@@ -624,15 +610,6 @@ export default function DashboardPage() {
                 <ShoppingBag size={18} />
               </div>
 
-              <p className="mt-4 text-sm font-semibold text-slate-950">
-                No customer activity yet
-              </p>
-
-              <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
-                Share your store link and customer inquiries will become easier
-                to track here.
-              </p>
-
               <button
                 type="button"
                 onClick={handleCopyStoreLink}
@@ -648,5 +625,6 @@ export default function DashboardPage() {
     </div>
   );
 }
+
 
 

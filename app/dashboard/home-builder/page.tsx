@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -314,10 +314,6 @@ export default function HomeBuilderPage() {
             <h1 className="mt-4 text-3xl font-black tracking-[-0.06em] md:text-5xl">
               Build a richer store homepage.
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/70">
-              Add hero sections, cards, images, text blocks, effects, and buttons.
-              These sections replace the default home content only when enabled.
-            </p>
           </div>
 
           <div>
@@ -363,9 +359,6 @@ export default function HomeBuilderPage() {
                 <h2 className="text-xl font-black tracking-[-0.04em] text-slate-950">
                   Add a section
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                  Start with a ready-made block, then customize the content.
-                </p>
               </div>
             </div>
 
@@ -398,10 +391,6 @@ export default function HomeBuilderPage() {
                 <h2 className="mt-3 text-xl font-black tracking-[-0.04em] text-slate-950">
                   No custom home sections yet
                 </h2>
-                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-                  Add a preset above. Until you save enabled sections, the store keeps
-                  using its current default homepage.
-                </p>
               </div>
             ) : null}
 
@@ -626,9 +615,6 @@ export default function HomeBuilderPage() {
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-black text-slate-900">Cards</p>
-                        <p className="mt-1 text-xs text-slate-500">
-                          Add images for visual cards, or leave them blank for simple badges.
-                        </p>
                       </div>
                       <button
                         type="button"
@@ -727,10 +713,6 @@ export default function HomeBuilderPage() {
           <h2 className="text-lg font-black tracking-[-0.04em] text-slate-950">
             Home page status
           </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Enabled sections appear on the public homepage. If none are enabled,
-            the store uses the default homepage.
-          </p>
 
           <div className="mt-4 grid gap-2 rounded-[1.25rem] bg-slate-50 p-3 text-sm">
             <div className="flex justify-between gap-3">
@@ -770,5 +752,6 @@ export default function HomeBuilderPage() {
     </div>
   );
 }
+
 
 

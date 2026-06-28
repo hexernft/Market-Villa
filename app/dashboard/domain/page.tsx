@@ -203,7 +203,6 @@ export default function DomainPage() {
       <main className="grid min-h-[60vh] place-items-center">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
-          <p className="mt-3 text-sm text-slate-500">Loading domain page...</p>
         </div>
       </main>
     );
@@ -214,10 +213,6 @@ export default function DomainPage() {
       <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-6 text-center">
         <p className="text-xl font-semibold tracking-[-0.04em] text-purple-950">
           Create your business page first
-        </p>
-
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
-          Add your business profile before requesting a custom domain.
         </p>
 
         <Link
@@ -262,7 +257,6 @@ export default function DomainPage() {
 
           <div className="grid grid-cols-3 gap-2">
             <div className="rounded-2xl bg-slate-50 px-3 py-2.5">
-              <p className="text-xs text-slate-500">Requests</p>
               <p className="mt-1 text-sm font-semibold text-slate-950">
                 {requests.length}
               </p>
@@ -490,7 +484,6 @@ export default function DomainPage() {
 
               <div>
                 <p className="font-semibold text-slate-950">Pricing</p>
-                <p className="text-sm text-slate-500">Custom domain add-on</p>
               </div>
             </div>
 
@@ -548,11 +541,6 @@ export default function DomainPage() {
           <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-4 lg:col-span-2">
             <div className="flex gap-3">
               <Info className="mt-1 shrink-0 text-purple-700" size={18} />
-
-              <p className="text-sm leading-6 text-purple-900">
-                Domain names depend on availability and yearly renewal. Keep
-                renewal active every year.
-              </p>
             </div>
           </div>
         </div>
@@ -560,4 +548,5 @@ export default function DomainPage() {
     </div>
   );
 }
+
 

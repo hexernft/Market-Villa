@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useEffect, useState } from "react";
 import { CheckCircle2, Loader2, Palette } from "lucide-react";
@@ -143,7 +143,6 @@ export default function CustomRequestsPage() {
       <main className="grid min-h-[60vh] place-items-center">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={26} />
-          <p className="mt-3 text-sm text-slate-500">Loading requests...</p>
         </div>
       </main>
     );
@@ -164,9 +163,6 @@ export default function CustomRequestsPage() {
           className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm"
         >
           <div className="mb-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7c3aed]">
-              New Request
-            </p>
             <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Tell us what you want changed.
             </h2>
@@ -182,7 +178,7 @@ export default function CustomRequestsPage() {
               >
                 {businesses.map((business) => (
                   <option key={business.id} value={business.id}>
-                    {business.name} — /store/{business.slug}
+                    {business.name} â€” /store/{business.slug}
                   </option>
                 ))}
               </select>
@@ -199,11 +195,6 @@ export default function CustomRequestsPage() {
                 }`}
               >
                 <CheckCircle2 size={18} />
-                <p className="mt-3 text-sm font-semibold">Customize My Shop</p>
-                <p className="mt-1 text-xs leading-5 opacity-70">
-                  Layout tweaks, content setup, section changes, product display,
-                  or shop improvement.
-                </p>
               </button>
 
               <button
@@ -216,11 +207,6 @@ export default function CustomRequestsPage() {
                 }`}
               >
                 <Palette size={18} />
-                <p className="mt-3 text-sm font-semibold">Custom Theme Request</p>
-                <p className="mt-1 text-xs leading-5 opacity-70">
-                  Request a new theme style built around your brand or business
-                  category.
-                </p>
               </button>
             </div>
 
@@ -261,7 +247,7 @@ export default function CustomRequestsPage() {
                 <input
                   value={budget}
                   onChange={(event) => setBudget(event.target.value)}
-                  placeholder="Example: ₦20,000"
+                  placeholder="Example: â‚¦20,000"
                   className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-800 outline-none focus:border-[#7c3aed]"
                 />
               </label>
@@ -298,9 +284,6 @@ export default function CustomRequestsPage() {
         <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7c3aed]">
-                History
-              </p>
               <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
                 Your requests
               </h2>
@@ -364,3 +347,4 @@ export default function CustomRequestsPage() {
     </div>
   );
 }
+

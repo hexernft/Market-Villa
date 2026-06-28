@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent } from "react";
@@ -327,9 +327,6 @@ export default function ThemeStorePage() {
       <main className="grid min-h-[60vh] place-items-center">
         <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
-          <p className="mt-3 text-sm text-slate-500">
-            Loading theme store...
-          </p>
         </div>
       </main>
     );
@@ -340,10 +337,6 @@ export default function ThemeStorePage() {
       <div className="rounded-[1.5rem] border border-purple-200 bg-purple-50 p-6 text-center">
         <p className="text-xl font-semibold tracking-[-0.04em] text-purple-950">
           Create your business page first
-        </p>
-
-        <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-purple-900">
-          Complete onboarding before choosing a premium storefront theme.
         </p>
 
         <Link
@@ -378,7 +371,6 @@ export default function ThemeStorePage() {
           </label>
 
           <div className="rounded-2xl bg-slate-50 px-4 py-3">
-            <p className="text-xs text-slate-500">Selected theme</p>
             <p className="mt-1 truncate text-sm font-semibold text-slate-950">
               {selectedTheme?.name || "Choose from store"}
             </p>
@@ -464,17 +456,10 @@ export default function ThemeStorePage() {
       <section className="rounded-[1.5rem] border border-[#e8e1f4] bg-white/72 p-4 shadow-[0_18px_55px_rgba(36,20,54,0.08)] backdrop-blur-xl">
         <div className="grid gap-4 xl:grid-cols-[24rem_minmax(0,1fr)]">
           <aside className="rounded-[1.25rem] border border-slate-200 bg-white p-4">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#7c3aed]">
-              Theme selector
-            </p>
 
             <h2 className="mt-2 text-xl font-black tracking-[-0.04em] text-[#241436]">
               Choose a storefront theme
             </h2>
-
-            <p className="mt-2 text-sm leading-6 text-[#6f6785]">
-              Select a theme name, preview the storefront look, then apply it to your business.
-            </p>
 
             <label className="mt-5 block">
               <span className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
@@ -500,7 +485,7 @@ export default function ThemeStorePage() {
 
                   return (
                     <option key={theme.id} value={theme.id} disabled={isLocked}>
-                      {theme.name} {isLocked ? "— Pro" : ""}
+                      {theme.name} {isLocked ? "â€” Pro" : ""}
                     </option>
                   );
                 })}
@@ -600,9 +585,6 @@ export default function ThemeStorePage() {
               ) : (
                 <div className="grid h-[680px] place-items-center bg-white p-8 text-center">
                   <div>
-                    <p className="text-sm font-black uppercase tracking-[0.18em] text-[#7c3aed]">
-                      No theme selected
-                    </p>
                     <h3 className="mt-3 text-2xl font-black tracking-[-0.05em] text-[#241436]">
                       Choose a theme to preview it here.
                     </h3>
@@ -617,14 +599,9 @@ export default function ThemeStorePage() {
       {visibleThemes.length === 0 ? (
         <section className="rounded-[1.5rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Palette className="mx-auto text-slate-400" size={28} />
-          <p className="mt-3 text-sm font-semibold text-slate-900">
-            No themes found
-          </p>
-          <p className="mt-1 text-sm text-slate-500">
-            Try another category or search term.
-          </p>
         </section>
       ) : null}
     </div>
   );
 }
+

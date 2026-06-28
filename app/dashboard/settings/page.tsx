@@ -169,7 +169,6 @@ export default function SettingsPage() {
       <main className="grid min-h-[50vh] place-items-center">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={26} />
-          <p className="mt-4 text-sm text-slate-500">Loading settings...</p>
         </div>
       </main>
     );
@@ -178,17 +177,10 @@ export default function SettingsPage() {
   return (
     <div className="grid gap-5">
       <section className="border border-slate-200 bg-white p-4 shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-          More
-        </p>
 
         <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
           Dashboard menu
         </h2>
-
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-          Everything from the desktop sidebar is available here on mobile.
-        </p>
       </section>
 
       {message ? (
@@ -250,9 +242,6 @@ export default function SettingsPage() {
               <h3 className="text-sm font-semibold tracking-[-0.03em] text-slate-950">
                 Profile
               </h3>
-              <p className="text-sm text-slate-500">
-                Your personal account details.
-              </p>
             </div>
           </div>
 
@@ -306,9 +295,6 @@ export default function SettingsPage() {
                 <h3 className="text-sm font-semibold tracking-[-0.03em] text-slate-950">
                   Business support
                 </h3>
-                <p className="text-sm text-slate-500">
-                  These can later be used for support replies and alerts.
-                </p>
               </div>
             </div>
 
@@ -349,18 +335,11 @@ export default function SettingsPage() {
                 <h3 className="text-sm font-semibold tracking-[-0.03em]">
                   Security
                 </h3>
-                <p className="text-sm text-slate-500">
-                  Password and login security options can be added here later.
-                </p>
               </div>
             </div>
 
             <div className="mt-5 flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-4">
               <Bell size={17} className="text-slate-500" />
-              <p className="text-sm leading-6 text-slate-500">
-                Renewal reminders and account alerts will connect here after
-                Paystack is finalized.
-              </p>
             </div>
           </div>
         </aside>
@@ -368,4 +347,5 @@ export default function SettingsPage() {
     </div>
   );
 }
+
 

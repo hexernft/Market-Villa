@@ -148,18 +148,10 @@ export default function OnboardingPage() {
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
         <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
-              Onboarding
-            </p>
 
             <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Create business page
             </h2>
-
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Own a business website with 1 month free. N1000 for the next 3
-              months.
-            </p>
           </div>
 
           <Link
@@ -179,9 +171,6 @@ export default function OnboardingPage() {
         >
           <div className="mb-4 flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
-                Business Details
-              </p>
 
               <h3 className="mt-1 text-xl font-semibold tracking-[-0.04em] text-slate-950">
                 Public store information
@@ -431,23 +420,13 @@ export default function OnboardingPage() {
 
         <aside className="grid content-start gap-4">
           <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
-              Store Link
-            </p>
 
             <p className="mt-3 break-all rounded-2xl bg-slate-50 p-3 text-sm font-semibold text-slate-950">
               /store/{slug || "business"}
             </p>
-
-            <p className="mt-3 text-xs leading-5 text-slate-500">
-              Theme selection is available after setup.
-            </p>
           </div>
 
           <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
-              Next Steps
-            </p>
 
             <div className="mt-3 grid gap-2">
               <div className="rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
@@ -472,4 +451,5 @@ export default function OnboardingPage() {
     </div>
   );
 }
+
 
