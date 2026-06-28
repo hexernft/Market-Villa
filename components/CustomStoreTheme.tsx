@@ -350,9 +350,6 @@ export function CustomStoreTheme({
             <h1 className="mt-3 text-2xl font-black tracking-[-0.04em]">
               This page is currently turned off.
             </h1>
-            <p className="mx-auto mt-2 max-w-xl text-sm leading-6" style={{ color: palette.muted }}>
-              {business.name} has not enabled this page or has not added enough content for it yet.
-            </p>
             <Link
               href={getStorePagePath(business.slug, "home")}
               className="mt-5 inline-flex rounded-full px-5 py-3 text-sm font-black"
@@ -386,10 +383,6 @@ export function CustomStoreTheme({
               <h1 className="mt-4 max-w-xl text-[2.6rem] font-black leading-[0.95] tracking-[-0.065em] md:text-[4.5rem]" style={{ color: palette.text }}>
                 {business.name}
               </h1>
-
-              <p className="mt-4 max-w-md text-base leading-7" style={{ color: palette.muted }}>
-                {business.tagline || business.description || "Shop products, ask questions, and send your order on WhatsApp."}
-              </p>
 
               {toggles.showPrices !== false && featuredProducts[0] ? (
                 <div className="mt-5">
@@ -496,10 +489,6 @@ export function CustomStoreTheme({
               <h1 className="mt-4 max-w-xl text-[2.4rem] font-black leading-[0.95] tracking-[-0.065em] md:text-[4rem]">
                 {business.name}
               </h1>
-
-              <p className="mt-4 max-w-lg text-sm leading-7 opacity-75">
-                {business.tagline || business.description || "Browse products and order quickly on WhatsApp."}
-              </p>
 
               <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold opacity-80">
                 {business.opening_hours ? (
@@ -624,9 +613,11 @@ export function CustomStoreTheme({
                   <h3 className="mt-2 text-base font-black tracking-[-0.03em]">
                     {product.name}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 opacity-65">
-                    {product.description || "Contact business for more details."}
-                  </p>
+                  {product.description ? (
+                    <p className="mt-2 text-sm leading-6 opacity-65">
+                      {product.description}
+                    </p>
+                  ) : null}
 
                   {toggles.showPrices !== false ? (
                     <p
@@ -674,9 +665,11 @@ export function CustomStoreTheme({
             >
               About
             </p>
-            <p className="mt-2 max-w-3xl text-sm leading-7 opacity-70">
-              {business.description || "Add business description, delivery notes, opening hours, and customer trust details here."}
-            </p>
+            {business.description ? (
+              <p className="mt-2 max-w-3xl text-sm leading-7 opacity-70">
+                {business.description}
+              </p>
+            ) : null}
           </div>
         </section>
       ) : null}
@@ -700,9 +693,6 @@ export function CustomStoreTheme({
               <h1 className="mt-3 text-3xl font-black tracking-[-0.05em]">
                 Contact {business.name}
               </h1>
-              <p className="mt-3 max-w-xl text-sm leading-7" style={{ color: palette.muted }}>
-                Send a message, ask about availability, or confirm an order directly with this business.
-              </p>
             </div>
 
             <div className="grid gap-3 text-sm font-semibold">
@@ -771,9 +761,11 @@ export function CustomStoreTheme({
           <div className="mx-auto grid max-w-6xl gap-8 border-b border-white/15 pb-8 md:grid-cols-4">
             <div>
               <p className="text-lg font-black">{business.name}</p>
-              <p className="mt-3 text-sm leading-6 text-white/65">
-                {business.description || "Shop products and send orders directly on WhatsApp."}
-              </p>
+              {business.description ? (
+                <p className="mt-3 text-sm leading-6 text-white/65">
+                  {business.description}
+                </p>
+              ) : null}
             </div>
 
             <div>
