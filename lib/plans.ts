@@ -62,7 +62,7 @@ export const MARKET_VILLA_PLANS: Record<
     id: "starter",
     name: "Starter",
     displayName: "Starter",
-    introMonthlyAmount: 2000,
+    introMonthlyAmount: 1000,
     regularMonthlyAmount: 3000,
     freeMonths: 1,
     introPaidMonths: 3,

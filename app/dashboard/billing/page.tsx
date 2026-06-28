@@ -361,7 +361,7 @@ export default function BillingPage() {
 
     if (planId === "starter" && starterFreeTrialActive) {
       setMessage(
-        "Starter is already active on this store. There is no billing for the first month; quarterly billing starts from month 2.",
+        "Starter is already active on this store. You get 1 month free, then N1000 for the next 3 months / N3000 monthly subsequently.",
       );
       return;
     }
@@ -499,15 +499,15 @@ export default function BillingPage() {
       </section>
 
       <div className="rounded-2xl border border-purple-200 bg-purple-50 p-4 text-sm font-semibold leading-6 text-[#241436]">
-        Pricing rule: Starter has 1 month free with no billing. From month 2,
-        quarterly billing starts at ₦2,000/month for the next 3 months.
+        Own a business website with 1 month free. N1000 for the next 3 months /
+        N3000 monthly subsequently.
       </div>
 
       {starterFreeTrialActive ? (
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium leading-6 text-emerald-900">
-          Starter is active for free on this store. There is no billing for the
-          first month; the first paid quarterly bill starts from month 2 unless
-          you upgrade to Grow or Pro before then.
+          Starter is active for free on this store. After the free month, it is
+          N1000 for the next 3 months / N3000 monthly subsequently unless you
+          upgrade to Grow or Pro before then.
         </div>
       ) : null}
 
@@ -620,7 +620,7 @@ export default function BillingPage() {
               plan.id === "starter"
                 ? starterFreeTrialActive
                   ? "Free for the first month. No billing is collected during this period."
-                  : `After the free month, pay ${formatNaira(plan.introMonthlyAmount)}/month for the next ${plan.introPaidMonths} months, billed quarterly.`
+                  : `After the free month, pay ${formatNaira(plan.introMonthlyAmount)}/month for the next ${plan.introPaidMonths} months. Regular price: ${formatNaira(plan.regularMonthlyAmount)}/month.`
                 : plan.id === "growth"
                   ? `Intro: ${formatNaira(plan.introMonthlyAmount)}/month for the first ${plan.introPaidMonths} months.`
                   : `Intro: ${formatNaira(plan.introMonthlyAmount)}/month for the first ${plan.introPaidMonths} months.`;

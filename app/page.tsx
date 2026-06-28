@@ -49,6 +49,27 @@ export default function Home() {
 
       <section className="mv-lavender-hero home-hero-section px-4 pb-20 pt-28 md:px-4 md:pb-24 md:pt-32">
         <div className="mx-auto max-w-7xl">
+          <div className="mb-5 rounded-[1.5rem] border border-[#7c3aed]/15 bg-white/88 p-4 shadow-[0_18px_55px_rgba(55,31,83,0.12)] backdrop-blur-xl md:flex md:items-center md:justify-between md:gap-6">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-[#f0e7ff] text-[#7c3aed]">
+                <CheckCircle2 size={17} />
+              </span>
+              <div>
+                <p className="text-sm font-semibold leading-6 text-[#241436]">
+                  Own a business website with 1 month free. N1000 for the next
+                  3 months / N3000 monthly subsequently.
+                </p>
+              </div>
+            </div>
+
+            <Link
+              href="/signup"
+              className="mt-3 inline-flex min-h-10 items-center justify-center rounded-2xl bg-[#241436] px-4 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#160d22] md:mt-0"
+            >
+              Start free
+            </Link>
+          </div>
+
           <div className="market-hero-carousel home-hero-visual relative min-h-[520px] overflow-hidden rounded-[2.5rem] border border-white/65 shadow-[0_30px_100px_rgba(55,31,83,0.18)] md:min-h-[640px]">
             <div
               className="market-hero-carousel-slide"
@@ -98,12 +119,6 @@ export default function Home() {
               <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#7c3aed]">
                 Business hosting made beautiful
               </p>
-
-              <div className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-2xl border border-[#7c3aed]/15 bg-[#f3edff] px-3 py-2 text-xs font-bold text-[#241436]">
-                <CheckCircle2 size={15} className="text-[#7c3aed]" />
-                1 month free on Starter. Then ₦2,000/month for the next 3
-                months, billed quarterly from month 2.
-              </div>
 
               <h1 className="mt-3 max-w-3xl text-[2.55rem] font-semibold leading-[1.03] text-[#241436] md:text-[4rem]">
                 Start simple. Look professional.

@@ -183,7 +183,7 @@ export function DashboardShell({
   return (
     <div className="mv-page-shell dashboard-mobile-light min-h-screen bg-[#fbf8ff] pl-20 text-[#241436] lg:pl-72">
       <aside data-dashboard-sidebar="true" className="dashboard-linear-sidebar dashboard-light-sidebar dashboard-sidebar fixed left-0 top-0 z-40 block h-screen w-20 overflow-hidden p-2 lg:w-72 lg:p-3">
-        <div className="flex h-full flex-col overflow-hidden rounded-[1.2rem] border border-[#e7e5ee] bg-[#f7f7fb] text-[#171421] shadow-[0_18px_45px_rgba(15,12,25,0.08)] lg:rounded-[1.8rem]">
+        <div className="flex h-full flex-col overflow-hidden rounded-[1.2rem] border border-[#e7e5ee] bg-[#f7f7fb] text-[#171421] lg:rounded-[1.8rem]">
           <div className="flex items-center justify-center px-2 py-4 lg:justify-start lg:px-5 lg:py-5">
             <Link href="/dashboard" className="flex items-center justify-center gap-3 lg:justify-start">
               <Image src="/market-villa-logo.png" alt="Market Villa" width={72} height={72} className="h-11 w-11 object-contain lg:h-16 lg:w-16" priority />
@@ -200,7 +200,7 @@ export function DashboardShell({
               const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
-                <Link key={item.href} href={item.href} title={label} className={`group flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-[13px] font-semibold transition lg:justify-start lg:px-4 ${isActive ? "bg-[#7c3aed] text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
+                <Link key={item.href} href={item.href} title={label} className={`group flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-[13px] font-semibold transition lg:justify-start lg:px-4 ${isActive ? "bg-[#7c3aed] text-white" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
                   <Icon size={17} />
                   <span className="hidden lg:inline">{label}</span>
                 </Link>

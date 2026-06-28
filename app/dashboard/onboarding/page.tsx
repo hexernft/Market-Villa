@@ -157,8 +157,8 @@ export default function OnboardingPage() {
             </h2>
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Starter includes 1 month free with no billing. Paid quarterly
-              billing starts from month 2 at ₦2,000/month for the next 3 months.
+              Own a business website with 1 month free. N1000 for the next 3
+              months / N3000 monthly subsequently.
             </p>
           </div>
 

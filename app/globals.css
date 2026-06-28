@@ -3798,7 +3798,9 @@ aside.admin-sidebar .admin-sidebar-link-active {
 /* FINAL Market Villa dashboard sidebar override */
 .dashboard-linear-sidebar,
 [data-dashboard-sidebar="true"] {
-  position: relative !important;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
   background: #f7f7fb !important;
   background-image: none !important;
   color: #171421 !important;
@@ -3928,7 +3930,8 @@ aside.admin-sidebar .admin-sidebar-link-active {
 /* Dashboard sticky sidebar */
 @media (min-width: 1024px) {
   [data-dashboard-sidebar="true"] {
-    position: sticky !important;
+    position: fixed !important;
+    left: 0 !important;
     top: 0 !important;
     align-self: start !important;
     height: 100vh !important;
@@ -4103,4 +4106,14 @@ aside.admin-sidebar .admin-sidebar-link-active {
 .bush-market-pro-theme [class*="text-white/"] {
   color: #fff8e8 !important;
   -webkit-text-fill-color: #fff8e8 !important;
+}
+
+/* Business dashboard should stay flat and shadowless */
+.dashboard-mobile-light,
+.dashboard-mobile-light *,
+.dashboard-mobile-light *::before,
+.dashboard-mobile-light *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
 }

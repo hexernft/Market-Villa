@@ -24,8 +24,8 @@ export default function SignupSuccessPage() {
           </p>
 
           <div className="mx-auto mt-5 max-w-xl rounded-[1.35rem] border border-purple-100 bg-purple-50 p-4 text-sm font-semibold leading-6 text-[#241436]">
-            Starter includes 1 month free. After the free month, quarterly
-            billing starts at ₦2,000/month for the next 3 months.
+            Own a business website with 1 month free. N1000 for the next 3
+            months / N3000 monthly subsequently.
           </div>
 
           <div className="mx-auto mt-7 flex max-w-xl items-start gap-3 rounded-[1.35rem] border border-[#7c3aed]/12 bg-[#f8f4ff] p-4 text-left">

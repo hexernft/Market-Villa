@@ -243,12 +243,6 @@ export default function AdminPricingPage() {
             Update subscription plans, visibility packages, pricing labels,
             durations, limits, and availability without changing code.
           </p>
-
-          <div className="mt-5 max-w-3xl border border-white/15 bg-white/10 p-4 text-sm font-semibold leading-6 text-white">
-            Starter rule: no billing at all for the first month. Quarterly
-            billing starts from month 2, currently ₦2,000/month for the next 3
-            months.
-          </div>
         </section>
 
         {message ? (
@@ -422,8 +416,8 @@ export default function AdminPricingPage() {
                         </p>
                         <p className="mt-1 text-xs leading-5 text-slate-500">
                           These fields are used by the billing page and Paystack
-                          checkout. The free month is treated as the trial
-                          period before paid quarterly billing starts.
+                          checkout. Starter should be 1 month free, N1000 for
+                          the next 3 months, and N3000 monthly subsequently.
                         </p>
                       </div>
 
