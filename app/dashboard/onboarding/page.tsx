@@ -158,7 +158,7 @@ export default function OnboardingPage() {
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
               Own a business website with 1 month free. N1000 for the next 3
-              months / N3000 monthly subsequently.
+              months.
             </p>
           </div>
 

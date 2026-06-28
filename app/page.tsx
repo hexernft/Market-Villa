@@ -56,8 +56,8 @@ export default function Home() {
               </span>
               <div>
                 <p className="text-sm font-semibold leading-6 text-[#241436]">
-                  Own a business website with 1 month free. N1000 for the next
-                  3 months / N3000 monthly subsequently.
+                  Get your business website with 1 month free. 
+		  Pay ₦1,000/month for the next 3 months, then ₦3,000/month afterwards.
                 </p>
               </div>
             </div>

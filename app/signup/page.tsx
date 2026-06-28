@@ -113,8 +113,7 @@ export default function SignupPage() {
             <div className="mt-3 rounded-[18px] border border-purple-100 bg-purple-50 px-3 py-2 text-left">
               <p className="flex items-start gap-2 text-xs font-semibold leading-5 text-[#241436]">
                 <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#7c3aed]" />
-                Own a business website with 1 month free. N1000 for the next 3
-                months / N3000 monthly subsequently.
+                Start your store for free.
               </p>
             </div>
           </div>
