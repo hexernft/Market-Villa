@@ -154,7 +154,7 @@ export default function AdminPricingPage() {
         .from("pricing_items")
         .update({
           name: String(formData.get("name") || "").trim(),
-          description: String(formData.get("description") || "").trim(),
+          description: "",
           price_label: String(formData.get("priceLabel") || "").trim(),
           amount,
           amount_in_kobo: amount * 100,
@@ -202,7 +202,6 @@ export default function AdminPricingPage() {
       <main className="grid min-h-screen place-items-center bg-[#f7f1ff] px-5">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={28} />
-          <p className="mt-4 text-sm text-slate-500">Loading pricing...</p>
         </div>
       </main>
     );
@@ -231,18 +230,10 @@ export default function AdminPricingPage() {
         </div>
 
         <section className="border border-slate-200 bg-[#26143d] p-6 text-white shadow-sm md:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7c3aed]">
-            Admin Pricing
-          </p>
 
           <h1 className="mt-3 max-w-3xl text-2xl font-semibold tracking-[-0.06em]">
             Manage Market Villa pricing from one place.
           </h1>
-
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/60">
-            Update subscription plans, visibility packages, pricing labels,
-            durations, limits, and availability without changing code.
-          </p>
         </section>
 
         {message ? (
@@ -303,11 +294,6 @@ export default function AdminPricingPage() {
 
             <p className="mt-4 text-xl font-semibold tracking-[-0.04em]">
               Pricing Source
-            </p>
-
-            <p className="mt-2 text-sm leading-6 text-slate-500">
-              Billing, Paystack checkout, and payment verification use these
-              active subscription prices.
             </p>
           </div>
         </section>
@@ -411,14 +397,6 @@ export default function AdminPricingPage() {
                   {isSubscription ? (
                     <div className="grid gap-4 rounded-[1rem] border border-purple-100 bg-purple-50/60 p-4">
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#7c3aed]">
-                          Subscription price model
-                        </p>
-                        <p className="mt-1 text-xs leading-5 text-slate-500">
-                          These fields are used by the billing page and Paystack
-                          checkout. Starter should be 1 month free, N1000 for
-                          the next 3 months, and N3000 monthly subsequently.
-                        </p>
                       </div>
 
                       <div className="grid gap-4 md:grid-cols-2">
@@ -574,14 +552,14 @@ export default function AdminPricingPage() {
             </form>
           ))}
 
-          {filteredItems.length === 0 ? (
-            <div className="border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">
-              No pricing items found for this section.
-            </div>
-          ) : null}
+          {null}
         </section>
       </section>
     </main>
   );
 }
+
+
+
+
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   useEffect, useState } from "react";
@@ -209,9 +209,6 @@ export default function AdminAiRequestsPage() {
       <main className="grid min-h-screen place-items-center bg-[#f7f1ff] px-5">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
-            Loading AI requests...
-          </p>
         </div>
       </main>
     );
@@ -240,19 +237,10 @@ export default function AdminAiRequestsPage() {
         </div>
 
         <section className="border border-slate-200 bg-slate-950 p-6 text-white shadow-sm md:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#c4b5fd]">
-            AI Assistant Requests
-          </p>
 
           <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.06em]">
             Review and activate store AI assistants.
           </h1>
-
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/60">
-            Businesses can request AI for their public store page. Approve only
-            when their setup is ready, because active stores will later show the
-            floating store assistant.
-          </p>
         </section>
 
         {message ? (
@@ -294,7 +282,7 @@ export default function AdminAiRequestsPage() {
                     </h2>
 
                     <p className="mt-2 text-sm text-slate-500">
-                      {request.businesses?.name || "Unknown business"} — /store/
+                      {request.businesses?.name || "Unknown business"} â€” /store/
                       {request.businesses?.slug || "no-slug"}
                     </p>
 
@@ -303,9 +291,6 @@ export default function AdminAiRequestsPage() {
 
                       {request.common_questions ? (
                         <div className="rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200">
-                          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-                            Common questions
-                          </p>
                           <p className="mt-2 leading-6">
                             {request.common_questions}
                           </p>
@@ -314,9 +299,6 @@ export default function AdminAiRequestsPage() {
 
                       {request.training_notes ? (
                         <div className="rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-200">
-                          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-                            Training notes
-                          </p>
                           <p className="mt-2 leading-6">
                             {request.training_notes}
                           </p>
@@ -425,13 +407,12 @@ export default function AdminAiRequestsPage() {
                 </div>
               </article>
             ))
-          ) : (
-            <div className="border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">
-              No AI assistant requests yet.
-            </div>
-          )}
+          ) : null}
         </section>
       </section>
     </main>
   );
 }
+
+
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   useEffect, useMemo, useState } from "react";
@@ -277,11 +277,6 @@ export default function AdminPage() {
           <h1 className="text-2xl font-semibold tracking-[-0.04em] text-slate-950">
             Checking admin access
           </h1>
-
-          <p className="mt-3 text-sm leading-6 text-slate-500">
-            Please wait while Market Villa verifies your Admin Center
-            permission.
-          </p>
         </div>
       </main>
     );
@@ -298,11 +293,6 @@ export default function AdminPage() {
           <h1 className="text-2xl font-semibold tracking-[-0.04em] text-slate-950">
             Admin access required
           </h1>
-
-          <p className="mt-3 text-sm leading-6 text-slate-500">
-            You need a Market Villa account with the super_admin role to view
-            the Admin Center.
-          </p>
 
           {message ? (
             <div className="mt-5 rounded-2xl bg-red-50 p-4 text-sm text-red-700">
@@ -439,9 +429,6 @@ export default function AdminPage() {
         <header className="admin-center-header sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur-xl">
           <div className="flex items-center justify-between px-5 py-2.5 md:px-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
-                Admin Center
-              </p>
 
               <h1 className="text-xl font-semibold tracking-tight text-slate-950">
                 Manage Market Villa platform activity
@@ -464,28 +451,16 @@ export default function AdminPage() {
           >
             <div className="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-200">
-                  Platform Overview
-                </p>
 
                 <h2 className="mt-3 max-w-3xl text-2xl font-semibold tracking-[-0.05em]">
                   Track businesses, subscriptions, leads, and custom domain requests.
                 </h2>
-
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-                  This admin area gives you a simple view of Market Villa
-                  products, properties, cars, paid plans, and platform requests
-                  from one place.
-                </p>
               </div>
 
               <div className="grid gap-3 rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur-xl">
                 <div className="flex items-center justify-between rounded-2xl bg-white p-4 text-slate-950">
                   <div>
                     <p className="text-sm font-semibold">Total Businesses</p>
-                    <p className="text-xs text-slate-500">
-                      All created stores
-                    </p>
                   </div>
                   <span className="text-2xl font-semibold">
                     {businesses.length}
@@ -495,9 +470,6 @@ export default function AdminPage() {
                 <div className="flex items-center justify-between rounded-2xl bg-white/10 p-4">
                   <div>
                     <p className="text-sm font-semibold">Pending Domains</p>
-                    <p className="text-xs text-slate-300">
-                      Awaiting admin review
-                    </p>
                   </div>
                   <span className="text-2xl font-semibold">
                     {pendingDomainCount}
@@ -507,9 +479,6 @@ export default function AdminPage() {
                 <div className="flex items-center justify-between rounded-2xl bg-white/10 p-4">
                   <div>
                     <p className="text-sm font-semibold">Buyer Leads</p>
-                    <p className="text-xs text-slate-300">
-                      Vehicle and property inquiries
-                    </p>
                   </div>
                   <span className="text-2xl font-semibold">
                     {leadCount}
@@ -533,49 +502,42 @@ export default function AdminPage() {
             <>
               <section className="grid gap-4 md:grid-cols-4 xl:grid-cols-8">
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Businesses</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {businesses.length}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Published</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {publishedCount}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Domain Requests</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {domainRequests.length}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Pending Domains</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {pendingDomainCount}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Products</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {productModeCount}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Properties</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {propertyModeCount}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Cars</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {carModeCount}
                   </p>
@@ -589,21 +551,18 @@ export default function AdminPage() {
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Leads</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {leadCount}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Paid Plans</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {platformMetrics.successfulPayments}
                   </p>
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
-                  <p className="text-sm text-slate-500">Active Prices</p>
                   <p className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                     {platformMetrics.activeSubscriptionPrices}
                   </p>
@@ -616,9 +575,6 @@ export default function AdminPage() {
               >
                 <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-                      Businesses
-                    </p>
                     <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
                       All business pages
                     </h2>
@@ -639,11 +595,7 @@ export default function AdminPage() {
                 </div>
 
                 <div className="grid gap-4">
-                  {filteredBusinesses.length === 0 ? (
-                    <div className="rounded-2xl bg-slate-50 p-8 text-center text-sm text-slate-500">
-                      No businesses found.
-                    </div>
-                  ) : null}
+                  {null}
 
                   {filteredBusinesses.map((business) => {
                     const mode = normalizeBusinessMode(business.business_mode);
@@ -788,20 +740,13 @@ export default function AdminPage() {
                 className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm"
               >
                 <div className="mb-6">
-                  <p className="text-sm font-semibold uppercase tracking-[0.24em] text-teal-700">
-                    Domain Requests
-                  </p>
                   <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
                     Review custom domain requests
                   </h2>
                 </div>
 
                 <div className="grid gap-4">
-                  {domainRequests.length === 0 ? (
-                    <div className="rounded-2xl bg-slate-50 p-8 text-center text-sm text-slate-500">
-                      No domain requests yet.
-                    </div>
-                  ) : null}
+                  {null}
 
                   {domainRequests.map((request) => (
                     <article
@@ -907,6 +852,10 @@ export default function AdminPage() {
     </main>
   );
 }
+
+
+
+
 
 
 

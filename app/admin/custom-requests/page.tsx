@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -130,9 +130,6 @@ export default function AdminCustomRequestsPage() {
       <main className="grid min-h-screen place-items-center bg-[#f7f1ff] px-5">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
-            Loading custom requests...
-          </p>
         </div>
       </main>
     );
@@ -160,18 +157,10 @@ export default function AdminCustomRequestsPage() {
         </div>
 
         <section className="border border-slate-200 bg-slate-950 p-6 text-white shadow-sm md:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#c4b5fd]">
-            Admin Requests
-          </p>
 
           <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.06em]">
             Custom theme and shop customization requests.
           </h1>
-
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/60">
-            Review requests from businesses that want custom design work,
-            storefront changes, or done-for-you shop improvements.
-          </p>
         </section>
 
         {message ? (
@@ -211,7 +200,7 @@ export default function AdminCustomRequestsPage() {
                     </h2>
 
                     <p className="mt-2 text-sm text-slate-500">
-                      {request.businesses?.name || "Unknown business"} — /store/
+                      {request.businesses?.name || "Unknown business"} â€” /store/
                       {request.businesses?.slug || "no-slug"}
                     </p>
 
@@ -292,13 +281,12 @@ export default function AdminCustomRequestsPage() {
                 </div>
               </article>
             ))
-          ) : (
-            <div className="border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">
-              No custom requests yet.
-            </div>
-          )}
+          ) : null}
         </section>
       </section>
     </main>
   );
 }
+
+
+

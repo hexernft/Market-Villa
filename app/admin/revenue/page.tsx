@@ -242,9 +242,6 @@ export default function AdminRevenuePage() {
       <main className="grid min-h-screen place-items-center bg-[#f7f1ff] px-5">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
-            Loading revenue dashboard...
-          </p>
         </div>
       </main>
     );
@@ -272,18 +269,10 @@ export default function AdminRevenuePage() {
         </div>
 
         <section className="border border-slate-200 bg-[#26143d] p-6 text-white shadow-sm md:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7c3aed]">
-            Admin Revenue
-          </p>
 
           <h1 className="mt-3 max-w-3xl text-2xl font-semibold tracking-[-0.06em]">
             Market Villa monetisation dashboard
           </h1>
-
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/60">
-            Track subscription payments, paid visibility packages, active
-            featured stores, and verified business revenue from one place.
-          </p>
         </section>
 
         {message ? (
@@ -314,10 +303,6 @@ export default function AdminRevenuePage() {
                 <p className="mt-7 text-2xl font-semibold tracking-[-0.05em] text-slate-950">
                   {card.value}
                 </p>
-
-                <p className="mt-2 text-xs leading-5 text-slate-500">
-                  {card.detail}
-                </p>
               </article>
             );
           })}
@@ -327,9 +312,6 @@ export default function AdminRevenuePage() {
           <div className="border border-slate-200 bg-white p-5 shadow-sm">
             <div className="mb-5 flex items-end justify-between gap-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7c3aed]">
-                  Visibility sales
-                </p>
 
                 <h2 className="mt-2 text-xl font-semibold tracking-[-0.04em]">
                   Visibility package purchases
@@ -415,11 +397,7 @@ export default function AdminRevenuePage() {
                 );
               })}
 
-              {visibilityPurchases.length === 0 ? (
-                <div className="border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500">
-                  No visibility purchases yet.
-                </div>
-              ) : null}
+              {null}
             </div>
           </div>
 
@@ -427,9 +405,6 @@ export default function AdminRevenuePage() {
             <div className="border border-slate-200 bg-white p-5 shadow-sm">
               <div className="mb-5 flex items-end justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7c3aed]">
-                    Subscription payments
-                  </p>
 
                   <h2 className="mt-2 text-xl font-semibold tracking-[-0.04em]">
                     Latest subscription payments
@@ -473,20 +448,13 @@ export default function AdminRevenuePage() {
                   </article>
                 ))}
 
-                {payments.length === 0 ? (
-                  <div className="border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500">
-                    No subscription payments yet.
-                  </div>
-                ) : null}
+                {null}
               </div>
             </div>
 
             <div className="border border-slate-200 bg-white p-5 shadow-sm">
               <div className="mb-5 flex items-end justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7c3aed]">
-                    Active placements
-                  </p>
 
                   <h2 className="mt-2 text-xl font-semibold tracking-[-0.04em]">
                     Featured and verified stores
@@ -536,11 +504,7 @@ export default function AdminRevenuePage() {
                   );
                 })}
 
-                {featuredBusinesses.length === 0 ? (
-                  <div className="border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500">
-                    No active placements yet.
-                  </div>
-                ) : null}
+                {null}
               </div>
             </div>
           </div>
@@ -549,4 +513,10 @@ export default function AdminRevenuePage() {
     </main>
   );
 }
+
+
+
+
+
+
 

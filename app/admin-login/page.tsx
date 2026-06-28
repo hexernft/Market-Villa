@@ -65,10 +65,6 @@ export default function AdminLoginPage() {
           Platform admin access
         </h1>
 
-        <p className="mt-2 text-sm leading-6 text-slate-500">
-          Login with a Market Villa account that has the super_admin role.
-        </p>
-
         <form onSubmit={handleAdminLogin} className="mt-8 grid gap-4">
           <input
             value={email}
@@ -119,5 +115,7 @@ export default function AdminLoginPage() {
     </main>
   );
 }
+
+
 
 

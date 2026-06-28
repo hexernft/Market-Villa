@@ -197,9 +197,6 @@ export default function AdminVisibilityRequestsPage() {
       <main className="grid min-h-[60vh] place-items-center bg-[#f7f1ff] px-5 py-12">
         <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
           <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={28} />
-          <p className="mt-4 text-sm text-slate-500">
-            Loading visibility requests...
-          </p>
         </div>
       </main>
     );
@@ -211,18 +208,10 @@ export default function AdminVisibilityRequestsPage() {
         <div className="border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7c3aed]">
-                Admin
-              </p>
 
               <h1 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
                 Visibility requests
               </h1>
-
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                Review featured placement requests from businesses and activate
-                store visibility boosts.
-              </p>
             </div>
 
             <button
@@ -295,27 +284,18 @@ export default function AdminVisibilityRequestsPage() {
 
                       <div className="mt-4 grid gap-3 text-sm text-slate-500 md:grid-cols-3">
                         <div className="border border-slate-200 bg-slate-50 p-3">
-                          <p className="text-xs uppercase tracking-[0.16em] text-slate-400">
-                            Slug
-                          </p>
                           <p className="mt-1 font-semibold text-slate-700">
                             /store/{business?.slug || "no-slug"}
                           </p>
                         </div>
 
                         <div className="border border-slate-200 bg-slate-50 p-3">
-                          <p className="text-xs uppercase tracking-[0.16em] text-slate-400">
-                            Weekly views
-                          </p>
                           <p className="mt-1 font-semibold text-slate-700">
                             {Number(business?.weekly_views || 0).toLocaleString()}
                           </p>
                         </div>
 
                         <div className="border border-slate-200 bg-slate-50 p-3">
-                          <p className="text-xs uppercase tracking-[0.16em] text-slate-400">
-                            Requested
-                          </p>
                           <p className="mt-1 font-semibold text-slate-700">
                             {formatDate(request.created_at)}
                           </p>
@@ -358,10 +338,6 @@ export default function AdminVisibilityRequestsPage() {
               <h2 className="mt-4 text-xl font-semibold tracking-[-0.04em] text-slate-950">
                 No visibility requests yet
               </h2>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-                When businesses request featured placement, they will appear
-                here for review.
-              </p>
             </div>
           )}
         </div>
@@ -369,4 +345,6 @@ export default function AdminVisibilityRequestsPage() {
     </main>
   );
 }
+
+
 
