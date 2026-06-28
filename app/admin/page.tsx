@@ -336,13 +336,13 @@ export default function AdminPage() {
 
   return (
     <main className="admin-center-page min-h-screen bg-slate-100">
-      <aside className="admin-sidebar fixed z-50 left-0 top-0 hidden h-screen w-72 border-r border-white/10 bg-[#26143d] p-5 text-white lg:block">
-        <Link href="/" className="mb-8 flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-slate-950">
+      <aside className="admin-sidebar fixed left-0 top-0 z-50 block h-screen w-20 overflow-hidden border-r border-white/10 bg-[#26143d] p-3 text-white lg:w-72 lg:p-5">
+        <Link href="/" className="mb-8 flex items-center justify-center gap-3 lg:justify-start">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white text-slate-950">
             <ShieldCheck size={20} />
           </span>
 
-          <span>
+          <span className="hidden lg:block">
             <span className="block text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
               MARKET VILLA
             </span>
@@ -353,80 +353,89 @@ export default function AdminPage() {
         <nav className="admin-sidebar-nav grid gap-2">
           <a
             href="#overview"
-            className="admin-sidebar-link admin-sidebar-link-active flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-2.5 text-sm font-medium text-white"
+            title="Overview"
+            className="admin-sidebar-link admin-sidebar-link-active flex min-h-11 items-center justify-center gap-3 rounded-2xl bg-white/10 px-2 py-2.5 text-sm font-medium text-white lg:justify-start lg:px-4"
           >
             <LayoutDashboard size={18} />
-            Overview
+            <span className="hidden lg:inline">Overview</span>
           </a>
 
           <a
             href="#businesses"
-            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            title="Businesses"
+            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
           >
             <Building2 size={18} />
-            Businesses
+            <span className="hidden lg:inline">Businesses</span>
           </a>
 
           <Link
             href="/admin/visibility-requests"
-            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            title="Visibility Requests"
+            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
           >
             <Megaphone size={18} />
-            Visibility Requests
+            <span className="hidden lg:inline">Visibility Requests</span>
           </Link>
 
           <Link
             href="/admin/revenue"
-            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            title="Revenue"
+            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
           >
             <Banknote size={18} />
-            Revenue
+            <span className="hidden lg:inline">Revenue</span>
           </Link>
 
           <Link
             href="/admin/pricing"
-            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            title="Pricing"
+            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
           >
             <BadgeDollarSign size={18} />
-            Pricing
+            <span className="hidden lg:inline">Pricing</span>
           </Link>
 
           <Link
             href="/admin/custom-requests"
-            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            title="Custom Requests"
+            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
           >
             <Sparkles size={18} />
-            Custom Requests
+            <span className="hidden lg:inline">Custom Requests</span>
           </Link>
 
           <Link
             href="/admin/ai-requests"
-            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            title="AI Requests"
+            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
           >
             <Sparkles size={18} />
-            AI Requests
+            <span className="hidden lg:inline">AI Requests</span>
           </Link>
 
           <a
             href="#domains"
-            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            title="Domain Requests"
+            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
           >
             <Globe2 size={18} />
-            Domain Requests
+            <span className="hidden lg:inline">Domain Requests</span>
           </a>
 
           <Link
             href="/dashboard"
-            className="admin-sidebar-link relative z-50 flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            title="Business Dashboard"
+            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
           >
             <Store size={18} />
-            Business Dashboard
+            <span className="hidden lg:inline">Business Dashboard</span>
           </Link>
         </nav>
 
       </aside>
 
-      <section className="lg:pl-72">
+      <section className="pl-20 lg:pl-72">
         <header className="admin-center-header sticky top-0 z-30 border-b border-slate-200 bg-white/85 backdrop-blur-xl">
           <div className="flex items-center justify-between px-5 py-2.5 md:px-5">
             <div>

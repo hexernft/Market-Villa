@@ -181,72 +181,45 @@ export function DashboardShell({
   }
 
   return (
-    <div className="mv-page-shell dashboard-mobile-light min-h-screen bg-[#fbf8ff] text-[#241436] lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
-      <aside data-dashboard-sidebar="true" className="dashboard-linear-sidebar dashboard-light-sidebar dashboard-sidebar sticky top-0 z-40 hidden h-screen w-full self-start overflow-hidden p-3 lg:block">
-        <div className="flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-[#e7e5ee] bg-[#f7f7fb] text-[#171421] shadow-[0_18px_45px_rgba(15,12,25,0.08)]">
-          <div className="flex items-center px-5 py-5">
-            <Link href="/dashboard" className="flex items-center gap-3">
-              <Image src="/market-villa-logo.png" alt="Market Villa" width={72} height={72} className="h-16 w-16 object-contain" priority />
-              <div>
+    <div className="mv-page-shell dashboard-mobile-light min-h-screen bg-[#fbf8ff] pl-20 text-[#241436] lg:pl-72">
+      <aside data-dashboard-sidebar="true" className="dashboard-linear-sidebar dashboard-light-sidebar dashboard-sidebar fixed left-0 top-0 z-40 block h-screen w-20 overflow-hidden p-2 lg:w-72 lg:p-3">
+        <div className="flex h-full flex-col overflow-hidden rounded-[1.2rem] border border-[#e7e5ee] bg-[#f7f7fb] text-[#171421] shadow-[0_18px_45px_rgba(15,12,25,0.08)] lg:rounded-[1.8rem]">
+          <div className="flex items-center justify-center px-2 py-4 lg:justify-start lg:px-5 lg:py-5">
+            <Link href="/dashboard" className="flex items-center justify-center gap-3 lg:justify-start">
+              <Image src="/market-villa-logo.png" alt="Market Villa" width={72} height={72} className="h-11 w-11 object-contain lg:h-16 lg:w-16" priority />
+              <div className="hidden lg:block">
                 <p className="text-sm font-semibold tracking-[-0.04em] text-[#241436]">{BRAND.name}</p>
                 <p className="text-xs font-medium text-[#241436]/50">Brand studio</p>
               </div>
             </Link>
           </div>
 
-          <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-2.5">
+          <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-2 lg:px-4 lg:py-2.5">
             {navItems.map((item) => {
   const Icon = item.modeAware ? InventoryIcon : item.icon;
               const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
-                <Link key={item.href} href={item.href} className={`group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-[13px] font-semibold transition ${isActive ? "bg-[#7c3aed] text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
+                <Link key={item.href} href={item.href} title={label} className={`group flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-[13px] font-semibold transition lg:justify-start lg:px-4 ${isActive ? "bg-[#7c3aed] text-white shadow-[0_14px_35px_rgba(124,58,237,0.35)]" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
                   <Icon size={17} />
-                  {label}
+                  <span className="hidden lg:inline">{label}</span>
                 </Link>
               );
             })}
           </nav>
 
-          <div className="p-4">
-            <button type="button" onClick={handleLogout} disabled={isLoggingOut} className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#e8e1f4] bg-white px-4 py-2.5 text-sm font-semibold text-[#241436]/80 transition hover:bg-[#f1eaff] hover:text-[#241436] disabled:cursor-not-allowed disabled:opacity-60">
+          <div className="p-2 lg:p-4">
+            <button type="button" onClick={handleLogout} disabled={isLoggingOut} title="Logout" className="flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl border border-[#e8e1f4] bg-white px-2 py-2.5 text-sm font-semibold text-[#241436]/80 transition hover:bg-[#f1eaff] hover:text-[#241436] disabled:cursor-not-allowed disabled:opacity-60 lg:px-4">
               {isLoggingOut ? <Loader2 size={17} className="animate-spin" /> : <LogOut size={17} />}
-              {isLoggingOut ? "Logging out..." : "Logout"}
+              <span className="hidden lg:inline">{isLoggingOut ? "Logging out..." : "Logout"}</span>
             </button>
           </div>
         </div>
       </aside>
 
-      <main data-dashboard-main="true" className="min-h-screen min-w-0 pb-24 lg:pb-0">
+      <main data-dashboard-main="true" className="min-h-screen min-w-0">
         <div className="mv-dashboard-content px-4 py-4 md:px-5 lg:px-5 lg:py-4">{children}</div>
       </main>
-
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white px-2 pb-[max(0.45rem,env(safe-area-inset-bottom))] pt-2 lg:hidden" aria-label="Mobile dashboard navigation">
-        <div className="grid grid-cols-5 gap-1">
-          {mobileNavItems.map((item) => {
-  const Icon = item.modeAware ? InventoryIcon : item.icon;
-            const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/dashboard" && pathname.startsWith(item.href));
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-2xl px-1 text-[11px] font-semibold transition ${
-  isActive
-                    ? "bg-emerald-50 text-emerald-700"
-                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
-                }`}
-                >
-                <Icon size={20} strokeWidth={isActive ? 2.4 : 2} />
-                <span>{label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
     </div>
   );
 }
