@@ -46,7 +46,7 @@ const menuSections = [
     ],
   },
   {
-    title: "Selling",
+    title: "Sales & Marketing",
     items: [
       { label: "Inventory", href: "/dashboard/products", icon: Package },
       { label: "Leads", href: "/dashboard/leads", icon: MessageCircle },
@@ -167,7 +167,7 @@ export default function SettingsPage() {
   if (isLoading) {
     return (
       <main className="grid min-h-[50vh] place-items-center">
-        <div className="border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <div className="rounded-2xl border border-[#ebe7f3] bg-white p-8 text-center">
           <Loader2 className="mx-auto animate-spin text-slate-950" size={26} />
         </div>
       </main>
@@ -175,17 +175,16 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="grid gap-5">
-      <section className="border border-slate-200 bg-white p-4 shadow-sm">
-
-        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
-          Dashboard menu
-        </h2>
+    <div className="grid gap-4">
+      <section>
+        <h1 className="text-[1.8rem] font-black tracking-[-0.05em] text-[#171421]">
+          More
+        </h1>
       </section>
 
       {message ? (
         <div
-          className={`border p-4 text-sm ${
+          className={`rounded-2xl border p-4 text-sm font-semibold ${
             message.toLowerCase().includes("success")
               ? "border-emerald-200 bg-emerald-50 text-emerald-700"
               : "border-red-200 bg-red-50 text-red-700"
@@ -195,13 +194,13 @@ export default function SettingsPage() {
         </div>
       ) : null}
 
-      <section className="grid gap-3 xl:grid-cols-3">
+      <section className="grid gap-4 xl:grid-cols-3">
         {menuSections.map((section) => (
           <div
             key={section.title}
-            className="border border-slate-200 bg-white p-3 shadow-sm"
+            className="rounded-2xl border border-[#ebe7f3] bg-white p-3"
           >
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+            <p className="px-1 text-xs font-black uppercase tracking-[0.22em] text-[#171421]">
               {section.title}
             </p>
 
@@ -213,10 +212,10 @@ export default function SettingsPage() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-white"
+                    className="flex items-center justify-between rounded-2xl border border-transparent bg-white px-3 py-3 text-base font-semibold text-[#171421] transition hover:border-[#ebe7f3] hover:bg-[#fcfbff]"
                   >
                     <span className="inline-flex items-center gap-3">
-                      <span className="grid h-8 w-8 place-items-center rounded-2xl bg-white text-emerald-700">
+                      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
                         <Icon size={18} />
                       </span>
                       {item.label}
@@ -231,10 +230,10 @@ export default function SettingsPage() {
         ))}
       </section>
 
-      <section className="grid gap-5 xl:grid-cols-[1fr_0.8fr]">
-        <div className="border border-slate-200 bg-white p-4 shadow-sm">
+      <section className="grid gap-4 xl:grid-cols-[1fr_0.8fr]">
+        <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4">
           <div className="mb-5 flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
               <User size={18} />
             </span>
 
@@ -253,7 +252,7 @@ export default function SettingsPage() {
               <input
                 value={fullName}
                 onChange={(event) => setFullName(event.target.value)}
-                className="h-10 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-violet)]"
+                className="h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm outline-none focus:border-[#7c3aed]"
                 placeholder="Your full name"
               />
             </label>
@@ -262,7 +261,7 @@ export default function SettingsPage() {
               <span className="text-sm font-semibold text-slate-700">
                 Email address
               </span>
-              <div className="flex h-10 items-center gap-3 border border-slate-200 bg-slate-50 px-4 text-sm text-slate-500">
+              <div className="flex h-11 items-center gap-3 rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] px-4 text-sm text-slate-500">
                 <Mail size={16} />
                 {profile?.email || "No email"}
               </div>
@@ -272,7 +271,7 @@ export default function SettingsPage() {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[#241436] px-5 text-sm font-bold text-white hover:bg-[#351b55] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSaving ? (
                 <Loader2 size={17} className="animate-spin" />
@@ -285,9 +284,9 @@ export default function SettingsPage() {
         </div>
 
         <aside className="grid gap-5">
-          <div className="border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4">
             <div className="mb-5 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
                 <Building2 size={18} />
               </span>
 
@@ -306,7 +305,7 @@ export default function SettingsPage() {
                 <input
                   value={supportEmail}
                   onChange={(event) => setSupportEmail(event.target.value)}
-                  className="h-10 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-violet)]"
+                  className="h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm outline-none focus:border-[#7c3aed]"
                   placeholder="support@example.com"
                 />
               </label>
@@ -318,16 +317,16 @@ export default function SettingsPage() {
                 <input
                   value={supportPhone}
                   onChange={(event) => setSupportPhone(event.target.value)}
-                  className="h-10 border border-slate-200 bg-white px-4 text-sm outline-none focus:border-[var(--mv-violet)]"
+                  className="h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm outline-none focus:border-[#7c3aed]"
                   placeholder="+234..."
                 />
               </label>
             </div>
           </div>
 
-          <div className="border border-slate-200 bg-white p-4 text-slate-950 shadow-sm">
+          <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4 text-slate-950">
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
                 <ShieldCheck size={18} />
               </span>
 
@@ -338,7 +337,7 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            <div className="mt-5 flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+            <div className="mt-5 flex items-center gap-3 rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] p-4">
               <Bell size={17} className="text-slate-500" />
             </div>
           </div>

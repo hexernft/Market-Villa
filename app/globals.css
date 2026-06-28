@@ -2898,12 +2898,12 @@ aside.admin-sidebar .admin-sidebar-link-active {
 /* Mobile dashboard should feel like a light native commerce app */
 @media (max-width: 767px) {
   .dashboard-mobile-light {
-    background-color: #eee5f7 !important;
+    background-color: #fcfbff !important;
     background-image: none !important;
   }
 
   .dashboard-mobile-light main {
-    background-color: #eee5f7 !important;
+    background-color: #fcfbff !important;
     background-image: none !important;
   }
 
@@ -2914,7 +2914,7 @@ aside.admin-sidebar .admin-sidebar-link-active {
     padding-right: 1rem !important;
   }
 
-  .dashboard-mobile-light .mv-dashboard-content section,
+  .dashboard-mobile-light .mv-dashboard-content section[class*="border"],
   .dashboard-mobile-light .mv-dashboard-content article,
   .dashboard-mobile-light .mv-dashboard-content aside,
   .dashboard-mobile-light .mv-dashboard-content form,
@@ -2924,20 +2924,20 @@ aside.admin-sidebar .admin-sidebar-link-active {
   .dashboard-mobile-light .mv-dashboard-content aside[class*="bg-[#26143d]"] {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.035) !important;
-    border-color: rgba(15, 23, 42, 0.075) !important;
+    box-shadow: none !important;
+    border-color: #ebe7f3 !important;
     background: #ffffff !important;
-    color: #111827 !important;
+    color: #171421 !important;
   }
 
-  .dashboard-mobile-light .mv-dashboard-content section:hover,
+  .dashboard-mobile-light .mv-dashboard-content section[class*="border"]:hover,
   .dashboard-mobile-light .mv-dashboard-content article:hover,
   .dashboard-mobile-light .premium-card-hover:hover {
     transform: none !important;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+    box-shadow: none !important;
   }
 
-  .dashboard-mobile-light .mv-dashboard-content section,
+  .dashboard-mobile-light .mv-dashboard-content section[class*="border"],
   .dashboard-mobile-light .mv-dashboard-content article,
   .dashboard-mobile-light .mv-dashboard-content form,
   .dashboard-mobile-light .mv-dashboard-content div[class*="border"] {
@@ -2992,22 +2992,21 @@ aside.admin-sidebar .admin-sidebar-link-active {
   }
 
   .dashboard-mobile-light .mv-dashboard-content [class*="bg-[#26143d]"],
+  .dashboard-mobile-light .mv-dashboard-content [class*="bg-[#241436]"],
   .dashboard-mobile-light .mv-dashboard-content [class*="bg-[#7c3aed]"],
   .dashboard-mobile-light .mv-dashboard-content [class*="bg-[#06110f]"] {
-    background: #059669 !important;
+    background: #7c3aed !important;
     color: #ffffff !important;
   }
 
   .dashboard-mobile-light .mv-dashboard-content [class*="text-[#7c3aed]"],
-  .dashboard-mobile-light .mv-dashboard-content [class*="text-purple"],
-  .dashboard-mobile-light .mv-dashboard-content [class*="text-teal"] {
-    color: #047857 !important;
+  .dashboard-mobile-light .mv-dashboard-content [class*="text-purple"] {
+    color: #7c3aed !important;
   }
 
   .dashboard-mobile-light .mv-dashboard-content [class*="bg-purple-50"],
-  .dashboard-mobile-light .mv-dashboard-content [class*="bg-teal-50"],
-  .dashboard-mobile-light .mv-dashboard-content [class*="bg-emerald-50"] {
-    background: #ecfdf5 !important;
+  .dashboard-mobile-light .mv-dashboard-content [class*="bg-[#f1eaff]"] {
+    background: #f1eaff !important;
   }
 
   .dashboard-mobile-light .mv-dashboard-content [class*="text-white/"],

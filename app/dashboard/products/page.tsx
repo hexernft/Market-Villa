@@ -627,8 +627,25 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="grid gap-5">
-      <section className="rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="grid gap-4">
+      <section className="flex items-center justify-between gap-3">
+        <div>
+          <h1 className="text-[1.8rem] font-black tracking-[-0.05em] text-[#171421]">
+            {modeMeta.inventoryLabel}
+          </h1>
+        </div>
+
+        <button
+          type="button"
+          onClick={openNewProductForm}
+          className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-emerald-600 text-white transition hover:bg-emerald-700"
+          aria-label={`Add ${singularInventoryLabel}`}
+        >
+          <Plus size={28} />
+        </button>
+      </section>
+
+      <section className="rounded-2xl border border-[#ebe7f3] bg-white p-3">
         <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-center">
           <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
             <select
@@ -637,7 +654,7 @@ export default function ProductsPage() {
   setSelectedBusinessId(event.target.value);
                 resetForm();
               }}
-              className="min-h-10 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 md:min-w-80"
+              className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] px-4 text-sm font-semibold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10 md:min-w-80"
             >
               {businesses.length === 0 ? (
                 <option value="">No business created yet</option>
@@ -659,14 +676,14 @@ export default function ProductsPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-10 w-full rounded-2xl border border-slate-200 bg-white px-11 text-sm outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-50"
+                className="min-h-11 w-full rounded-2xl border border-[#ebe7f3] bg-white px-11 text-sm outline-none transition focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-[#7c3aed]/10"
                 placeholder={`Search ${modeMeta.inventoryLabel.toLowerCase()}`}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
-            <div className="rounded-2xl bg-slate-50 px-3 py-2">
+            <div className="rounded-2xl bg-[#fcfbff] px-3 py-2">
             <p className="text-xs text-slate-500">Total</p>
               <p className="mt-1 text-lg font-semibold text-slate-950">
                 {products.length}
@@ -682,7 +699,7 @@ export default function ProductsPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-purple-50 px-3 py-2">
+            <div className="rounded-2xl bg-[#f1eaff] px-3 py-2">
               <p className="text-xs text-purple-700">Featured</p>
               <p className="mt-1 text-lg font-semibold text-purple-950">
                 {featuredProductsCount}
@@ -693,23 +710,23 @@ export default function ProductsPage() {
       </section>
 
       {message && !isProductFormOpen ? (
-        <div className="rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
+        <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4 text-sm font-semibold text-slate-700">
           {message}
         </div>
       ) : null}
 
       {isLoading ? (
-        <section className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
+        <section className="rounded-2xl border border-[#ebe7f3] bg-white p-8 text-center text-sm text-slate-500">
           Loading products...
         </section>
       ) : businesses.length === 0 ? (
-        <section className="rounded-[2rem] border border-purple-200 bg-purple-50 p-8 text-center">
+        <section className="rounded-2xl border border-purple-200 bg-purple-50 p-8 text-center">
           <p className="text-sm font-semibold text-purple-950">
             Create a business page first
           </p>
         </section>
       ) : isCurrentModeLocked ? (
-        <section className="rounded-[2rem] border border-amber-200 bg-amber-50 p-8 text-center shadow-sm">
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
           <p className="text-sm font-semibold text-amber-950">
             {getBusinessModePlanMessage(modeMeta.id)}
           </p>
@@ -726,11 +743,11 @@ export default function ProductsPage() {
           className={`grid gap-6 ${
   isProductFormOpen
               ? "xl:grid-cols-[0.9fr_1.1fr]"
-              : "xl:grid-cols-[0.35fr_1fr]"
+              : "xl:grid-cols-1"
           }`}
         >
           {!isProductFormOpen ? (
-            <div className="rounded-[1.35rem] border border-dashed border-slate-300 bg-white p-6 text-center shadow-sm">
+            <div className="hidden rounded-2xl border border-dashed border-[#ebe7f3] bg-white p-4 text-center lg:block">
               <button
                 type="button"
                 onClick={openNewProductForm}
@@ -743,7 +760,7 @@ export default function ProductsPage() {
           ) : null}
 
           {isProductFormOpen ? (
-            <div className="rounded-[1.35rem] border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+            <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4 md:p-6">
               <div className="mb-5 flex items-center justify-between gap-4">
                 <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
                   {editingProductId ? "Edit" : `New ${singularInventoryLabel}`}
@@ -1384,10 +1401,10 @@ export default function ProductsPage() {
             {filteredProducts.map((product) => (
               <article
                 key={product.id}
-                className={`overflow-hidden rounded-[1.25rem] border bg-white shadow-sm transition ${
+                className={`overflow-hidden rounded-2xl border bg-white transition ${
   editingProductId === product.id
                     ? "border-slate-950 ring-4 ring-slate-100"
-                    : "border-slate-200 hover:-translate-y-0.5 hover:shadow-md"
+                    : "border-[#ebe7f3] hover:bg-[#faf7ff]"
                 }`}
               >
                 {(() => {
@@ -1432,9 +1449,9 @@ export default function ProductsPage() {
                   ].filter(Boolean);
 
                   return (
-                <div className="grid md:grid-cols-[12rem_1fr]">
+                <div className="grid grid-cols-[5rem_1fr] md:grid-cols-[12rem_1fr]">
                   <div
-                    className="min-h-48 bg-cover bg-center md:min-h-full"
+                    className="min-h-24 bg-cover bg-center md:min-h-full"
                     style={{
   backgroundImage: `url(${
   product.image_url ||
@@ -1443,10 +1460,10 @@ export default function ProductsPage() {
 }}
                   />
 
-                  <div className="p-4">
+                  <div className="min-w-0 p-3 md:p-4">
                     <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-                      <div>
-                        <div className="mb-3 flex flex-wrap items-center gap-2">
+                      <div className="min-w-0">
+                        <div className="mb-2 flex flex-wrap items-center gap-2">
                           <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
                             {product.category || modeMeta.inventoryLabel}
                           </span>
@@ -1482,7 +1499,7 @@ export default function ProductsPage() {
                           ) : null}
                         </div>
 
-                        <p className="text-lg font-semibold tracking-[-0.03em] text-slate-950">
+                        <p className="truncate text-lg font-black tracking-[-0.03em] text-[#171421]">
                           {product.name}
                         </p>
 
@@ -1521,17 +1538,17 @@ export default function ProductsPage() {
                         ) : null}
                       </div>
 
-                      <p className="whitespace-nowrap text-lg font-semibold tracking-[-0.04em] text-slate-950">
+                      <p className="whitespace-nowrap text-lg font-black tracking-[-0.04em] text-[#171421]">
                         {formatCurrency(Number(product.price || 0))}
                       </p>
                     </div>
 
-                    <div className="mt-6 flex flex-wrap gap-3">
+                    <div className="mt-4 flex flex-wrap gap-2 md:mt-6 md:gap-3">
                       <button
                         type="button"
                         onClick={() => startEditing(product)}
                         disabled={busyProductId === product.id}
-                        className="rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-emerald-700 disabled:opacity-60"
+                        className="rounded-2xl bg-[#241436] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#351b55] disabled:opacity-60 md:px-5"
                       >
                         Edit
                       </button>

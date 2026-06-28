@@ -77,6 +77,7 @@ export default function OrdersPage() {
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [orders, setOrders] = useState<DashboardOrder[]>([]);
   const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const [isLoading, setIsLoading] = useState(true);
   const [updatingOrderId, setUpdatingOrderId] = useState("");
@@ -180,22 +181,22 @@ export default function OrdersPage() {
   const filteredOrders = useMemo(() => {
     const search = query.toLowerCase().trim();
 
-    if (!search) {
-      return orders;
-    }
-
     return orders.filter((order) => {
-      return (
+      const matchesStatus =
+        statusFilter === "all" || order.status === statusFilter;
+      const matchesSearch =
+        !search ||
         (order.customer_name || "").toLowerCase().includes(search) ||
         (order.customer_phone || "").toLowerCase().includes(search) ||
         (order.customer_address || "").toLowerCase().includes(search) ||
         order.status.toLowerCase().includes(search) ||
         order.order_items.some((item) =>
           item.product_name.toLowerCase().includes(search)
-        )
-      );
+        );
+
+      return matchesStatus && matchesSearch;
     });
-  }, [orders, query]);
+  }, [orders, query, statusFilter]);
 
   const totalRevenue = orders.reduce(
     (sum, order) => sum + Number(order.total_amount || 0),
@@ -238,14 +239,30 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="grid gap-6">
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="grid gap-4">
+      <section className="flex items-center justify-between gap-3">
+        <div>
+          <h1 className="text-[1.8rem] font-black tracking-[-0.05em] text-[#171421]">
+            Orders
+          </h1>
+        </div>
+
+        <Link
+          href="/dashboard/products"
+          className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-emerald-600 text-white transition hover:bg-emerald-700"
+          aria-label="Add product"
+        >
+          <PackageCheck size={24} />
+        </Link>
+      </section>
+
+      <section className="rounded-2xl border border-[#ebe7f3] bg-white p-3">
         <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-center">
           <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-[var(--mv-violet)] focus:ring-4 focus:ring-slate-100 md:min-w-80"
+              className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] px-4 text-sm font-semibold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10 md:min-w-80"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
@@ -263,34 +280,35 @@ export default function OrdersPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-11 text-sm outline-none transition focus:border-[var(--mv-violet)] focus:bg-white focus:ring-4 focus:ring-slate-100"
+                className="min-h-11 w-full rounded-2xl border border-[#ebe7f3] bg-white px-11 text-sm outline-none transition focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-[#7c3aed]/10"
                 placeholder="Search orders"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-3">
-            <div className="rounded-2xl bg-slate-50 px-4 py-2.5">
+          <div className="grid grid-cols-4 gap-2">
+            <div className="rounded-2xl bg-[#fcfbff] px-3 py-2.5">
+              <p className="text-xs text-slate-500">All</p>
               <p className="mt-1 text-xl font-semibold text-slate-950">
                 {orders.length}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-purple-50 px-4 py-2.5">
+            <div className="rounded-2xl bg-[#f1eaff] px-3 py-2.5">
               <p className="text-xs text-purple-700">Pending</p>
               <p className="mt-1 text-xl font-semibold text-purple-950">
                 {pendingOrders}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-emerald-50 px-4 py-2.5">
+            <div className="rounded-2xl bg-emerald-50 px-3 py-2.5">
               <p className="text-xs text-emerald-700">Delivered</p>
               <p className="mt-1 text-xl font-semibold text-emerald-950">
                 {deliveredOrders}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-[#26143d] px-4 py-2.5">
+            <div className="rounded-2xl bg-[#241436] px-3 py-2.5">
               <p className="text-xs text-slate-300">Revenue</p>
               <p className="mt-1 text-sm font-semibold text-white md:text-sm">
                 {formatCurrency(totalRevenue)}
@@ -300,18 +318,46 @@ export default function OrdersPage() {
         </div>
       </section>
 
+      <section className="flex gap-2 overflow-x-auto pb-1">
+        {[
+          { label: "All", value: "all" },
+          { label: "Started", value: "started" },
+          { label: "Confirmed", value: "confirmed" },
+          { label: "Delivered", value: "delivered" },
+        ].map((item) => (
+          <button
+            key={item.value}
+            type="button"
+            onClick={() => setStatusFilter(item.value)}
+            className={`min-h-11 shrink-0 rounded-2xl px-5 text-sm font-bold transition ${
+              statusFilter === item.value
+                ? "bg-[#7c3aed] text-white"
+                : "border border-[#ebe7f3] bg-white text-[#241436]"
+            }`}
+          >
+            {item.label}
+          </button>
+        ))}
+      </section>
+
       {message ? (
-        <div className="rounded-2xl bg-white p-4 text-sm text-slate-700 shadow-sm">
+        <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4 text-sm font-semibold text-slate-700">
           {message}
         </div>
       ) : null}
 
       <section className="grid gap-4">
         {filteredOrders.length === 0 ? (
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-sm">
-            <div className="mx-auto mb-5 grid h-11 w-14 place-items-center rounded-2xl bg-slate-50 text-slate-500">
-              <ClipboardList size={24} />
+          <div className="rounded-2xl border border-[#ebe7f3] bg-white p-10 text-center">
+            <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+              <ClipboardList size={28} />
             </div>
+            <h2 className="text-xl font-black tracking-[-0.04em] text-[#171421]">
+              No orders yet
+            </h2>
+            <p className="mx-auto mt-3 max-w-sm text-sm font-semibold leading-6 text-slate-500">
+              Share your store link to start receiving customer orders.
+            </p>
           </div>
         ) : null}
 
@@ -323,7 +369,7 @@ export default function OrdersPage() {
           return (
             <article
               key={order.id}
-              className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              className="rounded-2xl border border-[#ebe7f3] bg-white p-4 transition hover:bg-[#faf7ff] md:p-5"
             >
               <div className="grid gap-6 xl:grid-cols-[1fr_18rem] xl:items-start">
                 <div>
@@ -344,7 +390,7 @@ export default function OrdersPage() {
                   </div>
 
                   <div className="grid gap-1">
-                    <p className="text-xl font-semibold tracking-[-0.03em] text-slate-950">
+                    <p className="text-xl font-black tracking-[-0.03em] text-[#171421]">
                       {order.customer_name || "Customer"}
                     </p>
 
@@ -365,7 +411,7 @@ export default function OrdersPage() {
                     </p>
                   ) : null}
 
-                  <div className="mt-5 rounded-[1.5rem] bg-slate-50 p-3">
+                  <div className="mt-5 rounded-2xl bg-[#fcfbff] p-3">
                     <div className="grid gap-2">
                       {order.order_items.map((item) => (
                         <div
@@ -393,14 +439,14 @@ export default function OrdersPage() {
                 </div>
 
                 <div className="grid gap-3">
-                  <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="rounded-2xl bg-[#fcfbff] p-4">
 
-                    <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
+                    <p className="mt-1 text-2xl font-black tracking-[-0.04em] text-[#171421]">
                       {formatCurrency(Number(order.total_amount || 0))}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-slate-50 p-3">
+                  <div className="rounded-2xl bg-[#fcfbff] p-3">
                     <div className="grid gap-2">
                       {orderStatuses.map((status) => {
                         const Icon = status.icon;
@@ -416,8 +462,8 @@ export default function OrdersPage() {
                             disabled={updatingOrderId === order.id}
                             className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
                               isActive
-                                ? "bg-[#26143d] text-white"
-                                : "bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-[#26143d] hover:text-white"
+                                ? "bg-[#7c3aed] text-white"
+                                : "bg-white text-slate-700 ring-1 ring-[#ebe7f3] hover:bg-[#f1eaff] hover:text-[#241436]"
                             } disabled:opacity-60`}
                           >
                             {updatingOrderId === order.id ? (
@@ -441,7 +487,7 @@ export default function OrdersPage() {
                       )}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#241436] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#351b55]"
                     >
                       <MessageCircle size={17} />
                       Follow Up
