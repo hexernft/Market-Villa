@@ -11,22 +11,9 @@ export default function SignupSuccessPage() {
             <CheckCircle2 size={30} />
           </div>
 
-          <p className="mt-6 text-[11px] font-black uppercase tracking-[0.24em] text-[#7c3aed]">
-            Signup successful
-          </p>
-
           <h1 className="mx-auto mt-3 max-w-xl text-3xl font-semibold leading-tight tracking-[-0.055em] text-[#241436] md:text-5xl">
             Check your email to confirm your account.
           </h1>
-
-          <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-[#241436]/68">
-            Your {BRAND.name} account has been created. We sent a confirmation link to your email address. Open your mailbox and confirm your account before logging in.
-          </p>
-
-          <div className="mx-auto mt-5 max-w-xl rounded-[1.35rem] border border-purple-100 bg-purple-50 p-4 text-sm font-semibold leading-6 text-[#241436]">
-            Own a business website with 1 month free. N1000 for the next 3
-            months / N3000 monthly subsequently.
-          </div>
 
           <div className="mx-auto mt-7 flex max-w-xl items-start gap-3 rounded-[1.35rem] border border-[#7c3aed]/12 bg-[#f8f4ff] p-4 text-left">
             <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white text-[#7c3aed]">
@@ -36,9 +23,6 @@ export default function SignupSuccessPage() {
             <div>
               <p className="text-sm font-bold text-[#241436]">
                 Didn&apos;t see the email?
-              </p>
-              <p className="mt-1 text-sm leading-6 text-[#241436]/64">
-                Check your spam, promotions, or updates folder. The email may take a few minutes to arrive.
               </p>
             </div>
           </div>
@@ -64,3 +48,4 @@ export default function SignupSuccessPage() {
     </main>
   );
 }
+

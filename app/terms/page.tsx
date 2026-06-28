@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 
@@ -58,23 +58,12 @@ export default function TermsPage() {
             <ShieldCheck size={24} />
           </div>
 
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-teal-200">
-            Legal
-          </p>
-
           <h1 className="mt-3 text-2xl font-semibold tracking-[-0.05em] md:text-2xl">
             Terms of Service
           </h1>
-
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-            These terms explain how businesses and users should use {BRAND.name}.
-          </p>
         </section>
 
         <section className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-          <p className="mb-8 text-sm leading-7 text-slate-500">
-            Last updated: 2026
-          </p>
 
           <div className="grid gap-7">
             {sections.map((section) => (
@@ -94,5 +83,6 @@ export default function TermsPage() {
     </main>
   );
 }
+
 
 

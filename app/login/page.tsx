@@ -96,10 +96,6 @@ export default function LoginPage() {
             <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.04em] text-slate-950 sm:text-[30px]">
               Welcome back
             </h1>
-
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-              Login to manage your business page.
-            </p>
           </div>
 
           <form onSubmit={handleLogin} className="grid gap-3">
@@ -257,4 +253,5 @@ export default function LoginPage() {
     </main>
   );
 }
+
 

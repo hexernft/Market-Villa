@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -104,10 +104,6 @@ export default function ResetPasswordPage() {
             <h1 className="text-[26px] font-semibold leading-tight tracking-[-0.04em] text-slate-950 sm:text-[30px]">
               Set a new password
             </h1>
-
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-              Choose a new password for your business account.
-            </p>
           </div>
 
           <form onSubmit={handleResetPassword} className="grid gap-3">
@@ -233,3 +229,4 @@ export default function ResetPasswordPage() {
     </main>
   );
 }
+

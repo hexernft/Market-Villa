@@ -211,10 +211,6 @@ export default function StoresPage() {
               <h1 className="mt-4 max-w-2xl text-4xl font-semibold leading-[1.02] text-[#241436] md:text-6xl">
                 Discover businesses ready to sell.
               </h1>
-
-              <p className="mt-5 max-w-xl text-sm leading-7 text-[#241436]/70">
-                Browse live storefronts, featured businesses, and WhatsApp-ready sellers across Market Villa.
-              </p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
@@ -222,26 +218,17 @@ export default function StoresPage() {
                 <p className="text-2xl font-semibold text-[#241436]">
                   {stores.length}
                 </p>
-                <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#7c3aed]">
-                  Live stores
-                </p>
               </div>
 
               <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-white/78 p-4">
                 <p className="text-2xl font-semibold text-[#241436]">
                   {featuredStores.length}
                 </p>
-                <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#7c3aed]">
-                  Featured
-                </p>
               </div>
 
               <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-[#fff5f7] p-4">
                 <p className="text-2xl font-semibold text-[#241436]">
                   {categories.length}
-                </p>
-                <p className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-[#7c3aed]">
-                  Categories
                 </p>
               </div>
             </div>
@@ -258,12 +245,6 @@ export default function StoresPage() {
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(36,20,54,0.68))]" />
             <div className="home-dark-panel absolute bottom-4 left-4 right-4 rounded-[1.35rem] border border-white/18 bg-black/40 p-4 text-white shadow-[0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-xl">
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#c4b5fd]">
-                Smart discovery lives in the navbar
-              </p>
-              <p className="mt-2 text-sm leading-6 text-white/76">
-                Scroll to search stores and products from anywhere on the page.
-              </p>
             </div>
           </div>
         </div>
@@ -281,9 +262,6 @@ export default function StoresPage() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#7c3aed]">
-                Featured this week
-              </p>
 
               <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-[#241436] md:text-5xl">
                 Stores worth checking out
@@ -320,17 +298,10 @@ export default function StoresPage() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-6 grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#7c3aed]">
-                Store directory
-              </p>
 
               <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-[#241436] md:text-5xl">
                 Search all live stores
               </h2>
-
-              <p className="mt-3 text-sm leading-7 text-[#241436]/66">
-                Filter by category or search by name, location, and business type.
-              </p>
             </div>
 
             <div className="home-light-panel rounded-[1.6rem] border border-white/70 bg-white/74 p-3 shadow-[0_20px_60px_rgba(36,20,54,0.12)] backdrop-blur-2xl">
@@ -391,15 +362,9 @@ export default function StoresPage() {
       <section className="px-4 py-10 md:px-4">
         <div className="mv-why-panel home-showcase-card mx-auto flex max-w-7xl flex-col gap-5 rounded-[2rem] p-6 text-white shadow-[0_28px_70px_rgba(36,20,54,0.22)] md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/55">
-              Join the directory
-            </p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white">
               Want your business featured?
             </h2>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-white/76">
-              Create your Market Villa page and publish your store to join the directory.
-            </p>
           </div>
 
           <Link
@@ -483,11 +448,6 @@ function StoreCard({
           {store.name || "Untitled store"}
         </h3>
 
-        <p className="mt-2 line-clamp-2 min-h-[48px] text-sm font-semibold leading-6 text-[#241436]">
-          {store.description ||
-            `A Market Villa business page based in ${location}.`}
-        </p>
-
         <p className="mt-3 text-xs font-black uppercase tracking-[0.16em] text-[#5b21b6]">
           {location}
         </p>
@@ -556,14 +516,10 @@ function EmptyStores() {
       <h3 className="mt-4 text-xl font-semibold tracking-[-0.04em] text-[#241436]">
         No stores found
       </h3>
-
-      <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#241436]/62">
-        Published stores will appear here. Try another search or check back
-        later.
-      </p>
     </div>
   );
 }
+
 
 
 

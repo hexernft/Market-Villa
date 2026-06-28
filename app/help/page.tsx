@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import {
   Store, ArrowLeft, BookOpen, CheckCircle2, HelpCircle } from "lucide-react";
 import { BRAND } from "@/lib/brand";
@@ -59,18 +59,9 @@ export default function HelpPage() {
             <BookOpen size={24} />
           </div>
 
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-teal-200">
-            Help Center
-          </p>
-
           <h1 className="mt-3 text-2xl font-semibold tracking-[-0.05em] md:text-2xl">
             Learn how to use {BRAND.name}.
           </h1>
-
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-            Quick guides for setting up a business page, managing products,
-            handling orders, and requesting custom domains.
-          </p>
         </section>
 
         <section className="mt-6 grid gap-5 md:grid-cols-2">
@@ -106,9 +97,6 @@ export default function HelpPage() {
               <h2 className="text-xl font-semibold text-slate-950">
                 Still need help?
               </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Contact Market Villa support for setup, billing, or domain help.
-              </p>
             </div>
 
             <a
@@ -124,6 +112,7 @@ export default function HelpPage() {
     </main>
   );
 }
+
 
 
 

@@ -1,4 +1,4 @@
-import {
+﻿import {
   TestimonialsSection } from "@/components/TestimonialsSection";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,11 +17,11 @@ import {
 
 const features = [
   {
-  title: "A polished business page", description: "Give customers one clean place to view your brand, offers, contact details, and order options.", icon: Store },
+  title: "A polished business page", icon: Store },
   {
-  title: "WhatsApp-ready selling", description: "Customers can browse your page and start a clear order or inquiry conversation on WhatsApp.", icon: MessageCircle },
+  title: "WhatsApp-ready selling", icon: MessageCircle },
   {
-  title: "Custom domain option", description: "Upgrade from a Market Villa link to a professional domain when the business is ready.", icon: Globe2 },
+  title: "Custom domain option", icon: Globe2 },
 ];
 
 const faqItems = [
@@ -55,10 +55,6 @@ export default function Home() {
                 <CheckCircle2 size={17} />
               </span>
               <div>
-                <p className="text-sm font-semibold leading-6 text-[#241436]">
-                  Get your business website with 1 month free. 
-		  Pay ₦1,000/month for the next 3 months, then ₦3,000/month afterwards.
-                </p>
               </div>
             </div>
 
@@ -116,18 +112,11 @@ export default function Home() {
 
           <div className="hero-carousel-copy-card home-hero-copy relative z-10 mx-auto -mt-20 max-w-5xl rounded-[2.1rem] border border-white/75 bg-white/86 p-5 shadow-[0_28px_85px_rgba(55,31,83,0.18)] backdrop-blur-2xl md:-mt-24 md:p-7 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-8 lg:p-8">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#7c3aed]">
-                Business hosting made beautiful
-              </p>
 
               <h1 className="mt-3 max-w-3xl text-[2.55rem] font-semibold leading-[1.03] text-[#241436] md:text-[4rem]">
                 Start simple. Look professional.
                 <RotatingHeroPromise />
               </h1>
-
-              <p className="mt-5 max-w-xl text-sm leading-7 text-[#241436]/68">
-                Create a clean business page in minutes, add your details, and share your link with customers.
-              </p>
             </div>
           </div>
         </div>
@@ -149,15 +138,9 @@ export default function Home() {
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(36,20,54,0.36))]" />
 
             <div className="home-dark-panel absolute bottom-4 left-4 right-4 rounded-[1.35rem] border border-white/22 bg-black/42 p-4 text-white shadow-[0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-xl md:left-auto md:max-w-sm">
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#ffd93d]">
-                Featured food business
-              </p>
               <h2 className="mt-2 text-3xl font-semibold leading-[1.02] text-white">
                 ZCAS TastyBites
               </h2>
-              <p className="mt-2 text-sm leading-6 text-white/76">
-                Homemade with love in Abuja.
-              </p>
             </div>
           </div>
 
@@ -172,19 +155,12 @@ export default function Home() {
                 Where every bite tells a story.
               </h2>
 
-              <p className="mt-5 max-w-xl text-sm leading-7 text-[#241436]/70">
-                ZCAS TastyBites crafts artisan pastries, custom cakes, sweet snacks, and refreshing drinks for customers in Abuja.
-              </p>
-
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-[#f8f4ff] p-4">
                   <div className="flex items-center gap-2 text-sm font-bold text-[#241436]">
                     <MapPin size={16} className="text-[#7c3aed]" />
                     Abuja, Nigeria
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-[#241436]/62">
-                    Local homemade treats with WhatsApp orders.
-                  </p>
                 </div>
 
                 <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-[#fff5f7] p-4">
@@ -192,9 +168,6 @@ export default function Home() {
                     <Clock3 size={16} className="text-[#7c3aed]" />
                     Open daily
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-[#241436]/62">
-                    Mon-Fri 8am-8pm, weekends from 9am.
-                  </p>
                 </div>
               </div>
 
@@ -239,32 +212,19 @@ export default function Home() {
         <div className="fashion-brand-showcase home-showcase-card mx-auto grid max-w-7xl overflow-hidden text-white shadow-[0_30px_90px_rgba(36,20,54,0.2)] lg:grid-cols-[0.86fr_1.14fr]">
           <div className="flex flex-col justify-between p-6 md:p-8 lg:p-10">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#c4b5fd]">
-                Fashion brand example
-              </p>
 
               <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-[-0.05em] text-white md:text-5xl">
                 Give African fashion the kind of storefront it deserves.
               </h2>
-
-              <p className="mt-5 max-w-lg text-sm leading-7 text-white/68">
-                Present collections, textile detail, and founder craft with a page that feels premium before the first WhatsApp message.
-              </p>
             </div>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               <div className="home-mini-card rounded-2xl border border-white/10 bg-white/8 p-4">
                 <p className="text-sm font-semibold text-white">Editorial product story</p>
-                <p className="mt-2 text-sm leading-6 text-white/60">
-                  Lead with a rich boutique image that shows the full brand mood.
-                </p>
               </div>
 
               <div className="home-mini-card rounded-2xl border border-white/10 bg-white/8 p-4">
                 <p className="text-sm font-semibold text-white">Handmade trust</p>
-                <p className="mt-2 text-sm leading-6 text-white/60">
-                  Add a close atelier moment that makes the craft feel personal.
-                </p>
               </div>
             </div>
           </div>
@@ -323,18 +283,11 @@ export default function Home() {
 
           <div className="flex flex-col justify-between p-6 md:p-8 lg:p-10">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/45">
-                SleekStitch Atelier
-              </p>
 
               <h2 className="mt-4 max-w-md text-4xl font-semibold tracking-[-0.06em] text-white md:text-6xl">
                 Confidence, stitched with intention.
               </h2>
             </div>
-
-            <p className="mt-8 max-w-md text-sm leading-7 text-white/64">
-              High-quality custom clothing with flawless craftsmanship, designed to reflect each client&apos;s individuality.
-            </p>
           </div>
         </div>
       </section>
@@ -368,10 +321,6 @@ export default function Home() {
                       <h3 className="text-lg font-semibold leading-tight text-white">
                         {feature.title}
                       </h3>
-
-                      <p className="mt-3 max-w-[19rem] text-base leading-7 text-white/74">
-                        {feature.description}
-                      </p>
                     </div>
                   </div>
                 </MotionReveal>
@@ -384,7 +333,6 @@ export default function Home() {
 <section className="px-4 py-8 md:px-4">
         <div className="mv-why-panel home-showcase-card mx-auto grid max-w-7xl gap-5 rounded-[2rem] p-6 text-white shadow-[0_28px_70px_rgba(36,20,54,0.22)] lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/55">Why Market Villa</p>
             <h2 className="mt-3 text-2xl font-semibold text-white md:text-2xl">A simple page before the WhatsApp conversation.</h2>
           </div>
           <div className="grid gap-3">
@@ -407,7 +355,6 @@ export default function Home() {
       <section id="faq" className="px-4 py-10 md:px-4">
         <div className="mx-auto grid max-w-7xl gap-7 lg:grid-cols-[0.75fr_1.25fr]">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#7c3aed]">FAQ</p>
             <h2 className="mt-3 text-2xl font-semibold text-[#241436] md:text-2xl">Simple answers before you start.</h2>
           </div>
           <div className="mv-soft-panel home-showcase-card overflow-hidden rounded-[1.8rem]">
@@ -415,7 +362,6 @@ export default function Home() {
               <MotionReveal key={item.question} delay={index * 0.06}>
                 <div className="grid gap-2 border-t border-[#7c3aed]/10 p-5 first:border-t-0 hover:bg-white/30">
                   <h3 className="text-sm font-semibold text-[#241436]">{item.question}</h3>
-                  <p className="text-sm leading-6 text-[#241436]/62">{item.answer}</p>
                 </div>
               </MotionReveal>
             ))}
@@ -423,21 +369,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-[#241436] py-2">
-        <div className="market-villa-marquee flex whitespace-nowrap text-[11px] font-medium leading-none text-white/70">
-          <span className="mx-5">Market Villa helps businesses create clean pages, organize products, receive WhatsApp inquiries, and look more trusted online.</span>
-          <span className="mx-5">Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.</span>
-          <span className="mx-5">Market Villa helps businesses create clean pages, organize products, receive WhatsApp inquiries, and look more trusted online.</span>
-          <span className="mx-5">Simple business pages. Smart storefronts. WhatsApp-ready selling. Custom domain support. Built for small businesses.</span>
-        </div>
-      </section>
-
       <section className="mobile-showcase-section px-4 py-12 md:px-4">
         <div className="mobile-showcase-panel mx-auto grid max-w-7xl gap-8 overflow-hidden rounded-[2.1rem] border border-white/18 bg-[linear-gradient(145deg,#050008,#12051f_48%,#241436)] p-5 shadow-[0_34px_120px_rgba(0,0,0,0.38)] md:p-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:p-10">
           <div>
-            <p className="mobile-showcase-kicker text-[11px] font-bold uppercase tracking-[0.24em] text-[#ffb36b]">
-              Device-ready storefronts
-            </p>
 
             <h2 className="mobile-showcase-title mt-4 max-w-2xl text-[2.35rem] font-semibold leading-[1.02] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.55)] md:text-[4rem]">
               Your business looks premium on every screen.
@@ -494,6 +428,7 @@ export default function Home() {
     </main>
   );
 }
+
 
 
 

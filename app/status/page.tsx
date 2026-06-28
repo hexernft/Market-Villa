@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { ArrowLeft, CheckCircle2, Server, ShieldCheck } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 
@@ -28,18 +28,9 @@ export default function StatusPage() {
             <ShieldCheck size={24} />
           </div>
 
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-teal-200">
-            System Status
-          </p>
-
           <h1 className="mt-3 text-2xl font-semibold tracking-[-0.05em] md:text-2xl">
             All core systems operational.
           </h1>
-
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-            This page gives business owners a simple view of Market Villa
-            platform availability.
-          </p>
         </section>
 
         <section className="mt-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
@@ -51,7 +42,6 @@ export default function StatusPage() {
               <h2 className="text-xl font-semibold text-slate-950">
                 {BRAND.name} services
               </h2>
-              <p className="text-sm text-slate-500">Live service overview.</p>
             </div>
           </div>
 
@@ -74,6 +64,7 @@ export default function StatusPage() {
     </main>
   );
 }
+
 
 
 
