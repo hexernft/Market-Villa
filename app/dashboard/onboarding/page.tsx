@@ -155,6 +155,11 @@ export default function OnboardingPage() {
             <h2 className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-slate-950">
               Create business page
             </h2>
+
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+              Starter includes 1 month free with no billing. Paid quarterly
+              billing starts from month 2 at ₦2,000/month for the next 3 months.
+            </p>
           </div>
 
           <Link

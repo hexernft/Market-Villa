@@ -99,6 +99,12 @@ export default function Home() {
                 Business hosting made beautiful
               </p>
 
+              <div className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-2xl border border-[#7c3aed]/15 bg-[#f3edff] px-3 py-2 text-xs font-bold text-[#241436]">
+                <CheckCircle2 size={15} className="text-[#7c3aed]" />
+                1 month free on Starter. Then ₦2,000/month for the next 3
+                months, billed quarterly from month 2.
+              </div>
+
               <h1 className="mt-3 max-w-3xl text-[2.55rem] font-semibold leading-[1.03] text-[#241436] md:text-[4rem]">
                 Start simple. Look professional.
                 <RotatingHeroPromise />

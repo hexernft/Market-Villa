@@ -426,6 +426,12 @@ export async function createBusiness(input: CreateBusinessInput) {
   }
 
   const businessMode = normalizeBusinessMode(input.businessMode);
+  const trialStartedAt = new Date();
+  const trialExpiresAt = new Date(trialStartedAt);
+  trialExpiresAt.setMonth(trialExpiresAt.getMonth() + 1);
+
+  const trialGraceEndsAt = new Date(trialExpiresAt);
+  trialGraceEndsAt.setDate(trialGraceEndsAt.getDate() + 5);
 
   if (
     !canUseBusinessModeForPlan({
@@ -456,6 +462,9 @@ theme_id: input.themeId,
       is_published: true,
       subscription_plan: "starter",
       subscription_status: "trial",
+      subscription_started_at: trialStartedAt.toISOString(),
+      subscription_expires_at: trialExpiresAt.toISOString(),
+      grace_period_ends_at: trialGraceEndsAt.toISOString(),
     })
     .select()
     .single();

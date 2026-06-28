@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import { signUpWithEmail } from "@/lib/auth";
 
 export default function SignupPage() {
@@ -109,6 +109,14 @@ export default function SignupPage() {
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
               Create your account now and complete your setup inside the dashboard.
             </p>
+
+            <div className="mt-3 rounded-[18px] border border-purple-100 bg-purple-50 px-3 py-2 text-left">
+              <p className="flex items-start gap-2 text-xs font-semibold leading-5 text-[#241436]">
+                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#7c3aed]" />
+                Starter gives you 1 month free. After that, your first paid
+                quarter is ₦2,000/month for the next 3 months.
+              </p>
+            </div>
           </div>
 
           <form onSubmit={handleSignup} className="grid gap-3">

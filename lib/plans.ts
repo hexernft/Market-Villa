@@ -279,11 +279,7 @@ export function getPlanBillingAmount({
   let total = 0;
 
   for (let month = 1; month <= selectedCycle.months; month += 1) {
-    if (month <= selectedPlan.freeMonths) {
-      continue;
-    }
-
-    if (month <= selectedPlan.freeMonths + selectedPlan.introPaidMonths) {
+    if (month <= selectedPlan.introPaidMonths) {
       total += selectedPlan.introMonthlyAmount;
       continue;
     }
