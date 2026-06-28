@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -613,11 +613,6 @@ export function CustomStoreTheme({
                   <h3 className="mt-2 text-base font-black tracking-[-0.03em]">
                     {product.name}
                   </h3>
-                  {product.description ? (
-                    <p className="mt-2 text-sm leading-6 opacity-65">
-                      {product.description}
-                    </p>
-                  ) : null}
 
                   {toggles.showPrices !== false ? (
                     <p
@@ -665,11 +660,6 @@ export function CustomStoreTheme({
             >
               About
             </p>
-            {business.description ? (
-              <p className="mt-2 max-w-3xl text-sm leading-7 opacity-70">
-                {business.description}
-              </p>
-            ) : null}
           </div>
         </section>
       ) : null}
@@ -761,11 +751,6 @@ export function CustomStoreTheme({
           <div className="mx-auto grid max-w-6xl gap-8 border-b border-white/15 pb-8 md:grid-cols-4">
             <div>
               <p className="text-lg font-black">{business.name}</p>
-              {business.description ? (
-                <p className="mt-3 text-sm leading-6 text-white/65">
-                  {business.description}
-                </p>
-              ) : null}
             </div>
 
             <div>
@@ -800,7 +785,7 @@ export function CustomStoreTheme({
           </div>
 
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 pt-5 text-xs text-white/50">
-            <p>© {new Date().getFullYear()} {business.name}</p>
+            <p>Â© {new Date().getFullYear()} {business.name}</p>
             {toggles.showMarketVillaBadge !== false ? <p>Powered by Market Villa</p> : null}
           </div>
         </footer>
@@ -817,7 +802,7 @@ export function CustomStoreTheme({
             <div>
               <p className="text-sm font-black">{business.name}</p>
               <p className="mt-1 text-sm opacity-65">
-                {business.location || "Online"} · {business.phone || business.whatsapp || "Contact business"}
+                {business.location || "Online"} Â· {business.phone || business.whatsapp || "Contact business"}
               </p>
             </div>
 
@@ -840,3 +825,6 @@ export function CustomStoreTheme({
     </main>
   );
 }
+
+
+
