@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -75,16 +75,6 @@ const navItems = [
     label: "Store Details",
     href: "/dashboard/store-details",
     icon: Store,
-  },
-  {
-    label: "Themes",
-    href: "/dashboard/theme-store",
-    icon: Sparkles,
-  },
-  {
-    label: "Home Builder",
-    href: "/dashboard/home-builder",
-    icon: LayoutDashboard,
   },
   {
     label: "Customize Store",
@@ -297,6 +287,8 @@ export function DashboardShell({
     </div>
   );
 }
+
+
 
 
 
