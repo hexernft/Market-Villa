@@ -450,11 +450,13 @@ function addToCart(item: StoreProduct) {
 
               <div className="hidden h-[72px] w-px bg-white/35 md:block" />
 
-              <div className="text-center md:text-left">
-                <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
-                  Follow us
-                </h3>
-                <div className="mt-2 flex items-center justify-center gap-2 md:mt-3 md:justify-start md:gap-3">
+              {business.instagram_url || whatsapp ? (
+                <div className="text-center md:text-left">
+                  <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
+                    Follow us
+                  </h3>
+                  <div className="mt-2 flex items-center justify-center gap-2 md:mt-3 md:justify-start md:gap-3">
+
                   {business.instagram_url ? (
                     <a
                       href={business.instagram_url}
@@ -465,27 +467,32 @@ function addToCart(item: StoreProduct) {
                     >
                       IG
                     </a>
-                  ) : (
-                    <span className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white/70 md:h-9 md:w-9 md:text-xs">
-                      IG
-                    </span>
-                  )}
+                  ) : null}
 
-                  <span className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white/70 md:h-9 md:w-9 md:text-xs">
-                    FB
-                  </span>
-
-                  <a
-                    href={whatsapp ? buildWhatsAppLink(whatsapp, `Hello ${business.name}`) : "#"}
-                    target={whatsapp ? "_blank" : undefined}
-                    rel={whatsapp ? "noreferrer" : undefined}
-                    className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white transition hover:border-[#f4c76b] hover:bg-white/10 md:h-9 md:w-9 md:text-xs"
-                    aria-label="WhatsApp"
-                  >
-                    WA
-                  </a>
+                  {whatsapp ? (
+                    <a
+                      href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white transition hover:border-[#f4c76b] hover:bg-white/10 md:h-9 md:w-9 md:text-xs"
+                      aria-label="WhatsApp"
+                    >
+                      <svg
+                      viewBox="0 0 24 24"
+                      className="h-4 w-4"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12.04 2a9.86 9.86 0 0 0-8.46 14.9L2.3 22l5.23-1.24A9.94 9.94 0 1 0 12.04 2Zm0 2a7.94 7.94 0 1 1 0 15.88 7.85 7.85 0 0 1-4.02-1.1l-.38-.23-2.32.55.56-2.25-.25-.4A7.94 7.94 0 0 1 12.04 4Zm-3.5 4.3c.17-.38.35-.39.52-.39h.45c.15 0 .38.06.58.29.2.23.76.74.76 1.8s-.78 2.09-.89 2.24c-.11.15-.15.28-.04.5.11.23.48.79 1.02 1.28.7.62 1.29.82 1.52.91.23.08.36.07.5-.08.15-.17.58-.68.74-.91.15-.23.31-.19.52-.11.21.08 1.36.64 1.59.76.23.11.39.17.45.26.06.1.06.57-.13 1.12-.19.55-1.12 1.06-1.55 1.1-.4.04-.92.06-1.48-.09-.34-.09-.78-.25-1.34-.49-2.36-1.02-3.9-3.39-4.02-3.55-.11-.15-.96-1.28-.96-2.45s.61-1.74.83-1.97c.21-.23.46-.29.61-.29h.34Z"
+                      />
+                    </svg>
+                    </a>
+                  ) : null}
+                
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
 
             <div className="mt-4 border-t border-white/25 pt-2 text-center text-[0.68rem] font-semibold text-white/80 md:mt-5 md:pt-3 md:text-xs">
@@ -573,6 +580,8 @@ function ProductCard({
     </article>
   );
 }
+
+
 
 
 

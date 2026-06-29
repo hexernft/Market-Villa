@@ -469,31 +469,7 @@ export default function StoreDetailsPage() {
           </div>
         </section>
 
-        <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
-          <h2 className="text-lg font-black tracking-[-0.04em] text-slate-950">
-            Store Display Toggles
-          </h2>
-
-          <div className="mt-4 grid gap-3 md:grid-cols-3">
-            <ToggleRow
-              label="Show prices"
-              checked={showPrices}
-              onChange={setShowPrices}
-            />
-            <ToggleRow
-              label="Show footer"
-              checked={showFooter}
-              onChange={setShowFooter}
-            />
-            <ToggleRow
-              label="Show Market Villa badge"
-              checked={showMarketVillaBadge}
-              onChange={setShowMarketVillaBadge}
-            />
-          </div>
-        </section>
-
-        <div className="sticky bottom-20 z-20 rounded-[1.5rem] border border-slate-200 bg-white/95 p-3 backdrop-blur lg:bottom-4">
+        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-3">
           <button
             type="submit"
             disabled={isSaving || !selectedBusiness}
@@ -511,6 +487,9 @@ export default function StoreDetailsPage() {
     </div>
   );
 }
+
+
+
 
 
 
