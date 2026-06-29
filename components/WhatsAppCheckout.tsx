@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { toPng } from "html-to-image";
@@ -9,7 +9,7 @@ import {
   Minus,
   Plus,
   ReceiptText,
-  ShoppingBag,
+  ShoppingCart,
   X,
 } from "lucide-react";
 import { createOrder } from "@/lib/business-actions";
@@ -29,6 +29,9 @@ type Props = {
   whatsapp: string;
   cart: CartItem[];
   setCart: Dispatch<SetStateAction<CartItem[]>>;
+  hideTrigger?: boolean;
+  isOpen?: boolean;
+  setIsOpen?: Dispatch<SetStateAction<boolean>>;
 };
 
 export function WhatsAppCheckout({
@@ -37,8 +40,13 @@ export function WhatsAppCheckout({
   whatsapp,
   cart,
   setCart,
+  hideTrigger = false,
+  isOpen: controlledIsOpen,
+  setIsOpen: setControlledIsOpen,
 }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const drawerOpen = controlledIsOpen ?? internalIsOpen;
+  const setDrawerOpen = setControlledIsOpen ?? setInternalIsOpen;
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
@@ -73,7 +81,7 @@ export function WhatsAppCheckout({
 
   function buildOrderMessage(orderId?: string) {
     const lines = cart.map((item, index) => {
-      return `${index + 1}. ${item.name} — ${formatCurrency(
+      return `${index + 1}. ${item.name} â€” ${formatCurrency(
         item.price,
       )} x ${item.quantity} = ${formatCurrency(item.price * item.quantity)}`;
     });
@@ -172,7 +180,7 @@ export function WhatsAppCheckout({
 
       setMessage("Order sent to WhatsApp.");
       setCart([]);
-      setIsOpen(false);
+      setDrawerOpen(false);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unable to send order.";
@@ -189,19 +197,20 @@ export function WhatsAppCheckout({
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setIsOpen(true)}
-        className="mv-checkout-trigger fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-full bg-[#26143d] px-4 py-2 text-sm font-semibold text-white shadow-[0_18px_45px_rgba(38,20,61,0.28)] hover:bg-[#3b1b5d]"
-      >
-        <ShoppingBag size={17} />
-        Cart
-        <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-950">
-          {cart.length}
-        </span>
-      </button>
-
-      {isOpen ? (
+      {!hideTrigger ? (
+        <button
+          type="button"
+          onClick={() => setDrawerOpen(true)}
+          className="mv-checkout-trigger fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-full bg-[#26143d] px-4 py-2 text-sm font-semibold text-white hover:bg-[#3b1b5d]"
+        >
+          <ShoppingCart size={17} />
+          Cart
+          <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-950">
+            {cart.length}
+          </span>
+        </button>
+      ) : null}
+{drawerOpen ? (
         <div className="mv-checkout-ui fixed inset-0 z-[90] bg-[#26143d]/45 px-3 py-4 backdrop-blur-sm md:px-4 md:py-5">
           <div className="ml-auto flex h-full max-h-[calc(100vh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-[1.25rem] border border-[#e8e1f4] bg-[#f7f3fb] text-[#241436] shadow-[0_28px_80px_rgba(36,20,54,0.24)]">
             <div className="flex items-center justify-between border-b border-[#e8e1f4] bg-[#f4eefb] px-4 py-3">
@@ -216,7 +225,7 @@ export function WhatsAppCheckout({
 
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={() => setDrawerOpen(false)}
                 className="grid h-10 w-10 place-items-center rounded-full bg-white text-[#241436] shadow-sm"
                 aria-label="Close checkout"
               >
@@ -408,7 +417,7 @@ export function WhatsAppCheckout({
                       </p>
                     </div>
                     <p className="mt-1 text-xs text-[#6f6785]">
-                      {formatCurrency(item.price)} × {item.quantity}
+                      {formatCurrency(item.price)} Ã— {item.quantity}
                     </p>
                   </div>
                 ))}
@@ -425,3 +434,4 @@ export function WhatsAppCheckout({
     </>
   );
 }
+
