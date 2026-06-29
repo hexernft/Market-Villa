@@ -169,6 +169,7 @@ function addToCart(item: StoreProduct) {
         },
       ];
     });
+    setIsCartOpen(true);
   }
 
   return (
@@ -248,6 +249,19 @@ function addToCart(item: StoreProduct) {
                   <MessageCircle size={19} />
                 </a>
               ) : null}
+              <button
+                type="button"
+                onClick={() => setIsCartOpen(true)}
+                aria-label="Open cart"
+                className="relative grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-[#241436]"
+              >
+                <ShoppingCart size={20} />
+                {cartCount > 0 ? (
+                  <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#7c3aed] px-1 text-[0.68rem] font-black text-white">
+                    {cartCount}
+                  </span>
+                ) : null}
+              </button>
             </div>
           </div>
 
@@ -534,8 +548,14 @@ function ProductCard({
   const image = item.image_url || item.image || "";
 
   return (
-    <article className="group overflow-hidden bg-white transition duration-300 hover:-translate-y-1">
-      <div className="relative aspect-square overflow-hidden bg-[#f1f2f3]">
+    <article
+      className="group bg-white transition-transform duration-300 hover:-translate-y-1"
+      style={{ boxShadow: "none" }}
+    >
+      <div
+        className="relative aspect-square overflow-hidden bg-[#f1f2f3]"
+        style={{ boxShadow: "none" }}
+      >
 
         {image ? (
           <Image
@@ -552,7 +572,7 @@ function ProductCard({
         )}
       </div>
 
-      <div className="border-x border-b border-[#ebe6f3] px-3 pb-4 pt-3 transition duration-300 group-hover:border-[#c4b5fd]">
+      <div className="px-0 pb-4 pt-3" style={{ boxShadow: "none" }}>
         {showPrices ? (
           <p className="mb-3 text-xl font-black tracking-[-0.04em] text-[#6d28d9] md:text-2xl">
             {price}
@@ -572,7 +592,7 @@ function ProductCard({
         <button
           type="button"
           onClick={() => onAddToCart(item)}
-          className="mt-4 inline-flex min-h-10 w-full items-center justify-center rounded-md border border-[#241436] bg-white px-3 text-xs font-black text-[#241436] transition hover:-translate-y-0.5 hover:bg-[#241436] hover:text-white md:text-sm"
+          className="mx-auto mt-4 inline-flex min-h-10 w-[78%] items-center justify-center rounded-md border border-[#241436] bg-white px-3 text-xs font-black text-[#241436] transition hover:-translate-y-0.5 hover:bg-[#241436] hover:text-white md:text-sm"
         >
           Add to cart
         </button>
@@ -580,6 +600,8 @@ function ProductCard({
     </article>
   );
 }
+
+
 
 
 
