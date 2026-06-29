@@ -4108,11 +4108,41 @@ aside.admin-sidebar .admin-sidebar-link-active {
 }
 
 /* Business dashboard should stay flat and shadowless */
+.mv-page-shell,
+.mv-page-shell *,
+.mv-page-shell *::before,
+.mv-page-shell *::after,
+[data-dashboard-main],
+[data-dashboard-main] *,
+[data-dashboard-main] *::before,
+[data-dashboard-main] *::after,
+[data-dashboard-sidebar],
+[data-dashboard-sidebar] *,
+[data-dashboard-sidebar] *::before,
+[data-dashboard-sidebar] *::after,
 .dashboard-mobile-light,
 .dashboard-mobile-light *,
 .dashboard-mobile-light *::before,
 .dashboard-mobile-light *::after {
   box-shadow: none !important;
   text-shadow: none !important;
+}
+
+[data-dashboard-main] .shadow-sm,
+[data-dashboard-main] .shadow-soft,
+[data-dashboard-main] [class*="shadow-"],
+[data-dashboard-sidebar] .shadow-sm,
+[data-dashboard-sidebar] .shadow-soft,
+[data-dashboard-sidebar] [class*="shadow-"],
+.mv-page-shell .shadow-sm,
+.mv-page-shell .shadow-soft,
+.mv-page-shell [class*="shadow-"] {
+  box-shadow: none !important;
+}
+
+.dashboard-mobile-light,
+.dashboard-mobile-light *,
+.dashboard-mobile-light *::before,
+.dashboard-mobile-light *::after {
   filter: none !important;
 }
