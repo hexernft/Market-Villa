@@ -80,7 +80,7 @@ export default function OnboardingPage() {
   const [location, setLocation] = useState("");
   const [openingHours, setOpeningHours] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
-  const [themeId] = useState("simple-one-page");
+  const [themeId] = useState("default-one-page");
   const [includeSampleData, setIncludeSampleData] = useState(true);
 
   const [isSubmitting, setIsSubmitting] = useState(false);

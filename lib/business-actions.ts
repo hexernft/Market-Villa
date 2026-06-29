@@ -458,7 +458,10 @@ export async function createBusiness(input: CreateBusinessInput) {
       location: input.location,
       instagram_url: input.instagramUrl,
       opening_hours: input.openingHours,
-theme_id: input.themeId,
+theme_id: input.themeId || "default-one-page",
+      theme_settings: {
+        themeId: input.themeId || "default-one-page",
+      },
       is_published: true,
       subscription_plan: "starter",
       subscription_status: "trial",
@@ -1023,7 +1026,7 @@ export async function updateBusinessTheme({
 }) {
   const { data: business, error: businessError } = await supabase
     .from("businesses")
-    .select("id,subscription_plan")
+    .select("id,subscription_plan,theme_settings")
     .eq("id", businessId)
     .single();
 
@@ -1072,6 +1075,10 @@ export async function updateBusinessTheme({
     .from("businesses")
     .update({
       theme_id: themeId,
+      theme_settings: {
+        ...((business as any)?.theme_settings || {}),
+        themeId,
+      },
       updated_at: new Date().toISOString(),
     })
     .eq("id", businessId)

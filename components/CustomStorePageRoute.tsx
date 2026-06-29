@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { Store } from "lucide-react";
-import { CustomStoreTheme } from "@/components/CustomStoreTheme";
+import { ThemeRenderer } from "@/components/store-themes/ThemeRenderer";
 import { StoreAiAssistant } from "@/components/StoreAiAssistant";
 import { getPublicBusinessPageBySlug } from "@/lib/business-actions";
 import { StorePageId } from "@/lib/store-pages";
@@ -107,7 +107,7 @@ export function CustomStorePageRoute({ params, page }: Props) {
 
   return (
     <>
-      <CustomStoreTheme business={business} page={page} />
+      <ThemeRenderer business={business} products={business.products || []} />
       {storeAiAssistant}
     </>
   );

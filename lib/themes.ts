@@ -1,4 +1,5 @@
 ﻿export type StoreLayout =
+  | "default-one-page"
   | "classic-commerce"
   | "simple-one-page"
   | "editorial-luxury"
@@ -525,6 +526,34 @@ const propertyListingSections: ThemeSectionOption[] = [
 ];
 
 export const businessThemes: BusinessTheme[] = [
+  {
+    id: "default-one-page",
+    name: "Default One Page",
+    description: "",
+    layout: "default-one-page",
+    page: "bg-[#fbf9ff] text-[#211331]",
+    hero: "bg-white",
+    card: "bg-white text-[#211331]",
+    mutedCard: "bg-[#f1eaff] text-[#211331]",
+    text: "text-[#211331]",
+    mutedText: "text-[#6f6785]",
+    accent: "bg-[#7c3aed]",
+    accentText: "text-[#7c3aed]",
+    button: "bg-[#241436] text-white hover:bg-[#351b55]",
+    secondaryButton:
+      "bg-white text-[#241436] ring-1 ring-[#eee7f7] hover:bg-[#fbf9ff]",
+    chip: "bg-[#f1eaff] text-[#7c3aed]",
+    border: "border-[#eee7f7]",
+    productCard: "rounded-[1.25rem] border border-[#eee7f7] bg-white",
+    sectionLabel: "text-[#7c3aed]",
+    bestFor: "All businesses",
+    features: ["One-page layout", "Products", "Contact"],
+    storefrontSections: ["Products", "About", "Contact"],
+    configurableSections: [
+      { id: "products", label: "Products", description: "" },
+      { id: "contact", label: "Contact", description: "" },
+    ],
+  },
   {
     id: "classic-commerce",
     name: "Classic Commerce",
@@ -1057,7 +1086,7 @@ export const businessThemes: BusinessTheme[] = [
 export function getBusinessTheme(themeId: string) {
   return (
     businessThemes.find((theme) => theme.id === themeId) ??
-    businessThemes.find((theme) => theme.id === "simple-one-page") ??
+    businessThemes.find((theme) => theme.id === "default-one-page") ??
     businessThemes[0]
   );
 }
@@ -1091,3 +1120,6 @@ export function normalizeThemeSections(
 
   return normalized.length ? normalized : options.map((section) => section.id);
 }
+
+
+
