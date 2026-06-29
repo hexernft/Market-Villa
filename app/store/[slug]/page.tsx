@@ -3,7 +3,6 @@
 import { use, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Store } from "lucide-react";
-import { StoreAiAssistant } from "@/components/StoreAiAssistant";
 import { ThemeRenderer } from "@/components/store-themes/ThemeRenderer";
 import { getPublicBusinessPageBySlug } from "@/lib/business-actions";
 
@@ -145,15 +144,5 @@ export default function StorePage({ params }: StorePageProps) {
     );
   }
 
-  const storeAiAssistant =
-    business.ai_assistant_enabled && business.ai_assistant_status === "active" ? (
-      <StoreAiAssistant businessId={business.id} businessName={business.name} />
-    ) : null;
-
-  return (
-    <>
-      <ThemeRenderer business={business} products={visibleProducts} />
-      {storeAiAssistant}
-    </>
-  );
+  return <ThemeRenderer business={business} products={visibleProducts} />;
 }

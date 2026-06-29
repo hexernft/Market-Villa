@@ -19,6 +19,7 @@ import {
   Palette,
   Settings,
   Sparkles,
+  Store,
   UserRound
 } from "lucide-react";
 import {
@@ -69,6 +70,11 @@ const navItems = [
     label: "Profile",
     href: "/dashboard/profile",
     icon: UserRound,
+  },
+  {
+    label: "Store Details",
+    href: "/dashboard/store-details",
+    icon: Store,
   },
   {
     label: "Themes",

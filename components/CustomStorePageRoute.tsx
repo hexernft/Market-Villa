@@ -4,7 +4,6 @@ import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { Store } from "lucide-react";
 import { ThemeRenderer } from "@/components/store-themes/ThemeRenderer";
-import { StoreAiAssistant } from "@/components/StoreAiAssistant";
 import { getPublicBusinessPageBySlug } from "@/lib/business-actions";
 import { StorePageId } from "@/lib/store-pages";
 
@@ -100,15 +99,5 @@ export function CustomStorePageRoute({ params, page }: Props) {
     );
   }
 
-  const storeAiAssistant =
-    business.ai_assistant_enabled && business.ai_assistant_status === "active" ? (
-      <StoreAiAssistant businessId={business.id} businessName={business.name} />
-    ) : null;
-
-  return (
-    <>
-      <ThemeRenderer business={business} products={business.products || []} />
-      {storeAiAssistant}
-    </>
-  );
+  return <ThemeRenderer business={business} products={business.products || []} />;
 }

@@ -50,6 +50,10 @@ export function ImageUploadEditor({
   const previewUrl = sourceUrl || value;
   const cropClass =
     aspect === "square" ? "aspect-square" : "aspect-[16/5]";
+  const dimensionGuide =
+    aspect === "square"
+      ? "Recommended size: 900 × 900 px"
+      : "Recommended size: 1600 × 500 px";
 
   const transformStyle = useMemo(() => {
     return {
@@ -261,6 +265,10 @@ export function ImageUploadEditor({
         )}
       </div>
 
+      <p className="mt-2 text-center text-xs font-semibold text-slate-500">
+        {dimensionGuide}
+      </p>
+
       {sourceUrl ? (
         <div className="mt-4 grid gap-4">
           <div className="flex flex-wrap items-center gap-2">
@@ -378,4 +386,5 @@ function loadImage(src: string) {
     image.src = src;
   });
 }
+
 

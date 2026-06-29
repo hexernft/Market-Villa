@@ -15,7 +15,8 @@ import { supabase } from "@/lib/supabase";
 
 type ThemeSettings = {
   colorTheme?: "market-purple" | "warm-boutique" | "neon-rail" | "editorial" | "edge-blue" | "baby-bloom";
-  heroStyle?: "split" | "edge" | "carousel" | "minimal" | "product-first" | "storefront-pro";
+  heroStyle?: "split" | "full" | "edge" | "carousel" | "minimal" | "product-first" | "storefront-pro";
+  announcementText?: string;
   heroSize?: "slim" | "medium" | "bold";
   productCardStyle?: "soft" | "bordered" | "shadow" | "dark" | "playful" | "editorial" | "retail-grid";
   navbarStyle?: "none" | "simple" | "centered" | "floating" | "pill" | "ecommerce";
@@ -103,11 +104,7 @@ const colorThemes = [
 
 const heroStyles = [
   { id: "split", name: "Split Hero" },
-  { id: "edge", name: "End-to-End Hero" },
-  { id: "carousel", name: "Carousel Hero" },
-  { id: "minimal", name: "Minimal Hero" },
-  { id: "product-first", name: "Product First" },
-  { id: "storefront-pro", name: "Storefront Pro" },
+  { id: "full", name: "Full Hero" },
 ] as const;
 
 const productCardStyles = [
@@ -426,6 +423,18 @@ export default function CustomizeStorePage() {
                   ))}
                 </div>
               </div>
+
+              <label className="grid gap-2 text-sm font-black text-slate-900">
+                Announcement strip
+                <input
+                  value={settings.announcementText || ""}
+                  onChange={(event) =>
+                    updateSettings({ announcementText: event.target.value })
+                  }
+                  className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-900 outline-none focus:border-[#7c3aed]"
+                  placeholder="Summer sale, delivery update, business tagline..."
+                />
+              </label>
 
               <div>
                 <p className="text-sm font-black text-slate-900">Hero size</p>
