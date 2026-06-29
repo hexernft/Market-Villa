@@ -397,11 +397,19 @@ function addToCart(item: StoreProduct) {
                   <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
                     Contact
                   </h3>
-                  <div className="mt-2 grid gap-1.5 text-xs font-semibold text-white/85 md:mt-3 md:gap-2 md:text-sm">
+
+                  <div
+                    className="mt-1 flex flex-col items-center text-xs font-semibold text-white/85 md:items-start md:text-sm"
+                    style={{ gap: "8px", lineHeight: 1 }}
+                  >
                     {business.phone ? (
-                      <a href={`tel:${business.phone}`} className="inline-flex justify-center gap-2 md:justify-start">
-                        <Phone size={14} />
-                        {business.phone}
+                      <a
+                        href={`tel:${business.phone}`}
+                        className="inline-flex items-center justify-center gap-1.5 md:justify-start"
+                        style={{ minHeight: "16px", lineHeight: 1 }}
+                      >
+                        <Phone size={13} />
+                        <span>{business.phone}</span>
                       </a>
                     ) : null}
 
@@ -410,10 +418,11 @@ function addToCart(item: StoreProduct) {
                         href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex justify-center gap-2 md:justify-start"
+                        className="inline-flex items-center justify-center gap-1.5 md:justify-start"
+                        style={{ minHeight: "16px", lineHeight: 1 }}
                       >
-                        <MessageCircle size={14} />
-                        {whatsapp}
+                        <MessageCircle size={13} />
+                        <span>{whatsapp}</span>
                       </a>
                     ) : null}
                   </div>
@@ -423,15 +432,15 @@ function addToCart(item: StoreProduct) {
                   <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
                     Location
                   </h3>
-                  <div className="mt-2 grid gap-1.5 text-xs font-semibold text-white/85 md:mt-3 md:gap-2 md:text-sm">
+                  <div className="mt-2 grid gap-1 text-xs font-semibold text-white/85 md:mt-2 md:gap-1.5 md:text-sm">
                     {business.location ? (
-                      <span className="inline-flex justify-center gap-2 md:justify-start">
+                      <span className="inline-flex items-center justify-center gap-1.5 md:justify-start">
                         <MapPin size={14} />
                         {business.location}
                       </span>
                     ) : null}
 
-                    <span className="inline-flex justify-center gap-2 md:justify-start">
+                    <span className="inline-flex items-center justify-center gap-1.5 md:justify-start">
                       We deliver smiles!
                       <span className="text-[#f4c76b]">♥</span>
                     </span>
@@ -564,6 +573,12 @@ function ProductCard({
     </article>
   );
 }
+
+
+
+
+
+
 
 
 
