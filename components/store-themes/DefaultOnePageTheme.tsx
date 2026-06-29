@@ -358,12 +358,12 @@ function addToCart(item: StoreProduct) {
         )}
       </section>
       {showFooter ? (
-        <footer className="bg-[#1f0f35] px-4 py-6 text-white md:px-6">
+        <footer className="bg-[#1f0f35] px-4 py-4 text-white md:px-6 md:py-6">
           <div className="mx-auto max-w-7xl">
-            <div className="grid gap-6 md:grid-cols-[1.25fr_auto_1fr_1fr_auto_1fr] md:items-start">
-              <div className="flex items-center gap-4">
+            <div className="grid gap-5 md:grid-cols-[1.25fr_auto_1fr_1fr_auto_1fr] md:items-start md:gap-6">
+              <div className="flex flex-col items-center text-center md:flex-row md:items-center md:gap-4 md:text-left">
                 {business.logo_url ? (
-                  <span className="grid h-[76px] w-[76px] shrink-0 place-items-center overflow-hidden rounded-full border border-[#d3a334] bg-white/5">
+                  <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full border border-[#d3a334] bg-white/5 md:h-[76px] md:w-[76px]">
                     <Image
                       src={business.logo_url}
                       alt={business.name}
@@ -373,17 +373,17 @@ function addToCart(item: StoreProduct) {
                     />
                   </span>
                 ) : (
-                  <span className="grid h-[76px] w-[76px] shrink-0 place-items-center rounded-full border border-[#d3a334] bg-white/5 text-sm font-black text-[#f4c76b]">
+                  <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full border border-[#d3a334] bg-white/5 text-xs font-black text-[#f4c76b] md:h-[76px] md:w-[76px] md:text-sm">
                     {business.name.slice(0, 2).toUpperCase()}
                   </span>
                 )}
 
-                <div>
-                  <h2 className="text-base font-black text-white">
+                <div className="mt-2 md:mt-0">
+                  <h2 className="text-sm font-black text-white md:text-base">
                     {business.name}
                   </h2>
                   {business.tagline ? (
-                    <p className="mt-1 max-w-48 text-sm font-semibold leading-5 text-white/80">
+                    <p className="mt-0.5 max-w-56 text-xs font-semibold leading-4 text-white/80 md:mt-1 md:max-w-48 md:text-sm md:leading-5">
                       {business.tagline}
                     </p>
                   ) : null}
@@ -392,75 +392,77 @@ function addToCart(item: StoreProduct) {
 
               <div className="hidden h-[72px] w-px bg-white/35 md:block" />
 
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-[0.12em] text-[#f4c76b]">
-                  Contact
-                </h3>
-                <div className="mt-3 grid gap-2 text-sm font-semibold text-white/85">
-                  {business.phone ? (
-                    <a href={`tel:${business.phone}`} className="inline-flex items-center gap-2">
-                      <Phone size={15} />
-                      {business.phone}
-                    </a>
-                  ) : null}
+              <div className="grid grid-cols-2 gap-4 md:contents">
+                <div className="text-center md:text-left">
+                  <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
+                    Contact
+                  </h3>
+                  <div className="mt-2 grid gap-1.5 text-xs font-semibold text-white/85 md:mt-3 md:gap-2 md:text-sm">
+                    {business.phone ? (
+                      <a href={`tel:${business.phone}`} className="inline-flex justify-center gap-2 md:justify-start">
+                        <Phone size={14} />
+                        {business.phone}
+                      </a>
+                    ) : null}
 
-                  {whatsapp ? (
-                    <a
-                      href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2"
-                    >
-                      <MessageCircle size={15} />
-                      {whatsapp}
-                    </a>
-                  ) : null}
+                    {whatsapp ? (
+                      <a
+                        href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex justify-center gap-2 md:justify-start"
+                      >
+                        <MessageCircle size={14} />
+                        {whatsapp}
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-[0.12em] text-[#f4c76b]">
-                  Location
-                </h3>
-                <div className="mt-3 grid gap-2 text-sm font-semibold text-white/85">
-                  {business.location ? (
-                    <span className="inline-flex items-center gap-2">
-                      <MapPin size={15} />
-                      {business.location}
+                <div className="text-center md:text-left">
+                  <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
+                    Location
+                  </h3>
+                  <div className="mt-2 grid gap-1.5 text-xs font-semibold text-white/85 md:mt-3 md:gap-2 md:text-sm">
+                    {business.location ? (
+                      <span className="inline-flex justify-center gap-2 md:justify-start">
+                        <MapPin size={14} />
+                        {business.location}
+                      </span>
+                    ) : null}
+
+                    <span className="inline-flex justify-center gap-2 md:justify-start">
+                      We deliver smiles!
+                      <span className="text-[#f4c76b]">♥</span>
                     </span>
-                  ) : null}
-
-                  <span className="inline-flex items-center gap-2">
-                    We deliver smiles!
-                    <span className="text-[#f4c76b]">♥</span>
-                  </span>
+                  </div>
                 </div>
               </div>
 
               <div className="hidden h-[72px] w-px bg-white/35 md:block" />
 
-              <div>
-                <h3 className="text-xs font-black uppercase tracking-[0.12em] text-[#f4c76b]">
+              <div className="text-center md:text-left">
+                <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
                   Follow us
                 </h3>
-                <div className="mt-3 flex items-center gap-3">
+                <div className="mt-2 flex items-center justify-center gap-2 md:mt-3 md:justify-start md:gap-3">
                   {business.instagram_url ? (
                     <a
                       href={business.instagram_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="grid h-9 w-9 place-items-center rounded-full border border-[#f4c76b]/55 text-xs font-black text-white transition hover:border-[#f4c76b] hover:bg-white/10"
+                      className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white transition hover:border-[#f4c76b] hover:bg-white/10 md:h-9 md:w-9 md:text-xs"
                       aria-label="Instagram"
                     >
                       IG
                     </a>
                   ) : (
-                    <span className="grid h-9 w-9 place-items-center rounded-full border border-[#f4c76b]/55 text-xs font-black text-white/70">
+                    <span className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white/70 md:h-9 md:w-9 md:text-xs">
                       IG
                     </span>
                   )}
 
-                  <span className="grid h-9 w-9 place-items-center rounded-full border border-[#f4c76b]/55 text-xs font-black text-white/70">
+                  <span className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white/70 md:h-9 md:w-9 md:text-xs">
                     FB
                   </span>
 
@@ -468,7 +470,7 @@ function addToCart(item: StoreProduct) {
                     href={whatsapp ? buildWhatsAppLink(whatsapp, `Hello ${business.name}`) : "#"}
                     target={whatsapp ? "_blank" : undefined}
                     rel={whatsapp ? "noreferrer" : undefined}
-                    className="grid h-9 w-9 place-items-center rounded-full border border-[#f4c76b]/55 text-xs font-black text-white transition hover:border-[#f4c76b] hover:bg-white/10"
+                    className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white transition hover:border-[#f4c76b] hover:bg-white/10 md:h-9 md:w-9 md:text-xs"
                     aria-label="WhatsApp"
                   >
                     WA
@@ -477,7 +479,7 @@ function addToCart(item: StoreProduct) {
               </div>
             </div>
 
-            <div className="mt-5 border-t border-white/25 pt-3 text-center text-xs font-semibold text-white/80">
+            <div className="mt-4 border-t border-white/25 pt-2 text-center text-[0.68rem] font-semibold text-white/80 md:mt-5 md:pt-3 md:text-xs">
               © {new Date().getFullYear()} {business.name}. All rights reserved.
               {showMarketVillaBadge ? (
                 <span className="ml-2 text-white/45">
@@ -562,6 +564,8 @@ function ProductCard({
     </article>
   );
 }
+
+
 
 
 
