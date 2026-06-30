@@ -14,6 +14,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import {
   getMarketVillaPlan,
+  getIntroBillingCycleForPlan,
   getPlanPricingOverrideFromMetadata,
   normalizePlanId,
 } from "@/lib/plans";
@@ -120,6 +121,10 @@ export default function AdminPricingPage() {
     );
     const freeMonths = Number(formData.get("freeMonths") || 0);
     const introPaidMonths = Number(formData.get("introPaidMonths") || 0);
+    const introBillingCycle = String(
+      formData.get("introBillingCycle") ||
+        getIntroBillingCycleForPlan(item.pricing_key),
+    );
 
     try {
       if (formAmount < 0) {
@@ -144,6 +149,7 @@ export default function AdminPricingPage() {
               regular_monthly_amount: regularMonthlyAmount,
               free_months: freeMonths,
               intro_paid_months: introPaidMonths,
+              intro_billing_cycle: introBillingCycle,
             }
           : item.metadata;
 
@@ -234,6 +240,18 @@ export default function AdminPricingPage() {
           <h1 className="mt-3 max-w-3xl text-2xl font-semibold tracking-[-0.06em]">
             Manage Market Villa pricing from one place.
           </h1>
+
+          <div className="mt-6 grid gap-3 text-sm font-semibold text-white md:grid-cols-3">
+            <div className="border border-white/15 bg-white/5 p-4">
+              Starter: 3 months free, then ₦1,500/month for 3 months.
+            </div>
+            <div className="border border-white/15 bg-white/5 p-4">
+              Grow: 50% off for 6 months, bi-annual checkout only.
+            </div>
+            <div className="border border-white/15 bg-white/5 p-4">
+              Pro: 50% off for 6 months, bi-annual checkout only.
+            </div>
+          </div>
         </section>
 
         {message ? (
@@ -328,6 +346,9 @@ export default function AdminPricingPage() {
                   "intro_paid_months",
                   subscriptionPlan.introPaidMonths,
                 );
+                const introBillingCycle =
+                  String(item.metadata?.intro_billing_cycle || "") ||
+                  getIntroBillingCycleForPlan(item.pricing_key);
 
                 return (
               <div className="grid gap-5 xl:grid-cols-[1fr_0.8fr]">
@@ -395,8 +416,17 @@ export default function AdminPricingPage() {
                   ) : null}
 
                   {isSubscription ? (
+                    <input
+                      type="hidden"
+                      name="introBillingCycle"
+                      value={introBillingCycle}
+                    />
+                  ) : null}
+
+                  {isSubscription ? (
                     <div className="grid gap-4 rounded-[1rem] border border-purple-100 bg-purple-50/60 p-4">
-                      <div>
+                      <div className="rounded-2xl border border-purple-100 bg-white px-4 py-3 text-sm font-semibold text-purple-950">
+                        Intro cycle: {introBillingCycle}
                       </div>
 
                       <div className="grid gap-4 md:grid-cols-2">

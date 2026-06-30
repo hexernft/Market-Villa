@@ -638,14 +638,14 @@ export default function ProductsPage() {
         <button
           type="button"
           onClick={openNewProductForm}
-          className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-emerald-600 text-white transition hover:bg-emerald-700"
+          className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-r from-[#241436] to-[#7c3aed] text-white transition hover:bg-[#351b55]"
           aria-label={`Add ${singularInventoryLabel}`}
         >
-          <Plus size={28} />
+          <Plus size={24} />
         </button>
       </section>
 
-      <section className="rounded-2xl border border-[#ebe7f3] bg-white p-3">
+      <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-3">
         <div className="grid gap-4 xl:grid-cols-[1fr_auto] xl:items-center">
           <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
             <select
@@ -654,7 +654,7 @@ export default function ProductsPage() {
   setSelectedBusinessId(event.target.value);
                 resetForm();
               }}
-              className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] px-4 text-sm font-semibold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10 md:min-w-80"
+              className="min-h-12 rounded-2xl border border-[#eadfff] bg-[#faf8ff] px-4 text-sm font-bold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10 md:min-w-80"
             >
               {businesses.length === 0 ? (
                 <option value="">No business created yet</option>
@@ -662,7 +662,7 @@ export default function ProductsPage() {
 
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} â€” /store/{business.slug}
+                {business.name} - /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -676,32 +676,32 @@ export default function ProductsPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-11 w-full rounded-2xl border border-[#ebe7f3] bg-white px-11 text-sm outline-none transition focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-[#7c3aed]/10"
+                className="min-h-12 w-full rounded-2xl border border-[#eadfff] bg-white px-11 text-sm font-semibold outline-none transition focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-[#7c3aed]/10"
                 placeholder={`Search ${modeMeta.inventoryLabel.toLowerCase()}`}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
-            <div className="rounded-2xl bg-[#fcfbff] px-3 py-2">
-            <p className="text-xs text-slate-500">Total</p>
-              <p className="mt-1 text-lg font-semibold text-slate-950">
+            <div className="rounded-2xl border border-[#eadfff] bg-[#faf8ff] px-3 py-2">
+            <p className="text-xs font-black uppercase tracking-[0.12em] text-[#7c3aed]">Total</p>
+              <p className="mt-1 text-xl font-black text-[#241436]">
                 {products.length}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-emerald-50 px-3 py-2">
-              <p className="text-xs text-emerald-700">
+            <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-3 py-2">
+              <p className="text-xs font-black uppercase tracking-[0.12em] text-emerald-700">
                 {isDealershipMode ? "Visible" : "Live"}
               </p>
-              <p className="mt-1 text-lg font-semibold text-emerald-950">
+              <p className="mt-1 text-xl font-black text-emerald-950">
                 {availableProductsCount}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-[#f1eaff] px-3 py-2">
-              <p className="text-xs text-purple-700">Featured</p>
-              <p className="mt-1 text-lg font-semibold text-purple-950">
+            <div className="rounded-2xl border border-[#d8c9f8] bg-[#f4edff] px-3 py-2">
+              <p className="text-xs font-black uppercase tracking-[0.12em] text-[#7c3aed]">Featured</p>
+              <p className="mt-1 text-xl font-black text-[#241436]">
                 {featuredProductsCount}
               </p>
             </div>
@@ -716,8 +716,8 @@ export default function ProductsPage() {
       ) : null}
 
       {isLoading ? (
-        <section className="rounded-2xl border border-[#ebe7f3] bg-white p-8 text-center text-sm text-slate-500">
-          Loading products...
+        <section className="rounded-2xl border border-[#eadfff] bg-white p-8 text-center">
+          <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={24} />
         </section>
       ) : businesses.length === 0 ? (
         <section className="rounded-2xl border border-purple-200 bg-purple-50 p-8 text-center">
@@ -746,27 +746,14 @@ export default function ProductsPage() {
               : "xl:grid-cols-1"
           }`}
         >
-          {!isProductFormOpen ? (
-            <div className="hidden rounded-2xl border border-dashed border-[#ebe7f3] bg-white p-4 text-center lg:block">
-              <button
-                type="button"
-                onClick={openNewProductForm}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-emerald-700"
-              >
-                <Plus size={18} />
-                Add {singularInventoryLabel}
-              </button>
-            </div>
-          ) : null}
-
           {isProductFormOpen ? (
-            <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4 md:p-6">
+            <div className="rounded-[1.35rem] border border-[#eadfff] bg-white p-4 md:p-6">
               <div className="mb-5 flex items-center justify-between gap-4">
-                <span className="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+                <span className="rounded-full bg-[#f4edff] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#7c3aed]">
                   {editingProductId ? "Edit" : `New ${singularInventoryLabel}`}
                 </span>
 
-                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-teal-50 text-teal-700">
+                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#f4edff] text-[#7c3aed]">
                   <ImagePlus size={21} />
                 </span>
               </div>
@@ -847,13 +834,6 @@ export default function ProductsPage() {
                         : isPropertiesMode
                           ? "Upload listing image"
                         : "Upload product image"
-                  }
-                  helper={
-  isDealershipMode
-                      ? "Use a clean exterior or hero image. Large images will be compressed."
-                      : isPropertiesMode
-                        ? "Use a clean property hero image. Large images will be compressed."
-                      : "Large images will be compressed before upload."
                   }
                   maxWidth={1400}
                   maxHeight={1400}
@@ -1332,7 +1312,7 @@ export default function ProductsPage() {
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#241436] to-[#7c3aed] px-4 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSaving ? (
                       <Loader2 size={17} className="animate-spin" />
@@ -1350,7 +1330,7 @@ export default function ProductsPage() {
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
+                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-black text-[#241436] transition hover:bg-[#faf8ff]"
                   >
                     <X size={17} />
                     Cancel
@@ -1362,12 +1342,12 @@ export default function ProductsPage() {
 
           <div className="grid content-start gap-4">
             {filteredProducts.length === 0 ? (
-              <div className="rounded-[1.35rem] border border-slate-200 bg-white p-8 text-center shadow-sm">
-                <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+              <div className="rounded-[1.35rem] border border-[#eadfff] bg-white p-8 text-center">
+                <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-[#f4edff] text-[#7c3aed]">
                   <ImagePlus size={20} />
                 </div>
 
-                <p className="mt-4 text-base font-semibold text-slate-950">
+                <p className="mt-4 text-lg font-black tracking-[-0.035em] text-[#241436]">
                   {products.length === 0
                     ? isDealershipMode
                       ? "You have no vehicles yet"
@@ -1385,7 +1365,7 @@ export default function ProductsPage() {
                   <button
                     type="button"
                     onClick={openNewProductForm}
-                    className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                    className="mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#241436] to-[#7c3aed] px-5 text-sm font-black text-white"
                   >
                     <Plus size={17} />
                     {isDealershipMode
@@ -1403,8 +1383,8 @@ export default function ProductsPage() {
                 key={product.id}
                 className={`overflow-hidden rounded-2xl border bg-white transition ${
   editingProductId === product.id
-                    ? "border-slate-950 ring-4 ring-slate-100"
-                    : "border-[#ebe7f3] hover:bg-[#faf7ff]"
+                    ? "border-[#7c3aed] ring-4 ring-[#7c3aed]/10"
+                    : "border-[#eadfff] hover:bg-[#faf8ff]"
                 }`}
               >
                 {(() => {
@@ -1449,9 +1429,9 @@ export default function ProductsPage() {
                   ].filter(Boolean);
 
                   return (
-                <div className="grid grid-cols-[5rem_1fr] md:grid-cols-[12rem_1fr]">
+                <div className="grid grid-cols-[5.25rem_1fr] md:grid-cols-[12rem_1fr]">
                   <div
-                    className="min-h-24 bg-cover bg-center md:min-h-full"
+                    className="min-h-28 bg-cover bg-center md:min-h-full"
                     style={{
   backgroundImage: `url(${
   product.image_url ||
@@ -1464,23 +1444,23 @@ export default function ProductsPage() {
                     <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
                       <div className="min-w-0">
                         <div className="mb-2 flex flex-wrap items-center gap-2">
-                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                          <span className="rounded-full bg-[#f4edff] px-3 py-1 text-xs font-bold text-[#7c3aed]">
                             {product.category || modeMeta.inventoryLabel}
                           </span>
 
                           {product.is_available ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
                               <BadgeCheck size={14} />
                               Available
                             </span>
                           ) : (
-                            <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
+                            <span className="rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700">
                               Hidden
                             </span>
                           )}
 
                           {product.is_featured ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold text-purple-700">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#f4edff] px-3 py-1 text-xs font-bold text-[#7c3aed]">
                               <Star size={14} />
                               Featured
                             </span>
@@ -1499,7 +1479,7 @@ export default function ProductsPage() {
                           ) : null}
                         </div>
 
-                        <p className="truncate text-lg font-black tracking-[-0.03em] text-[#171421]">
+                        <p className="truncate text-base font-black tracking-[-0.03em] text-[#241436] md:text-lg">
                           {product.name}
                         </p>
 
@@ -1538,7 +1518,7 @@ export default function ProductsPage() {
                         ) : null}
                       </div>
 
-                      <p className="whitespace-nowrap text-lg font-black tracking-[-0.04em] text-[#171421]">
+                      <p className="whitespace-nowrap text-lg font-black tracking-[-0.04em] text-[#dc2626]">
                         {formatCurrency(Number(product.price || 0))}
                       </p>
                     </div>
@@ -1557,7 +1537,7 @@ export default function ProductsPage() {
                         type="button"
                         onClick={() => handleToggleAvailability(product)}
                         disabled={busyProductId === product.id}
-                        className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-200 disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-2xl border border-[#eadfff] bg-white px-4 py-2.5 text-sm font-bold text-[#241436] transition hover:bg-[#faf8ff] disabled:opacity-60 md:px-5"
                       >
                         {busyProductId === product.id ? (
                           <Loader2 size={17} className="animate-spin" />
@@ -1572,7 +1552,7 @@ export default function ProductsPage() {
                         type="button"
                         onClick={() => handleDeleteProduct(product.id)}
                         disabled={busyProductId === product.id}
-                        className="inline-flex items-center gap-2 rounded-full bg-red-50 px-5 py-2.5 text-sm font-semibold text-red-700 transition hover:-translate-y-0.5 hover:bg-red-100 disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-2xl bg-red-50 px-4 py-2.5 text-sm font-bold text-red-700 transition hover:bg-red-100 disabled:opacity-60 md:px-5"
                       >
                         <Trash2 size={17} />
                         Delete

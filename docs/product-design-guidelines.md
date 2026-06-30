@@ -231,7 +231,7 @@ Theme customization should be controlled through Store Details, theme settings, 
 
 Current starter messaging:
 
-Own a business website with 1 month free. N1000 for the next 3 months/ N3000 monthly subsequently.
+Own a business website with 3 months free. Starter pays N1500/month for the next 3 months, then regular billing resumes. Growth and Pro get 50% off for the first 6 months on bi-annual payment only; quarterly, bi-annual, and annual billing resume after 6 months.
 
 Pricing text must match across:
 

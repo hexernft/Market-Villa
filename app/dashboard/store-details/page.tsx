@@ -46,7 +46,7 @@ type DashboardBusiness = {
 };
 
 const inputClass =
-  "min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-900 outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10";
+  "min-h-12 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-semibold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10";
 
 function mergeSettings(settings?: ThemeSettings | null): ThemeSettings {
   return {
@@ -58,28 +58,6 @@ function mergeSettings(settings?: ThemeSettings | null): ThemeSettings {
       showMarketVillaBadge: settings?.toggles?.showMarketVillaBadge !== false,
     },
   };
-}
-
-function ToggleRow({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (value: boolean) => void;
-}) {
-  return (
-    <label className="flex min-h-12 items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white px-4">
-      <span className="text-sm font-black text-slate-800">{label}</span>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        className="h-5 w-5 accent-[#7c3aed]"
-      />
-    </label>
-  );
 }
 
 export default function StoreDetailsPage() {
@@ -100,9 +78,6 @@ export default function StoreDetailsPage() {
   const [location, setLocation] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
   const [openingHours, setOpeningHours] = useState("");
-  const [showPrices, setShowPrices] = useState(true);
-  const [showFooter, setShowFooter] = useState(true);
-  const [showMarketVillaBadge, setShowMarketVillaBadge] = useState(true);
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
@@ -179,9 +154,6 @@ export default function StoreDetailsPage() {
     setLocation(selectedBusiness.location || "");
     setInstagramUrl(selectedBusiness.instagram_url || "");
     setOpeningHours(selectedBusiness.opening_hours || "");
-    setShowPrices(settings.toggles?.showPrices !== false);
-    setShowFooter(settings.toggles?.showFooter !== false);
-    setShowMarketVillaBadge(settings.toggles?.showMarketVillaBadge !== false);
   }, [selectedBusiness]);
 
   function handleBusinessChange(businessId: string) {
@@ -206,9 +178,9 @@ export default function StoreDetailsPage() {
       announcementText,
       toggles: {
         ...(currentSettings.toggles || {}),
-        showPrices,
-        showFooter,
-        showMarketVillaBadge,
+        showPrices: true,
+        showFooter: true,
+        showMarketVillaBadge: true,
       },
     };
 
@@ -273,7 +245,7 @@ export default function StoreDetailsPage() {
 
   return (
     <div className="grid gap-5">
-      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
+      <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-[#7c3aed]">
@@ -344,14 +316,11 @@ export default function StoreDetailsPage() {
                 onChange={(event) => setAnnouncementText(event.target.value)}
                 className={inputClass}
               />
-              <span className="text-center text-xs font-semibold leading-5 text-slate-500">
-                Use | between announcements so each message appears separately on your store banner.
-              </span>
             </label>
           </div>
         </section>
 
-        <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
+        <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-5">
           <h2 className="flex items-center gap-2 text-lg font-black tracking-[-0.04em] text-slate-950">
             <ImageIcon size={18} className="text-[#7c3aed]" />
             Store Banner
@@ -382,7 +351,7 @@ export default function StoreDetailsPage() {
           </div>
         </section>
 
-        <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
+        <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-5">
           <h2 className="flex items-center gap-2 text-lg font-black tracking-[-0.04em] text-slate-950">
             <Phone size={18} className="text-[#7c3aed]" />
             Contact Details
@@ -469,11 +438,11 @@ export default function StoreDetailsPage() {
           </div>
         </section>
 
-        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-3">
+        <div className="rounded-[1.35rem] border border-[#eadfff] bg-white p-3">
           <button
             type="submit"
             disabled={isSaving || !selectedBusiness}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#241436] px-5 text-sm font-black text-white transition hover:bg-[#321b52] disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#241436] to-[#7c3aed] px-5 text-sm font-black text-white transition disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSaving ? (
               <Loader2 size={18} className="animate-spin" />

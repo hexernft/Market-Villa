@@ -42,6 +42,7 @@ type StoreBusiness = {
   email?: string | null;
   location?: string | null;
   instagram_url?: string | null;
+  opening_hours?: string | null;
   products?: StoreProduct[] | null;
   theme_settings?: {
     announcementText?: string | null;
@@ -84,9 +85,9 @@ export function DefaultOnePageTheme({
   const settings = business.theme_settings || {};
   const whatsapp = business.whatsapp || business.phone || "";
   const heroImage = getHeroImage(business);
-  const showPrices = settings.toggles?.showPrices !== false;
-  const showFooter = settings.toggles?.showFooter !== false;
-  const showMarketVillaBadge = settings.toggles?.showMarketVillaBadge !== false;
+  const showPrices = true;
+  const showFooter = true;
+  const showMarketVillaBadge = true;
   const announcement =
     settings.announcementText?.trim() || `Welcome to ${business.name}`;
 
@@ -234,7 +235,11 @@ function addToCart(item: StoreProduct) {
                 </span>
               )}
 
-              <span className="min-w-0"><span className="block truncate text-base font-black uppercase leading-tight text-[#17111f] md:text-lg">{business.name}</span></span>
+              <span className="min-w-0">
+                <span className="block truncate text-base font-black uppercase leading-tight text-[#17111f] md:text-lg">
+                  {business.name}
+                </span>
+              </span>
             </Link>
 
             <div className="flex shrink-0 items-center gap-2 md:hidden">
@@ -439,6 +444,17 @@ function addToCart(item: StoreProduct) {
                         <span>{whatsapp}</span>
                       </a>
                     ) : null}
+
+                    {business.email ? (
+                      <a
+                        href={`mailto:${business.email}`}
+                        className="inline-flex items-center justify-center gap-1.5 md:justify-start"
+                        style={{ minHeight: "16px", lineHeight: 1 }}
+                      >
+                        <Mail size={13} />
+                        <span>{business.email}</span>
+                      </a>
+                    ) : null}
                   </div>
                 </div>
 
@@ -454,10 +470,11 @@ function addToCart(item: StoreProduct) {
                       </span>
                     ) : null}
 
-                    <span className="inline-flex items-center justify-center gap-1.5 md:justify-start">
-                      We deliver smiles!
-                      <span className="text-[#f4c76b]">♥</span>
-                    </span>
+                    {business.opening_hours ? (
+                      <span className="inline-flex items-center justify-center gap-1.5 md:justify-start">
+                        {business.opening_hours}
+                      </span>
+                    ) : null}
                   </div>
                 </div>
               </div>

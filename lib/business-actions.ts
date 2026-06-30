@@ -1,6 +1,7 @@
 ﻿import { supabase } from "@/lib/supabase";
 
 import {
+  MARKET_VILLA_PLANS,
   canUseBusinessModeForPlan,
   canUseThemeForPlan,
   getBusinessModePlanMessage,
@@ -428,7 +429,9 @@ export async function createBusiness(input: CreateBusinessInput) {
   const businessMode = normalizeBusinessMode(input.businessMode);
   const trialStartedAt = new Date();
   const trialExpiresAt = new Date(trialStartedAt);
-  trialExpiresAt.setMonth(trialExpiresAt.getMonth() + 1);
+  trialExpiresAt.setMonth(
+    trialExpiresAt.getMonth() + MARKET_VILLA_PLANS.starter.freeMonths,
+  );
 
   const trialGraceEndsAt = new Date(trialExpiresAt);
   trialGraceEndsAt.setDate(trialGraceEndsAt.getDate() + 5);

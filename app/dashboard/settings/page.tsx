@@ -4,23 +4,20 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   BarChart3,
-  Bell,
-  Building2,
   ChevronRight,
   CreditCard,
   Globe2,
   HelpCircle,
-  LayoutDashboard,
   Loader2,
   Mail,
   Megaphone,
   MessageCircle,
   Package,
-  Palette,
   Save,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
+  Store,
   User,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -36,26 +33,26 @@ const menuSections = [
   {
     title: "Store Setup",
     items: [
-      { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
-      { label: "Profile", href: "/dashboard/profile", icon: User },
-      { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
+      { label: "Store Details", href: "/dashboard/store-details", icon: Store },
       { label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
+      { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
       { label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
     ],
   },
   {
     title: "Sales & Marketing",
     items: [
-      { label: "Inventory", href: "/dashboard/products", icon: Package },
-      { label: "Leads", href: "/dashboard/leads", icon: MessageCircle },
+      { label: "Products", href: "/dashboard/products", icon: Package },
       { label: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
+      { label: "Messaging", href: "/dashboard/leads", icon: MessageCircle },
       { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
       { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
     ],
   },
   {
-    title: "Support",
+    title: "Account & Support",
     items: [
+      { label: "Profile", href: "/dashboard/profile", icon: User },
       { label: "Help Center", href: "/help", icon: HelpCircle },
       { label: "Platform Status", href: "/status", icon: ShieldCheck },
     ],
@@ -65,8 +62,6 @@ const menuSections = [
 export default function SettingsPage() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [fullName, setFullName] = useState("");
-  const [supportEmail, setSupportEmail] = useState("");
-  const [supportPhone, setSupportPhone] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -112,7 +107,6 @@ export default function SettingsPage() {
         });
 
         setFullName(data?.full_name || user.user_metadata?.full_name || "");
-        setSupportEmail(user.email || "");
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : "Unable to load settings.";
@@ -228,7 +222,7 @@ export default function SettingsPage() {
         ))}
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[1fr_0.8fr]">
+      <section className="grid gap-4">
         <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4">
           <div className="mb-5 flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
@@ -280,66 +274,6 @@ export default function SettingsPage() {
             </button>
           </div>
         </div>
-
-        <aside className="grid gap-5">
-          <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4">
-            <div className="mb-5 flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
-                <Building2 size={18} />
-              </span>
-
-              <div>
-                <h3 className="text-sm font-semibold tracking-[-0.03em] text-slate-950">
-                  Business support
-                </h3>
-              </div>
-            </div>
-
-            <div className="grid gap-4">
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Support email
-                </span>
-                <input
-                  value={supportEmail}
-                  onChange={(event) => setSupportEmail(event.target.value)}
-                  className="h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm outline-none focus:border-[#7c3aed]"
-                  placeholder="support@example.com"
-                />
-              </label>
-
-              <label className="grid gap-2">
-                <span className="text-sm font-semibold text-slate-700">
-                  Support phone
-                </span>
-                <input
-                  value={supportPhone}
-                  onChange={(event) => setSupportPhone(event.target.value)}
-                  className="h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm outline-none focus:border-[#7c3aed]"
-                  placeholder="+234..."
-                />
-              </label>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4 text-slate-950">
-            <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
-                <ShieldCheck size={18} />
-              </span>
-
-              <div>
-                <h3 className="text-sm font-semibold tracking-[-0.03em]">
-                  Security
-                </h3>
-              </div>
-            </div>
-
-            <div className="mt-5 flex items-center gap-3 rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] p-4">
-              <Bell size={17} className="text-slate-500" />
-            </div>
-          </div>
-        </aside>
       </section>
     </div>
   );

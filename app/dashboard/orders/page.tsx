@@ -249,24 +249,24 @@ export default function OrdersPage() {
 
         <Link
           href="/dashboard/products"
-          className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-emerald-600 text-white transition hover:bg-emerald-700"
+          className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-r from-[#241436] to-[#7c3aed] text-white transition hover:bg-[#351b55]"
           aria-label="Add product"
         >
-          <PackageCheck size={24} />
+          <PackageCheck size={22} />
         </Link>
       </section>
 
-      <section className="rounded-2xl border border-[#ebe7f3] bg-white p-3">
+      <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-3">
         <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-center">
           <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
             <select
               value={selectedBusinessId}
               onChange={(event) => setSelectedBusinessId(event.target.value)}
-              className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] px-4 text-sm font-semibold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10 md:min-w-80"
+              className="min-h-12 rounded-2xl border border-[#eadfff] bg-[#faf8ff] px-4 text-sm font-bold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10 md:min-w-80"
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} — /store/{business.slug}
+                  {business.name} - /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -280,37 +280,37 @@ export default function OrdersPage() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                className="min-h-11 w-full rounded-2xl border border-[#ebe7f3] bg-white px-11 text-sm outline-none transition focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-[#7c3aed]/10"
+                className="min-h-12 w-full rounded-2xl border border-[#eadfff] bg-white px-11 text-sm font-semibold outline-none transition focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-[#7c3aed]/10"
                 placeholder="Search orders"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-2">
-            <div className="rounded-2xl bg-[#fcfbff] px-3 py-2.5">
-              <p className="text-xs text-slate-500">All</p>
-              <p className="mt-1 text-xl font-semibold text-slate-950">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="rounded-2xl border border-[#eadfff] bg-[#faf8ff] px-3 py-2.5">
+              <p className="text-xs font-black uppercase tracking-[0.12em] text-[#7c3aed]">All</p>
+              <p className="mt-1 text-xl font-black text-[#241436]">
                 {orders.length}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-[#f1eaff] px-3 py-2.5">
-              <p className="text-xs text-purple-700">Pending</p>
-              <p className="mt-1 text-xl font-semibold text-purple-950">
+            <div className="rounded-2xl border border-[#d8c9f8] bg-[#f4edff] px-3 py-2.5">
+              <p className="text-xs font-black uppercase tracking-[0.12em] text-[#7c3aed]">Pending</p>
+              <p className="mt-1 text-xl font-black text-[#241436]">
                 {pendingOrders}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-emerald-50 px-3 py-2.5">
-              <p className="text-xs text-emerald-700">Delivered</p>
-              <p className="mt-1 text-xl font-semibold text-emerald-950">
+            <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-3 py-2.5">
+              <p className="text-xs font-black uppercase tracking-[0.12em] text-emerald-700">Delivered</p>
+              <p className="mt-1 text-xl font-black text-emerald-950">
                 {deliveredOrders}
               </p>
             </div>
 
             <div className="rounded-2xl bg-[#241436] px-3 py-2.5">
-              <p className="text-xs text-slate-300">Revenue</p>
-              <p className="mt-1 text-sm font-semibold text-white md:text-sm">
+              <p className="text-xs font-black uppercase tracking-[0.12em] text-white/70">Revenue</p>
+              <p className="mt-1 text-sm font-black text-white md:text-sm">
                 {formatCurrency(totalRevenue)}
               </p>
             </div>
@@ -332,7 +332,7 @@ export default function OrdersPage() {
             className={`min-h-11 shrink-0 rounded-2xl px-5 text-sm font-bold transition ${
               statusFilter === item.value
                 ? "bg-[#7c3aed] text-white"
-                : "border border-[#ebe7f3] bg-white text-[#241436]"
+                : "border border-[#eadfff] bg-white text-[#241436]"
             }`}
           >
             {item.label}
@@ -341,23 +341,20 @@ export default function OrdersPage() {
       </section>
 
       {message ? (
-        <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4 text-sm font-semibold text-slate-700">
+        <div className="rounded-2xl border border-[#eadfff] bg-white p-4 text-sm font-semibold text-slate-700">
           {message}
         </div>
       ) : null}
 
       <section className="grid gap-4">
         {filteredOrders.length === 0 ? (
-          <div className="rounded-2xl border border-[#ebe7f3] bg-white p-10 text-center">
-            <div className="mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
+          <div className="rounded-[1.35rem] border border-[#eadfff] bg-white p-10 text-center">
+            <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-[#f4edff] text-[#7c3aed]">
               <ClipboardList size={28} />
             </div>
-            <h2 className="text-xl font-black tracking-[-0.04em] text-[#171421]">
+            <h2 className="text-xl font-black tracking-[-0.04em] text-[#241436]">
               No orders yet
             </h2>
-            <p className="mx-auto mt-3 max-w-sm text-sm font-semibold leading-6 text-slate-500">
-              Share your store link to start receiving customer orders.
-            </p>
           </div>
         ) : null}
 
@@ -369,7 +366,7 @@ export default function OrdersPage() {
           return (
             <article
               key={order.id}
-              className="rounded-2xl border border-[#ebe7f3] bg-white p-4 transition hover:bg-[#faf7ff] md:p-5"
+              className="rounded-[1.35rem] border border-[#eadfff] bg-white p-4 transition hover:bg-[#faf8ff] md:p-5"
             >
               <div className="grid gap-6 xl:grid-cols-[1fr_18rem] xl:items-start">
                 <div>
@@ -390,7 +387,7 @@ export default function OrdersPage() {
                   </div>
 
                   <div className="grid gap-1">
-                    <p className="text-xl font-black tracking-[-0.03em] text-[#171421]">
+                    <p className="text-xl font-black tracking-[-0.03em] text-[#241436]">
                       {order.customer_name || "Customer"}
                     </p>
 
@@ -406,12 +403,12 @@ export default function OrdersPage() {
                   </div>
 
                   {order.customer_note ? (
-                    <p className="mt-4 max-w-2xl rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
+                    <p className="mt-4 max-w-2xl rounded-2xl bg-[#faf8ff] p-4 text-sm leading-6 text-[#6f6580]">
                       {order.customer_note}
                     </p>
                   ) : null}
 
-                  <div className="mt-5 rounded-2xl bg-[#fcfbff] p-3">
+                  <div className="mt-5 rounded-2xl border border-[#eadfff] bg-[#faf8ff] p-3">
                     <div className="grid gap-2">
                       {order.order_items.map((item) => (
                         <div
@@ -439,14 +436,14 @@ export default function OrdersPage() {
                 </div>
 
                 <div className="grid gap-3">
-                  <div className="rounded-2xl bg-[#fcfbff] p-4">
+                  <div className="rounded-2xl border border-[#eadfff] bg-[#faf8ff] p-4">
 
-                    <p className="mt-1 text-2xl font-black tracking-[-0.04em] text-[#171421]">
+                    <p className="mt-1 text-2xl font-black tracking-[-0.04em] text-[#dc2626]">
                       {formatCurrency(Number(order.total_amount || 0))}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-[#fcfbff] p-3">
+                  <div className="rounded-2xl border border-[#eadfff] bg-[#faf8ff] p-3">
                     <div className="grid gap-2">
                       {orderStatuses.map((status) => {
                         const Icon = status.icon;
@@ -487,7 +484,7 @@ export default function OrdersPage() {
                       )}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-[#241436] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#351b55]"
+                      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#241436] px-5 text-sm font-bold text-white transition hover:bg-[#351b55]"
                     >
                       <MessageCircle size={17} />
                       Follow Up

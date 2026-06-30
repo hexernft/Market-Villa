@@ -6,6 +6,8 @@ import {
   getPlanBillingAmount,
   getPlanBillingAmountInKobo,
   getPlanPricingOverrideFromMetadata,
+  getIntroBillingCycleMessage,
+  isIntroBillingCycleAllowed,
   isPlanDowngrade,
   isSubscriptionDateStillActive,
   isValidPlanAlias,
@@ -156,17 +158,63 @@ export async function POST(request: Request) {
 
     const selectedPlan = getMarketVillaPlan(planId, pricingOverride);
 
+    const { data: business, error: businessError } = await supabase
+      .from("businesses")
+      .select("id, owner_id, name, subscription_plan, subscription_status, subscription_expires_at")
+      .eq("id", businessId)
+      .single();
+
+    if (businessError || !business) {
+      return NextResponse.json(
+        { error: "Business not found." },
+        { status: 404 },
+      );
+    }
+
+    if (business.owner_id !== user.id) {
+      return NextResponse.json(
+        { error: "You cannot pay for this business." },
+        { status: 403 },
+      );
+    }
+
+    const { count: successfulPaymentCount, error: paymentCountError } =
+      await supabase
+        .from("payments")
+        .select("id", { count: "exact", head: true })
+        .eq("business_id", businessId)
+        .eq("status", "success");
+
+    if (paymentCountError) {
+      return NextResponse.json(
+        { error: paymentCountError.message },
+        { status: 400 },
+      );
+    }
+
+    const isIntroPayment = Number(successfulPaymentCount || 0) === 0;
+
+    if (
+      isIntroPayment &&
+      !isIntroBillingCycleAllowed({ plan: planId, billingCycle })
+    ) {
+      return NextResponse.json(
+        { error: getIntroBillingCycleMessage(planId) },
+        { status: 400 },
+      );
+    }
+
     const payableAmount = getPlanBillingAmount({
       plan: planId,
       billingCycle,
-      isIntro: true,
+      isIntro: isIntroPayment,
       override: pricingOverride,
     });
 
     const payableAmountInKobo = getPlanBillingAmountInKobo({
       plan: planId,
       billingCycle,
-      isIntro: true,
+      isIntro: isIntroPayment,
       override: pricingOverride,
     });
 
@@ -198,6 +246,7 @@ export async function POST(request: Request) {
       regularMonthlyAmount: selectedPlan.regularMonthlyAmount,
       freeMonths: selectedPlan.freeMonths,
       introPaidMonths: selectedPlan.introPaidMonths,
+      isIntroPayment,
       billingCycle,
       billingCycleLabel: selectedCycle.label,
       billingCycleMonths: selectedCycle.months,
@@ -206,26 +255,6 @@ export async function POST(request: Request) {
       regularRenewalAmount,
       regularRenewalAmountInKobo,
     };
-
-    const { data: business, error: businessError } = await supabase
-      .from("businesses")
-      .select("id, owner_id, name, subscription_plan, subscription_status, subscription_expires_at")
-      .eq("id", businessId)
-      .single();
-
-    if (businessError || !business) {
-      return NextResponse.json(
-        { error: "Business not found." },
-        { status: 404 },
-      );
-    }
-
-    if (business.owner_id !== user.id) {
-      return NextResponse.json(
-        { error: "You cannot pay for this business." },
-        { status: 403 },
-      );
-    }
 
     const currentSubscriptionStillActive = isSubscriptionDateStillActive(
       business.subscription_expires_at,
@@ -284,6 +313,7 @@ export async function POST(request: Request) {
             regular_monthly_amount: plan.regularMonthlyAmount,
             free_months: plan.freeMonths,
             intro_paid_months: plan.introPaidMonths,
+            is_intro_payment: plan.isIntroPayment,
             payable_amount: plan.payableAmount,
             regular_renewal_amount: plan.regularRenewalAmount,
             business_name: business.name,
@@ -337,6 +367,7 @@ export async function POST(request: Request) {
           regular_monthly_amount: plan.regularMonthlyAmount,
           free_months: plan.freeMonths,
           intro_paid_months: plan.introPaidMonths,
+          is_intro_payment: plan.isIntroPayment,
           payable_amount: plan.payableAmount,
           payable_amount_in_kobo: plan.payableAmountInKobo,
           regular_renewal_amount: plan.regularRenewalAmount,

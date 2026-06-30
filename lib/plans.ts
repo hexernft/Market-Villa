@@ -62,9 +62,9 @@ export const MARKET_VILLA_PLANS: Record<
     id: "starter",
     name: "Starter",
     displayName: "Starter",
-    introMonthlyAmount: 1000,
+    introMonthlyAmount: 1500,
     regularMonthlyAmount: 3000,
-    freeMonths: 1,
+    freeMonths: 3,
     introPaidMonths: 3,
     description:
       "For new small businesses getting online with a polished storefront.",
@@ -74,10 +74,10 @@ export const MARKET_VILLA_PLANS: Record<
     id: "growth",
     name: "Grow",
     displayName: "Grow",
-    introMonthlyAmount: 3000,
-    regularMonthlyAmount: 5000,
+    introMonthlyAmount: 3500,
+    regularMonthlyAmount: 7000,
     freeMonths: 0,
-    introPaidMonths: 3,
+    introPaidMonths: 6,
     description: "For growing businesses that need more room and sales tools.",
     themeLimit: PLAN_THEME_LIMITS.growth,
   },
@@ -85,10 +85,10 @@ export const MARKET_VILLA_PLANS: Record<
     id: "pro",
     name: "Pro",
     displayName: "Pro",
-    introMonthlyAmount: 7000,
+    introMonthlyAmount: 5000,
     regularMonthlyAmount: 10000,
     freeMonths: 0,
-    introPaidMonths: 3,
+    introPaidMonths: 6,
     description:
       "For serious sellers, growing teams, and premium storefronts.",
     themeLimit: PLAN_THEME_LIMITS.pro,
@@ -136,7 +136,7 @@ export function getMarketVillaPlan(
 
   if (!override) return basePlan;
 
-  return {
+  const mergedPlan = {
     ...basePlan,
     name: String(override.name || basePlan.name),
     displayName: String(override.displayName || basePlan.displayName),
@@ -156,6 +156,34 @@ export function getMarketVillaPlan(
     ),
     themeLimit: readPositiveNumber(override.themeLimit, basePlan.themeLimit),
   };
+
+  const hasStaleStarterIntro =
+    planId === "starter" &&
+    mergedPlan.introMonthlyAmount === 1000 &&
+    mergedPlan.freeMonths === 1 &&
+    mergedPlan.introPaidMonths === 3;
+  const hasStaleGrowthIntro =
+    planId === "growth" &&
+    mergedPlan.introMonthlyAmount === 3000 &&
+    mergedPlan.regularMonthlyAmount === 5000 &&
+    mergedPlan.introPaidMonths === 3;
+  const hasStaleProIntro =
+    planId === "pro" &&
+    mergedPlan.introMonthlyAmount === 7000 &&
+    mergedPlan.regularMonthlyAmount === 10000 &&
+    mergedPlan.introPaidMonths === 3;
+
+  if (hasStaleStarterIntro || hasStaleGrowthIntro || hasStaleProIntro) {
+    return {
+      ...mergedPlan,
+      introMonthlyAmount: basePlan.introMonthlyAmount,
+      regularMonthlyAmount: basePlan.regularMonthlyAmount,
+      freeMonths: basePlan.freeMonths,
+      introPaidMonths: basePlan.introPaidMonths,
+    };
+  }
+
+  return mergedPlan;
 }
 
 export function getPlanPricingOverrideFromMetadata(
@@ -256,6 +284,36 @@ export function getPlanMonthlyPrice({
     : selectedPlan.regularMonthlyAmount;
 }
 
+export function getIntroBillingCycleForPlan(
+  plan: string | null | undefined,
+): BillingCycle {
+  const planId = normalizePlanId(plan);
+
+  return planId === "starter" ? "quarterly" : "biannually";
+}
+
+export function isIntroBillingCycleAllowed({
+  plan,
+  billingCycle,
+}: {
+  plan: string | null | undefined;
+  billingCycle: string | null | undefined;
+}) {
+  return (
+    normalizeBillingCycle(billingCycle) === getIntroBillingCycleForPlan(plan)
+  );
+}
+
+export function getIntroBillingCycleMessage(plan: string | null | undefined) {
+  const planId = normalizePlanId(plan);
+
+  if (planId === "starter") {
+    return "Starter intro billing is quarterly: 3 months free, then ₦1,500/month for the next 3 months.";
+  }
+
+  return "Growth and Pro intro discounts are available only on bi-annual payment for the first 6 months.";
+}
+
 export function getPlanBillingAmount({
   plan,
   billingCycle,
@@ -276,18 +334,7 @@ export function getPlanBillingAmount({
     return selectedPlan.regularMonthlyAmount * selectedCycle.months;
   }
 
-  let total = 0;
-
-  for (let month = 1; month <= selectedCycle.months; month += 1) {
-    if (month <= selectedPlan.introPaidMonths) {
-      total += selectedPlan.introMonthlyAmount;
-      continue;
-    }
-
-    total += selectedPlan.regularMonthlyAmount;
-  }
-
-  return total;
+  return selectedPlan.introMonthlyAmount * selectedPlan.introPaidMonths;
 }
 
 export function getPlanBillingAmountInKobo({

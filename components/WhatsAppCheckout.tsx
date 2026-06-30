@@ -81,7 +81,7 @@ export function WhatsAppCheckout({
 
   function buildOrderMessage(orderId?: string) {
     const lines = cart.map((item, index) => {
-      return `${index + 1}. ${item.name} â€” ${formatCurrency(
+      return `${index + 1}. ${item.name} - ${formatCurrency(
         item.price,
       )} x ${item.quantity} = ${formatCurrency(item.price * item.quantity)}`;
     });
@@ -191,7 +191,7 @@ export function WhatsAppCheckout({
     }
   }
 
-  if (cart.length === 0) {
+  if (cart.length === 0 && !drawerOpen) {
     return null;
   }
 
@@ -234,6 +234,18 @@ export function WhatsAppCheckout({
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 py-3">
+              {cart.length === 0 ? (
+                <div className="grid h-full min-h-72 place-items-center rounded-2xl border border-[#e8e1f4] bg-white p-6 text-center">
+                  <div>
+                    <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-[#f4eefb] text-[#4c1d95]">
+                      <ShoppingCart size={24} />
+                    </div>
+                    <h3 className="mt-4 text-lg font-black tracking-[-0.04em] text-[#241436]">
+                      Your cart is empty
+                    </h3>
+                  </div>
+                </div>
+              ) : (
               <div className="grid gap-3">
                 <div className="grid gap-2">
                   {cart.map((item) => (
@@ -326,8 +338,10 @@ export function WhatsAppCheckout({
                   </p>
                 ) : null}
               </div>
+              )}
             </div>
 
+            {cart.length > 0 ? (
             <div className="border-t border-[#e8e1f4] bg-[#f3eefb] px-4 py-3">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <p className="text-sm text-[#6f6785]">Total</p>
@@ -366,8 +380,10 @@ export function WhatsAppCheckout({
                 </button>
               </div>
             </div>
+            ) : null}
           </div>
 
+          {cart.length > 0 ? (
           <div
             ref={summaryRef}
             data-order-summary-preview="true"
@@ -417,7 +433,7 @@ export function WhatsAppCheckout({
                       </p>
                     </div>
                     <p className="mt-1 text-xs text-[#6f6785]">
-                      {formatCurrency(item.price)} Ã— {item.quantity}
+                      {formatCurrency(item.price)} x {item.quantity}
                     </p>
                   </div>
                 ))}
@@ -429,6 +445,7 @@ export function WhatsAppCheckout({
               </div>
             </div>
           </div>
+          ) : null}
         </div>
       ) : null}
     </>

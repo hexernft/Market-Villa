@@ -16,8 +16,11 @@ import {
   type BillingCycle,
   type MarketVillaPlanId,
   getMarketVillaPlan,
+  getIntroBillingCycleForPlan,
+  getIntroBillingCycleMessage,
   getPlanBillingAmount,
   getPlanPricingOverrideFromMetadata,
+  isIntroBillingCycleAllowed,
   isPlanDowngrade,
   isSubscriptionDateStillActive,
   normalizeBillingCycle,
@@ -211,6 +214,9 @@ export default function BillingPage() {
 
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
   const [plans, setPlans] = useState<BillingPlan[]>(fallbackBillingPlans);
+  const [successfulPaymentCounts, setSuccessfulPaymentCounts] = useState<
+    Record<string, number>
+  >({});
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [selectedBillingCycle, setSelectedBillingCycle] =
     useState<BillingCycle>("quarterly");
@@ -236,6 +242,9 @@ export default function BillingPage() {
     null;
 
   const starterFreeTrialActive = isStarterFreeTrialActive(selectedBusiness);
+  const selectedBusinessHasSuccessfulPayment =
+    Boolean(selectedBusiness?.id) &&
+    Number(successfulPaymentCounts[selectedBusiness?.id || ""] || 0) > 0;
 
   async function loadBillingData() {
     const [items, activePlans] = await Promise.all([
@@ -244,6 +253,27 @@ export default function BillingPage() {
     ]);
 
     setBusinesses(items);
+
+    if (items.length > 0) {
+      const businessIds = items.map((item) => item.id);
+      const { data: successfulPayments } = await supabase
+        .from("payments")
+        .select("business_id")
+        .in("business_id", businessIds)
+        .eq("status", "success");
+
+      const paymentCounts = (successfulPayments || []).reduce<
+        Record<string, number>
+      >((counts, payment) => {
+        const businessId = String(payment.business_id || "");
+        counts[businessId] = (counts[businessId] || 0) + 1;
+        return counts;
+      }, {});
+
+      setSuccessfulPaymentCounts(paymentCounts);
+    } else {
+      setSuccessfulPaymentCounts({});
+    }
 
     if (items.length > 0) {
       setSelectedBusinessId((current) => current || items[0].id);
@@ -361,8 +391,19 @@ export default function BillingPage() {
 
     if (planId === "starter" && starterFreeTrialActive) {
       setMessage(
-        "Starter is already active on this store. You get 1 month free, then N1000 for the next 3 months / N3000 monthly subsequently.",
+        "Starter is already active on this store. You get 3 months free, then ₦1,500/month for the next 3 months. Regular billing resumes after 6 months.",
       );
+      return;
+    }
+
+    if (
+      !selectedBusinessHasSuccessfulPayment &&
+      !isIntroBillingCycleAllowed({
+        plan: planId,
+        billingCycle: selectedBillingCycle,
+      })
+    ) {
+      setMessage(getIntroBillingCycleMessage(planId));
       return;
     }
 
@@ -558,6 +599,8 @@ export default function BillingPage() {
           {plans.map((plan) => {
             const isCurrent = plan.id === currentPlan?.id;
             const cycle = BILLING_CYCLES[selectedBillingCycle];
+            const introCycle =
+              BILLING_CYCLES[getIntroBillingCycleForPlan(plan.id)];
             const planOverride = getPlanOverrideFromBillingPlan(plan);
 
             const firstBillingAmount =
@@ -565,7 +608,7 @@ export default function BillingPage() {
                 ? 0
                 : getPlanBillingAmount({
                     plan: plan.id,
-                    billingCycle: selectedBillingCycle,
+                    billingCycle: getIntroBillingCycleForPlan(plan.id),
                     isIntro: true,
                     override: planOverride,
                   });
@@ -576,6 +619,13 @@ export default function BillingPage() {
               isIntro: false,
               override: planOverride,
             });
+
+            const displayedBillingAmount = selectedBusinessHasSuccessfulPayment
+              ? regularBillingAmount
+              : firstBillingAmount;
+            const displayedCycleLabel = selectedBusinessHasSuccessfulPayment
+              ? cycle.shortLabel
+              : introCycle.shortLabel;
 
             const downgradeBlocked = isDowngradeBlockedForBusiness({
               business: selectedBusiness,
@@ -589,15 +639,6 @@ export default function BillingPage() {
                   ? "For growing sellers"
                   : "For scaling businesses";
 
-            const introText =
-              plan.id === "starter"
-                ? starterFreeTrialActive
-                  ? "Free for the first month. No billing is collected during this period."
-                  : `After the free month, pay ${formatNaira(plan.introMonthlyAmount)}/month for the next ${plan.introPaidMonths} months. Regular price: ${formatNaira(plan.regularMonthlyAmount)}/month.`
-                : plan.id === "growth"
-                  ? `Intro: ${formatNaira(plan.introMonthlyAmount)}/month for the first ${plan.introPaidMonths} months.`
-                  : `Intro: ${formatNaira(plan.introMonthlyAmount)}/month for the first ${plan.introPaidMonths} months.`;
-
             const features =
               plan.id === "starter"
                 ? [
@@ -608,6 +649,8 @@ export default function BillingPage() {
                     "WhatsApp order flow",
                     "Dashboard management",
                     "Public store link",
+                    `First 3 months free`,
+                    `${formatNaira(plan.introMonthlyAmount)}/month for the next ${plan.introPaidMonths} months`,
                     `Regular price: ${formatNaira(plan.regularMonthlyAmount)}/month`,
                   ]
                 : plan.id === "growth"
@@ -618,6 +661,8 @@ export default function BillingPage() {
                         : "Unlimited inventory items",
                       "More product themes and inventory room",
                       "For product-heavy businesses",
+                      `50% off: ${formatNaira(plan.introMonthlyAmount)}/month equivalent`,
+                      "Intro checkout: bi-annual only",
                       `Regular price: ${formatNaira(plan.regularMonthlyAmount)}/month`,
                     ]
                   : [
@@ -628,6 +673,8 @@ export default function BillingPage() {
                       "Unlock Products, Properties, and advanced sections",
                       "Property listing and advanced business tools",
                       "More premium themes for every section",
+                      `50% off: ${formatNaira(plan.introMonthlyAmount)}/month equivalent`,
+                      "Intro checkout: bi-annual only",
                       `Regular price: ${formatNaira(plan.regularMonthlyAmount)}/month`,
                     ];
 
@@ -649,13 +696,13 @@ export default function BillingPage() {
 
                   <div className="text-right">
                     <p className="whitespace-nowrap text-[21px] font-semibold leading-none tracking-[-0.06em] text-white">
-                      {firstBillingAmount === 0
+                      {displayedBillingAmount === 0
                         ? "Free"
-                        : formatNaira(firstBillingAmount)}
+                        : formatNaira(displayedBillingAmount)}
                     </p>
 
                     <p className="mt-1 text-[11px] font-semibold text-white/70">
-                      /{cycle.shortLabel}
+                      /{displayedCycleLabel}
                     </p>
                   </div>
                 </div>
