@@ -1,327 +1,317 @@
-﻿import {
-  TestimonialsSection } from "@/components/TestimonialsSection";
-import Image from "next/image";
 import Link from "next/link";
 import {
-  CakeSlice, CheckCircle2, Clock3, ExternalLink, Globe2, MapPin, MessageCircle, Store } from "lucide-react";
-import {
-  PlatformNavbar } from "@/components/PlatformNavbar";
-import {
-  PlatformFooter } from "@/components/PlatformFooter";
-import {
-  MotionReveal } from "@/components/MotionReveal";
-import {
-  HomeCommerceExperiences } from "@/components/HomeCommerceExperiences";
-import {
-  RotatingHeroPromise } from "@/components/RotatingHeroPromise";
+  ArrowRight,
+  CheckCircle2,
+  HelpCircle,
+  MessageCircle,
+  Package,
+  Search,
+  ShoppingBag,
+  Smartphone,
+  Store,
+  Timer,
+} from "lucide-react";
+import { PlatformFooter } from "@/components/PlatformFooter";
+import { PlatformNavbar } from "@/components/PlatformNavbar";
+import { MotionReveal } from "@/components/MotionReveal";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 
-const features = [
+const benefits = [
   {
-  title: "A polished business page", icon: Store },
+    title: "Website in minutes",
+    body: "Launch a clean business page with products, prices, and contact details.",
+    icon: Timer,
+  },
   {
-  title: "WhatsApp-ready selling", icon: MessageCircle },
+    title: "WhatsApp-ready orders",
+    body: "Customers browse and send order requests through WhatsApp.",
+    icon: MessageCircle,
+  },
   {
-  title: "Custom domain option", icon: Globe2 },
+    title: "Mobile-first storefront",
+    body: "Your page feels simple, fast, and ready for buyers on phones.",
+    icon: Smartphone,
+  },
 ];
 
-const faqItems = [
+const steps = [
   {
-  question: "Do I need technical skills?", answer: "No. Market Villa is built so a business owner can create and manage a simple page without writing code." },
+    title: "Create your store",
+    icon: Store,
+  },
   {
-  question: "Can customers order through the page?", answer: "Yes. Customers can view your products and start a clear WhatsApp order or inquiry." },
+    title: "Add your products",
+    icon: Package,
+  },
   {
-  question: "Can I use my own domain?", answer: "Yes. Custom domain setup can be requested as an add-on when the business is ready." },
+    title: "Share your link",
+    icon: ArrowRight,
+  },
   {
-  question: "What kind of businesses can use Market Villa?", answer: "Food vendors, fashion brands, beauty businesses, apartments, and retail stores can all use it." },
+    title: "Receive orders",
+    icon: MessageCircle,
+  },
 ];
 
-const zcasTreats = [
-  "Pink Cupcake Box",
-  "Classic Doughnuts",
-  "Custom Celebration Cake",
-  "Golden Meat Pie",
+const products = [
+  {
+    name: "Blush Bouquet",
+    category: "Flowers",
+    price: "₦12,000",
+    color: "from-pink-100 to-rose-50",
+  },
+  {
+    name: "Sunshine Bouquet",
+    category: "Gifts",
+    price: "₦15,000",
+    color: "from-yellow-100 to-orange-50",
+  },
+  {
+    name: "Rose Delight",
+    category: "Flowers",
+    price: "₦18,000",
+    color: "from-red-100 to-pink-50",
+  },
+  {
+    name: "Lily & Rose",
+    category: "Premium",
+    price: "₦20,000",
+    color: "from-purple-100 to-fuchsia-50",
+  },
 ];
+
+const pricingPlans = [
+  {
+    name: "Starter",
+    price: "3 months free",
+    note: "₦1,500/month for next 3 months",
+    after: "₦3,000/month after intro period",
+    cta: "Start free",
+    href: "/signup",
+    featured: true,
+  },
+  {
+    name: "Grow",
+    price: "₦7,000",
+    note: "50% off first 6 months",
+    after: "Only on bi-annual upgrade",
+    cta: "Choose Grow",
+    href: "/signup",
+    featured: false,
+  },
+  {
+    name: "Pro",
+    price: "₦10,000",
+    note: "50% off first 6 months",
+    after: "Only on bi-annual upgrade",
+    cta: "Choose Pro",
+    href: "/signup",
+    featured: false,
+  },
+];
+
+const faqs = [
+  "Do I need technical skills?",
+  "Can customers order through WhatsApp?",
+  "Can I use my own domain?",
+  "What happens after the free period?",
+];
+
+function ProductArtwork({ color }: { color: string }) {
+  return (
+    <div
+      className={`relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-gradient-to-br ${color}`}
+    >
+      <span className="absolute h-20 w-20 rounded-full bg-white/60 blur-2xl" />
+      <span className="absolute bottom-5 left-5 h-10 w-10 rounded-full bg-white/50" />
+      <span className="absolute right-7 top-7 h-8 w-8 rounded-full bg-white/70" />
+      <ShoppingBag className="relative text-[#7c3aed]" size={38} />
+    </div>
+  );
+}
+
+function StorefrontPreview({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="overflow-hidden rounded-[1.65rem] border border-[#e3d7f7] bg-white">
+      <div className="flex items-center justify-between border-b border-[#efe7fb] px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span className="grid h-8 w-8 place-items-center rounded-xl bg-[#f2eaff] text-[#7c3aed]">
+            <Store size={16} />
+          </span>
+          <div>
+            <p className="text-sm font-bold text-[#241436]">Bloom Haven</p>
+            {!compact ? (
+              <p className="text-[11px] font-semibold text-[#7a6a8f]">
+                Fresh flowers
+              </p>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="hidden items-center gap-2 rounded-full border border-[#e6dcf5] px-3 py-1.5 text-xs font-bold text-[#241436] sm:flex">
+          <Search size={13} />
+          Search
+        </div>
+      </div>
+
+      <div className="grid gap-4 bg-[#fbf9ff] p-4 md:grid-cols-[1fr_0.82fr] md:items-center">
+        <div className="rounded-[1.35rem] border border-[#ede4f9] bg-white p-5">
+          <p className="max-w-xs text-2xl font-black leading-tight tracking-[-0.05em] text-[#241436]">
+            Fresh flowers for every special moment.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <span className="rounded-full bg-[#7c3aed] px-4 py-2 text-xs font-bold text-white">
+              Shop now
+            </span>
+            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700">
+              WhatsApp
+            </span>
+          </div>
+        </div>
+
+        <div className="grid min-h-36 place-items-center rounded-[1.35rem] bg-gradient-to-br from-pink-100 via-white to-purple-100">
+          <ShoppingBag className="text-[#7c3aed]" size={58} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 p-4 md:grid-cols-4">
+        {products.map((product) => (
+          <div
+            key={product.name}
+            className="rounded-2xl border border-[#eee5fa] bg-white p-2"
+          >
+            <ProductArtwork color={product.color} />
+            <p className="mt-3 truncate text-xs font-bold text-[#241436]">
+              {product.name}
+            </p>
+            <p className="mt-1 text-[11px] font-semibold text-[#7a6a8f]">
+              {product.price}
+            </p>
+            {!compact ? (
+              <button className="mt-2 min-h-8 w-full rounded-xl bg-[#7c3aed] text-[11px] font-bold text-white">
+                Add to cart
+              </button>
+            ) : null}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <main className="mv-page-shell min-h-screen text-[#241436]">
+    <main className="min-h-screen bg-[#fcfaff] text-[#241436]">
       <PlatformNavbar />
 
-      <section className="mv-lavender-hero home-hero-section px-4 pb-20 pt-28 md:px-4 md:pb-24 md:pt-32">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-5 rounded-[1.5rem] border border-[#7c3aed]/15 bg-white/88 p-4 shadow-[0_18px_55px_rgba(55,31,83,0.12)] backdrop-blur-xl md:flex md:items-center md:justify-between md:gap-6">
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-[#f0e7ff] text-[#7c3aed]">
-                <CheckCircle2 size={17} />
-              </span>
-              <div>
+      <section className="px-4 pb-10 pt-28 md:px-6 md:pb-14 md:pt-32">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <MotionReveal>
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#e4d8f8] bg-white px-3 py-2 text-xs font-bold text-[#7c3aed]">
+                <ShoppingBag size={14} />
+                Simple websites. Real results.
               </div>
-            </div>
 
-            <Link
-              href="/signup"
-              className="mt-3 inline-flex min-h-10 items-center justify-center rounded-2xl bg-[#241436] px-4 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#160d22] md:mt-0"
-            >
-              Start free
-            </Link>
-          </div>
-
-          <div className="market-hero-carousel home-hero-visual relative min-h-[520px] overflow-hidden rounded-[2.5rem] border border-white/65 shadow-[0_30px_100px_rgba(55,31,83,0.18)] md:min-h-[640px]">
-            <div
-              className="market-hero-carousel-slide"
-              style={{
-  animationDelay: "0s" }}
-            >
-              <Image
-                src="/main-hero.png"
-                alt="Market Villa storefront preview"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-            <div
-              className="market-hero-carousel-slide"
-              style={{
-  animationDelay: "5s" }}
-            >
-              <Image
-                src="/phone-shop.png"
-                alt="Phone shop storefront preview"
-                fill
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-            <div
-              className="market-hero-carousel-slide"
-              style={{
-  animationDelay: "10s" }}
-            >
-              <Image
-                src="/phone-hub.png"
-                alt="Mobile business storefront preview"
-                fill
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.10),transparent_30%)]" />
-          </div>
-
-          <div className="hero-carousel-copy-card home-hero-copy relative z-10 mx-auto -mt-20 max-w-5xl rounded-[2.1rem] border border-white/75 bg-white/86 p-5 shadow-[0_28px_85px_rgba(55,31,83,0.18)] backdrop-blur-2xl md:-mt-24 md:p-7 lg:grid lg:grid-cols-[1fr_auto] lg:items-end lg:gap-8 lg:p-8">
-            <div>
-
-              <h1 className="mt-3 max-w-3xl text-[2.55rem] font-semibold leading-[1.03] text-[#241436] md:text-[4rem]">
-                Start simple. Look professional.
-                <RotatingHeroPromise />
+              <h1 className="mt-6 max-w-2xl text-[2.55rem] font-black leading-[1.04] tracking-[-0.06em] text-[#241436] md:text-[4.3rem]">
+                Own a business website that looks{" "}
+                <span className="text-[#7c3aed]">ready to sell.</span>
               </h1>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <HomeCommerceExperiences />
-
-      <section className="px-4 py-10 md:px-4">
-        <div className="home-showcase-card home-light-panel mx-auto grid max-w-7xl gap-6 overflow-hidden rounded-[2rem] border border-white/75 bg-white/76 p-5 shadow-[0_30px_90px_rgba(36,20,54,0.18)] backdrop-blur-2xl lg:grid-cols-[1.08fr_0.92fr] lg:p-7">
-          <div className="relative min-h-[420px] overflow-hidden rounded-[1.65rem] bg-[#fff5f7]">
-            <Image
-              src="/zcas-tastybites-spread.png"
-              alt="ZCAS TastyBites cupcakes, doughnuts, cake, drinks, and meat pies"
-              fill
-              sizes="(min-width: 1024px) 54vw, 100vw"
-              className="object-cover"
-            />
-
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),rgba(36,20,54,0.36))]" />
-
-            <div className="home-dark-panel absolute bottom-4 left-4 right-4 rounded-[1.35rem] border border-white/22 bg-black/42 p-4 text-white shadow-[0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-xl md:left-auto md:max-w-sm">
-              <h2 className="mt-2 text-3xl font-semibold leading-[1.02] text-white">
-                ZCAS TastyBites
-              </h2>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between gap-8 p-1 md:p-2">
-            <div>
-              <p className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#7c3aed]">
-                <CakeSlice size={15} />
-                Business spotlight
+              <p className="mt-5 max-w-xl text-base font-medium leading-7 text-[#5f5370] md:text-lg">
+                Create a clean business page, add products, share your link, and
+                receive orders through WhatsApp.
               </p>
 
-              <h2 className="mt-4 max-w-xl text-3xl font-semibold leading-[1.03] text-[#241436] md:text-5xl">
-                Where every bite tells a story.
-              </h2>
-
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-[#f8f4ff] p-4">
-                  <div className="flex items-center gap-2 text-sm font-bold text-[#241436]">
-                    <MapPin size={16} className="text-[#7c3aed]" />
-                    Abuja, Nigeria
-                  </div>
-                </div>
-
-                <div className="home-mini-card rounded-[1.25rem] border border-[#7c3aed]/12 bg-[#fff5f7] p-4">
-                  <div className="flex items-center gap-2 text-sm font-bold text-[#241436]">
-                    <Clock3 size={16} className="text-[#7c3aed]" />
-                    Open daily
-                  </div>
-                </div>
+              <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#eadffc] bg-[#f5efff] px-4 py-2 text-sm font-bold text-[#6d28d9]">
+                <CheckCircle2 size={16} />
+                Start with 3 months free on Starter.
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-2">
-                {zcasTreats.map((treat) => (
-                  <span
-                    key={treat}
-                    className="rounded-2xl border border-[#7c3aed]/12 bg-white/78 px-3 py-2 text-xs font-bold text-[#241436]/78 shadow-sm"
-                  >
-                    {treat}
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link
+                  href="/signup"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#7c3aed] px-6 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#6d28d9]"
+                >
+                  Start free
+                  <ArrowRight size={16} />
+                </Link>
+
+                <Link
+                  href="/stores"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-[#cbb7ef] bg-white px-6 text-sm font-bold text-[#6d28d9] transition hover:-translate-y-0.5 hover:bg-[#f8f3ff]"
+                >
+                  View stores
+                  <Store size={16} />
+                </Link>
+              </div>
+
+              <div className="mt-7 flex flex-wrap gap-4 text-xs font-bold text-[#7a6a8f]">
+                <span>No credit card</span>
+                <span>Easy to use</span>
+                <span>Cancel anytime</span>
+              </div>
+            </div>
+          </MotionReveal>
+
+          <MotionReveal delay={0.08} direction="right">
+            <div className="rounded-[2rem] border border-[#e6daf7] bg-white p-3">
+              <StorefrontPreview />
+            </div>
+          </MotionReveal>
+        </div>
+      </section>
+
+      <section id="features" className="px-4 py-5 md:px-6">
+        <div className="mx-auto grid max-w-7xl gap-3 rounded-[1.65rem] border border-[#e7dcf7] bg-white p-4 md:grid-cols-3">
+          {benefits.map((benefit, index) => {
+            const Icon = benefit.icon;
+
+            return (
+              <MotionReveal key={benefit.title} delay={index * 0.06}>
+                <div className="flex gap-4 rounded-[1.25rem] border border-transparent p-4 transition hover:border-[#eadffc] hover:bg-[#fbf9ff]">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#f1e8ff] text-[#7c3aed]">
+                    <Icon size={22} />
                   </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <a
-                href="https://wa.me/2348148124675?text=Hello%20ZCAS%20TastyBites%2C%20I%20would%20like%20to%20place%20an%20order."
-                target="_blank"
-                rel="noreferrer"
-                className="market-primary-button inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold text-white"
-              >
-                <MessageCircle size={16} />
-                Order on WhatsApp
-              </a>
-
-              <a
-                href="https://zcas.vercel.app/index.html"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#7c3aed]/15 bg-white/76 px-4 py-2.5 text-sm font-semibold text-[#241436] shadow-sm hover:bg-white"
-              >
-                Visit ZCAS
-                <ExternalLink size={15} />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-10 md:px-4">
-        <div className="fashion-brand-showcase home-showcase-card mx-auto grid max-w-7xl overflow-hidden text-white shadow-[0_30px_90px_rgba(36,20,54,0.2)] lg:grid-cols-[0.86fr_1.14fr]">
-          <div className="flex flex-col justify-between p-6 md:p-8 lg:p-10">
-            <div>
-
-              <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-[-0.05em] text-white md:text-5xl">
-                Give African fashion the kind of storefront it deserves.
-              </h2>
-            </div>
-
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <div className="home-mini-card rounded-2xl border border-white/10 bg-white/8 p-4">
-                <p className="text-sm font-semibold text-white">Editorial product story</p>
-              </div>
-
-              <div className="home-mini-card rounded-2xl border border-white/10 bg-white/8 p-4">
-                <p className="text-sm font-semibold text-white">Handmade trust</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="fashion-brand-visual home-image-stage relative min-h-[420px] overflow-hidden">
-            <Image
-              src="/african-fashion-editorial.png"
-              alt="African fashion brand storefront editorial"
-              fill
-              sizes="(min-width: 1024px) 58vw, 100vw"
-              className="fashion-brand-main object-cover"
-            />
-
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(36,20,54,0.42),rgba(36,20,54,0.04)_46%,rgba(36,20,54,0.32))]" />
-
-            <div className="fashion-brand-accent home-floating-accent absolute">
-              <Image
-                src="/african-fashion-atelier.png"
-                alt="African fashion atelier detail"
-                fill
-                sizes="(min-width: 1024px) 22vw, 48vw"
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-10 md:px-4">
-        <div className="sleekstitch-showcase home-showcase-card mx-auto grid max-w-7xl overflow-hidden bg-black text-white shadow-[0_30px_90px_rgba(36,20,54,0.2)] lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="sleekstitch-device-wrap flex min-h-[560px] items-center justify-center p-8 md:p-10">
-            <div className="sleekstitch-tablet home-floating-tablet">
-              <div className="sleekstitch-gallery grid h-full gap-3 sm:grid-cols-[1.15fr_0.85fr]">
-                <div className="relative min-h-[420px] overflow-hidden bg-neutral-950">
-                  <Image
-                    src="/sleekstitch-luxury.png"
-                    alt="Sleek Luxury by SleekStitch Atelier"
-                    fill
-                    sizes="(min-width: 1024px) 44vw, 100vw"
-                    className="object-cover"
-                  />
+                  <div>
+                    <h2 className="text-base font-black text-[#241436]">
+                      {benefit.title}
+                    </h2>
+                    <p className="mt-1 text-sm font-medium leading-6 text-[#6f647d]">
+                      {benefit.body}
+                    </p>
+                  </div>
                 </div>
-
-                <div className="relative min-h-[420px] overflow-hidden bg-neutral-950">
-                  <Image
-                    src="/sleekstitch-executive.png"
-                    alt="Sleek Executive by SleekStitch Atelier"
-                    fill
-                    sizes="(min-width: 1024px) 32vw, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-between p-6 md:p-8 lg:p-10">
-            <div>
-
-              <h2 className="mt-4 max-w-md text-4xl font-semibold tracking-[-0.06em] text-white md:text-6xl">
-                Confidence, stitched with intention.
-              </h2>
-            </div>
-          </div>
+              </MotionReveal>
+            );
+          })}
         </div>
       </section>
 
-      <section id="how" className="px-4 py-10 md:px-4">
+      <section id="how" className="px-4 py-14 md:px-6">
         <div className="mx-auto max-w-7xl">
-          <h2 className="text-center text-2xl font-semibold text-white md:text-2xl">
-            Powerful tools. Beautiful results.
-          </h2>
+          <div className="text-center">
+            <h2 className="text-2xl font-black tracking-[-0.04em] md:text-3xl">
+              How it works
+            </h2>
+          </div>
 
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {features.map((feature, index) => {
-  const Icon = feature.icon;
-              const glowClass =
-                index === 0
-                  ? "mv-empty-feature-card-1"
-                  : index === 1
-                  ? "mv-empty-feature-card-2"
-                  : "mv-empty-feature-card-3";
+          <div className="mt-10 grid gap-5 md:grid-cols-4">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
 
               return (
-                <MotionReveal key={feature.title} delay={index * 0.08}>
-                  <div className={`mv-empty-feature-card home-lift-card ${glowClass} flex flex-col items-center justify-center p-7 text-center`}>
-                    <span className="mv-empty-feature-light" />
-
-                    <div className="relative z-10 mb-6 grid h-14 w-14 place-items-center rounded-[1.25rem] border border-[#c4b5fd]/24 bg-white/10 text-[#c4b5fd] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
-                      <Icon size={24} />
-                    </div>
-
-                    <div className="relative z-10">
-                      <h3 className="text-lg font-semibold leading-tight text-white">
-                        {feature.title}
-                      </h3>
-                    </div>
+                <MotionReveal key={step.title} delay={index * 0.06}>
+                  <div className="relative rounded-[1.5rem] border border-[#e9ddf8] bg-white p-5 text-center">
+                    <span className="mx-auto grid h-9 w-9 place-items-center rounded-full bg-[#7c3aed] text-xs font-black text-white">
+                      {index + 1}
+                    </span>
+                    <span className="mx-auto mt-4 grid h-12 w-12 place-items-center rounded-2xl bg-[#f2eaff] text-[#7c3aed]">
+                      <Icon size={21} />
+                    </span>
+                    <h3 className="mt-4 text-sm font-black text-[#241436]">
+                      {step.title}
+                    </h3>
                   </div>
                 </MotionReveal>
               );
@@ -330,108 +320,170 @@ export default function Home() {
         </div>
       </section>
 
-<section className="px-4 py-8 md:px-4">
-        <div className="mv-why-panel home-showcase-card mx-auto grid max-w-7xl gap-5 rounded-[2rem] p-6 text-white shadow-[0_28px_70px_rgba(36,20,54,0.22)] lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-          <div>
-            <h2 className="mt-3 text-2xl font-semibold text-white md:text-2xl">A simple page before the WhatsApp conversation.</h2>
-          </div>
-          <div className="grid gap-3">
-            {[
-              "Customers see your business clearly before messaging.",
-              "Products stay organized in one place.",
-              "Business owners can keep their page updated anytime.",
-            ].map((item, index) => (
-              <MotionReveal key={item} delay={index * 0.08} direction="right">
-                <div className="home-mini-card flex gap-3 rounded-[1.35rem] border border-white/10 bg-white/8 p-4 backdrop-blur">
-                  <CheckCircle2 size={17} className="mt-1 shrink-0 text-[#c4b5fd]" />
-                  <p className="text-[20px] leading-8 text-white/80">{item}</p>
-                </div>
-              </MotionReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="faq" className="px-4 py-10 md:px-4">
-        <div className="mx-auto grid max-w-7xl gap-7 lg:grid-cols-[0.75fr_1.25fr]">
-          <div>
-            <h2 className="mt-3 text-2xl font-semibold text-[#241436] md:text-2xl">Simple answers before you start.</h2>
-          </div>
-          <div className="mv-soft-panel home-showcase-card overflow-hidden rounded-[1.8rem]">
-            {faqItems.map((item, index) => (
-              <MotionReveal key={item.question} delay={index * 0.06}>
-                <div className="grid gap-2 border-t border-[#7c3aed]/10 p-5 first:border-t-0 hover:bg-white/30">
-                  <h3 className="text-sm font-semibold text-[#241436]">{item.question}</h3>
-                </div>
-              </MotionReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mobile-showcase-section px-4 py-12 md:px-4">
-        <div className="mobile-showcase-panel mx-auto grid max-w-7xl gap-8 overflow-hidden rounded-[2.1rem] border border-white/18 bg-[linear-gradient(145deg,#050008,#12051f_48%,#241436)] p-5 shadow-[0_34px_120px_rgba(0,0,0,0.38)] md:p-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:p-10">
-          <div>
-
-            <h2 className="mobile-showcase-title mt-4 max-w-2xl text-[2.35rem] font-semibold leading-[1.02] text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.55)] md:text-[4rem]">
-              Your business looks premium on every screen.
-            </h2>
-
-            <p className="mobile-showcase-copy mt-5 max-w-xl text-base font-medium leading-8 text-white/90">
-              From furniture stores to food vendors, Market Villa helps businesses present products, prices, and customer actions in a clean mobile-ready page.
-            </p>
-
-            <div className="mobile-showcase-tabs mt-7 grid gap-3 sm:grid-cols-3">
-              {["Mobile-ready", "Product-focused", "WhatsApp-friendly"].map((item) => (
-                <div
-                  key={item}
-                  className="mobile-showcase-badge rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-bold text-white shadow-sm backdrop-blur-md"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href="/login"
-                className="market-primary-button inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-bold text-white"
-              >
-                Create Business Page
-              </Link>
-
+      <section id="examples" className="px-4 py-10 md:px-6">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
+          <MotionReveal>
+            <div>
+              <h2 className="text-2xl font-black tracking-[-0.04em] md:text-3xl">
+                See how your store looks
+              </h2>
+              <div className="mt-6 grid gap-3 text-sm font-bold text-[#5f5370]">
+                {[
+                  "Beautiful product display",
+                  "Add to cart with one tap",
+                  "WhatsApp checkout",
+                  "Built for mobile",
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-2">
+                    <CheckCircle2 size={17} className="text-[#7c3aed]" />
+                    {item}
+                  </div>
+                ))}
+              </div>
               <Link
                 href="/stores"
-                className="mobile-showcase-secondary inline-flex items-center justify-center rounded-2xl border border-white/22 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/16"
+                className="mt-7 inline-flex min-h-11 items-center justify-center rounded-2xl border border-[#cbb7ef] bg-white px-5 text-sm font-bold text-[#6d28d9] transition hover:-translate-y-0.5 hover:bg-[#f8f3ff]"
               >
-                Explore Stores
+                View live stores
               </Link>
             </div>
+          </MotionReveal>
+
+          <MotionReveal delay={0.08} direction="right">
+            <div className="grid gap-4 md:grid-cols-[0.48fr_1fr] md:items-end">
+              <div className="rounded-[1.8rem] border border-[#e6daf7] bg-white p-3 md:translate-y-6">
+                <StorefrontPreview compact />
+              </div>
+              <div className="rounded-[1.8rem] border border-[#e6daf7] bg-white p-3">
+                <StorefrontPreview />
+              </div>
+            </div>
+          </MotionReveal>
+        </div>
+      </section>
+
+      <section id="pricing" className="px-4 py-14 md:px-6">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center">
+            <h2 className="text-2xl font-black tracking-[-0.04em] md:text-3xl">
+              Simple pricing. More value.
+            </h2>
           </div>
 
-          <div className="relative">
-            <div className="mobile-showcase-media relative overflow-hidden rounded-[1.8rem] border border-white/16 bg-white/[0.06] p-4 shadow-[0_28px_95px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
-              <Image
-                src="/mobile.png"
-                alt="Furniture business storefront preview on tablet and mobile"
-                width={1100}
-                height={760}
-                className="w-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.45)]"
-              />
-            </div>
+          <div className="mt-8 grid gap-4 lg:grid-cols-3">
+            {pricingPlans.map((plan) => (
+              <MotionReveal key={plan.name}>
+                <div
+                  className={`flex min-h-full flex-col rounded-[1.5rem] border bg-white p-6 ${
+                    plan.featured
+                      ? "border-[#8b5cf6]"
+                      : "border-[#e7dcf7]"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-sm font-black text-[#241436]">
+                      {plan.name}
+                    </h3>
+                    {plan.featured ? (
+                      <span className="rounded-full bg-[#f1e8ff] px-3 py-1 text-xs font-black text-[#7c3aed]">
+                        Best to start
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <p className="mt-5 text-3xl font-black tracking-[-0.05em] text-[#241436]">
+                    {plan.price}
+                    {plan.price.startsWith("₦") ? (
+                      <span className="text-sm font-bold text-[#5f5370]">
+                        {" "}
+                        / month
+                      </span>
+                    ) : null}
+                  </p>
+
+                  <p className="mt-4 text-sm font-bold text-[#5f5370]">
+                    {plan.note}
+                  </p>
+                  <p className="mt-2 text-sm font-bold text-[#5f5370]">
+                    {plan.after}
+                  </p>
+
+                  <Link
+                    href={plan.href}
+                    className={`mt-6 inline-flex min-h-11 items-center justify-center rounded-2xl px-5 text-sm font-black transition hover:-translate-y-0.5 ${
+                      plan.featured
+                        ? "bg-[#7c3aed] text-white hover:bg-[#6d28d9]"
+                        : "border border-[#cbb7ef] bg-white text-[#6d28d9] hover:bg-[#f8f3ff]"
+                    }`}
+                  >
+                    {plan.cta}
+                  </Link>
+                </div>
+              </MotionReveal>
+            ))}
+          </div>
+
+          <p className="mt-5 text-center text-sm font-bold text-[#6f647d]">
+            After intro pricing, quarterly, bi-annual, and annual billing
+            resumes.
+          </p>
+        </div>
+      </section>
+
+      <section id="faq" className="px-4 py-10 md:px-6">
+        <div className="mx-auto max-w-5xl rounded-[1.65rem] border border-[#e7dcf7] bg-white p-4">
+          <h2 className="px-3 pb-3 text-center text-xl font-black tracking-[-0.03em]">
+            Frequently asked questions
+          </h2>
+
+          <div className="grid gap-2">
+            {faqs.map((question) => (
+              <details
+                key={question}
+                className="group rounded-2xl border border-[#eadffc] bg-[#fdfbff] px-4 py-3"
+              >
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-black text-[#241436]">
+                  {question}
+                  <HelpCircle
+                    size={16}
+                    className="text-[#7c3aed] transition group-open:rotate-45"
+                  />
+                </summary>
+              </details>
+            ))}
           </div>
         </div>
       </section>
 
       <TestimonialsSection />
+
+      <section className="px-4 py-10 md:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 rounded-[1.65rem] border border-[#5b21b6]/30 bg-[#241436] p-6 text-white md:flex-row md:items-center md:justify-between md:p-8">
+          <div>
+            <h2 className="text-2xl font-black tracking-[-0.04em]">
+              Ready to grow your business online?
+            </h2>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/signup"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-white px-6 text-sm font-black text-[#6d28d9] transition hover:-translate-y-0.5"
+            >
+              Start free
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/login"
+              className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/25 px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/10"
+            >
+              Login
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <PlatformFooter />
     </main>
   );
 }
-
-
-
-
-
-
-
