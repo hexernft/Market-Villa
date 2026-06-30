@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
@@ -61,3 +61,4 @@ export function DeferredSupportWidget() {
 
   return shouldLoad && !shouldHideSupportWidget ? <SupportWidget /> : null;
 }
+

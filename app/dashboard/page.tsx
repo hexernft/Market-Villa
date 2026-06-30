@@ -1,111 +1,71 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  Building2,
-  Car,
   CheckCircle2,
-  Clock3,
   Copy,
+  CreditCard,
   ExternalLink,
-  Globe2,
   Loader2,
-  MessageCircle,
   Package,
-  Palette,
   Plus,
-  Send,
   ShoppingBag,
-  Sparkles,
+  Store,
   UserRound,
-  Wallet,
 } from "lucide-react";
 import {
   getMyBusinesses,
   getProductsByBusinessId,
 } from "@/lib/business-actions";
 import { supabase } from "@/lib/supabase";
-import { formatCurrency } from "@/lib/utils";
-import { AnimatedNumber } from "@/components/AnimatedNumber";
-import { getBusinessModeMeta, normalizeBusinessMode } from "@/lib/business-modes";
 
 type DashboardBusiness = {
   id: string;
   name: string;
   slug: string;
   is_published?: boolean | null;
-  subscription_plan?: string | null;
-  subscription_status?: string | null;
   description?: string | null;
+  tagline?: string | null;
   logo_url?: string | null;
   cover_image_url?: string | null;
+  phone?: string | null;
   whatsapp?: string | null;
-  selected_theme?: string | null;
-created_at?: string | null;
+  email?: string | null;
+  location?: string | null;
+};
+
+type DashboardProduct = {
+  id: string;
+  is_published?: boolean | null;
+  is_available?: boolean | null;
 };
 
 type DashboardOrder = {
   id: string;
   business_id: string;
-  customer_name?: string | null;
-  status?: string | null;
-  total_amount?: number | null;
-  total?: number | null;
-  order_total?: number | null;
   created_at?: string | null;
 };
 
-function getOrderAmount(order: DashboardOrder) {
-  return Number(order.total_amount || order.total || order.order_total || 0);
-}
+function isToday(value?: string | null) {
+  if (!value) return false;
 
-function formatDate(value?: string | null) {
-  if (!value) return "";
+  const date = new Date(value);
+  const today = new Date();
 
-  return new Intl.DateTimeFormat("en-NG", {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
-}
-
-function getStatusStyle(status?: string | null) {
-  const cleanStatus = String(status || "pending").toLowerCase();
-
-  if (
-    ["completed", "complete", "delivered", "fulfilled"].includes(cleanStatus)
-  ) {
-    return "bg-emerald-50 text-emerald-700 ring-emerald-200";
-  }
-
-  if (["cancelled", "failed", "rejected"].includes(cleanStatus)) {
-    return "bg-red-50 text-red-700 ring-red-200";
-  }
-
-  return "bg-purple-50 text-purple-700 ring-purple-200";
-}
-
-function formatStatus(status?: string | null) {
-  return String(status || "pending").replace(/_/g, " ");
-}
-
-function getInventoryIcon(mode: string | null | undefined) {
-  const _normalizedMode = normalizeBusinessMode(mode);
-
-  if (false) return Building2;
-  if (false) return Car;
-
-  return Package;
+  return (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate()
+  );
 }
 
 export default function DashboardPage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
   const [productsCount, setProductsCount] = useState(0);
-  const [orders, setOrders] = useState<DashboardOrder[]>([]);
+  const [ordersTodayCount, setOrdersTodayCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMetrics, setIsLoadingMetrics] = useState(false);
   const [message, setMessage] = useState("");
@@ -114,31 +74,6 @@ export default function DashboardPage() {
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
   }, [businesses, selectedBusinessId]);
-
-  const modeMeta = getBusinessModeMeta("products");
-  const selectedMode = normalizeBusinessMode("products");
-  const InventoryIcon = getInventoryIcon("products");
-
-  const metrics = useMemo(() => {
-    const revenue = orders.reduce(
-      (sum, order) => sum + getOrderAmount(order),
-      0,
-    );
-
-    const pendingOrders = orders.filter((order) => {
-      const status = String(order.status || "pending").toLowerCase();
-      return ["pending", "new", "started", "processing", "confirmed"].includes(
-        status,
-      );
-    }).length;
-
-    return {
-      revenue,
-      orders: orders.length,
-      pendingOrders,
-      products: productsCount,
-    };
-  }, [orders, productsCount]);
 
   const storeUrl = selectedBusiness?.slug
     ? `/store/${selectedBusiness.slug}`
@@ -152,44 +87,48 @@ export default function DashboardPage() {
     return [
       {
         label: "Complete store profile",
-        href: "/dashboard/profile",
-        done: Boolean(
-          selectedBusiness.name &&
-            selectedBusiness.description &&
-            selectedBusiness.whatsapp
-        ),
+        href: "/dashboard/store-details",
+        done: Boolean(selectedBusiness.name && selectedBusiness.tagline),
       },
       {
         label: "Add logo or cover",
-        href: "/dashboard/profile",
-        done: Boolean(selectedBusiness.logo_url || selectedBusiness.cover_image_url),
+        href: "/dashboard/store-details",
+        done: Boolean(
+          selectedBusiness.logo_url || selectedBusiness.cover_image_url,
+        ),
       },
       {
-        label: `Add your first ${modeMeta.inventoryLabel.toLowerCase().slice(0, -1)}`,
+        label: "Add your first product",
         href: "/dashboard/products",
         done: productsCount > 0,
       },
       {
-        label: "Choose a theme",
-        href: "/dashboard/theme",
-        done: Boolean(selectedBusiness.selected_theme),
+        label: "Set contact details",
+        href: "/dashboard/store-details",
+        done: Boolean(
+          selectedBusiness.whatsapp ||
+            selectedBusiness.phone ||
+            selectedBusiness.email ||
+            selectedBusiness.location,
+        ),
       },
       {
         label: "Publish your store",
-        href: "/dashboard/profile",
+        href: "/dashboard/visibility",
         done: Boolean(selectedBusiness.is_published),
       },
     ];
-  }, [modeMeta.inventoryLabel, productsCount, selectedBusiness]);
+  }, [productsCount, selectedBusiness]);
 
   const completedSetupCount = setupItems.filter((item) => item.done).length;
   const setupProgress =
     setupItems.length > 0
       ? Math.round((completedSetupCount / setupItems.length) * 100)
       : 0;
+  const statusLabel = selectedBusiness?.is_published ? "Published" : "Draft";
 
   async function loadBusinesses() {
-    const items = await getMyBusinesses();
+    const items = (await getMyBusinesses()) as DashboardBusiness[];
 
     setBusinesses(items);
 
@@ -204,26 +143,32 @@ export default function DashboardPage() {
 
     try {
       const [products, orderResponse] = await Promise.all([
-        getProductsByBusinessId(businessId),
+        getProductsByBusinessId(businessId) as Promise<DashboardProduct[]>,
         supabase
           .from("orders")
-          .select("*")
+          .select("id,business_id,created_at")
           .eq("business_id", businessId)
           .order("created_at", { ascending: false })
-          .limit(6),
+          .limit(50),
       ]);
 
       if (orderResponse.error) {
         throw orderResponse.error;
       }
 
-      setProductsCount(products.length);
-      setOrders((orderResponse.data || []) as DashboardOrder[]);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unable to load dashboard.";
+      const liveProducts = products.filter((product) => {
+        return product.is_published !== false && product.is_available !== false;
+      });
+      const todayOrders = ((orderResponse.data || []) as DashboardOrder[]).filter(
+        (order) => isToday(order.created_at),
+      );
 
-      setMessage(errorMessage);
+      setProductsCount(liveProducts.length);
+      setOrdersTodayCount(todayOrders.length);
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Unable to load dashboard.",
+      );
     } finally {
       setIsLoadingMetrics(false);
     }
@@ -240,7 +185,7 @@ export default function DashboardPage() {
       await navigator.clipboard.writeText(url);
       setCopyMessage("Store link copied.");
     } catch {
-      setCopyMessage("Copy failed. Open your store and copy the link.");
+      setCopyMessage("Copy failed.");
     }
 
     window.setTimeout(() => setCopyMessage(""), 2200);
@@ -256,12 +201,11 @@ export default function DashboardPage() {
       } catch (error) {
         if (!mounted) return;
 
-        const errorMessage =
+        setMessage(
           error instanceof Error
             ? error.message
-            : "Unable to load your dashboard.";
-
-        setMessage(errorMessage);
+            : "Unable to load your dashboard.",
+        );
       } finally {
         if (mounted) {
           setIsLoading(false);
@@ -279,7 +223,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!selectedBusinessId) {
       setProductsCount(0);
-      setOrders([]);
+      setOrdersTodayCount(0);
       return;
     }
 
@@ -289,8 +233,8 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <main className="grid min-h-[60vh] place-items-center">
-        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
-          <Loader2 className="mx-auto animate-spin text-slate-950" size={24} />
+        <div className="rounded-[1.5rem] border border-[#eadfff] bg-white p-6 text-center">
+          <Loader2 className="mx-auto animate-spin text-[#7c3aed]" size={24} />
         </div>
       </main>
     );
@@ -298,18 +242,18 @@ export default function DashboardPage() {
 
   if (businesses.length === 0) {
     return (
-      <section className="mx-auto max-w-3xl rounded-[1.5rem] border border-slate-200 bg-white p-6 text-center shadow-sm">
-        <div className="mx-auto grid h-10 w-12 place-items-center rounded-2xl bg-[#26143d] text-white">
-          <Sparkles size={20} />
+      <section className="mx-auto grid max-w-2xl gap-5 rounded-[1.6rem] border border-[#eadfff] bg-white p-5 text-center">
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
+          <Store size={22} />
         </div>
 
-        <h2 className="mt-5 text-xl font-semibold tracking-[-0.04em] text-slate-950">
-          Create your first business page
-        </h2>
+        <h1 className="text-2xl font-black tracking-[-0.045em] text-[#241436]">
+          Market Villa
+        </h1>
 
         <Link
           href="/dashboard/onboarding"
-          className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[#26143d] px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#241436] to-[#7c3aed] px-5 text-sm font-black text-white"
         >
           Start Setup
           <ArrowRight size={16} />
@@ -318,150 +262,134 @@ export default function DashboardPage() {
     );
   }
 
-  const statCards = [
+  const quickActions = [
     {
-      label: "Revenue",
-      value: metrics.revenue,
-      prefix: "₦",
-      icon: Wallet,
+      label: "Products",
+      href: "/dashboard/products",
+      icon: Package,
     },
     {
       label: "Orders",
-      value: metrics.orders,
+      href: "/dashboard/orders",
       icon: ShoppingBag,
     },
     {
-      label: "Pending",
-      value: metrics.pendingOrders,
-      icon: Clock3,
+      label: "Store details",
+      href: "/dashboard/store-details",
+      icon: Store,
     },
     {
-      label: modeMeta.inventoryLabel,
-      value: metrics.products,
-      icon: InventoryIcon,
+      label: "Billing",
+      href: "/dashboard/billing",
+      icon: CreditCard,
     },
-  ];
-
-  const quickActions = [
-    {
-      label: modeMeta.inventoryLabel.slice(0, -1),
-      href: "/dashboard/products",
-      icon: InventoryIcon,
-    },
-    {
-      label: "Theme",
-      href: "/dashboard/theme",
-      icon: Palette,
-    },
-    {
-      label: "Profile",
-      href: "/dashboard/profile",
-      icon: UserRound,
-    },
-    selectedMode === "products"
-      ? {
-          label: "Domain",
-          href: "/dashboard/domain",
-          icon: Globe2,
-        }
-      : {
-          label: "Leads",
-          href: "/dashboard/leads",
-          icon: MessageCircle,
-        },
   ];
 
   return (
-    <div className="dashboard-overview-mobile grid gap-4">
-      <section className="dashboard-hero-card rounded-2xl border border-[#ebe7f3] bg-white p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h1 className="truncate text-[1.65rem] font-black tracking-[-0.045em] text-[#171421]">
-              Hi, {selectedBusiness?.name || "there"}
-            </h1>
-          </div>
-
-          <span
-            className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
-              selectedBusiness?.is_published
-                ? "bg-emerald-50 text-emerald-700"
-                : "bg-amber-50 text-amber-700"
-            }`}
-          >
-            {selectedBusiness?.is_published ? "Live" : "Draft"}
-          </span>
+    <div className="mx-auto grid w-full max-w-6xl gap-4 text-[#241436]">
+      <header className="flex items-center justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="text-[1.85rem] font-black tracking-[-0.055em] text-[#241436] md:text-4xl">
+            Market Villa
+          </h1>
         </div>
 
-        <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_auto_auto] sm:items-center">
-          <select
-            value={selectedBusinessId}
-            onChange={(event) => setSelectedBusinessId(event.target.value)}
-            className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] px-4 text-sm font-semibold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10"
+        <div className="flex items-center gap-2">
+          <span
+            className={`rounded-full border px-3 py-1.5 text-xs font-black ${
+              selectedBusiness?.is_published
+                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                : "border-[#eadfff] bg-[#f4edff] text-[#7c3aed]"
+            }`}
           >
-            {businesses.map((business) => (
-              <option key={business.id} value={business.id}>
-                {business.name} - /store/{business.slug}
-              </option>
-            ))}
-          </select>
+            {statusLabel}
+          </span>
 
+          <Link
+            href="/dashboard/profile"
+            aria-label="Open profile"
+            className="grid h-11 w-11 place-items-center rounded-2xl border border-[#eadfff] bg-white text-[#7c3aed]"
+          >
+            <UserRound size={20} />
+          </Link>
+        </div>
+      </header>
+
+      {businesses.length > 1 ? (
+        <select
+          value={selectedBusinessId}
+          onChange={(event) => setSelectedBusinessId(event.target.value)}
+          className="min-h-12 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-bold text-[#241436] outline-none focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10"
+        >
+          {businesses.map((business) => (
+            <option key={business.id} value={business.id}>
+              {business.name} - /store/{business.slug}
+            </option>
+          ))}
+        </select>
+      ) : null}
+
+      {message ? (
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
+          {message}
+        </div>
+      ) : null}
+
+      <section className="rounded-[1.6rem] border border-[#eadfff] bg-gradient-to-br from-white via-[#faf8ff] to-[#f4edff] p-4 md:p-5">
+        <div className="grid gap-3 sm:grid-cols-2">
           {storeUrl ? (
             <Link
               href={storeUrl}
               target="_blank"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#241436] px-4 text-sm font-bold text-white transition hover:bg-[#351b55]"
+              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#241436] to-[#7c3aed] px-5 text-sm font-black text-white"
             >
               Visit store
-              <ExternalLink size={16} />
+              <ExternalLink size={17} />
             </Link>
-          ) : null}
+          ) : (
+            <Link
+              href="/dashboard/onboarding"
+              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-2xl bg-[#d8c9f8] px-5 text-sm font-black text-[#241436]/60"
+            >
+              Visit store
+              <ExternalLink size={17} />
+            </Link>
+          )}
 
           <button
             type="button"
             onClick={handleCopyStoreLink}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm font-bold text-[#241436] transition hover:bg-[#faf7ff]"
+            disabled={!selectedBusiness?.slug}
+            className="inline-flex min-h-13 items-center justify-center gap-2 rounded-2xl border border-[#d8c9f8] bg-white px-5 text-sm font-black text-[#241436] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <Copy size={16} />
+            <Copy size={17} />
             Share link
           </button>
         </div>
 
         {copyMessage ? (
-          <p className="mt-3 text-sm font-medium text-emerald-700">
+          <p className="mt-3 text-sm font-bold text-emerald-700">
             {copyMessage}
           </p>
         ) : null}
       </section>
 
-      {isLoadingMetrics ? (
-        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#ebe7f3] bg-white px-4 py-2 text-xs font-semibold text-slate-500">
-          <Loader2 size={13} className="animate-spin" />
-          Updating dashboard
-        </div>
-      ) : null}
-
-      {message ? (
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {message}
-        </div>
-      ) : null}
-
-      <section className="dashboard-setup-card rounded-2xl border border-[#ebe7f3] bg-white p-4">
+      <section className="rounded-[1.6rem] border border-[#eadfff] bg-white p-4 md:p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-black tracking-[-0.03em] text-[#171421]">
-              {completedSetupCount}/{setupItems.length} steps done
+            <h2 className="text-xl font-black tracking-[-0.045em] text-[#241436]">
+              {completedSetupCount}/5 steps done
             </h2>
           </div>
 
-          <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+          <span className="rounded-full border border-[#d8c9f8] bg-[#f4edff] px-3 py-1.5 text-xs font-black text-[#7c3aed]">
             {setupProgress}%
           </span>
         </div>
 
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
+        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[#eee6ff]">
           <div
-            className="h-full rounded-full bg-emerald-600 transition-all"
+            className="h-full rounded-full bg-gradient-to-r from-[#241436] to-[#7c3aed] transition-all"
             style={{ width: `${setupProgress}%` }}
           />
         </div>
@@ -471,164 +399,89 @@ export default function DashboardPage() {
             <Link
               key={item.label}
               href={item.href}
-              className="flex items-center justify-between rounded-2xl border border-[#ebe7f3] bg-[#fcfbff] px-3 py-3 text-sm font-bold text-[#241436] transition hover:bg-white"
+              className="flex min-h-12 items-center justify-between rounded-2xl border border-[#eadfff] bg-[#faf8ff] px-3 py-2 text-sm font-black text-[#241436]"
             >
-              <span className="inline-flex items-center gap-2">
+              <span className="inline-flex min-w-0 items-center gap-2">
                 {item.done ? (
-                  <CheckCircle2 size={17} className="text-emerald-600" />
+                  <CheckCircle2
+                    size={18}
+                    className="shrink-0 text-[#7c3aed]"
+                  />
                 ) : (
-                  <span className="grid h-[17px] w-[17px] place-items-center rounded-full border border-slate-300">
-                    <Plus size={11} />
+                  <span className="grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full border border-[#c9b7ef] text-[#7c3aed]">
+                    <Plus size={12} />
                   </span>
                 )}
-                {item.label}
+                <span className="truncate">{item.label}</span>
               </span>
 
-              <ArrowRight size={15} className="text-slate-400" />
+              {!item.done ? (
+                <ArrowRight size={15} className="shrink-0 text-[#7c3aed]" />
+              ) : null}
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="dashboard-quick-actions">
-        <div className="grid grid-cols-4 gap-3 sm:grid-cols-5">
-          {quickActions.map((action) => {
-            const Icon = action.icon;
-
-            return (
-              <Link
-                key={action.href}
-                href={action.href}
-                className="grid min-h-[5.8rem] place-items-center gap-2 rounded-2xl border border-[#ebe7f3] bg-white p-3 text-center text-sm font-bold text-[#241436] transition hover:bg-[#faf7ff]"
-              >
-                <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
-                  <Icon size={20} />
-                </span>
-                {action.label}
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-        {statCards.map((card) => {
-          const Icon = card.icon;
+      <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {quickActions.map((action) => {
+          const Icon = action.icon;
 
           return (
-            <div
-              key={card.label}
-              className="dashboard-metric-card rounded-2xl border border-[#ebe7f3] bg-white p-4 transition hover:bg-[#faf7ff]"
+            <Link
+              key={action.href}
+              href={action.href}
+              className="grid min-h-[6.1rem] place-items-center gap-2 rounded-[1.35rem] border border-[#eadfff] bg-white p-3 text-center text-sm font-black text-[#241436]"
             >
-              <div className="flex items-center justify-between gap-3">
-                <span className="grid h-9 w-9 place-items-center rounded-2xl bg-[#fcfbff] text-[#6f6a7a]">
-                  <Icon size={17} />
-                </span>
-
-                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
-                  {card.label}
-                </span>
-              </div>
-
-              <AnimatedNumber
-                value={card.value}
-                prefix={card.prefix || ""}
-                compact={card.label === "Revenue"}
-                className="mt-4 block truncate text-2xl font-black tracking-[-0.04em] text-[#171421]"
-              />
-            </div>
+              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#f4edff] text-[#7c3aed]">
+                <Icon size={20} />
+              </span>
+              {action.label}
+            </Link>
           );
         })}
       </section>
 
-      <Link
-        href="/dashboard/analytics"
-        className="flex min-h-16 items-center justify-between gap-4 rounded-full border border-[#ebe7f3] bg-white px-5 py-3 text-sm font-bold text-[#6f6a7a] transition hover:bg-[#faf7ff]"
-      >
-        <span>Your business report is ready.</span>
-        <span className="grid h-12 w-16 place-items-center rounded-r-full bg-emerald-600 text-white">
-          <ArrowRight size={20} />
-        </span>
-      </Link>
+      <section className="rounded-[1.6rem] border border-[#eadfff] bg-white p-4 md:p-5">
+        <div className="mb-4 flex items-center justify-between gap-4">
+          <h2 className="text-xl font-black tracking-[-0.045em] text-[#241436]">
+            Store status
+          </h2>
 
-      <section className="grid gap-5">
-        <div className="rounded-2xl border border-[#ebe7f3] bg-white">
-          <div className="flex items-center justify-between gap-4 border-b border-slate-200 p-4">
-            <div>
+          {isLoadingMetrics ? (
+            <Loader2 size={18} className="animate-spin text-[#7c3aed]" />
+          ) : null}
+        </div>
 
-              <h3 className="text-sm font-black tracking-[-0.03em] text-[#171421]">
-                Customer Activity
-              </h3>
-            </div>
-
-            <Link
-              href="/dashboard/orders"
-              className="inline-flex items-center gap-2 rounded-full bg-[#241436] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#351b55]"
-            >
-              Orders
-              <ArrowRight size={14} />
-            </Link>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border border-[#eadfff] bg-[#faf8ff] p-4">
+            <p className="text-xs font-black uppercase tracking-[0.12em] text-[#7c3aed]">
+              Status
+            </p>
+            <p className="mt-3 text-2xl font-black tracking-[-0.055em] text-[#241436]">
+              {statusLabel}
+            </p>
           </div>
 
-          {orders.length > 0 ? (
-            <div>
-              {orders.map((order, index) => (
-                <div
-                  key={order.id}
-                  className={`grid gap-3 p-4 md:grid-cols-[1fr_auto] md:items-center ${
-                    index === 0 ? "" : "border-t border-slate-100"
-                  }`}
-                >
-                  <div>
-                    <p className="text-sm font-semibold text-slate-950">
-                      {order.customer_name || "Customer order"}
-                    </p>
+          <div className="rounded-2xl border border-[#eadfff] bg-[#faf8ff] p-4">
+            <p className="text-xs font-black uppercase tracking-[0.12em] text-[#7c3aed]">
+              Products live
+            </p>
+            <p className="mt-3 text-2xl font-black tracking-[-0.055em] text-[#241436]">
+              {productsCount}
+            </p>
+          </div>
 
-                    {order.created_at ? (
-                      <p className="mt-1 text-xs text-slate-400">
-                        {formatDate(order.created_at)}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <div className="flex items-center gap-3 md:justify-end">
-                    <span className="text-sm font-semibold text-slate-950">
-                      {formatCurrency(getOrderAmount(order))}
-                    </span>
-
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${getStatusStyle(
-                        order.status,
-                      )}`}
-                    >
-                      {formatStatus(order.status)}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 text-center">
-              <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-700">
-                <ShoppingBag size={18} />
-              </div>
-
-              <button
-                type="button"
-                onClick={handleCopyStoreLink}
-                className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
-              >
-                <Send size={16} />
-                Share store link
-              </button>
-            </div>
-          )}
+          <div className="rounded-2xl border border-[#eadfff] bg-[#faf8ff] p-4">
+            <p className="text-xs font-black uppercase tracking-[0.12em] text-[#7c3aed]">
+              Orders today
+            </p>
+            <p className="mt-3 text-2xl font-black tracking-[-0.055em] text-[#241436]">
+              {ordersTodayCount}
+            </p>
+          </div>
         </div>
       </section>
     </div>
   );
 }
-
-
-
-

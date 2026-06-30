@@ -3049,6 +3049,20 @@ aside.admin-sidebar .admin-sidebar-link-active {
   stroke: #ffffff !important;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
+
+.support-widget-trigger[data-dashboard-support="true"] {
+  bottom: calc(6.45rem + env(safe-area-inset-bottom)) !important;
+  right: 0.9rem !important;
+  z-index: 60 !important;
+}
+
+@media (min-width: 1024px) {
+  .support-widget-trigger[data-dashboard-support="true"] {
+    bottom: 1.5rem !important;
+    right: 1.5rem !important;
+  }
+}
+
 /* Compact Market Villa AI support panel */
 .support-widget-panel {
   position: fixed !important;
@@ -3078,6 +3092,20 @@ aside.admin-sidebar .admin-sidebar-link-active {
 
 .support-widget-panel .rounded-2xl {
   border-radius: 1rem !important;
+}
+
+.support-widget-panel[data-dashboard-support="true"] {
+  bottom: calc(6.7rem + env(safe-area-inset-bottom)) !important;
+  right: 0.75rem !important;
+  height: min(28rem, calc(100vh - 8.5rem)) !important;
+}
+
+@media (min-width: 1024px) {
+  .support-widget-panel[data-dashboard-support="true"] {
+    bottom: 5.25rem !important;
+    right: 1.25rem !important;
+    height: min(32rem, calc(100vh - 7rem)) !important;
+  }
 }
 
 @media (max-width: 640px) {
@@ -4144,5 +4172,17 @@ aside.admin-sidebar .admin-sidebar-link-active {
 .dashboard-mobile-light *,
 .dashboard-mobile-light *::before,
 .dashboard-mobile-light *::after {
+  filter: none !important;
+}
+
+/* Public store pages should stay flat and shadowless */
+.market-villa-customized-store,
+.market-villa-customized-store *,
+.market-villa-customized-store *::before,
+.market-villa-customized-store *::after,
+.market-villa-customized-store [class*="shadow-"],
+.market-villa-customized-store [class*="drop-shadow"] {
+  box-shadow: none !important;
+  text-shadow: none !important;
   filter: none !important;
 }

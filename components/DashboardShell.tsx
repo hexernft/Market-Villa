@@ -106,7 +106,7 @@ const mobileNavItems = [
   {
   label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
   {
-  label: "Messaging", href: "/dashboard/leads", icon: MessageCircle },
+  label: "Store", href: "/dashboard/store-details", icon: Store },
   {
   label: "More", href: "/dashboard/settings", icon: Settings },
 ];
@@ -115,7 +115,7 @@ const mobilePrimaryRoutes = new Set([
   "/dashboard",
   "/dashboard/products",
   "/dashboard/orders",
-  "/dashboard/leads",
+  "/dashboard/store-details",
 ]);
 
 function getInventoryIcon() {
@@ -287,6 +287,8 @@ export function DashboardShell({
     </div>
   );
 }
+
+
 
 
 

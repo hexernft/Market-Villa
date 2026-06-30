@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, MessageCircle, Send, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 type ChatMessage = {
   role: "assistant" | "user";
@@ -38,6 +39,7 @@ async function readSupportResponse(response: Response) {
 }
 
 export function SupportWidget() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -48,6 +50,7 @@ export function SupportWidget() {
     },
   ]);
   const [isSending, setIsSending] = useState(false);
+  const isDashboardRoute = pathname?.startsWith("/dashboard");
 
   async function sendSupportMessage(value: string) {
     const cleanMessage = value.trim();
@@ -125,6 +128,7 @@ export function SupportWidget() {
           whileHover={{ y: -2, scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           className="support-widget-trigger fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-[#7c3aed] p-0 text-white shadow-[0_0_34px_rgba(124,58,237,0.75)] ring-4 ring-[#7c3aed]/25 transition hover:-translate-y-0.5 hover:bg-[#6d28d9] hover:shadow-[0_0_44px_rgba(124,58,237,0.9)] md:h-14 md:w-14"
+          data-dashboard-support={isDashboardRoute ? "true" : undefined}
           style={{
             width: "3rem",
             height: "3rem",
@@ -166,6 +170,7 @@ export function SupportWidget() {
               exit={{ opacity: 0, y: 28, scale: 0.98, filter: "blur(10px)" }}
               transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
               className="support-widget-panel absolute bottom-5 right-5 flex h-[min(620px,calc(100vh-2.5rem))] w-[min(420px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[1.25rem] bg-white shadow-2xl ring-1 ring-slate-200"
+              data-dashboard-support={isDashboardRoute ? "true" : undefined}
             >
               <div className="bg-[#26143d] px-5 py-2.5 text-white">
                 <div className="flex items-center justify-between gap-3">

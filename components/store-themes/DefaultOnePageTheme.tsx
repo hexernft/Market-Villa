@@ -549,11 +549,11 @@ function ProductCard({
 
   return (
     <article
-      className="group bg-white transition-transform duration-300 hover:-translate-y-1"
+      className="group overflow-hidden rounded-[2rem] bg-[#fbfaff] transition-transform duration-300 hover:-translate-y-1"
       style={{ boxShadow: "none" }}
     >
       <div
-        className="relative aspect-square overflow-hidden bg-[#f1f2f3]"
+        className="relative aspect-[1.02] overflow-hidden rounded-t-[2rem] bg-[#f1f2f3]"
         style={{ boxShadow: "none" }}
       >
 
@@ -572,19 +572,22 @@ function ProductCard({
         )}
       </div>
 
-      <div className="px-0 pb-4 pt-3" style={{ boxShadow: "none" }}>
+      <div className="px-5 pb-6 pt-5" style={{ boxShadow: "none" }}>
         {showPrices ? (
-          <p className="mb-3 text-xl font-black tracking-[-0.04em] text-[#6d28d9] md:text-2xl">
+          <p className="mb-5 text-3xl font-black tracking-[-0.06em] text-[#dc2626] md:text-[2.15rem]">
             {price}
           </p>
         ) : null}
 
-        <h2 className="line-clamp-2 min-h-10 text-sm font-semibold uppercase leading-5 text-slate-950 md:text-[0.95rem]">
-          {item.name}
-        </h2>
+        <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+          <h2 className="line-clamp-2 min-h-10 text-sm font-semibold uppercase leading-5 text-[#241436] md:text-base">
+            {item.name}
+          </h2>
+          <span className="h-1 w-1 rounded-full bg-[#dc2626]" />
+        </div>
 
         {item.category ? (
-          <p className="mt-1 text-sm font-medium text-slate-500">
+          <p className="mt-5 text-base font-semibold text-[#7d748f]">
             {item.category}
           </p>
         ) : null}
@@ -592,7 +595,7 @@ function ProductCard({
         <button
           type="button"
           onClick={() => onAddToCart(item)}
-          className="mx-auto mt-4 inline-flex min-h-10 w-[78%] items-center justify-center rounded-md border border-[#241436] bg-white px-3 text-xs font-black text-[#241436] transition hover:-translate-y-0.5 hover:bg-[#241436] hover:text-white md:text-sm"
+          className="mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-[1.35rem] border border-[#241436] bg-white px-3 text-sm font-black text-[#241436] transition hover:-translate-y-0.5 hover:bg-[#241436] hover:text-white md:text-base"
         >
           Add to cart
         </button>
@@ -600,6 +603,7 @@ function ProductCard({
     </article>
   );
 }
+
 
 
 
