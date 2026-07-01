@@ -282,7 +282,7 @@ export default function AdminAiRequestsPage() {
                     </h2>
 
                     <p className="mt-2 text-sm text-slate-500">
-                      {request.businesses?.name || "Unknown business"} â€” /store/
+                      {request.businesses?.name || "Unknown business"} - /store/
                       {request.businesses?.slug || "no-slug"}
                     </p>
 

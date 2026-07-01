@@ -1,5 +1,6 @@
 ﻿export type StoreLayout =
   | "default-one-page"
+  | "premium-treats"
   | "classic-commerce"
   | "simple-one-page"
   | "editorial-luxury"
@@ -553,6 +554,49 @@ export const businessThemes: BusinessTheme[] = [
       { id: "products", label: "Products", description: "" },
       { id: "contact", label: "Contact", description: "" },
     ],
+  },
+  {
+    id: "premium-treats",
+    name: "Premium Treats",
+    description:
+      "A refined product storefront for bakeries, food brands, gift shops, and premium catalog sellers.",
+    layout: "premium-treats",
+    page: "bg-[#fffaf0] text-[#1f180d]",
+    hero: "from-[#06261c] via-[#0c3b2c] to-[#1f180d]",
+    card: "bg-white text-[#1f180d]",
+    mutedCard: "bg-[#06261c] text-white",
+    text: "text-white",
+    mutedText: "text-[#f8e6b8]",
+    accent: "bg-[#b8892f]",
+    accentText: "text-[#9b6f21]",
+    button: "bg-[#06261c] text-white hover:bg-[#0c3b2c]",
+    secondaryButton:
+      "bg-white text-[#1f180d] ring-1 ring-[#eadbb8] hover:bg-[#fffaf0]",
+    chip: "bg-[#fffaf0] text-[#1f180d] ring-1 ring-[#eadbb8]",
+    border: "border-[#eadbb8]",
+    productCard: "rounded-xl border border-[#eadbb8] bg-white text-[#1f180d]",
+    sectionLabel: "text-[#9b6f21]",
+    bestFor: "Bakeries, food vendors, gift shops, premium products",
+    features: [
+      "Luxury catalog layout",
+      "Cart to WhatsApp",
+      "Extension-ready sections",
+    ],
+    storefrontSections: [
+      "Announcement Bar",
+      "Hero",
+      "Category Pills",
+      "Product Grid",
+      "Contact Footer",
+      "Extension Slots",
+    ],
+    configurableSections: [
+      { id: "feature-strip", label: "Feature strip", description: "" },
+      { id: "products", label: "Products", description: "" },
+      { id: "contact", label: "Contact", description: "" },
+    ],
+    priceLabel: "Premium theme",
+    pricingNote: "Add-ons activate only after purchase or admin entitlement.",
   },
   {
     id: "classic-commerce",

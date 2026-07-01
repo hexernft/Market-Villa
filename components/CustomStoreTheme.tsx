@@ -785,7 +785,7 @@ export function CustomStoreTheme({
           </div>
 
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 pt-5 text-xs text-white/50">
-            <p>Â© {new Date().getFullYear()} {business.name}</p>
+            <p>© {new Date().getFullYear()} {business.name}</p>
             {toggles.showMarketVillaBadge !== false ? <p>Powered by Market Villa</p> : null}
           </div>
         </footer>
@@ -802,7 +802,7 @@ export function CustomStoreTheme({
             <div>
               <p className="text-sm font-black">{business.name}</p>
               <p className="mt-1 text-sm opacity-65">
-                {business.location || "Online"} Â· {business.phone || business.whatsapp || "Contact business"}
+                {business.location || "Online"} · {business.phone || business.whatsapp || "Contact business"}
               </p>
             </div>
 

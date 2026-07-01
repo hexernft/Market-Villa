@@ -1,6 +1,7 @@
 "use client";
 
 import { DefaultOnePageTheme } from "@/components/store-themes/DefaultOnePageTheme";
+import { PremiumTreatsTheme } from "@/components/store-themes/PremiumTreatsTheme";
 
 type ThemeRendererProps = {
   business: any;
@@ -13,6 +14,13 @@ export function ThemeRenderer({
   products,
   services,
 }: ThemeRendererProps) {
+  const themeId =
+    business?.theme_id || business?.theme_settings?.themeId || "default-one-page";
+
+  if (themeId === "premium-treats") {
+    return <PremiumTreatsTheme business={business} products={products} />;
+  }
+
   return (
     <DefaultOnePageTheme
       business={business}

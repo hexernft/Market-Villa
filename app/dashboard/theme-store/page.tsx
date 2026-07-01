@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -19,6 +19,15 @@ const defaultTheme = {
   price: 0,
   status: "active/free/default",
 };
+
+const premiumTheme = {
+  id: "premium-treats",
+  name: "Premium Treats",
+  price: null,
+  status: "premium/add-ons locked until purchased",
+};
+
+const themeOptions = [defaultTheme, premiumTheme];
 
 export default function ThemeStorePage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
@@ -47,7 +56,7 @@ export default function ThemeStorePage() {
 
         if (items.length > 0) {
           setSelectedBusinessId(items[0].id);
-          setSelectedThemeId(defaultTheme.id);
+          setSelectedThemeId(items[0].theme_id || defaultTheme.id);
         }
       } catch (error) {
         const errorMessage =
@@ -138,7 +147,13 @@ export default function ThemeStorePage() {
             </span>
             <select
               value={selectedBusinessId}
-              onChange={(event) => setSelectedBusinessId(event.target.value)}
+              onChange={(event) => {
+                const businessId = event.target.value;
+                const business = businesses.find((item) => item.id === businessId);
+
+                setSelectedBusinessId(businessId);
+                setSelectedThemeId(business?.theme_id || defaultTheme.id);
+              }}
               className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm font-semibold text-[#241436] outline-none focus:border-[#7c3aed]"
             >
               {businesses.map((business) => (
@@ -158,7 +173,11 @@ export default function ThemeStorePage() {
               onChange={(event) => setSelectedThemeId(event.target.value)}
               className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm font-semibold text-[#241436] outline-none focus:border-[#7c3aed]"
             >
-              <option value={defaultTheme.id}>{defaultTheme.name}</option>
+              {themeOptions.map((theme) => (
+                <option key={theme.id} value={theme.id}>
+                  {theme.name}
+                </option>
+              ))}
             </select>
           </label>
 
@@ -191,10 +210,13 @@ export default function ThemeStorePage() {
           </span>
           <div>
             <h2 className="text-lg font-black tracking-[-0.04em] text-[#171421]">
-              {defaultTheme.name}
+              {themeOptions.find((theme) => theme.id === selectedThemeId)?.name ||
+                defaultTheme.name}
             </h2>
             <p className="mt-1 text-sm font-bold text-emerald-700">
-              ₦{defaultTheme.price} · {defaultTheme.status}
+              {selectedThemeId === premiumTheme.id
+                ? premiumTheme.status
+                : `₦${defaultTheme.price} · ${defaultTheme.status}`}
             </p>
           </div>
         </div>

@@ -178,7 +178,7 @@ export default function CustomRequestsPage() {
               >
                 {businesses.map((business) => (
                   <option key={business.id} value={business.id}>
-                    {business.name} â€” /store/{business.slug}
+                    {business.name} - /store/{business.slug}
                   </option>
                 ))}
               </select>
@@ -247,7 +247,7 @@ export default function CustomRequestsPage() {
                 <input
                   value={budget}
                   onChange={(event) => setBudget(event.target.value)}
-                  placeholder="Example: â‚¦20,000"
+                  placeholder="Example: ₦20,000"
                   className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-800 outline-none focus:border-[#7c3aed]"
                 />
               </label>

@@ -244,7 +244,7 @@ export default function AiAssistantPage() {
 
             <p className="mt-3 text-sm text-white/65">
               {selectedBusiness
-                ? `${selectedBusiness.name} â€” /store/${selectedBusiness.slug}`
+                ? `${selectedBusiness.name} - /store/${selectedBusiness.slug}`
                 : "No business selected"}
             </p>
           </div>
@@ -278,7 +278,7 @@ export default function AiAssistantPage() {
               >
                 {businesses.map((business) => (
                   <option key={business.id} value={business.id}>
-                    {business.name} â€” /store/{business.slug}
+                    {business.name} - /store/{business.slug}
                   </option>
                 ))}
               </select>
@@ -360,7 +360,7 @@ export default function AiAssistantPage() {
                 <input
                   value={budget}
                   onChange={(event) => setBudget(event.target.value)}
-                  placeholder="Example: â‚¦10,000/month"
+                  placeholder="Example: ₦10,000/month"
                   className="min-h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-800 outline-none focus:border-[#7c3aed]"
                 />
               </label>

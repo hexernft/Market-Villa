@@ -387,15 +387,6 @@ export default function AdminPage() {
           </Link>
 
           <Link
-            href="/admin/custom-requests"
-            title="Custom Requests"
-            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
-          >
-            <Sparkles size={18} />
-            <span className="hidden lg:inline">Custom Requests</span>
-          </Link>
-
-          <Link
             href="/admin/ai-requests"
             title="AI Requests"
             className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"

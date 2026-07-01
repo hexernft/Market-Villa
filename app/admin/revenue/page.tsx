@@ -58,7 +58,7 @@ type FeaturedBusiness = {
 };
 
 function formatNaira(value?: number | null) {
-  return `â‚¦${Number(value || 0).toLocaleString()}`;
+  return `₦${Number(value || 0).toLocaleString()}`;
 }
 
 function formatDate(value?: string | null) {

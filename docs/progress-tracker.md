@@ -122,6 +122,31 @@ Source: `C:\Users\Hex\Downloads\Market_Villa_Product_Progress_Tracker.pdf`
 | Frontend locking | Locked themes shown with upgrade prompt. Lower-plan users see upgrade badges and cannot select locked themes. | Clear upgrade UX. | Done |
 | Backend enforcement | Saving locked themes blocked server-side. `updateBusinessTheme` checks plan limits before saving. | Cannot bypass frontend. | Done |
 
+### Premium Theme Add-ons / Extensions
+
+Premium themes should be built with extension slots for optional add-ons. These add-ons should be visible as purchasable upgrades, but inactive by default. A business should only be able to activate an add-on after purchase or admin entitlement approval.
+
+| Add-on | What It Adds | Activation Rule | Status |
+| --- | --- | --- | --- |
+| Blog | Posts/articles for SEO, product education, announcements, and business updates. | Locked until purchased. | Not Started |
+| Photo Gallery | Brand, product, lookbook, food, property, car, or event image galleries. | Locked until purchased. | Not Started |
+| Gift Box at Checkout | Gift wrapping or packaging option during checkout/order request. | Locked until purchased. | Not Started |
+| Product Add-ons | Optional extras attached to a product before checkout. | Locked until purchased. | Not Started |
+| Pages | Extra informational pages such as About, Policies, Size Guide, FAQ, Delivery, or Care Instructions. | Locked until purchased. | Not Started |
+| Custom Checkout | Custom checkout/order fields for details the seller needs to collect. | Locked until purchased. | Not Started |
+| Countdown | Countdown banners for launches, flash sales, deadlines, or limited offers. | Locked until purchased. | Not Started |
+| Back In Stock | Customer restock notifications for unavailable products. | Locked until purchased. | Not Started |
+| Featured Brands | Brand grouping and navigation for multi-brand stores. | Locked until purchased. | Not Started |
+| Product Bundles | Group multiple products into one bundle with one price and stock handling. | Locked until purchased. | Not Started |
+| Gift Card | Sell or issue gift cards customers can redeem later. | Locked until purchased. | Not Started |
+
+Implementation notes:
+
+- Add-ons must not appear as active storefront features unless the business owns the add-on.
+- Premium themes should be designed to support these add-ons visually, even before the add-on logic is built.
+- Add-on entitlement should be stored separately from theme selection so a business can change themes without losing purchased add-ons.
+- The future Extensions/Add-ons page should show available, purchased, and active states clearly.
+
 ## 8. Billing, Payments, and Subscription Enforcement
 
 | Task | What to Build / Verify | Success Criteria | Status |

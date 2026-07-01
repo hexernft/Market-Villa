@@ -343,7 +343,7 @@ export default function CustomizeStorePage() {
             >
               {businesses.map((business) => (
                 <option key={business.id} value={business.id}>
-                  {business.name} â€” /store/{business.slug}
+                  {business.name} - /store/{business.slug}
                 </option>
               ))}
             </select>
@@ -626,7 +626,7 @@ export default function CustomizeStorePage() {
                       className="mt-1 text-xs font-black"
                       style={{ color: selectedColorTheme.swatches[1] }}
                     >
-                      â‚¦10,000
+                      ₦10,000
                     </p>
                   ) : null}
                 </div>
