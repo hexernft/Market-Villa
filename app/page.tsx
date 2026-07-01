@@ -398,14 +398,14 @@ export default function Home() {
 
           <MotionReveal delay={0.08} direction="right">
             <div className="grid gap-4 md:grid-cols-[0.48fr_1fr] md:items-end">
-              <div className="overflow-hidden rounded-[1.8rem] border border-[#e6daf7] bg-white p-3 md:translate-y-6">
-                <div className="relative aspect-[9/16] overflow-hidden rounded-[1.4rem]">
+              <div className="rounded-[1.8rem] border border-[#e6daf7] bg-[#f4edff] p-3 md:translate-y-6">
+                <div className="relative aspect-[9/16] overflow-hidden rounded-[1.4rem] bg-[#efe7fb]">
                   <Image
-                    src="/market-villa-home/storefront-fashion.png"
-                    alt="Mobile-ready fashion storefront preview"
+                    src="/market-villa-home/iphone-perfume-store.png"
+                    alt="Front-facing iPhone perfume store website preview"
                     fill
                     sizes="(min-width: 1024px) 24vw, 100vw"
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
               </div>
