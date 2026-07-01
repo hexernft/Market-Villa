@@ -178,7 +178,7 @@ function StorefrontCarousel({
           <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/14 bg-[#241436]/70 px-4 py-3 text-white backdrop-blur-xl">
             <div className="flex items-center gap-2 text-sm font-black">
               <ShoppingBag size={16} />
-              Your store can look like this too
+              Premium. Elegance. Class.
             </div>
             <div className="flex gap-1.5">
               {carouselImages.map((image, index) => (
