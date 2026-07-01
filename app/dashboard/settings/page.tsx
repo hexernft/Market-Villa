@@ -14,7 +14,6 @@ import {
   MessageCircle,
   Package,
   Save,
-  ShieldCheck,
   ShoppingBag,
   Sparkles,
   Store,
@@ -54,7 +53,6 @@ const menuSections = [
     items: [
       { label: "Profile", href: "/dashboard/profile", icon: User },
       { label: "Help Center", href: "/help", icon: HelpCircle },
-      { label: "Platform Status", href: "/status", icon: ShieldCheck },
     ],
   },
 ];
