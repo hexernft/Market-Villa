@@ -116,13 +116,31 @@ const pricingPlans = [
 ];
 
 const faqs = [
-  "Do I need technical skills?",
-  "Can customers order through WhatsApp?",
-  "Can I use my own domain?",
-  "What happens after the free period?",
+  {
+    question: "Do I need technical skills?",
+    answer: "No. Create your page, add products, and share your link.",
+  },
+  {
+    question: "Can customers order through WhatsApp?",
+    answer: "Yes. Customers can browse products and send orders through WhatsApp.",
+  },
+  {
+    question: "Can I use my own domain?",
+    answer: "Yes. Custom domains are available when your store is ready.",
+  },
+  {
+    question: "What happens after the free period?",
+    answer: "Starter stays free for 3 months, then intro pricing begins.",
+  },
 ];
 
-function StorefrontCarousel({ compact = false }: { compact?: boolean }) {
+function StorefrontCarousel({
+  compact = false,
+  priorityFirst = false,
+}: {
+  compact?: boolean;
+  priorityFirst?: boolean;
+}) {
   return (
     <div className="relative overflow-hidden rounded-[1.8rem] border border-[#ded0f2] bg-[#170d23]">
       <div
@@ -142,7 +160,8 @@ function StorefrontCarousel({ compact = false }: { compact?: boolean }) {
               src={image.src}
               alt={image.alt}
               fill
-              priority={index === 0}
+              priority={priorityFirst && index === 0}
+              quality={compact ? 72 : 80}
               sizes={
                 compact
                   ? "(min-width: 1024px) 48vw, 100vw"
@@ -280,7 +299,7 @@ export default function Home() {
 
           <MotionReveal delay={0.08} direction="right">
             <div className="rounded-[2rem] border border-[#e6daf7] bg-white p-3">
-              <StorefrontCarousel />
+              <StorefrontCarousel priorityFirst />
             </div>
           </MotionReveal>
         </div>
@@ -327,8 +346,9 @@ export default function Home() {
               return (
                 <MotionReveal key={step.title} delay={index * 0.06}>
                   <div
-                    className="mv-flip-card h-48 rounded-[1.5rem] outline-none"
+                    className="mv-flip-card h-48 cursor-pointer rounded-[1.5rem] outline-none focus-visible:ring-4 focus-visible:ring-[#c4b5fd]/45"
                     tabIndex={0}
+                    aria-label={`${step.title}. ${step.details}`}
                   >
                     <div className="mv-flip-inner relative h-full w-full">
                       <div className="mv-flip-face absolute inset-0 grid place-items-center rounded-[1.5rem] border border-[#4f2a76] bg-[#241436] p-5 text-center text-white">
@@ -405,7 +425,7 @@ export default function Home() {
                     alt="Front-facing iPhone perfume store website preview"
                     fill
                     sizes="(min-width: 1024px) 24vw, 100vw"
-                    className="object-contain"
+                    className="scale-[1.22] object-cover"
                   />
                 </div>
               </div>
@@ -492,18 +512,21 @@ export default function Home() {
           </h2>
 
           <div className="grid gap-2">
-            {faqs.map((question) => (
+            {faqs.map((item) => (
               <details
-                key={question}
+                key={item.question}
                 className="group rounded-2xl border border-[#eadffc] bg-[#fdfbff] px-4 py-3"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-black text-[#241436]">
-                  {question}
+                  {item.question}
                   <HelpCircle
                     size={16}
                     className="text-[#7c3aed] transition group-open:rotate-45"
                   />
                 </summary>
+                <p className="mt-3 text-sm font-semibold leading-6 text-[#6d607b]">
+                  {item.answer}
+                </p>
               </details>
             ))}
           </div>
