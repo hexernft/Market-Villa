@@ -17,7 +17,6 @@ import {
   ShoppingBag,
   Sparkles,
   Store,
-  User,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -51,7 +50,6 @@ const menuSections = [
   {
     title: "Account & Support",
     items: [
-      { label: "Profile", href: "/dashboard/profile", icon: User },
       { label: "Help Center", href: "/help", icon: HelpCircle },
     ],
   },
@@ -224,7 +222,7 @@ export default function SettingsPage() {
         <div className="rounded-2xl border border-[#ebe7f3] bg-white p-4">
           <div className="mb-5 flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
-              <User size={18} />
+              <Mail size={18} />
             </span>
 
             <div>

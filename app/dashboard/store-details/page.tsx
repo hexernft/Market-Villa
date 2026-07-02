@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
   Clock3,
+  Globe2,
   ImageIcon,
   Instagram,
   Loader2,
@@ -16,7 +17,17 @@ import {
   Store,
 } from "lucide-react";
 import { getMyBusinesses } from "@/lib/business-actions";
+import {
+  BusinessMode,
+  businessModes,
+  normalizeBusinessMode,
+} from "@/lib/business-modes";
+import {
+  canUseBusinessModeForPlan,
+  getBusinessModePlanMessage,
+} from "@/lib/plans";
 import { supabase } from "@/lib/supabase";
+import { slugify } from "@/lib/utils";
 
 type ThemeSettings = {
   announcementText?: string | null;
@@ -33,6 +44,8 @@ type DashboardBusiness = {
   id: string;
   name: string;
   slug: string;
+  category: string | null;
+  description: string | null;
   tagline: string | null;
   logo_url: string | null;
   cover_image_url: string | null;
@@ -42,11 +55,46 @@ type DashboardBusiness = {
   location: string | null;
   instagram_url: string | null;
   opening_hours: string | null;
+  subscription_plan?: string | null;
+  business_mode?: string | null;
+  is_published?: boolean | null;
   theme_settings?: ThemeSettings | null;
 };
 
 const inputClass =
   "min-h-12 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-semibold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10";
+
+const categoriesByMode: Record<BusinessMode, string[]> = {
+  products: [
+    "Fashion",
+    "Food & Drinks",
+    "Beauty",
+    "Electronics",
+    "Furniture",
+    "Kids & Baby",
+    "Grocery",
+    "Pharmacy",
+    "Jewelry",
+    "Events & Catering",
+    "General Retail",
+  ],
+  properties: [
+    "Shortlet Apartment",
+    "Rental Property",
+    "Land",
+    "Commercial Property",
+    "Real Estate Agency",
+    "Property Management",
+  ],
+  cars: [
+    "Car Dealership",
+    "Vehicle Broker",
+    "Imported Cars",
+    "Auto Lot",
+    "Car Rentals",
+    "Spare Parts",
+  ],
+};
 
 function mergeSettings(settings?: ThemeSettings | null): ThemeSettings {
   return {
@@ -68,6 +116,9 @@ export default function StoreDetailsPage() {
   const [message, setMessage] = useState("");
 
   const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
+  const [category, setCategory] = useState(categoriesByMode.products[0]);
+  const [description, setDescription] = useState("");
   const [tagline, setTagline] = useState("");
   const [announcementText, setAnnouncementText] = useState("");
   const [logoUrl, setLogoUrl] = useState("");
@@ -78,6 +129,8 @@ export default function StoreDetailsPage() {
   const [location, setLocation] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
   const [openingHours, setOpeningHours] = useState("");
+  const [businessMode, setBusinessMode] = useState<BusinessMode>("products");
+  const [isPublished, setIsPublished] = useState(false);
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
@@ -105,7 +158,7 @@ export default function StoreDetailsPage() {
         const { data, error } = await supabase
           .from("businesses")
           .select(
-            "id,name,slug,tagline,logo_url,cover_image_url,whatsapp,phone,email,location,instagram_url,opening_hours,theme_settings",
+            "id,name,slug,category,description,tagline,logo_url,cover_image_url,whatsapp,phone,email,location,instagram_url,opening_hours,subscription_plan,business_mode,is_published,theme_settings",
           )
           .in("id", ids)
           .order("created_at", { ascending: true });
@@ -142,8 +195,12 @@ export default function StoreDetailsPage() {
     if (!selectedBusiness) return;
 
     const settings = mergeSettings(selectedBusiness.theme_settings);
+    const nextMode = normalizeBusinessMode(selectedBusiness.business_mode);
 
     setName(selectedBusiness.name || "");
+    setSlug(selectedBusiness.slug || "");
+    setCategory(selectedBusiness.category || categoriesByMode[nextMode][0]);
+    setDescription(selectedBusiness.description || "");
     setTagline(selectedBusiness.tagline || "");
     setAnnouncementText(settings.announcementText || "");
     setLogoUrl(selectedBusiness.logo_url || "");
@@ -154,11 +211,40 @@ export default function StoreDetailsPage() {
     setLocation(selectedBusiness.location || "");
     setInstagramUrl(selectedBusiness.instagram_url || "");
     setOpeningHours(selectedBusiness.opening_hours || "");
+    setBusinessMode(nextMode);
+    setIsPublished(Boolean(selectedBusiness.is_published));
   }, [selectedBusiness]);
 
   function handleBusinessChange(businessId: string) {
     setSelectedBusinessId(businessId);
     setMessage("");
+  }
+
+  function handleNameChange(value: string) {
+    setName(value);
+
+    if (!slug) {
+      setSlug(slugify(value));
+    }
+  }
+
+  function handleModeChange(mode: BusinessMode) {
+    if (
+      !canUseBusinessModeForPlan({
+        mode,
+        plan: selectedBusiness?.subscription_plan,
+      })
+    ) {
+      setMessage(getBusinessModePlanMessage(mode));
+      return;
+    }
+
+    setMessage("");
+    setBusinessMode(mode);
+
+    if (!categoriesByMode[mode].includes(category)) {
+      setCategory(categoriesByMode[mode][0]);
+    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -171,6 +257,17 @@ export default function StoreDetailsPage() {
 
     setIsSaving(true);
     setMessage("");
+
+    if (
+      !canUseBusinessModeForPlan({
+        mode: businessMode,
+        plan: selectedBusiness.subscription_plan,
+      })
+    ) {
+      setIsSaving(false);
+      setMessage(getBusinessModePlanMessage(businessMode));
+      return;
+    }
 
     const currentSettings = selectedBusiness.theme_settings || {};
     const nextSettings: ThemeSettings = {
@@ -189,6 +286,9 @@ export default function StoreDetailsPage() {
         .from("businesses")
         .update({
           name,
+          slug: slugify(slug),
+          category,
+          description,
           tagline,
           logo_url: logoUrl,
           cover_image_url: coverImageUrl,
@@ -198,6 +298,8 @@ export default function StoreDetailsPage() {
           location,
           instagram_url: instagramUrl,
           opening_hours: openingHours,
+          business_mode: businessMode,
+          is_published: isPublished,
           theme_settings: nextSettings,
           updated_at: new Date().toISOString(),
         })
@@ -211,6 +313,9 @@ export default function StoreDetailsPage() {
             ? {
                 ...business,
                 name,
+                slug: slugify(slug),
+                category,
+                description,
                 tagline,
                 logo_url: logoUrl,
                 cover_image_url: coverImageUrl,
@@ -220,6 +325,8 @@ export default function StoreDetailsPage() {
                 location,
                 instagram_url: instagramUrl,
                 opening_hours: openingHours,
+                business_mode: businessMode,
+                is_published: isPublished,
                 theme_settings: nextSettings,
               }
             : business,
@@ -294,18 +401,94 @@ export default function StoreDetailsPage() {
               Business name
               <input
                 value={name}
-                onChange={(event) => setName(event.target.value)}
+                onChange={(event) => handleNameChange(event.target.value)}
                 className={inputClass}
                 required
               />
             </label>
 
             <label className="grid gap-2 text-sm font-black text-slate-700">
+              Category
+              <select
+                value={category}
+                onChange={(event) => setCategory(event.target.value)}
+                className={inputClass}
+              >
+                {categoriesByMode[businessMode].map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </label>
+
+            <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
+              Business mode
+              <select
+                value={businessMode}
+                onChange={(event) =>
+                  handleModeChange(normalizeBusinessMode(event.target.value))
+                }
+                className={inputClass}
+              >
+                {businessModes.map((mode) => {
+                  const isModeLocked = !canUseBusinessModeForPlan({
+                    mode: mode.id,
+                    plan: selectedBusiness?.subscription_plan,
+                  });
+
+                  return (
+                    <option key={mode.id} value={mode.id} disabled={isModeLocked}>
+                      {mode.label}
+                      {isModeLocked ? " - Pro plan" : ""}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+
+            <label className="grid gap-2 text-sm font-black text-slate-700">
+              Store slug
+              <span className="relative">
+                <Globe2
+                  size={16}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <input
+                  value={slug}
+                  onChange={(event) => setSlug(slugify(event.target.value))}
+                  className={`${inputClass} w-full pl-11`}
+                  required
+                />
+              </span>
+            </label>
+
+            <label className="grid gap-2 text-sm font-black text-slate-700">
+              Status
+              <label className="flex min-h-12 items-center justify-between gap-4 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-black text-[#241436]">
+                <span>{isPublished ? "Published" : "Draft"}</span>
+                <input
+                  type="checkbox"
+                  checked={isPublished}
+                  onChange={(event) => setIsPublished(event.target.checked)}
+                />
+              </label>
+            </label>
+
+            <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
               Tagline
               <input
                 value={tagline}
                 onChange={(event) => setTagline(event.target.value)}
                 className={inputClass}
+              />
+            </label>
+
+            <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
+              Business description
+              <textarea
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                rows={3}
+                className={`${inputClass} py-3`}
               />
             </label>
 

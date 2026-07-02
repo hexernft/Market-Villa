@@ -66,11 +66,6 @@ const navItems = [
     icon: Globe2,
   },
   {
-    label: "Profile",
-    href: "/dashboard/profile",
-    icon: UserRound,
-  },
-  {
     label: "Store Details",
     href: "/dashboard/store-details",
     icon: Store,
@@ -233,9 +228,9 @@ export function DashboardShell({
           </div>
 
           <Link
-            href="/dashboard/profile"
+            href="/dashboard/settings"
             className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-[#eee9f6] bg-white text-[#7c3aed]"
-            aria-label="Open profile"
+            aria-label="Open settings"
           >
             <UserRound size={22} />
           </Link>
