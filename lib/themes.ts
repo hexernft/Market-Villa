@@ -1,5 +1,6 @@
 ﻿export type StoreLayout =
   | "default-one-page"
+  | "suya-spot-pro"
   | "premium-treats"
   | "classic-commerce"
   | "simple-one-page"
@@ -554,6 +555,66 @@ export const businessThemes: BusinessTheme[] = [
       { id: "products", label: "Products", description: "" },
       { id: "contact", label: "Contact", description: "" },
     ],
+  },
+  {
+    id: "suya-spot-pro",
+    name: "Suya Spot Pro",
+    description:
+      "Premium suya and grill website theme with cinematic hero, featured products, party packs, quote requests, Paystack checkout, and WhatsApp ordering.",
+    layout: "suya-spot-pro",
+    page: "bg-[#fffaf0] text-[#17120a]",
+    hero: "from-[#17120a] via-[#2a160c] to-[#000000]",
+    card: "bg-white text-[#17120a]",
+    mutedCard: "bg-[#17120a] text-white",
+    text: "text-white",
+    mutedText: "text-[#f8e6b8]",
+    accent: "bg-[#facc15]",
+    accentText: "text-[#b45309]",
+    button: "bg-[#17120a] text-white hover:bg-[#2a160c]",
+    secondaryButton:
+      "bg-white text-[#17120a] ring-1 ring-[#e7dcc8] hover:bg-[#fffaf0]",
+    chip: "bg-[#fffaf0] text-[#17120a] ring-1 ring-[#e7dcc8]",
+    border: "border-[#e7dcc8]",
+    productCard: "rounded-[1.35rem] border border-[#e7dcc8] bg-white text-[#17120a]",
+    sectionLabel: "text-[#b45309]",
+    bestFor:
+      "Suya vendors, grill spots, BBQ businesses, meat restaurants, party/event food vendors",
+    features: [
+      "Full-screen hero",
+      "Scroll-cover content effect",
+      "Customer Favorites",
+      "Separate The Grill page",
+      "Party Packs",
+      "Bulk/Event quote form",
+      "Video upload support",
+      "Instagram video preview",
+      "Gallery carousel",
+      "Paystack checkout",
+      "WhatsApp ordering",
+      "Delivery/pickup checkout",
+      "Area-based delivery fees",
+    ],
+    storefrontSections: [
+      "Hero",
+      "Customer Favorites",
+      "The Grill",
+      "Party Packs",
+      "Grillary",
+      "Bulk/Event Orders",
+      "Delivery & Pickup",
+      "FAQ",
+      "Footer",
+    ],
+    configurableSections: [
+      { id: "feature-strip", label: "Feature strip", description: "" },
+      { id: "products", label: "The Grill", description: "" },
+      { id: "packages", label: "Party Packs", description: "" },
+      { id: "lookbook", label: "Grillary", description: "" },
+      { id: "contact", label: "Contact", description: "" },
+    ],
+    priceLabel: "Premium food theme",
+    pricingNote:
+      "Built for suya, grill, BBQ, and event food vendors. Add-ons activate only after purchase.",
   },
   {
     id: "premium-treats",

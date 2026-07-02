@@ -27,7 +27,14 @@ const premiumTheme = {
   status: "premium/add-ons locked until purchased",
 };
 
-const themeOptions = [defaultTheme, premiumTheme];
+const suyaTheme = {
+  id: "suya-spot-pro",
+  name: "Suya Spot Pro",
+  price: null,
+  status: "premium/food theme",
+};
+
+const themeOptions = [defaultTheme, suyaTheme, premiumTheme];
 
 export default function ThemeStorePage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
@@ -216,6 +223,8 @@ export default function ThemeStorePage() {
             <p className="mt-1 text-sm font-bold text-emerald-700">
               {selectedThemeId === premiumTheme.id
                 ? premiumTheme.status
+                : selectedThemeId === suyaTheme.id
+                  ? suyaTheme.status
                 : `₦${defaultTheme.price} · ${defaultTheme.status}`}
             </p>
           </div>

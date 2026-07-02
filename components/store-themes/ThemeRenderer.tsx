@@ -2,6 +2,7 @@
 
 import { DefaultOnePageTheme } from "@/components/store-themes/DefaultOnePageTheme";
 import { PremiumTreatsTheme } from "@/components/store-themes/PremiumTreatsTheme";
+import { SuyaSpotProTheme } from "@/components/store-themes/SuyaSpotProTheme";
 
 type ThemeRendererProps = {
   business: any;
@@ -19,6 +20,10 @@ export function ThemeRenderer({
 
   if (themeId === "premium-treats") {
     return <PremiumTreatsTheme business={business} products={products} />;
+  }
+
+  if (themeId === "suya-spot-pro") {
+    return <SuyaSpotProTheme business={business} products={products} />;
   }
 
   return (
