@@ -651,6 +651,58 @@ export default function StoreDetailsPage() {
           </div>
         </section>
 
+        <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-5">
+          <h2 className="flex items-center gap-2 text-lg font-black tracking-[-0.04em] text-slate-950">
+            <Landmark size={18} className="text-[#7c3aed]" />
+            Settlement
+          </h2>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <label className="grid gap-2 text-sm font-black text-slate-700">
+              Paystack subaccount code
+              <input
+                value={paystackSubaccountCode}
+                onChange={(event) =>
+                  setPaystackSubaccountCode(event.target.value)
+                }
+                className={inputClass}
+                placeholder="ACCT_..."
+              />
+            </label>
+
+            <label className="grid gap-2 text-sm font-black text-slate-700">
+              Bank code
+              <input
+                value={settlementBankCode}
+                onChange={(event) => setSettlementBankCode(event.target.value)}
+                className={inputClass}
+              />
+            </label>
+
+            <label className="grid gap-2 text-sm font-black text-slate-700">
+              Account number
+              <input
+                value={settlementAccountNumber}
+                onChange={(event) =>
+                  setSettlementAccountNumber(event.target.value)
+                }
+                className={inputClass}
+              />
+            </label>
+
+            <label className="grid gap-2 text-sm font-black text-slate-700">
+              Account name
+              <input
+                value={settlementAccountName}
+                onChange={(event) =>
+                  setSettlementAccountName(event.target.value)
+                }
+                className={inputClass}
+              />
+            </label>
+          </div>
+        </section>
+
         <div className="rounded-[1.35rem] border border-[#eadfff] bg-white p-3">
           <button
             type="submit"

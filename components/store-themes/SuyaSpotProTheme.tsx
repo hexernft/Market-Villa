@@ -19,6 +19,7 @@ import {
   X,
 } from "lucide-react";
 import { createOrder } from "@/lib/business-actions";
+import { initializeStoreOrderPayment } from "@/lib/payment-actions";
 import { buildWhatsAppLink, formatCurrency } from "@/lib/utils";
 
 type SuyaProduct = {
@@ -49,6 +50,7 @@ type SuyaBusiness = {
   location?: string | null;
   instagram_url?: string | null;
   opening_hours?: string | null;
+  paystack_subaccount_code?: string | null;
   products?: SuyaProduct[] | null;
   theme_settings?: Record<string, any> | null;
 };
@@ -353,14 +355,30 @@ export function SuyaSpotProTheme({
       return;
     }
 
-    if (payOnline) {
-      setCheckoutMessage(
-        "Online customer payment is being prepared. Please send this order on WhatsApp for now.",
-      );
-      return;
-    }
-
     try {
+      if (payOnline) {
+        const payment = await initializeStoreOrderPayment({
+          businessId: business.id,
+          customerName: fields.name,
+          customerPhone: fields.phone,
+          customerEmail: fields.email,
+          customerAddress:
+            fields.fulfillment === "Delivery" ? fields.address : "Pickup",
+          customerNote: `${fields.fulfillment}${
+            fields.area ? ` - ${fields.area}` : ""
+          }${fields.note ? ` | ${fields.note}` : ""}`,
+          items: cart.map((item) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+          })),
+        });
+
+        window.location.href = payment.authorizationUrl;
+        return;
+      }
+
       const order = await createOrder({
         businessId: business.id,
         customerName: fields.name,
@@ -1020,7 +1038,7 @@ const faqs = [
   ["How do I place an order?", "Open The Grill, add items, then checkout by WhatsApp."],
   ["Do you deliver?", "Yes. Delivery is available and fees depend on your area."],
   ["Can I order party packs?", "Yes. Use the bulk/event order form."],
-  ["Can I pay online?", "Online customer payment is being prepared."],
+  ["Can I pay online?", "Yes. Online payment opens Paystack when the store has settlement connected."],
   ["How do bulk/event orders work?", "Send your details and we confirm a quote on WhatsApp."],
   ["What time do you open?", "We open from 11:00 AM daily."],
   ["Do you offer pickup?", "Yes. Pickup is available from Gwarimpa, Abuja."],

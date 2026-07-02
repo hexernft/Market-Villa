@@ -18,6 +18,20 @@ type VerifyPlanPaymentResponse = {
   reference?: string;
 };
 
+type StoreCheckoutItem = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
+type InitializeStorePaymentResponse = {
+  authorizationUrl: string;
+  reference: string;
+  orderId: string;
+  amount: number;
+};
+
 async function getAccessToken() {
   const {
     data: { session },
@@ -102,4 +116,34 @@ export async function verifyPlanPayment(reference: string) {
   }
 
   return data as VerifyPlanPaymentResponse;
+}
+
+export async function initializeStoreOrderPayment(input: {
+  businessId: string;
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string;
+  customerAddress: string;
+  customerNote: string;
+  items: StoreCheckoutItem[];
+}) {
+  const response = await fetch("/api/store-payments/initialize", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  });
+
+  const data = await readResponseJson(response);
+
+  if (!response.ok) {
+    throw new Error(data.error || "Unable to initialize store payment.");
+  }
+
+  if (!data.authorizationUrl || !data.reference) {
+    throw new Error("Paystack checkout link was not returned.");
+  }
+
+  return data as InitializeStorePaymentResponse;
 }
