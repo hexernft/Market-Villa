@@ -12,6 +12,7 @@ import {
   Loader2,
   Mail,
   MapPin,
+  Landmark,
   Phone,
   Save,
   Store,
@@ -55,6 +56,11 @@ type DashboardBusiness = {
   location: string | null;
   instagram_url: string | null;
   opening_hours: string | null;
+  paystack_subaccount_code?: string | null;
+  settlement_bank_code?: string | null;
+  settlement_account_number?: string | null;
+  settlement_account_name?: string | null;
+  settlement_status?: string | null;
   subscription_plan?: string | null;
   business_mode?: string | null;
   is_published?: boolean | null;
@@ -129,6 +135,10 @@ export default function StoreDetailsPage() {
   const [location, setLocation] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
   const [openingHours, setOpeningHours] = useState("");
+  const [paystackSubaccountCode, setPaystackSubaccountCode] = useState("");
+  const [settlementBankCode, setSettlementBankCode] = useState("");
+  const [settlementAccountNumber, setSettlementAccountNumber] = useState("");
+  const [settlementAccountName, setSettlementAccountName] = useState("");
   const [businessMode, setBusinessMode] = useState<BusinessMode>("products");
   const [isPublished, setIsPublished] = useState(false);
 
@@ -158,7 +168,7 @@ export default function StoreDetailsPage() {
         const { data, error } = await supabase
           .from("businesses")
           .select(
-            "id,name,slug,category,description,tagline,logo_url,cover_image_url,whatsapp,phone,email,location,instagram_url,opening_hours,subscription_plan,business_mode,is_published,theme_settings",
+            "id,name,slug,category,description,tagline,logo_url,cover_image_url,whatsapp,phone,email,location,instagram_url,opening_hours,paystack_subaccount_code,settlement_bank_code,settlement_account_number,settlement_account_name,settlement_status,subscription_plan,business_mode,is_published,theme_settings",
           )
           .in("id", ids)
           .order("created_at", { ascending: true });
@@ -211,6 +221,10 @@ export default function StoreDetailsPage() {
     setLocation(selectedBusiness.location || "");
     setInstagramUrl(selectedBusiness.instagram_url || "");
     setOpeningHours(selectedBusiness.opening_hours || "");
+    setPaystackSubaccountCode(selectedBusiness.paystack_subaccount_code || "");
+    setSettlementBankCode(selectedBusiness.settlement_bank_code || "");
+    setSettlementAccountNumber(selectedBusiness.settlement_account_number || "");
+    setSettlementAccountName(selectedBusiness.settlement_account_name || "");
     setBusinessMode(nextMode);
     setIsPublished(Boolean(selectedBusiness.is_published));
   }, [selectedBusiness]);
@@ -298,6 +312,13 @@ export default function StoreDetailsPage() {
           location,
           instagram_url: instagramUrl,
           opening_hours: openingHours,
+          paystack_subaccount_code: paystackSubaccountCode.trim() || null,
+          settlement_bank_code: settlementBankCode.trim() || null,
+          settlement_account_number: settlementAccountNumber.trim() || null,
+          settlement_account_name: settlementAccountName.trim() || null,
+          settlement_status: paystackSubaccountCode.trim()
+            ? "connected"
+            : "not_configured",
           business_mode: businessMode,
           is_published: isPublished,
           theme_settings: nextSettings,
@@ -325,6 +346,15 @@ export default function StoreDetailsPage() {
                 location,
                 instagram_url: instagramUrl,
                 opening_hours: openingHours,
+                paystack_subaccount_code:
+                  paystackSubaccountCode.trim() || null,
+                settlement_bank_code: settlementBankCode.trim() || null,
+                settlement_account_number:
+                  settlementAccountNumber.trim() || null,
+                settlement_account_name: settlementAccountName.trim() || null,
+                settlement_status: paystackSubaccountCode.trim()
+                  ? "connected"
+                  : "not_configured",
                 business_mode: businessMode,
                 is_published: isPublished,
                 theme_settings: nextSettings,

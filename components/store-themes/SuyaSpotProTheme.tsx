@@ -146,7 +146,6 @@ const fallbackBusiness: SuyaBusiness = {
   cover_image_url: "/suya/suya-hero.png",
   whatsapp: "2348036882822",
   location: "Gwarimpa, Abuja",
-  opening_hours: "Open from 11:00 AM daily",
 };
 
 function getHeroImage(business: SuyaBusiness) {
@@ -482,7 +481,7 @@ export function SuyaSpotProTheme({
             <div className="mx-auto max-w-7xl">
               <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-center">
                 <label className="flex min-h-12 items-center gap-3 rounded-2xl border border-[#e7dcc8] bg-white px-4">
-                  <Search size={18} className="text-[#8b6b2a]" />
+                  <Search size={18} className="text-[#9a4b12]" />
                   <input
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
@@ -539,6 +538,18 @@ export function SuyaSpotProTheme({
         close={() => setQuoteState(null)}
       />
       <style jsx global>{`
+        .suya-grill-hero-copy,
+        .suya-grill-hero-copy *,
+        .suya-grill-hero-copy p,
+        .suya-grill-hero-copy h1 {
+          color: #ffffff !important;
+        }
+
+        .suya-grill-hero-copy p,
+        .suya-grill-hero-copy h1 {
+          text-shadow: 0 3px 24px rgba(0, 0, 0, 0.85);
+        }
+
         @keyframes suya-nav-slide-down {
           from {
             opacity: 0;
@@ -588,37 +599,40 @@ function SheetArrivalNav({
 }) {
   return (
     <div
-      className={`fixed inset-x-0 top-0 z-[80] border-b border-[#e7dcc8] bg-[#fffaf0]/96 px-4 py-3 backdrop-blur transition duration-300 md:px-6 ${
+      className={`fixed inset-x-0 top-0 z-[80] border-b border-[#8a3f0d] bg-[#b45309] px-4 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.35)] transition duration-300 md:px-6 ${
         visible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
         <Link href="/suya-spot" className="min-w-0">
-          <span className="block truncate text-sm font-black tracking-[-0.03em] text-[#17120a]">
+          <span className="block truncate text-sm font-black tracking-[-0.03em] text-[#fff8e1]">
             {business.name}
           </span>
-          <span className="block text-[11px] font-bold text-[#8b6b2a]">
+          <span className="block text-[11px] font-bold text-[#ffe8b5]">
             {business.opening_hours || "Open from 11:00 AM daily"}
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 text-xs font-black text-[#17120a] lg:flex">
-          <Link href="/suya-spot/grill" className="rounded-full px-3 py-2 hover:bg-[#fff4c2]">
+        <nav className="hidden items-center gap-1 text-xs font-black text-[#fff8e1] lg:flex">
+          <Link href="/suya-spot" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
+            Home
+          </Link>
+          <Link href="/suya-spot/grill" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
             The Grill
           </Link>
-          <a href="#party-packs" className="rounded-full px-3 py-2 hover:bg-[#fff4c2]">
+          <a href="#party-packs" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
             Party Packs
           </a>
-          <a href="#grillary" className="rounded-full px-3 py-2 hover:bg-[#fff4c2]">
+          <a href="#grillary" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
             Gallery
           </a>
-          <button type="button" onClick={openQuote} className="rounded-full px-3 py-2 hover:bg-[#fff4c2]">
+          <button type="button" onClick={openQuote} className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
             Bulk Orders
           </button>
-          <a href="#contact" className="rounded-full px-3 py-2 hover:bg-[#fff4c2]">
+          <a href="#contact" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
             Contact
           </a>
-          <Link href="/login" className="rounded-full px-3 py-2 hover:bg-[#fff4c2]">
+          <Link href="/suya-spot/login" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
             Login
           </Link>
         </nav>
@@ -632,31 +646,34 @@ function SheetArrivalNav({
             <button
               type="button"
               onClick={() => setMenuOpen(!menuOpen)}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-[#e7dcc8] bg-white px-4 text-xs font-black text-[#17120a] transition hover:bg-[#fff4c2]"
+              className="inline-flex h-10 items-center gap-2 rounded-full border border-[#ffe8b5]/50 bg-[#8a3f0d] px-4 text-xs font-black text-[#fff8e1] transition hover:bg-[#6f3009] hover:text-[#ffe8b5]"
             >
               <Menu size={17} />
               Menu
             </button>
 
             <div
-              className={`${menuOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"} absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-[#e7dcc8] bg-white p-2 text-sm font-bold text-[#17120a] shadow-2xl transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}
+              className={`${menuOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"} absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-[#8a3f0d] bg-[#b45309] p-2 text-sm font-bold text-[#fff8e1] shadow-2xl transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}
             >
-              <Link className="block rounded-xl px-3 py-2 hover:bg-[#fff4c2]" href="/suya-spot/grill">
+              <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot">
+                Home
+              </Link>
+              <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot/grill">
                 The Grill
               </Link>
-              <a className="block rounded-xl px-3 py-2 hover:bg-[#fff4c2]" href="#party-packs">
+              <a className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="#party-packs">
                 Party Packs
               </a>
-              <a className="block rounded-xl px-3 py-2 hover:bg-[#fff4c2]" href="#grillary">
+              <a className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="#grillary">
                 Gallery
               </a>
-              <button type="button" onClick={openQuote} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-[#fff4c2]">
+              <button type="button" onClick={openQuote} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
                 Bulk Orders
               </button>
-              <a className="block rounded-xl px-3 py-2 hover:bg-[#fff4c2]" href="#contact">
+              <a className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="#contact">
                 Contact
               </a>
-              <Link className="block rounded-xl px-3 py-2 text-[#b45309] hover:bg-[#fff4c2]" href="/login">
+              <Link className="block rounded-xl px-3 py-2 text-[#ffe8b5] hover:bg-[#8a3f0d]" href="/suya-spot/login">
                 Login
               </Link>
             </div>
@@ -665,12 +682,12 @@ function SheetArrivalNav({
           <button
             type="button"
             onClick={openCart}
-            className="relative grid h-10 w-10 place-items-center rounded-full bg-[#17120a] text-white"
+            className="relative grid h-10 w-10 place-items-center rounded-full bg-[#f59e0b] text-black"
             aria-label="Open cart"
           >
             <ShoppingCart size={18} />
             {cartCount ? (
-              <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#facc15] px-1 text-[10px] font-black text-black">
+              <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#f59e0b] px-1 text-[10px] font-black text-black">
                 {cartCount}
               </span>
             ) : null}
@@ -708,7 +725,7 @@ function Hero({
       <Image src={heroImage} alt={business.name} fill priority sizes="100vw" className="object-cover" />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.58),rgba(0,0,0,0.42)),radial-gradient(circle_at_50%_45%,rgba(245,158,11,0.14),transparent_34%)]" />
       {announcementText ? (
-        <div className="absolute inset-x-0 top-0 z-20 bg-[#111]/80 px-4 py-2 text-center text-xs font-black text-[#facc15]">
+        <div className="absolute inset-x-0 top-0 z-20 bg-[#111]/80 px-4 py-2 text-center text-xs font-black text-[#f59e0b]">
           {announcementText}
         </div>
       ) : null}
@@ -722,7 +739,7 @@ function Hero({
       />
       <div className="relative z-10 grid min-h-screen max-w-5xl items-start px-5 pt-[24vh] text-left md:px-10 md:pt-[22vh] lg:ml-[4vw]">
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#facc15]/35 bg-black/35 px-4 py-2 text-xs font-black text-[#facc15] backdrop-blur">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#f59e0b]/35 bg-black/35 px-4 py-2 text-xs font-black text-[#f59e0b] backdrop-blur">
             <Flame size={15} />
             {business.opening_hours || "Open from 11:00 AM daily"}
           </span>
@@ -735,7 +752,7 @@ function Hero({
                 <span className="block">S I S Suya Spot serves fresh grilled suya for every craving.</span>
               </p>
           <div className="mt-8 flex flex-wrap justify-start gap-3">
-            <Link href="/suya-spot/grill" className="inline-flex h-12 items-center rounded-full bg-[#facc15] px-7 text-sm font-black text-black">
+            <Link href="/suya-spot/grill" className="inline-flex h-12 items-center rounded-full bg-[#f59e0b] px-7 text-sm font-black text-black">
               Order Now
             </Link>
             <Link href="/suya-spot/grill" className="inline-flex h-12 items-center rounded-full border border-white/35 px-7 text-sm font-black text-white">
@@ -766,31 +783,34 @@ function TopControls(props: {
         <button
           type="button"
           onClick={() => props.setMenuOpen(!props.menuOpen)}
-          className="inline-flex h-11 items-center gap-2 rounded-full bg-white/12 px-4 text-sm font-black text-white backdrop-blur transition hover:bg-white/18"
+          className="inline-flex h-11 items-center gap-2 bg-transparent px-2 text-sm font-black text-white transition hover:text-[#f59e0b]"
         >
           <Menu size={18} />
           Menu
         </button>
 
         <div
-          className={`${props.menuOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"} absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-white/15 bg-[#17120a] p-2 text-sm font-bold text-white shadow-2xl transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}
+          className={`${props.menuOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"} absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-[#8a3f0d] bg-[#b45309] p-2 text-sm font-bold text-[#fff8e1] shadow-2xl transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}
         >
-          <Link className="block rounded-xl px-3 py-2 hover:bg-white/10" href="/suya-spot/grill">
+          <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot">
+            Home
+          </Link>
+          <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot/grill">
             The Grill
           </Link>
-          <button type="button" onClick={() => props.scrollOrQuote("party-packs")} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-white/10">
+          <button type="button" onClick={() => props.scrollOrQuote("party-packs")} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
             Party Packs
           </button>
-          <Link className="block rounded-xl px-3 py-2 hover:bg-white/10" href="/suya-spot#grillary">
+          <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot#grillary">
             Gallery
           </Link>
-          <button type="button" onClick={props.openQuote} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-white/10">
+          <button type="button" onClick={props.openQuote} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
             Bulk Orders
           </button>
-          <Link className="block rounded-xl px-3 py-2 hover:bg-white/10" href="#contact">
+          <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="#contact">
             Contact
           </Link>
-          <Link className="block rounded-xl px-3 py-2 text-[#facc15] hover:bg-white/10" href="/login">
+          <Link className="block rounded-xl px-3 py-2 text-[#ffe8b5] hover:bg-[#8a3f0d]" href="/suya-spot/login">
             Login
           </Link>
         </div>
@@ -799,12 +819,12 @@ function TopControls(props: {
       <button
         type="button"
         onClick={props.openCart}
-        className="relative grid h-11 w-11 place-items-center rounded-full bg-white/12 text-white backdrop-blur transition hover:bg-white/18"
+        className="relative grid h-11 w-11 place-items-center bg-transparent text-white transition hover:text-[#f59e0b]"
         aria-label="Open cart"
       >
         <ShoppingCart size={19} />
         {props.cartCount ? (
-          <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#facc15] px-1 text-[10px] font-black text-black">
+          <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#f59e0b] px-1 text-[10px] font-black text-black">
             {props.cartCount}
           </span>
         ) : null}
@@ -822,12 +842,21 @@ function GrillBanner(props: {
   openQuote: () => void;
 }) {
   return (
-    <section className="relative overflow-visible bg-[#17120a] px-4 py-8 text-white md:px-6">
+    <section className="relative overflow-hidden bg-[#17120a] px-4 py-12 text-white md:px-6 md:py-16">
+      <Image
+        src="/suya/suya-grill-hero.png"
+        alt="S I S Suya Spot grill"
+        fill
+        sizes="100vw"
+        className="object-cover"
+        priority
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(23,18,10,0.92),rgba(23,18,10,0.54),rgba(23,18,10,0.36))]" />
       <TopControls {...props} />
-      <div className="mx-auto max-w-7xl pt-14">
-        <p className="text-xs font-black uppercase tracking-[0.22em] text-[#facc15]">The Grill</p>
-        <h1 className="mt-3 text-4xl font-black tracking-[-0.06em]">The Grill</h1>
-        <p className="mt-3 max-w-xl text-sm font-semibold text-white/70">Browse fresh suya, party packs, event trays, and yaji.</p>
+      <div className="suya-grill-hero-copy relative z-10 mx-auto max-w-7xl pt-14">
+        <p className="text-xs font-black uppercase tracking-[0.22em]" style={{ color: "#ffffff" }}>The Grill</p>
+        <h1 className="mt-3 text-4xl font-black tracking-[-0.06em]" style={{ color: "#ffffff" }}>The Grill</h1>
+        <p className="mt-3 max-w-xl text-sm font-semibold" style={{ color: "#ffffff" }}>Browse fresh suya, party packs, event trays, and yaji.</p>
       </div>
     </section>
   );
@@ -877,7 +906,7 @@ function ProductGrid({ products, onAction }: { products: SuyaProduct[]; onAction
           </div>
           <div className="p-4">
             <h3 className="text-sm font-black">{product.name}</h3>
-            <p className="mt-2 text-xs font-black uppercase tracking-[0.14em] text-[#8b6b2a]">{product.category || "Suya"}</p>
+            <p className="mt-2 text-xs font-black uppercase tracking-[0.14em] text-[#9a4b12]">{product.category || "Suya"}</p>
             {isPriced(product) ? <p className="mt-3 text-xl font-black text-[#b91c1c]">{formatCurrency(Number(product.price || 0))}</p> : null}
             <button type="button" onClick={() => onAction(product)} className="mt-4 h-11 w-full rounded-full bg-[#17120a] text-sm font-black text-white">
               {isPriced(product) ? "Add to cart" : "Request Quote"}
@@ -899,7 +928,7 @@ function Process({ promoVideoUrl, instagramVideoUrl, openGrillHref }: { promoVid
           <Link href={openGrillHref} className="mt-5 inline-flex rounded-full bg-[#17120a] px-5 py-3 text-sm font-black text-white">Explore The Grill</Link>
         </div>
         <div className="relative aspect-video overflow-hidden rounded-[1.5rem] border border-[#e7dcc8] bg-[#17120a]">
-          {promoVideoUrl ? <video src={promoVideoUrl} controls className="h-full w-full object-cover" /> : instagramVideoUrl ? <a href={instagramVideoUrl} target="_blank" rel="noreferrer" className="grid h-full place-items-center text-center text-white"><ImageIcon className="mx-auto mb-3 text-[#facc15]" /><span className="font-black">Open Instagram Preview</span></a> : <Image src="/suya/suya-grill.png" alt="Suya grill" fill sizes="50vw" className="object-cover" />}
+          {promoVideoUrl ? <video src={promoVideoUrl} controls className="h-full w-full object-cover" /> : instagramVideoUrl ? <a href={instagramVideoUrl} target="_blank" rel="noreferrer" className="grid h-full place-items-center text-center text-white"><ImageIcon className="mx-auto mb-3 text-[#f59e0b]" /><span className="font-black">Open Instagram Preview</span></a> : <Image src="/suya/suya-grill.png" alt="Suya grill" fill sizes="50vw" className="object-cover" />}
         </div>
       </div>
     </section>
@@ -912,7 +941,7 @@ function PartyPacks({ products, openQuote }: { products: SuyaProduct[]; openQuot
       <div className="mx-auto max-w-7xl">
         <div className="mb-5 flex items-center justify-between gap-3">
           <h2 className="text-2xl font-black tracking-[-0.04em]">Party Packs</h2>
-          <button type="button" onClick={openQuote} className="rounded-full bg-[#facc15] px-5 py-2 text-sm font-black text-black">Plan Your Party Pack</button>
+          <button type="button" onClick={openQuote} className="rounded-full bg-[#f59e0b] px-5 py-2 text-sm font-black text-black">Plan Your Party Pack</button>
         </div>
         <div className="grid gap-4 md:grid-cols-[1.2fr_0.8fr_0.8fr]">
           {products.map((product, index) => <ShowcaseCard key={product.id} product={product} large={index === 0} />)}
@@ -953,7 +982,7 @@ function BulkCta({ openQuote }: { openQuote: () => void }) {
     <section className="px-4 py-8 md:px-6">
       <div className="mx-auto max-w-7xl rounded-[1.5rem] bg-[#17120a] p-6 text-white md:p-8">
         <h2 className="text-2xl font-black tracking-[-0.04em]">Bulk/Event Orders</h2>
-        <button type="button" onClick={openQuote} className="mt-5 rounded-full bg-[#facc15] px-5 py-3 text-sm font-black text-black">Message Us For Bulk Orders & Events</button>
+        <button type="button" onClick={openQuote} className="mt-5 rounded-full bg-[#f59e0b] px-5 py-3 text-sm font-black text-black">Message Us For Bulk Orders & Events</button>
       </div>
     </section>
   );
@@ -1036,15 +1065,15 @@ function FinalCta({ business, whatsapp }: { business: SuyaBusiness; whatsapp: st
 
 function Footer({ business, whatsapp, instagramUrl, openQuote }: { business: SuyaBusiness; whatsapp: string; instagramUrl: string; openQuote: () => void }) {
   return (
-    <footer id="contact" className="border-t-4 border-[#facc15] bg-[#17120a] px-4 py-8 text-white md:px-6">
+    <footer id="contact" className="border-t-4 border-[#f59e0b] bg-[#17120a] px-4 py-8 text-white md:px-6">
       <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
         <div>
-          <h3 className="text-lg font-black text-[#facc15]">{business.name}</h3>
+          <h3 className="text-lg font-black text-[#f59e0b]">{business.name}</h3>
           <p className="mt-3 text-sm font-semibold text-white/70">{business.location || "Gwarimpa, Abuja"}</p>
           <p className="mt-1 text-sm font-semibold text-white/70">{business.opening_hours || "Open from 11:00 AM daily"}</p>
         </div>
         <div>
-          <h3 className="font-black text-[#facc15]">Quick Links</h3>
+          <h3 className="font-black text-[#f59e0b]">Quick Links</h3>
           <div className="mt-3 grid gap-2 text-sm font-semibold text-white/75">
             <Link href="/suya-spot/grill">The Grill</Link>
             <button className="text-left" type="button" onClick={openQuote}>Party Packs</button>
@@ -1054,7 +1083,7 @@ function Footer({ business, whatsapp, instagramUrl, openQuote }: { business: Suy
           </div>
         </div>
         <div>
-          <h3 className="font-black text-[#facc15]">Contact</h3>
+          <h3 className="font-black text-[#f59e0b]">Contact</h3>
           <div className="mt-3 grid gap-2 text-sm font-semibold text-white/75">
             {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">WhatsApp</a> : null}
             {instagramUrl ? <a href={instagramUrl} target="_blank" rel="noreferrer">Instagram</a> : null}
@@ -1127,7 +1156,7 @@ function CartDrawer(props: {
               <textarea name="note" placeholder="Delivery or pickup note optional" className="min-h-20 rounded-xl border px-3 py-2 text-sm" />
               {props.message ? <p className="rounded-xl bg-amber-50 p-3 text-xs font-bold text-amber-800">{props.message}</p> : null}
               <p className="text-lg font-black">Total: {formatCurrency(props.total)}</p>
-              <button type="submit" name="checkoutAction" value="pay-online" className="h-12 rounded-full bg-[#facc15] text-sm font-black text-black">Pay Online</button>
+              <button type="submit" name="checkoutAction" value="pay-online" className="h-12 rounded-full bg-[#f59e0b] text-sm font-black text-black">Pay Online</button>
               <button type="submit" name="checkoutAction" value="whatsapp" className="h-12 rounded-full bg-[#17120a] text-sm font-black text-white">Send to WhatsApp</button>
             </div>
           ) : null}
@@ -1223,6 +1252,15 @@ function QuoteDialog({ state, business, whatsapp, close }: { state: QuoteState; 
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 

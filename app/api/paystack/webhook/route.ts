@@ -68,6 +68,10 @@ function getAmountInNaira(data: any) {
   return Math.round(amountInKobo / 100);
 }
 
+function isStoreOrderPayment(data: any) {
+  return String(data?.metadata?.source || "") === "market_villa_store_order";
+}
+
 function getBillingCycleFromMetadata(data: any): BillingCycle {
   return normalizeBillingCycle(data?.metadata?.billing_cycle || "quarterly");
 }
@@ -186,6 +190,114 @@ export async function POST(request: Request) {
     }
 
     if (eventName === "charge.success") {
+      if (isStoreOrderPayment(data)) {
+        const amount = getAmountInNaira(data);
+        const amountInKobo = Number(data?.amount || 0);
+        const currency = String(data?.currency || "");
+        const orderId = String(data?.metadata?.order_id || "");
+        const businessId = getBusinessIdFromMetadata(data);
+
+        if (currency !== "NGN") {
+          await supabaseAdmin
+            .from("orders")
+            .update({
+              payment_status: "currency_mismatch",
+              payment_raw_response: event,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("payment_reference", reference);
+
+          return NextResponse.json({
+            received: true,
+            ignored: true,
+            reason: "Store order currency mismatch.",
+          });
+        }
+
+        const { data: order, error: orderError } = await supabaseAdmin
+          .from("orders")
+          .select("id,business_id,total_amount,payment_status")
+          .eq("payment_reference", reference)
+          .maybeSingle();
+
+        if (orderError || !order) {
+          return NextResponse.json({
+            received: true,
+            ignored: true,
+            reason: "Store order not found.",
+          });
+        }
+
+        if (orderId && String(order.id) !== orderId) {
+          return NextResponse.json({
+            received: true,
+            ignored: true,
+            reason: "Store order metadata mismatch.",
+          });
+        }
+
+        if (businessId && String(order.business_id) !== businessId) {
+          return NextResponse.json({
+            received: true,
+            ignored: true,
+            reason: "Store order business mismatch.",
+          });
+        }
+
+        const expectedAmountInKobo = Math.round(Number(order.total_amount || 0) * 100);
+
+        if (amountInKobo !== expectedAmountInKobo) {
+          await supabaseAdmin
+            .from("orders")
+            .update({
+              payment_status: "amount_mismatch",
+              payment_raw_response: event,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", order.id);
+
+          return NextResponse.json({
+            received: true,
+            ignored: true,
+            reason: "Store order amount mismatch.",
+          });
+        }
+
+        if (order.payment_status === "paid") {
+          return NextResponse.json({
+            received: true,
+            duplicate: true,
+            reference,
+          });
+        }
+
+        const now = new Date().toISOString();
+
+        const { error: updateError } = await supabaseAdmin
+          .from("orders")
+          .update({
+            status: "paid",
+            payment_status: "paid",
+            paid_at: now,
+            payment_raw_response: event,
+            updated_at: now,
+          })
+          .eq("id", order.id);
+
+        if (updateError) {
+          throw updateError;
+        }
+
+        return NextResponse.json({
+          received: true,
+          processed: true,
+          event: eventName,
+          reference,
+          orderId: order.id,
+          amount,
+        });
+      }
+
       const businessId = getBusinessIdFromMetadata(data);
       const ownerId = getOwnerIdFromMetadata(data);
       const plan = getPlanFromMetadata(data);
