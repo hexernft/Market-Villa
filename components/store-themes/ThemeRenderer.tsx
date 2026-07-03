@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { DefaultOnePageTheme } from "@/components/store-themes/DefaultOnePageTheme";
 import { PremiumTreatsTheme } from "@/components/store-themes/PremiumTreatsTheme";
@@ -34,3 +34,4 @@ export function ThemeRenderer({
     />
   );
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -89,3 +89,4 @@ export function SuyaSpotRoute({ mode }: Props) {
     />
   );
 }
+

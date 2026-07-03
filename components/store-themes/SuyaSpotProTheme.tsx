@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { FormEvent, useMemo, useState , useEffect, useRef} from "react";
 import {
   CalendarDays,
@@ -71,6 +72,7 @@ type Props = {
   business: SuyaBusiness;
   products?: SuyaProduct[] | null;
   mode?: "home" | "grill";
+  routeBase?: string;
 };
 
 const fallbackProducts: SuyaProduct[] = [
@@ -152,6 +154,7 @@ const fallbackBusiness: SuyaBusiness = {
 
 function getHeroImage(business: SuyaBusiness) {
   return (
+    business.theme_settings?.hero_image_url ||
     business.theme_settings?.heroImageUrl ||
     business.cover_image_url ||
     business.hero_image_url ||
@@ -180,12 +183,43 @@ export function SuyaSpotProTheme({
   business: inputBusiness,
   products,
   mode = "home",
+  routeBase: inputRouteBase,
 }: Props) {
   const business = { ...fallbackBusiness, ...inputBusiness };
   const whatsapp = getWhatsapp(business);
   const settings = business.theme_settings || {};
+  const routeBase = inputRouteBase || (business.slug ? `/store/${business.slug}` : "/suya-spot");
+  const grillHref = routeBase === "/suya-spot" ? "/suya-spot/grill" : `${routeBase}#products`;
+  const galleryHref = `${routeBase}#grillary`;
+  const loginHref = `${routeBase}/login`;
+  const logoUrl = String(settings.logo_url || business.logo_url || "/suya/sis-suya-logo.png");
+  const heroTitle = String(settings.hero_title || business.tagline || "Hot Suya.\nFresh Off The Grill.");
+  const heroSubtitle = String(
+    settings.hero_subtitle ||
+      business.description ||
+      "From single portions to party packs,\nS I S Suya Spot serves fresh grilled suya for every craving.",
+  );
+  const openingHours = String(settings.opening_hours || business.opening_hours || "Open from 11:00 AM daily");
+  const showGallery = settings.show_gallery !== false;
+  const showPartyPacks = settings.show_party_packs !== false;
+  const showBulkCta = settings.show_bulk_cta !== false;
+  const headingFont = String(settings.font_heading || "grill");
+  const bodyFont = String(settings.font_body || "manrope");
+  const themeStyle = {
+    "--suya-primary": String(settings.primary_color || "#b45309"),
+    "--suya-fire": String(settings.fire_color || "#f59e0b"),
+    "--suya-dark": String(settings.dark_color || "#17120a"),
+    "--font-store-heading":
+      headingFont === "elegant"
+        ? "var(--font-store-elegant)"
+        : headingFont === "market"
+          ? "var(--font-market)"
+          : headingFont === "manrope"
+            ? "var(--font-store-body)"
+            : "var(--font-store-grill)",
+  } as CSSProperties;
   const heroImage = getHeroImage(business);
-  const announcementText = String(settings.announcementText || "").trim();
+  const announcementText = String(settings.announcement_text || settings.announcementText || "").trim();
   const instagramVideoUrl = String(settings.instagramVideoUrl || "").trim();
   const promoVideoUrl = String(settings.promoVideoUrl || "").trim();
   const instagramUrl =
@@ -431,11 +465,22 @@ export function SuyaSpotProTheme({
   }, [mode]);
 
   return (
-    <main className="min-h-screen bg-[#fffaf0] text-[#17120a]">
+    <main
+      className={`min-h-screen bg-[#fffaf0] text-[#17120a] ${
+        bodyFont === "market" ? "font-store-market" : "font-store-body"
+      }`}
+      style={themeStyle}
+    >
       {mode === "home" ? (
         <Hero
           business={business}
           heroImage={heroImage}
+          heroTitle={heroTitle}
+          heroSubtitle={heroSubtitle}
+          openingHours={openingHours}
+          grillHref={grillHref}
+          routeBase={routeBase}
+          galleryHref={galleryHref}
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
           cartCount={cartCount}
@@ -444,16 +489,23 @@ export function SuyaSpotProTheme({
           scrollOrQuote={scrollOrQuote}
           announcementText={announcementText}
           whatsapp={whatsapp}
+          loginHref={loginHref}
         />
       ) : (
         <GrillBanner
           business={business}
+          grillHeroImage={String(settings.grill_hero_image_url || "/suya/suya-grill-hero.png")}
+          grillSubtitle={String(settings.grill_subtitle || "Browse fresh suya, party packs, event trays, and yaji.")}
+          routeBase={routeBase}
+          grillHref={grillHref}
+          galleryHref={galleryHref}
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
           cartCount={cartCount}
           openCart={() => setCartOpen(true)}
           scrollOrQuote={scrollOrQuote}
           openQuote={() => setQuoteState({ type: "bulk" })}
+          loginHref={loginHref}
         />
       )}
 
@@ -466,26 +518,29 @@ export function SuyaSpotProTheme({
           cartCount={cartCount}
           openCart={() => setCartOpen(true)}
           openQuote={() => setQuoteState({ type: "bulk" })}
+          loginHref={loginHref}
+          logoUrl={logoUrl}
+          logoSize={String(settings.navbar_logo_size || "medium")}
         />
       ) : null}
 
       {mode === "home" ? (
         <div ref={sheetRef} className="relative z-50 rounded-t-[2rem] border-t border-[#d8d2c5] bg-[#fffaf0]">
-          <Favorites products={favorites} />
+          <Favorites products={favorites} grillHref={grillHref} />
           <Process
             promoVideoUrl={promoVideoUrl}
             instagramVideoUrl={instagramVideoUrl}
-            openGrillHref="/suya-spot/grill"
+            openGrillHref={grillHref}
           />
-          <PartyPacks
+          {showPartyPacks ? <PartyPacks
             products={partyPacks}
             openQuote={() => setQuoteState({ type: "bulk" })}
-          />
-          <Grillary />
-          <BulkCta openQuote={() => setQuoteState({ type: "bulk" })} />
+          /> : null}
+          {showGallery ? <Grillary /> : null}
+          {showBulkCta ? <BulkCta openQuote={() => setQuoteState({ type: "bulk" })} /> : null}
           <DeliveryPickup business={business} />
           <Faq activeFaq={activeFaq} setActiveFaq={setActiveFaq} />
-          <FinalCta business={business} whatsapp={whatsapp} />
+          <FinalCta business={business} whatsapp={whatsapp} grillHref={grillHref} />
           <Footer
             business={business}
             whatsapp={whatsapp}
@@ -527,10 +582,10 @@ export function SuyaSpotProTheme({
               <ProductGrid products={filteredItems} onAction={addToCart} />
             </div>
           </section>
-          <PartyPacks
+          {showPartyPacks ? <PartyPacks
             products={partyPacks}
             openQuote={() => setQuoteState({ type: "bulk" })}
-          />
+          /> : null}
           <Footer
             business={business}
             whatsapp={whatsapp}
@@ -556,6 +611,17 @@ export function SuyaSpotProTheme({
         close={() => setQuoteState(null)}
       />
       <style jsx global>{`
+        .suya-main-nav,
+        .suya-main-nav a,
+        .suya-main-nav button {
+          color: #ffffff !important;
+        }
+
+        .suya-main-nav a:hover,
+        .suya-main-nav button:hover {
+          color: #facc15 !important;
+        }
+
         .suya-grill-hero-copy,
         .suya-grill-hero-copy *,
         .suya-grill-hero-copy p,
@@ -606,6 +672,12 @@ function SheetArrivalNav({
   cartCount,
   openCart,
   openQuote,
+  routeBase,
+  grillHref,
+  galleryHref,
+  loginHref,
+  logoUrl,
+  logoSize,
 }: {
   visible: boolean;
   business: SuyaBusiness;
@@ -614,90 +686,65 @@ function SheetArrivalNav({
   cartCount: number;
   openCart: () => void;
   openQuote: () => void;
+  routeBase: string;
+  grillHref: string;
+  galleryHref: string;
+  loginHref: string;
+  logoUrl: string;
+  logoSize: string;
 }) {
+  const logoClass =
+    logoSize === "large"
+      ? "h-24 w-24 md:h-28 md:w-28"
+      : logoSize === "small"
+        ? "h-16 w-16 md:h-20 md:w-20"
+        : "h-20 w-20 md:h-24 md:w-24";
+  const logoPadding =
+    logoSize === "large"
+      ? "pl-24 md:pl-28"
+      : logoSize === "small"
+        ? "pl-16 md:pl-20"
+        : "pl-20 md:pl-24";
+
   return (
     <div
       className={`fixed inset-x-0 top-0 z-[80] border-b border-[#8a3f0d] bg-[#b45309] px-4 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.35)] transition duration-300 md:px-6 ${
         visible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-        <Link href="/suya-spot" className="min-w-0">
-          <span className="block truncate text-sm font-black tracking-[-0.03em] text-[#fff8e1]">
-            {business.name}
-          </span>
-          <span className="block text-[11px] font-bold text-[#ffe8b5]">
-            {business.opening_hours || "Open from 11:00 AM daily"}
-          </span>
-        </Link>
+      <Link
+        href={routeBase}
+        className={`absolute left-0 top-0 z-10 block overflow-visible ${logoClass}`}
+        aria-label="S I S Suya Spot home"
+      >
+        <Image
+          src={logoUrl}
+          alt="S I S Suya Spot"
+          width={96}
+          height={96}
+          className="h-full w-full object-contain"
+          priority
+        />
+      </Link>
 
-        <nav className="hidden items-center gap-1 text-xs font-black text-[#fff8e1] lg:flex">
-          <Link href="/suya-spot" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            Home
+      <div className={`mx-auto flex max-w-7xl items-center justify-end gap-4 ${logoPadding}`}>
+
+        <nav className="suya-main-nav hidden items-center gap-1 text-xs font-black text-white lg:flex">
+          <Link href={routeBase} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
+            <span className="!text-white" style={{ color: "#ffffff" }}>Home</span>
           </Link>
-          <Link href="/suya-spot/grill" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            The Grill
+          <Link href={grillHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
+            <span className="!text-white" style={{ color: "#ffffff" }}>The Grill</span>
           </Link>
-          <a href="#party-packs" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            Party Packs
-          </a>
-          <a href="#grillary" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            Gallery
-          </a>
-          <button type="button" onClick={openQuote} className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            Bulk Orders
-          </button>
-          <a href="#contact" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            Contact
-          </a>
-          <Link href="/suya-spot/login" className="rounded-full px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            Login
+          <Link href={galleryHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
+            <span className="!text-white" style={{ color: "#ffffff" }}>Gallery</span>
+          </Link>
+          <Link href={loginHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
+            <span className="!text-white" style={{ color: "#ffffff" }}>Login</span>
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <div
-            className="group relative"
-            onMouseEnter={() => setMenuOpen(true)}
-            onMouseLeave={() => setMenuOpen(false)}
-          >
-            <button
-              type="button"
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-[#ffe8b5]/50 bg-[#8a3f0d] px-4 text-xs font-black text-[#fff8e1] transition hover:bg-[#6f3009] hover:text-[#ffe8b5]"
-            >
-              <Menu size={17} />
-              Menu
-            </button>
-
-            <div
-              className={`${menuOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"} absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-[#8a3f0d] bg-[#b45309] p-2 text-sm font-bold text-[#fff8e1] shadow-2xl transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}
-            >
-              <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot">
-                Home
-              </Link>
-              <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot/grill">
-                The Grill
-              </Link>
-              <a className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="#party-packs">
-                Party Packs
-              </a>
-              <a className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="#grillary">
-                Gallery
-              </a>
-              <button type="button" onClick={openQuote} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-                Bulk Orders
-              </button>
-              <a className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="#contact">
-                Contact
-              </a>
-              <Link className="block rounded-xl px-3 py-2 text-[#ffe8b5] hover:bg-[#8a3f0d]" href="/suya-spot/login">
-                Login
-              </Link>
-            </div>
-          </div>
-
-          <button
+        <div className="flex items-center gap-2"><button
             type="button"
             onClick={openCart}
             className="relative grid h-10 w-10 place-items-center rounded-full bg-[#f59e0b] text-black"
@@ -718,6 +765,10 @@ function SheetArrivalNav({
 function Hero({
   business,
   heroImage,
+  heroTitle,
+  heroSubtitle,
+  openingHours,
+  grillHref,
   menuOpen,
   setMenuOpen,
   cartCount,
@@ -726,9 +777,16 @@ function Hero({
   scrollOrQuote,
   announcementText,
   whatsapp,
+  routeBase,
+  galleryHref,
+  loginHref,
 }: {
   business: SuyaBusiness;
   heroImage: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  openingHours: string;
+  grillHref: string;
   menuOpen: boolean;
   setMenuOpen: (value: boolean) => void;
   cartCount: number;
@@ -737,7 +795,13 @@ function Hero({
   scrollOrQuote: (target: string) => void;
   announcementText: string;
   whatsapp: string;
+  routeBase: string;
+  galleryHref: string;
+  loginHref: string;
 }) {
+  const heroTitleLines = heroTitle.split("\n").filter(Boolean);
+  const heroSubtitleLines = heroSubtitle.split("\n").filter(Boolean);
+
   return (
     <section className="sticky top-0 min-h-screen overflow-hidden bg-[#110d09] text-white">
       <Image src={heroImage} alt={business.name} fill priority sizes="100vw" className="object-cover" />
@@ -754,26 +818,29 @@ function Hero({
         openCart={openCart}
         scrollOrQuote={scrollOrQuote}
         openQuote={openQuote}
+        loginHref={loginHref}
       />
       <div className="relative z-10 grid min-h-screen max-w-5xl items-start px-5 pt-[24vh] text-left md:px-10 md:pt-[22vh] lg:ml-[4vw]">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-[#f59e0b]/35 bg-black/35 px-4 py-2 text-xs font-black text-[#f59e0b] backdrop-blur">
             <Flame size={15} />
-            {business.opening_hours || "Open from 11:00 AM daily"}
+            {openingHours}
           </span>
-          <h1 className="mt-5 max-w-3xl text-[2.05rem] font-black leading-[1.02] tracking-[-0.055em] md:text-[4.15rem]">
-                <span className="block">Hot Suya.</span>
-                <span className="block">Fresh Off The Grill.</span>
-              </h1>
+          <h1 className="font-store-heading mt-5 max-w-3xl text-[2.05rem] font-black leading-[1.02] tracking-[-0.055em] md:text-[4.15rem]">
+            {(heroTitleLines.length ? heroTitleLines : ["Hot Suya.", "Fresh Off The Grill."]).map((line) => (
+              <span key={line} className="block">{line}</span>
+            ))}
+          </h1>
           <p className="mt-5 max-w-2xl text-sm font-semibold leading-7 text-white/82 md:text-base">
-                <span className="block">From single portions to party packs,</span>
-                <span className="block">S I S Suya Spot serves fresh grilled suya for every craving.</span>
-              </p>
+            {(heroSubtitleLines.length ? heroSubtitleLines : ["From single portions to party packs,", "S I S Suya Spot serves fresh grilled suya for every craving."]).map((line) => (
+              <span key={line} className="block">{line}</span>
+            ))}
+          </p>
           <div className="mt-8 flex flex-wrap justify-start gap-3">
-            <Link href="/suya-spot/grill" className="inline-flex h-12 items-center rounded-full bg-[#f59e0b] px-7 text-sm font-black text-black">
+            <Link href={grillHref} className="inline-flex h-12 items-center rounded-full bg-[#f59e0b] px-7 text-sm font-black text-black">
               Order Now
             </Link>
-            <Link href="/suya-spot/grill" className="inline-flex h-12 items-center rounded-full border border-white/35 px-7 text-sm font-black text-white">
+            <Link href={grillHref} className="inline-flex h-12 items-center rounded-full border border-white/35 px-7 text-sm font-black text-white">
               View Menu
             </Link>
           </div>
@@ -790,79 +857,82 @@ function TopControls(props: {
   openCart: () => void;
   scrollOrQuote: (target: string) => void;
   openQuote: () => void;
+  routeBase: string;
+  grillHref: string;
+  galleryHref: string;
+  loginHref: string;
 }) {
   return (
-    <div className="absolute right-4 top-4 z-40 flex items-center gap-2">
-      <div
-        className="group relative"
-        onMouseEnter={() => props.setMenuOpen(true)}
-        onMouseLeave={() => props.setMenuOpen(false)}
-      >
+    <div className="absolute inset-x-0 top-0 z-40 pointer-events-none">
+      <div className="pointer-events-auto absolute right-4 top-4 flex items-center gap-2">
+        <div
+          className="group relative"
+          onMouseEnter={() => props.setMenuOpen(true)}
+          onMouseLeave={() => props.setMenuOpen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => props.setMenuOpen(!props.menuOpen)}
+            className="inline-flex h-11 items-center gap-2 bg-transparent px-2 text-sm font-black text-white transition hover:text-[#f59e0b]"
+          >
+            <Menu size={18} />
+            Menu
+          </button>
+
+          <div
+            className={`${props.menuOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"} absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-[#8a3f0d] bg-[#b45309] p-2 text-sm font-bold text-white shadow-2xl transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}
+          >
+            <Link className="block rounded-xl px-3 py-2 text-[#fff8e1] hover:bg-[#8a3f0d] hover:text-[#facc15]" href={props.routeBase}>
+              <span className="!text-white" style={{ color: "#ffffff" }}>Home</span>
+            </Link>
+            <Link className="block rounded-xl px-3 py-2 text-[#fff8e1] hover:bg-[#8a3f0d] hover:text-[#facc15]" href={props.grillHref}>
+              <span className="!text-white" style={{ color: "#ffffff" }}>The Grill</span>
+            </Link>
+            <Link className="block rounded-xl px-3 py-2 text-[#fff8e1] hover:bg-[#8a3f0d] hover:text-[#facc15]" href={props.galleryHref}>
+              Gallery
+            </Link>
+            <Link className="block rounded-xl px-3 py-2 text-[#fff8e1] hover:bg-[#8a3f0d] hover:text-[#facc15]" href={props.loginHref}>
+              <span className="!text-white" style={{ color: "#ffffff" }}>Login</span>
+            </Link>
+          </div>
+        </div>
+
         <button
           type="button"
-          onClick={() => props.setMenuOpen(!props.menuOpen)}
-          className="inline-flex h-11 items-center gap-2 bg-transparent px-2 text-sm font-black text-white transition hover:text-[#f59e0b]"
+          onClick={props.openCart}
+          className="relative grid h-11 w-11 place-items-center bg-transparent text-white transition hover:text-[#f59e0b]"
+          aria-label="Open cart"
         >
-          <Menu size={18} />
-          Menu
+          <ShoppingCart size={19} />
+          {props.cartCount ? (
+            <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#f59e0b] px-1 text-[10px] font-black text-black">
+              {props.cartCount}
+            </span>
+          ) : null}
         </button>
-
-        <div
-          className={`${props.menuOpen ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0"} absolute right-0 mt-2 w-60 overflow-hidden rounded-2xl border border-[#8a3f0d] bg-[#b45309] p-2 text-sm font-bold text-[#fff8e1] shadow-2xl transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100`}
-        >
-          <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot">
-            Home
-          </Link>
-          <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot/grill">
-            The Grill
-          </Link>
-          <button type="button" onClick={() => props.scrollOrQuote("party-packs")} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            Party Packs
-          </button>
-          <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="/suya-spot#grillary">
-            Gallery
-          </Link>
-          <button type="button" onClick={props.openQuote} className="block w-full rounded-xl px-3 py-2 text-left hover:bg-[#8a3f0d] hover:text-[#ffe8b5]">
-            Bulk Orders
-          </button>
-          <Link className="block rounded-xl px-3 py-2 hover:bg-[#8a3f0d] hover:text-[#ffe8b5]" href="#contact">
-            Contact
-          </Link>
-          <Link className="block rounded-xl px-3 py-2 text-[#ffe8b5] hover:bg-[#8a3f0d]" href="/suya-spot/login">
-            Login
-          </Link>
-        </div>
       </div>
-
-      <button
-        type="button"
-        onClick={props.openCart}
-        className="relative grid h-11 w-11 place-items-center bg-transparent text-white transition hover:text-[#f59e0b]"
-        aria-label="Open cart"
-      >
-        <ShoppingCart size={19} />
-        {props.cartCount ? (
-          <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#f59e0b] px-1 text-[10px] font-black text-black">
-            {props.cartCount}
-          </span>
-        ) : null}
-      </button>
     </div>
   );
 }
 function GrillBanner(props: {
   business: SuyaBusiness;
+  grillHeroImage: string;
+  grillSubtitle: string;
   menuOpen: boolean;
   setMenuOpen: (value: boolean) => void;
   cartCount: number;
   openCart: () => void;
   scrollOrQuote: (target: string) => void;
   openQuote: () => void;
+  routeBase: string;
+  grillHref: string;
+  galleryHref: string;
+  loginHref: string;
 }) {
   return (
     <section className="relative overflow-hidden bg-[#17120a] px-4 py-12 text-white md:px-6 md:py-16">
       <Image
-        src="/suya/suya-grill-hero.png"
+        src={props.grillHeroImage}
         alt="S I S Suya Spot grill"
         fill
         sizes="100vw"
@@ -873,20 +943,20 @@ function GrillBanner(props: {
       <TopControls {...props} />
       <div className="suya-grill-hero-copy relative z-10 mx-auto max-w-7xl pt-14">
         <p className="text-xs font-black uppercase tracking-[0.22em]" style={{ color: "#ffffff" }}>The Grill</p>
-        <h1 className="mt-3 text-4xl font-black tracking-[-0.06em]" style={{ color: "#ffffff" }}>The Grill</h1>
-        <p className="mt-3 max-w-xl text-sm font-semibold" style={{ color: "#ffffff" }}>Browse fresh suya, party packs, event trays, and yaji.</p>
+        <h1 className="font-store-heading mt-3 text-4xl font-black tracking-[-0.06em]" style={{ color: "#ffffff" }}>The Grill</h1>
+        <p className="mt-3 max-w-xl text-sm font-semibold" style={{ color: "#ffffff" }}>{props.grillSubtitle}</p>
       </div>
     </section>
   );
 }
 
-function Favorites({ products }: { products: SuyaProduct[] }) {
+function Favorites({ products, grillHref }: { products: SuyaProduct[]; grillHref: string }) {
   return (
     <section className="px-4 py-10 md:px-6">
       <div className="mx-auto max-w-7xl">
         <div className="mb-5 flex items-center justify-between gap-3">
           <h2 className="text-2xl font-black tracking-[-0.04em]">Customer Favorites</h2>
-          <Link href="/suya-spot/grill" className="rounded-full bg-[#17120a] px-5 py-2 text-sm font-black text-white">Explore The Grill</Link>
+          <Link href={grillHref} className="rounded-full bg-[#17120a] px-5 py-2 text-sm font-black text-white">Explore The Grill</Link>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {products.slice(0, 2).map((product) => <ShowcaseCard key={product.id} product={product} large />)}
@@ -1064,7 +1134,7 @@ function Faq({ activeFaq, setActiveFaq }: { activeFaq: number; setActiveFaq: (in
   );
 }
 
-function FinalCta({ business, whatsapp }: { business: SuyaBusiness; whatsapp: string }) {
+function FinalCta({ business, whatsapp, grillHref }: { business: SuyaBusiness; whatsapp: string; grillHref: string }) {
   return (
     <section className="px-4 py-8 md:px-6">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 rounded-[1.5rem] border border-[#e7dcc8] bg-white p-6 md:flex-row md:items-center md:justify-between">
@@ -1073,7 +1143,7 @@ function FinalCta({ business, whatsapp }: { business: SuyaBusiness; whatsapp: st
           <p className="mt-2 text-sm font-semibold text-[#6f6252]">Fresh suya, party packs, and event trays are ready when you are.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href="/suya-spot/grill" className="rounded-full bg-[#17120a] px-5 py-3 text-sm font-black text-white">Explore The Grill</Link>
+          <Link href={grillHref} className="rounded-full bg-[#17120a] px-5 py-3 text-sm font-black text-white">Explore The Grill</Link>
           {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">WhatsApp</a> : null}
         </div>
       </div>
@@ -1086,18 +1156,16 @@ function Footer({ business, whatsapp, instagramUrl, openQuote }: { business: Suy
     <footer id="contact" className="border-t-4 border-[#f59e0b] bg-[#17120a] px-4 py-8 text-white md:px-6">
       <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
         <div>
-          <h3 className="text-lg font-black text-[#f59e0b]">{business.name}</h3>
+          <Link href={storeHomeHref} className="text-lg font-black text-[#f59e0b]">{business.name}</Link>
           <p className="mt-3 text-sm font-semibold text-white/70">{business.location || "Gwarimpa, Abuja"}</p>
           <p className="mt-1 text-sm font-semibold text-white/70">{business.opening_hours || "Open from 11:00 AM daily"}</p>
         </div>
         <div>
           <h3 className="font-black text-[#f59e0b]">Quick Links</h3>
           <div className="mt-3 grid gap-2 text-sm font-semibold text-white/75">
-            <Link href="/suya-spot/grill">The Grill</Link>
+            <Link href={grillHref}>The Grill</Link>
             <button className="text-left" type="button" onClick={openQuote}>Party Packs</button>
-            <Link href="/suya-spot#grillary">Gallery</Link>
-            <button className="text-left" type="button" onClick={openQuote}>Bulk Orders</button>
-            <a href="#contact">Contact</a>
+            <Link href={galleryHref}>Gallery</Link>
           </div>
         </div>
         <div>
@@ -1105,7 +1173,7 @@ function Footer({ business, whatsapp, instagramUrl, openQuote }: { business: Suy
           <div className="mt-3 grid gap-2 text-sm font-semibold text-white/75">
             {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">WhatsApp</a> : null}
             {instagramUrl ? <a href={instagramUrl} target="_blank" rel="noreferrer">Instagram</a> : null}
-            <Link href="/">Powered by Market Villa</Link>
+            {footerText ? <span>{footerText}</span> : <Link href="/">Powered by Market Villa</Link>}
           </div>
         </div>
       </div>
@@ -1270,6 +1338,18 @@ function QuoteDialog({ state, business, whatsapp, close }: { state: QuoteState; 
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

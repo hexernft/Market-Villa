@@ -2,8 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, Loader2, Palette } from "lucide-react";
+import { CheckCircle2, Loader2, Lock, Palette, Pencil } from "lucide-react";
 import { getMyBusinesses, updateBusinessTheme } from "@/lib/business-actions";
+import {
+  BusinessThemeExtension,
+  canEditProTheme,
+  getPurchasedThemeExtensions,
+} from "@/lib/theme-editor-actions";
 
 type DashboardBusiness = {
   id: string;
@@ -43,6 +48,7 @@ export default function ThemeStorePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [extensions, setExtensions] = useState<BusinessThemeExtension[]>([]);
 
   const selectedBusiness = useMemo(() => {
     return businesses.find((business) => business.id === selectedBusinessId);
@@ -64,6 +70,7 @@ export default function ThemeStorePage() {
         if (items.length > 0) {
           setSelectedBusinessId(items[0].id);
           setSelectedThemeId(items[0].theme_id || defaultTheme.id);
+          setExtensions(await getPurchasedThemeExtensions(items[0].id));
         }
       } catch (error) {
         const errorMessage =
@@ -160,6 +167,9 @@ export default function ThemeStorePage() {
 
                 setSelectedBusinessId(businessId);
                 setSelectedThemeId(business?.theme_id || defaultTheme.id);
+                getPurchasedThemeExtensions(businessId)
+                  .then(setExtensions)
+                  .catch(() => setExtensions([]));
               }}
               className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm font-semibold text-[#241436] outline-none focus:border-[#7c3aed]"
             >
@@ -229,7 +239,39 @@ export default function ThemeStorePage() {
             </p>
           </div>
         </div>
+        <div className="mt-5 flex flex-wrap gap-2">
+          {selectedBusiness &&
+          canEditProTheme({
+            business: selectedBusiness as any,
+            themeId: selectedThemeId,
+            extensions,
+          }) &&
+          selectedThemeId !== defaultTheme.id ? (
+            <Link
+              href={`/dashboard/theme-editor/${selectedThemeId}?businessId=${selectedBusinessId}`}
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#241436] px-4 py-2 text-sm font-black text-white"
+            >
+              <Pencil size={15} />
+              Edit Theme
+            </Link>
+          ) : selectedThemeId !== defaultTheme.id ? (
+            <Link
+              href="/dashboard/billing"
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#7c3aed] px-4 py-2 text-sm font-black text-white"
+            >
+              <Lock size={15} />
+              Purchase / Upgrade
+            </Link>
+          ) : null}
+          <Link
+            href="/dashboard/theme-editor"
+            className="inline-flex rounded-2xl border border-[#ebe7f3] bg-white px-4 py-2 text-sm font-black text-[#241436]"
+          >
+            Theme Editor
+          </Link>
+        </div>
       </section>
     </div>
   );
 }
+

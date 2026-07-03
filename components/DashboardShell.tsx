@@ -16,6 +16,7 @@ import {
   Megaphone,
   MessageCircle,
   Package,
+  Palette,
   Settings,
   Sparkles,
   Store,
@@ -69,6 +70,11 @@ const navItems = [
     label: "Store Details",
     href: "/dashboard/store-details",
     icon: Store,
+  },
+  {
+    label: "Theme Editor",
+    href: "/dashboard/theme-editor",
+    icon: Palette,
   },
   {
     label: "Billing",

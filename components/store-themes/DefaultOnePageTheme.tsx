@@ -174,7 +174,7 @@ function addToCart(item: StoreProduct) {
   }
 
   return (
-    <main className="market-villa-customized-store min-h-screen bg-[#faf8ff] text-[#17111f]">
+    <main className="market-villa-customized-store min-h-screen bg-white text-[#17111f]">
       
       <div
         className="px-4 py-2 text-[0.68rem] font-black uppercase tracking-[0.08em] text-white"
@@ -318,8 +318,8 @@ function addToCart(item: StoreProduct) {
         </div>
       </header>
 
-      <section className="bg-[#faf8ff]">
-        <div className="relative grid min-h-[10.5rem] overflow-hidden bg-[#f6f0ff] md:min-h-[15.5rem]">
+      <section className="bg-white">
+        <div className="relative grid min-h-[10.5rem] overflow-hidden bg-white md:min-h-[15.5rem]">
           {heroImage ? (
             <Image
               src={heroImage}
@@ -334,7 +334,7 @@ function addToCart(item: StoreProduct) {
         </div>
       </section>
 
-      <section className="border-y border-[#eee7f7] bg-[#faf8ff]">
+      <section className="border-y border-slate-200 bg-white">
         <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 md:px-6">
           {categories.map((category) => (
             <button
@@ -358,7 +358,7 @@ function addToCart(item: StoreProduct) {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl bg-[#faf8ff] px-4 py-7 md:px-6 md:py-10">
+      <section className="mx-auto max-w-7xl bg-white px-4 py-7 md:px-6 md:py-10">
         {filteredItems.length ? (
           <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-x-9">
             {filteredItems.map((item) => (
@@ -566,7 +566,7 @@ function ProductCard({
 
   return (
     <article
-      className="group overflow-hidden rounded-[2rem] bg-[#fbfaff] transition-transform duration-300 hover:-translate-y-1"
+      className="group overflow-hidden rounded-[2rem] bg-white transition-transform duration-300 hover:-translate-y-1"
       style={{ boxShadow: "none" }}
     >
       <div
@@ -620,6 +620,8 @@ function ProductCard({
     </article>
   );
 }
+
+
 
 
 

@@ -1,6 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap");
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -22,6 +20,7 @@
   --mv-shadow-soft: 0 16px 44px rgba(55, 31, 83, 0.09);
   --mv-radius: 1.35rem;
   --mv-radius-lg: 2rem;
+  --font-store-heading: var(--font-store-body);
 }
 
 * { box-sizing: border-box; }
@@ -34,7 +33,7 @@ body {
     radial-gradient(circle at 96% 42%, rgba(247, 214, 232, .54), transparent 26rem),
     linear-gradient(135deg, #fff7f3 0%, #f7f1ff 44%, #efe3ff 100%);
   color: var(--foreground);
-  font-family: "Inter Tight", "Inter", "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-market), "Segoe UI", Arial, sans-serif;
   font-size: 14px;
   letter-spacing: -0.015em;
 }
@@ -42,9 +41,15 @@ button, input, textarea, select { font: inherit; }
 ::selection { background: var(--mv-violet); color: white; }
 
 .font-editorial {
-  font-family: "Playfair Display", Georgia, serif !important;
+  font-family: var(--font-store-elegant), Georgia, serif !important;
   letter-spacing: -0.055em;
 }
+.font-store-body { font-family: var(--font-store-body), var(--font-market), Arial, sans-serif !important; }
+.font-store-heading { font-family: var(--font-store-heading), var(--font-store-body), var(--font-market), Arial, sans-serif !important; }
+.font-store-elegant { font-family: var(--font-store-elegant), Georgia, serif !important; }
+.font-store-grill { font-family: var(--font-store-grill), var(--font-store-body), Arial, sans-serif !important; }
+.font-store-manrope { font-family: var(--font-store-body), var(--font-market), Arial, sans-serif !important; }
+.font-store-market { font-family: var(--font-market), Arial, sans-serif !important; }
 h3 { letter-spacing: -0.04em; }
 p { line-height: 1.65; }
 
@@ -2008,7 +2013,7 @@ section h2:has(+ p) {
 .market-featured-stores-section article::before,
 .market-featured-stores-section .premium-card-hover::before,
 .market-featured-stores-section .mv-soft-panel::before {
-  content: "✓ Featured";
+  content: "âœ“ Featured";
   position: absolute;
   right: 1.15rem;
   top: 1.15rem;
@@ -4186,3 +4191,33 @@ aside.admin-sidebar .admin-sidebar-link-active {
   text-shadow: none !important;
   filter: none !important;
 }
+
+/* SUYA CUSTOMER LOGIN FORCE */
+.suya-customer-login-force input {
+  background: #2a170c !important;
+  border: 1px solid rgba(250, 204, 21, 0.38) !important;
+  color: #fff8e1 !important;
+}
+
+.suya-customer-login-force input::placeholder {
+  color: #d8c6ad !important;
+}
+
+.suya-customer-login-force button[type="submit"] {
+  background: #f59e0b !important;
+  color: #000 !important;
+  border-color: #f59e0b !important;
+}
+
+.suya-customer-login-force .google-btn {
+  background: #2a170c !important;
+  color: #facc15 !important;
+  border: 1px solid rgba(250, 204, 21, 0.45) !important;
+}
+
+.suya-customer-login-force .guest-btn {
+  background: #3b2415 !important;
+  color: #fff8e1 !important;
+  border: 1px solid rgba(250, 204, 21, 0.3) !important;
+}
+
