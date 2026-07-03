@@ -478,9 +478,6 @@ export function SuyaSpotProTheme({
           heroTitle={heroTitle}
           heroSubtitle={heroSubtitle}
           openingHours={openingHours}
-          grillHref={grillHref}
-          routeBase={routeBase}
-          galleryHref={galleryHref}
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
           cartCount={cartCount}
@@ -489,6 +486,9 @@ export function SuyaSpotProTheme({
           scrollOrQuote={scrollOrQuote}
           announcementText={announcementText}
           whatsapp={whatsapp}
+          routeBase={routeBase}
+          grillHref={grillHref}
+          galleryHref={galleryHref}
           loginHref={loginHref}
         />
       ) : (
@@ -496,15 +496,15 @@ export function SuyaSpotProTheme({
           business={business}
           grillHeroImage={String(settings.grill_hero_image_url || "/suya/suya-grill-hero.png")}
           grillSubtitle={String(settings.grill_subtitle || "Browse fresh suya, party packs, event trays, and yaji.")}
-          routeBase={routeBase}
-          grillHref={grillHref}
-          galleryHref={galleryHref}
           menuOpen={menuOpen}
           setMenuOpen={setMenuOpen}
           cartCount={cartCount}
           openCart={() => setCartOpen(true)}
           scrollOrQuote={scrollOrQuote}
           openQuote={() => setQuoteState({ type: "bulk" })}
+          routeBase={routeBase}
+          grillHref={grillHref}
+          galleryHref={galleryHref}
           loginHref={loginHref}
         />
       )}
@@ -518,6 +518,9 @@ export function SuyaSpotProTheme({
           cartCount={cartCount}
           openCart={() => setCartOpen(true)}
           openQuote={() => setQuoteState({ type: "bulk" })}
+          routeBase={routeBase}
+          grillHref={grillHref}
+          galleryHref={galleryHref}
           loginHref={loginHref}
           logoUrl={logoUrl}
           logoSize={String(settings.navbar_logo_size || "medium")}
@@ -733,10 +736,10 @@ function SheetArrivalNav({
           <Link href={routeBase} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
             <span className="!text-white" style={{ color: "#ffffff" }}>Home</span>
           </Link>
-          <Link href={grillHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
+          <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
             <span className="!text-white" style={{ color: "#ffffff" }}>The Grill</span>
           </Link>
-          <Link href={galleryHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
+          <Link href={business.slug ? `/store/${business.slug}#grillary` : "/suya-spot#grillary"} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
             <span className="!text-white" style={{ color: "#ffffff" }}>Gallery</span>
           </Link>
           <Link href={loginHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
@@ -818,6 +821,9 @@ function Hero({
         openCart={openCart}
         scrollOrQuote={scrollOrQuote}
         openQuote={openQuote}
+        routeBase={routeBase}
+        grillHref={grillHref}
+        galleryHref={galleryHref}
         loginHref={loginHref}
       />
       <div className="relative z-10 grid min-h-screen max-w-5xl items-start px-5 pt-[24vh] text-left md:px-10 md:pt-[22vh] lg:ml-[4vw]">
@@ -837,10 +843,10 @@ function Hero({
             ))}
           </p>
           <div className="mt-8 flex flex-wrap justify-start gap-3">
-            <Link href={grillHref} className="inline-flex h-12 items-center rounded-full bg-[#f59e0b] px-7 text-sm font-black text-black">
+            <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"} className="inline-flex h-12 items-center rounded-full bg-[#f59e0b] px-7 text-sm font-black text-black">
               Order Now
             </Link>
-            <Link href={grillHref} className="inline-flex h-12 items-center rounded-full border border-white/35 px-7 text-sm font-black text-white">
+            <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"} className="inline-flex h-12 items-center rounded-full border border-white/35 px-7 text-sm font-black text-white">
               View Menu
             </Link>
           </div>
@@ -1143,7 +1149,7 @@ function FinalCta({ business, whatsapp, grillHref }: { business: SuyaBusiness; w
           <p className="mt-2 text-sm font-semibold text-[#6f6252]">Fresh suya, party packs, and event trays are ready when you are.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href={grillHref} className="rounded-full bg-[#17120a] px-5 py-3 text-sm font-black text-white">Explore The Grill</Link>
+          <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"} className="rounded-full bg-[#17120a] px-5 py-3 text-sm font-black text-white">Explore The Grill</Link>
           {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">WhatsApp</a> : null}
         </div>
       </div>
@@ -1156,16 +1162,16 @@ function Footer({ business, whatsapp, instagramUrl, openQuote }: { business: Suy
     <footer id="contact" className="border-t-4 border-[#f59e0b] bg-[#17120a] px-4 py-8 text-white md:px-6">
       <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
         <div>
-          <Link href={storeHomeHref} className="text-lg font-black text-[#f59e0b]">{business.name}</Link>
+          <Link href={business.slug ? `/store/${business.slug}` : "/suya-spot"} className="text-lg font-black text-[#f59e0b]">{business.name}</Link>
           <p className="mt-3 text-sm font-semibold text-white/70">{business.location || "Gwarimpa, Abuja"}</p>
           <p className="mt-1 text-sm font-semibold text-white/70">{business.opening_hours || "Open from 11:00 AM daily"}</p>
         </div>
         <div>
           <h3 className="font-black text-[#f59e0b]">Quick Links</h3>
           <div className="mt-3 grid gap-2 text-sm font-semibold text-white/75">
-            <Link href={grillHref}>The Grill</Link>
+            <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"}>The Grill</Link>
             <button className="text-left" type="button" onClick={openQuote}>Party Packs</button>
-            <Link href={galleryHref}>Gallery</Link>
+            <Link href={business.slug ? `/store/${business.slug}#grillary` : "/suya-spot#grillary"}>Gallery</Link>
           </div>
         </div>
         <div>
@@ -1173,7 +1179,7 @@ function Footer({ business, whatsapp, instagramUrl, openQuote }: { business: Suy
           <div className="mt-3 grid gap-2 text-sm font-semibold text-white/75">
             {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">WhatsApp</a> : null}
             {instagramUrl ? <a href={instagramUrl} target="_blank" rel="noreferrer">Instagram</a> : null}
-            {footerText ? <span>{footerText}</span> : <Link href="/">Powered by Market Villa</Link>}
+            <Link href="/">Powered by Market Villa</Link>
           </div>
         </div>
       </div>
@@ -1338,6 +1344,15 @@ function QuoteDialog({ state, business, whatsapp, close }: { state: QuoteState; 
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 
