@@ -13,6 +13,7 @@ import {
   Megaphone,
   MessageCircle,
   Package,
+  Palette,
   Save,
   ShoppingBag,
   Sparkles,
@@ -32,6 +33,7 @@ const menuSections = [
     title: "Store Setup",
     items: [
       { label: "Store Details", href: "/dashboard/store-details", icon: Store },
+      { label: "Theme Store", href: "/dashboard/theme-store", icon: Palette },
       { label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
       { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
       { label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
