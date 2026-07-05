@@ -23,6 +23,7 @@ export type ThemeEditorBusiness = {
   logo_url?: string | null;
   cover_image_url?: string | null;
   opening_hours?: string | null;
+  instagram_url?: string | null;
   theme_settings?: Record<string, any> | null;
 };
 
@@ -92,7 +93,7 @@ export async function getBusinessThemeEditorData() {
   const { data: businesses, error } = await supabase
     .from("businesses")
     .select(
-      "id,name,slug,theme_id,subscription_plan,admin_override_active,logo_url,cover_image_url,opening_hours,theme_settings",
+      "id,name,slug,theme_id,subscription_plan,admin_override_active,logo_url,cover_image_url,opening_hours,instagram_url,theme_settings",
     )
     .eq("owner_id", user.id)
     .order("created_at", { ascending: false });

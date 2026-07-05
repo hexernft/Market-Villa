@@ -20,7 +20,7 @@ type Props = {
   value: string;
   onChange: (url: string) => void;
   businessId: string;
-  imageType: "logo" | "cover";
+  imageType: "logo" | "cover" | "hero" | "grill-hero" | "theme-logo";
   aspect: "square" | "wide";
 };
 

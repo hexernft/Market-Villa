@@ -224,6 +224,11 @@ export function SuyaSpotProTheme({
   const promoVideoUrl = String(settings.promoVideoUrl || "").trim();
   const instagramUrl =
     String(settings.instagramUrl || business.instagram_url || "").trim();
+  const primaryCtaText = String(settings.primary_cta_text || "Order Now");
+  const secondaryCtaText = String(settings.secondary_cta_text || "View Menu");
+  const bulkCtaText = String(settings.bulk_cta_text || "Message Us For Bulk Orders & Events");
+  const whatsappCtaText = String(settings.whatsapp_cta_text || "WhatsApp");
+  const footerText = String(settings.footer_text || "Powered by Market Villa");
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -490,6 +495,8 @@ export function SuyaSpotProTheme({
           grillHref={grillHref}
           galleryHref={galleryHref}
           loginHref={loginHref}
+          primaryCtaText={primaryCtaText}
+          secondaryCtaText={secondaryCtaText}
         />
       ) : (
         <GrillBanner
@@ -540,15 +547,22 @@ export function SuyaSpotProTheme({
             openQuote={() => setQuoteState({ type: "bulk" })}
           /> : null}
           {showGallery ? <Grillary /> : null}
-          {showBulkCta ? <BulkCta openQuote={() => setQuoteState({ type: "bulk" })} /> : null}
+          {showBulkCta ? <BulkCta openQuote={() => setQuoteState({ type: "bulk" })} bulkCtaText={bulkCtaText} /> : null}
           <DeliveryPickup business={business} />
           <Faq activeFaq={activeFaq} setActiveFaq={setActiveFaq} />
-          <FinalCta business={business} whatsapp={whatsapp} grillHref={grillHref} />
+          <FinalCta
+            business={business}
+            whatsapp={whatsapp}
+            grillHref={grillHref}
+            whatsappCtaText={whatsappCtaText}
+          />
           <Footer
             business={business}
             whatsapp={whatsapp}
             instagramUrl={instagramUrl}
             openQuote={() => setQuoteState({ type: "bulk" })}
+            whatsappCtaText={whatsappCtaText}
+            footerText={footerText}
           />
         </div>
       ) : (
@@ -594,6 +608,8 @@ export function SuyaSpotProTheme({
             whatsapp={whatsapp}
             instagramUrl={instagramUrl}
             openQuote={() => setQuoteState({ type: "bulk" })}
+            whatsappCtaText={whatsappCtaText}
+            footerText={footerText}
           />
         </>
       )}
@@ -783,6 +799,8 @@ function Hero({
   routeBase,
   galleryHref,
   loginHref,
+  primaryCtaText,
+  secondaryCtaText,
 }: {
   business: SuyaBusiness;
   heroImage: string;
@@ -801,6 +819,8 @@ function Hero({
   routeBase: string;
   galleryHref: string;
   loginHref: string;
+  primaryCtaText: string;
+  secondaryCtaText: string;
 }) {
   const heroTitleLines = heroTitle.split("\n").filter(Boolean);
   const heroSubtitleLines = heroSubtitle.split("\n").filter(Boolean);
@@ -844,10 +864,10 @@ function Hero({
           </p>
           <div className="mt-8 flex flex-wrap justify-start gap-3">
             <Link href={grillHref} className="inline-flex h-12 items-center rounded-full bg-[#f59e0b] px-7 text-sm font-black text-black">
-              Order Now
+              {primaryCtaText}
             </Link>
             <Link href={grillHref} className="inline-flex h-12 items-center rounded-full border border-white/35 px-7 text-sm font-black text-white">
-              View Menu
+              {secondaryCtaText}
             </Link>
           </div>
         </div>
@@ -1071,12 +1091,12 @@ function Grillary() {
   );
 }
 
-function BulkCta({ openQuote }: { openQuote: () => void }) {
+function BulkCta({ openQuote, bulkCtaText }: { openQuote: () => void; bulkCtaText: string }) {
   return (
     <section className="px-4 py-8 md:px-6">
       <div className="mx-auto max-w-7xl rounded-[1.5rem] bg-[#17120a] p-6 text-white md:p-8">
         <h2 className="text-2xl font-black tracking-[-0.04em]">Bulk/Event Orders</h2>
-        <button type="button" onClick={openQuote} className="mt-5 rounded-full bg-[#f59e0b] px-5 py-3 text-sm font-black text-black">Message Us For Bulk Orders & Events</button>
+        <button type="button" onClick={openQuote} className="mt-5 rounded-full bg-[#f59e0b] px-5 py-3 text-sm font-black text-black">{bulkCtaText}</button>
       </div>
     </section>
   );
@@ -1140,7 +1160,17 @@ function Faq({ activeFaq, setActiveFaq }: { activeFaq: number; setActiveFaq: (in
   );
 }
 
-function FinalCta({ business, whatsapp, grillHref }: { business: SuyaBusiness; whatsapp: string; grillHref: string }) {
+function FinalCta({
+  business,
+  whatsapp,
+  grillHref,
+  whatsappCtaText,
+}: {
+  business: SuyaBusiness;
+  whatsapp: string;
+  grillHref: string;
+  whatsappCtaText: string;
+}) {
   return (
     <section className="px-4 py-8 md:px-6">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 rounded-[1.5rem] border border-[#e7dcc8] bg-white p-6 md:flex-row md:items-center md:justify-between">
@@ -1150,14 +1180,28 @@ function FinalCta({ business, whatsapp, grillHref }: { business: SuyaBusiness; w
         </div>
         <div className="flex flex-wrap gap-2">
           <Link href={grillHref} className="rounded-full bg-[#17120a] px-5 py-3 text-sm font-black text-white">Explore The Grill</Link>
-          {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">WhatsApp</a> : null}
+          {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">{whatsappCtaText}</a> : null}
         </div>
       </div>
     </section>
   );
 }
 
-function Footer({ business, whatsapp, instagramUrl, openQuote }: { business: SuyaBusiness; whatsapp: string; instagramUrl: string; openQuote: () => void }) {
+function Footer({
+  business,
+  whatsapp,
+  instagramUrl,
+  openQuote,
+  whatsappCtaText,
+  footerText,
+}: {
+  business: SuyaBusiness;
+  whatsapp: string;
+  instagramUrl: string;
+  openQuote: () => void;
+  whatsappCtaText: string;
+  footerText: string;
+}) {
   return (
     <footer id="contact" className="border-t-4 border-[#f59e0b] bg-[#17120a] px-4 py-8 text-white md:px-6">
       <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
@@ -1177,9 +1221,9 @@ function Footer({ business, whatsapp, instagramUrl, openQuote }: { business: Suy
         <div>
           <h3 className="font-black text-[#f59e0b]">Contact</h3>
           <div className="mt-3 grid gap-2 text-sm font-semibold text-white/75">
-            {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">WhatsApp</a> : null}
+            {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">{whatsappCtaText}</a> : null}
             {instagramUrl ? <a href={instagramUrl} target="_blank" rel="noreferrer">Instagram</a> : null}
-            <Link href="/">Powered by Market Villa</Link>
+            <Link href="/">{footerText}</Link>
           </div>
         </div>
       </div>

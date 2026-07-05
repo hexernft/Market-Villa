@@ -1,9 +1,10 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { Eye, Lock, Loader2, RotateCcw, Save } from "lucide-react";
+import { Eye, Lock, Loader2, RotateCcw, Save, Trash2, Upload, Video } from "lucide-react";
+import { ImageUploadEditor } from "@/components/ImageUploadEditor";
 import {
   BusinessThemeExtension,
   ThemeEditorBusiness,
@@ -13,6 +14,7 @@ import {
   resetBusinessThemeSettings,
   updateBusinessThemeSettings,
 } from "@/lib/theme-editor-actions";
+import { supabase } from "@/lib/supabase";
 
 const inputClass =
   "min-h-11 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-bold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10";
@@ -120,6 +122,12 @@ export default function ThemeEditorDetailPage() {
       navbar_style: readSetting(settings, "navbar_style", "sticky"),
       font_heading: readSetting(settings, "font_heading", "grill"),
       font_body: readSetting(settings, "font_body", "manrope"),
+      instagramUrl: readSetting(settings, "instagramUrl", business?.instagram_url || ""),
+      promoVideoUrl: readSetting(settings, "promoVideoUrl"),
+      instagramVideoUrl: readSetting(settings, "instagramVideoUrl"),
+      primary_cta_text: readSetting(settings, "primary_cta_text", "Order Now"),
+      secondary_cta_text: readSetting(settings, "secondary_cta_text", "View Menu"),
+      bulk_cta_text: readSetting(settings, "bulk_cta_text", "Message Us For Bulk Orders & Events"),
       whatsapp_cta_text: readSetting(settings, "whatsapp_cta_text"),
       footer_text: readSetting(settings, "footer_text"),
       show_gallery: readBool(settings, "show_gallery", true),
@@ -245,20 +253,58 @@ export default function ThemeEditorDetailPage() {
       ) : null}
 
       <EditorSection title="Brand">
-        <TextInput label="Store logo URL" value={formState.logo_url} onChange={(value) => updateField("logo_url", value)} />
+        <ImageUploadEditor
+          label="Store logo"
+          value={formState.logo_url}
+          onChange={(value) => updateField("logo_url", value)}
+          businessId={selectedBusiness.id}
+          imageType="theme-logo"
+          aspect="square"
+        />
         <TextInput label="Opening hours" value={formState.opening_hours} onChange={(value) => updateField("opening_hours", value)} />
+        <TextInput label="Instagram URL" value={formState.instagramUrl} onChange={(value) => updateField("instagramUrl", value)} />
       </EditorSection>
 
       <EditorSection title="Hero">
         <TextInput label="Hero title" value={formState.hero_title} onChange={(value) => updateField("hero_title", value)} />
         <TextInput label="Hero subtitle" value={formState.hero_subtitle} onChange={(value) => updateField("hero_subtitle", value)} />
-        <TextInput label="Hero image URL" value={formState.hero_image_url} onChange={(value) => updateField("hero_image_url", value)} />
+        <ImageUploadEditor
+          label="Hero image"
+          value={formState.hero_image_url}
+          onChange={(value) => updateField("hero_image_url", value)}
+          businessId={selectedBusiness.id}
+          imageType="hero"
+          aspect="wide"
+        />
         <TextInput label="Announcement text" value={formState.announcement_text} onChange={(value) => updateField("announcement_text", value)} />
+        <TextInput label="Primary CTA text" value={formState.primary_cta_text} onChange={(value) => updateField("primary_cta_text", value)} />
+        <TextInput label="Secondary CTA text" value={formState.secondary_cta_text} onChange={(value) => updateField("secondary_cta_text", value)} />
       </EditorSection>
 
       <EditorSection title="Grill Page">
-        <TextInput label="Grill hero image URL" value={formState.grill_hero_image_url} onChange={(value) => updateField("grill_hero_image_url", value)} />
+        <ImageUploadEditor
+          label="Grill hero image"
+          value={formState.grill_hero_image_url}
+          onChange={(value) => updateField("grill_hero_image_url", value)}
+          businessId={selectedBusiness.id}
+          imageType="grill-hero"
+          aspect="wide"
+        />
         <TextInput label="Grill subtitle" value={formState.grill_subtitle} onChange={(value) => updateField("grill_subtitle", value)} />
+        <VideoUploadInput
+          label="Promo video"
+          value={formState.promoVideoUrl}
+          onChange={(value) => updateField("promoVideoUrl", value)}
+          businessId={selectedBusiness.id}
+          videoType="promo-video"
+        />
+        <VideoUploadInput
+          label="Instagram video"
+          value={formState.instagramVideoUrl}
+          onChange={(value) => updateField("instagramVideoUrl", value)}
+          businessId={selectedBusiness.id}
+          videoType="instagram-video"
+        />
       </EditorSection>
 
       <EditorSection title="Colors">
@@ -276,6 +322,9 @@ export default function ThemeEditorDetailPage() {
             <option value="large">Large</option>
           </select>
         </label>
+      </EditorSection>
+
+      <EditorSection title="Sections">
         <ToggleInput label="Show gallery" value={formState.show_gallery} onChange={(value) => updateField("show_gallery", value)} />
         <ToggleInput label="Show party packs" value={formState.show_party_packs} onChange={(value) => updateField("show_party_packs", value)} />
         <ToggleInput label="Show bulk CTA" value={formState.show_bulk_cta} onChange={(value) => updateField("show_bulk_cta", value)} />
@@ -287,6 +336,7 @@ export default function ThemeEditorDetailPage() {
       </EditorSection>
 
       <EditorSection title="Footer/CTA">
+        <TextInput label="Bulk CTA text" value={formState.bulk_cta_text} onChange={(value) => updateField("bulk_cta_text", value)} />
         <TextInput label="WhatsApp CTA text" value={formState.whatsapp_cta_text} onChange={(value) => updateField("whatsapp_cta_text", value)} />
         <TextInput label="Footer note" value={formState.footer_text} onChange={(value) => updateField("footer_text", value)} />
       </EditorSection>
@@ -309,6 +359,120 @@ function TextInput({ label, value, onChange }: { label: string; value: string; o
       <span className="text-sm font-black text-[#241436]">{label}</span>
       <input value={value || ""} onChange={(event) => onChange(event.target.value)} className={inputClass} />
     </label>
+  );
+}
+
+function VideoUploadInput({
+  label,
+  value,
+  onChange,
+  businessId,
+  videoType,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  businessId: string;
+  videoType: "promo-video" | "instagram-video";
+}) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  async function handleFile(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("video/")) {
+      setMessage("Choose a valid video file.");
+      return;
+    }
+
+    setIsUploading(true);
+    setMessage("");
+
+    try {
+      const fileExtension = file.name.split(".").pop() || "mp4";
+      const filePath = `businesses/${businessId}/${videoType}-${Date.now()}.${fileExtension}`;
+
+      const { error } = await supabase.storage
+        .from("business-assets")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          contentType: file.type,
+          upsert: true,
+        });
+
+      if (error) throw error;
+
+      const { data } = supabase.storage
+        .from("business-assets")
+        .getPublicUrl(filePath);
+
+      onChange(data.publicUrl);
+      setMessage("Video ready. Save changes to update your theme.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Video upload failed.");
+    } finally {
+      setIsUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div className="rounded-[1.25rem] border border-[#e8def8] bg-white p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <h3 className="text-sm font-black text-slate-800">{label}</h3>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={isUploading}
+            className="inline-flex h-9 items-center gap-2 rounded-full border border-[#e8def8] bg-white px-3 text-xs font-black text-[#241436] transition hover:border-[#7c3aed] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isUploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+            {value ? "Replace" : "Upload"}
+          </button>
+
+          {value ? (
+            <button
+              type="button"
+              onClick={() => {
+                onChange("");
+                setMessage("");
+              }}
+              className="grid h-9 w-9 place-items-center rounded-full border border-[#e8def8] text-red-500 transition hover:border-red-300"
+              aria-label="Remove video"
+            >
+              <Trash2 size={15} />
+            </button>
+          ) : null}
+        </div>
+      </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="video/*"
+        className="hidden"
+        onChange={handleFile}
+      />
+
+      <div className="relative grid aspect-video place-items-center overflow-hidden rounded-[1rem] border border-[#eee7f7] bg-[#faf8ff] text-[#7c3aed]">
+        {value ? (
+          <video src={value} controls className="h-full w-full object-cover" />
+        ) : (
+          <Video size={32} />
+        )}
+      </div>
+
+      {message ? (
+        <p className="mt-3 text-center text-xs font-semibold text-slate-500">
+          {message}
+        </p>
+      ) : null}
+    </div>
   );
 }
 
