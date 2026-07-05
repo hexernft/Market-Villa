@@ -72,6 +72,11 @@ const navItems = [
     icon: Store,
   },
   {
+    label: "Theme Store",
+    href: "/dashboard/theme-store",
+    icon: Palette,
+  },
+  {
     label: "Theme Editor",
     href: "/dashboard/theme-editor",
     icon: Palette,

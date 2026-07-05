@@ -736,10 +736,10 @@ function SheetArrivalNav({
           <Link href={routeBase} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
             <span className="!text-white" style={{ color: "#ffffff" }}>Home</span>
           </Link>
-          <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
+          <Link href={grillHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
             <span className="!text-white" style={{ color: "#ffffff" }}>The Grill</span>
           </Link>
-          <Link href={business.slug ? `/store/${business.slug}#grillary` : "/suya-spot#grillary"} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
+          <Link href={galleryHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
             <span className="!text-white" style={{ color: "#ffffff" }}>Gallery</span>
           </Link>
           <Link href={loginHref} style={{ color: "#ffffff" }} className="rounded-full px-3 py-2 !text-white hover:bg-[#8a3f0d]">
@@ -843,10 +843,10 @@ function Hero({
             ))}
           </p>
           <div className="mt-8 flex flex-wrap justify-start gap-3">
-            <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"} className="inline-flex h-12 items-center rounded-full bg-[#f59e0b] px-7 text-sm font-black text-black">
+            <Link href={grillHref} className="inline-flex h-12 items-center rounded-full bg-[#f59e0b] px-7 text-sm font-black text-black">
               Order Now
             </Link>
-            <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"} className="inline-flex h-12 items-center rounded-full border border-white/35 px-7 text-sm font-black text-white">
+            <Link href={grillHref} className="inline-flex h-12 items-center rounded-full border border-white/35 px-7 text-sm font-black text-white">
               View Menu
             </Link>
           </div>
@@ -1149,7 +1149,7 @@ function FinalCta({ business, whatsapp, grillHref }: { business: SuyaBusiness; w
           <p className="mt-2 text-sm font-semibold text-[#6f6252]">Fresh suya, party packs, and event trays are ready when you are.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href={business.slug ? `/store/${business.slug}#products` : "/suya-spot/grill"} className="rounded-full bg-[#17120a] px-5 py-3 text-sm font-black text-white">Explore The Grill</Link>
+          <Link href={grillHref} className="rounded-full bg-[#17120a] px-5 py-3 text-sm font-black text-white">Explore The Grill</Link>
           {whatsapp ? <a href={buildWhatsAppLink(whatsapp, `Hello ${business.name}, I want to order from The Grill.`)} target="_blank" rel="noreferrer" className="rounded-full border border-[#17120a]/15 bg-white px-5 py-3 text-sm font-black text-[#17120a]">WhatsApp</a> : null}
         </div>
       </div>
