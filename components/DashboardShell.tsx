@@ -7,20 +7,19 @@ import {
 import {
   ReactNode, useEffect, useState } from "react";
 import {
-  BarChart3,  ClipboardList,
+  ClipboardList,
   CreditCard,
   Globe2,
   LayoutDashboard,
+  LifeBuoy,
   Loader2,
   LogOut,
-  Megaphone,
-  MessageCircle,
   Package,
   Palette,
   Settings,
-  Sparkles,
   Store,
-  UserRound
+  UserRound,
+  UsersRound
 } from "lucide-react";
 import {
   supabase } from "@/lib/supabase";
@@ -36,25 +35,14 @@ const navItems = [
     icon: LayoutDashboard,
   },
   {
-    label: "Analytics",
-    href: "/dashboard/analytics",
-    icon: BarChart3,
+    label: "Storefront",
+    href: "/dashboard/storefront",
+    icon: Store,
   },
   {
-    label: "Visibility",
-    href: "/dashboard/visibility",
-    icon: Megaphone,
-  },
-  {
-    label: "Onboarding",
-    href: "/dashboard/onboarding",
-    icon: Sparkles,
-  },
-  {
-    label: "Products",
+    label: "Products & Services",
     href: "/dashboard/products",
     icon: Package,
-    modeAware: true,
   },
   {
     label: "Orders",
@@ -62,24 +50,19 @@ const navItems = [
     icon: ClipboardList,
   },
   {
-    label: "Domain",
-    href: "/dashboard/domain",
-    icon: Globe2,
+    label: "Customers",
+    href: "/dashboard/customers",
+    icon: UsersRound,
   },
   {
-    label: "Store Details",
-    href: "/dashboard/store-details",
-    icon: Store,
-  },
-  {
-    label: "Theme Store",
+    label: "Themes",
     href: "/dashboard/theme-store",
     icon: Palette,
   },
   {
-    label: "Theme Editor",
-    href: "/dashboard/theme-editor",
-    icon: Palette,
+    label: "Domain",
+    href: "/dashboard/domain",
+    icon: Globe2,
   },
   {
     label: "Billing",
@@ -91,6 +74,11 @@ const navItems = [
     href: "/dashboard/settings",
     icon: Settings,
   },
+  {
+    label: "Support",
+    href: "/help",
+    icon: LifeBuoy,
+  },
 ];
 
 const mobileNavItems = [
@@ -101,7 +89,7 @@ const mobileNavItems = [
   {
   label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
   {
-  label: "Store", href: "/dashboard/store-details", icon: Store },
+  label: "Storefront", href: "/dashboard/storefront", icon: Store },
   {
   label: "More", href: "/dashboard/settings", icon: Settings },
 ];
@@ -200,8 +188,8 @@ export function DashboardShell({
 
           <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-2 lg:px-4 lg:py-2.5">
             {navItems.map((item) => {
-  const Icon = item.modeAware ? InventoryIcon : item.icon;
-              const label = item.modeAware ? modeMeta.inventoryLabel : item.label;
+  const Icon = item.icon;
+              const label = item.label;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
                 <Link key={item.href} href={item.href} title={label} aria-current={isActive ? "page" : undefined} className={`group flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-[13px] font-semibold transition lg:justify-start lg:px-4 ${isActive ? "bg-[#7c3aed] text-white" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>

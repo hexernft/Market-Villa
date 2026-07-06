@@ -18,6 +18,7 @@ import {
   ShoppingBag,
   Sparkles,
   Store,
+  UsersRound,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -32,8 +33,9 @@ const menuSections = [
   {
     title: "Store Setup",
     items: [
+      { label: "Storefront", href: "/dashboard/storefront", icon: Store },
       { label: "Store Details", href: "/dashboard/store-details", icon: Store },
-      { label: "Theme Store", href: "/dashboard/theme-store", icon: Palette },
+      { label: "Themes", href: "/dashboard/theme-store", icon: Palette },
       { label: "Visibility", href: "/dashboard/visibility", icon: Megaphone },
       { label: "Domain", href: "/dashboard/domain", icon: Globe2 },
       { label: "Onboarding", href: "/dashboard/onboarding", icon: Sparkles },
@@ -42,8 +44,9 @@ const menuSections = [
   {
     title: "Sales & Marketing",
     items: [
-      { label: "Products", href: "/dashboard/products", icon: Package },
+      { label: "Products & Services", href: "/dashboard/products", icon: Package },
       { label: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
+      { label: "Customers", href: "/dashboard/customers", icon: UsersRound },
       { label: "Messaging", href: "/dashboard/leads", icon: MessageCircle },
       { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
       { label: "Billing", href: "/dashboard/billing", icon: CreditCard },

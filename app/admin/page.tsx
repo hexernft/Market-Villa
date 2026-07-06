@@ -8,19 +8,18 @@ import {
   Building2,
   CheckCircle2,
   Clock3,
+  CreditCard,
   Globe2,
   LayoutDashboard,
   Loader2,
+  Palette,
   Search,
+  Settings,
   ShieldCheck,
-  Store,
-  Megaphone,
-  Banknote,
-  BadgeDollarSign,
+  UsersRound,
   Car,
   Home,
   Package,
-  Sparkles
 } from "lucide-react";
 import {
   getAdminPlatformMetrics,
@@ -340,78 +339,36 @@ export default function AdminPage() {
           </span>
         </Link>
 
-        <nav className="admin-sidebar-nav grid gap-2">
-          <a
-            href="#overview"
-            title="Overview"
-            className="admin-sidebar-link admin-sidebar-link-active flex min-h-11 items-center justify-center gap-3 rounded-2xl bg-white/10 px-2 py-2.5 text-sm font-medium text-white lg:justify-start lg:px-4"
-          >
-            <LayoutDashboard size={18} />
-            <span className="hidden lg:inline">Overview</span>
-          </a>
+        <nav className="admin-sidebar-nav grid gap-1.5">
+          {[
+            { label: "Overview", href: "/admin#overview", icon: LayoutDashboard, active: true },
+            { label: "Businesses", href: "/admin/businesses", icon: Building2 },
+            { label: "Subscriptions", href: "/admin/subscriptions", icon: CreditCard },
+            { label: "Payments", href: "/admin/payments", icon: CreditCard },
+            { label: "Themes", href: "/admin/themes", icon: Palette },
+            { label: "Theme Store", href: "/admin/theme-store", icon: Palette },
+            { label: "Domain Requests", href: "/admin/domain-requests", icon: Globe2 },
+            { label: "Users", href: "/admin/users", icon: UsersRound },
+            { label: "Settings", href: "/admin/settings", icon: Settings },
+          ].map((item) => {
+            const Icon = item.icon;
 
-          <a
-            href="#businesses"
-            title="Businesses"
-            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
-          >
-            <Building2 size={18} />
-            <span className="hidden lg:inline">Businesses</span>
-          </a>
-
-          <Link
-            href="/admin/visibility-requests"
-            title="Visibility Requests"
-            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
-          >
-            <Megaphone size={18} />
-            <span className="hidden lg:inline">Visibility Requests</span>
-          </Link>
-
-          <Link
-            href="/admin/revenue"
-            title="Revenue"
-            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
-          >
-            <Banknote size={18} />
-            <span className="hidden lg:inline">Revenue</span>
-          </Link>
-
-          <Link
-            href="/admin/pricing"
-            title="Pricing"
-            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
-          >
-            <BadgeDollarSign size={18} />
-            <span className="hidden lg:inline">Pricing</span>
-          </Link>
-
-          <Link
-            href="/admin/ai-requests"
-            title="AI Requests"
-            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
-          >
-            <Sparkles size={18} />
-            <span className="hidden lg:inline">AI Requests</span>
-          </Link>
-
-          <a
-            href="#domains"
-            title="Domain Requests"
-            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
-          >
-            <Globe2 size={18} />
-            <span className="hidden lg:inline">Domain Requests</span>
-          </a>
-
-          <Link
-            href="/dashboard"
-            title="Business Dashboard"
-            className="admin-sidebar-link relative z-50 flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white lg:justify-start lg:px-4"
-          >
-            <Store size={18} />
-            <span className="hidden lg:inline">Business Dashboard</span>
-          </Link>
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                title={item.label}
+                className={`admin-sidebar-link flex min-h-10 items-center justify-center gap-3 rounded-2xl px-2 py-2 text-sm font-medium transition lg:justify-start lg:px-4 ${
+                  item.active
+                    ? "bg-white/12 text-white"
+                    : "text-slate-300 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                <Icon size={17} />
+                <span className="hidden lg:inline">{item.label}</span>
+              </Link>
+            );
+          })}
         </nav>
 
       </aside>

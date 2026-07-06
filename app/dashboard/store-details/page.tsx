@@ -6,6 +6,8 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
   Clock3,
+  Eye,
+  FileText,
   Globe2,
   ImageIcon,
   Instagram,
@@ -13,9 +15,11 @@ import {
   Mail,
   MapPin,
   Landmark,
+  Palette,
   Phone,
   Save,
   Store,
+  Truck,
 } from "lucide-react";
 import { getMyBusinesses } from "@/lib/business-actions";
 import {
@@ -70,6 +74,58 @@ type DashboardBusiness = {
 const inputClass =
   "min-h-12 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-semibold text-[#241436] outline-none transition focus:border-[#7c3aed] focus:ring-4 focus:ring-[#7c3aed]/10";
 
+type SectionId =
+  | "business"
+  | "branding"
+  | "contact"
+  | "delivery"
+  | "policies"
+  | "publish";
+
+const editorSections: Array<{
+  id: SectionId;
+  label: string;
+  description: string;
+  icon: typeof Store;
+}> = [
+  {
+    id: "business",
+    label: "Business Info",
+    description: "Store identity, category, slug, and basic details.",
+    icon: Store,
+  },
+  {
+    id: "branding",
+    label: "Branding",
+    description: "Logo, banner, and visual presentation.",
+    icon: Palette,
+  },
+  {
+    id: "contact",
+    label: "Contact",
+    description: "How customers reach and locate your business.",
+    icon: Phone,
+  },
+  {
+    id: "delivery",
+    label: "Delivery & Pickup",
+    description: "Fulfillment options for customer orders.",
+    icon: Truck,
+  },
+  {
+    id: "policies",
+    label: "Policies",
+    description: "Store rules, FAQs, and customer expectations.",
+    icon: FileText,
+  },
+  {
+    id: "publish",
+    label: "Publish Settings",
+    description: "Live status, preview, and search appearance.",
+    icon: Eye,
+  },
+];
+
 const categoriesByMode: Record<BusinessMode, string[]> = {
   products: [
     "Fashion",
@@ -120,6 +176,7 @@ export default function StoreDetailsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [activeSection, setActiveSection] = useState<SectionId>("business");
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -419,291 +476,253 @@ export default function StoreDetailsPage() {
         </div>
       ) : null}
 
-      <form onSubmit={handleSubmit} className="grid gap-5">
-        <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
-          <h2 className="flex items-center gap-2 text-lg font-black tracking-[-0.04em] text-slate-950">
-            <Store size={18} className="text-[#7c3aed]" />
-            Store Identity
-          </h2>
+      <form onSubmit={handleSubmit} className="grid gap-5 lg:grid-cols-[18rem_1fr]">
+        <nav className="flex gap-2 overflow-x-auto rounded-[1.35rem] border border-[#eadfff] bg-white p-2 lg:sticky lg:top-4 lg:block lg:h-fit lg:space-y-1 lg:overflow-visible">
+          {editorSections.map((section) => {
+            const Icon = section.icon;
+            const isActive = activeSection === section.id;
 
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Business name
-              <input
-                value={name}
-                onChange={(event) => handleNameChange(event.target.value)}
-                className={inputClass}
-                required
-              />
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Category
-              <select
-                value={category}
-                onChange={(event) => setCategory(event.target.value)}
-                className={inputClass}
+            return (
+              <button
+                key={section.id}
+                type="button"
+                onClick={() => setActiveSection(section.id)}
+                className={`flex min-w-[11rem] items-center gap-3 rounded-2xl px-3 py-3 text-left transition lg:min-w-0 lg:w-full ${
+                  isActive
+                    ? "bg-[#f1eaff] text-[#241436]"
+                    : "text-[#6f627d] hover:bg-[#faf8ff] hover:text-[#241436]"
+                }`}
               >
-                {categoriesByMode[businessMode].map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </label>
+                <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${isActive ? "bg-[#7c3aed] text-white" : "bg-[#faf8ff] text-[#7c3aed]"}`}>
+                  <Icon size={17} />
+                </span>
+                <span>
+                  <span className="block text-sm font-black">{section.label}</span>
+                  <span className="hidden text-xs font-semibold text-[#7d728b] lg:block">
+                    {section.description}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </nav>
 
-            <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
-              Business mode
-              <select
-                value={businessMode}
-                onChange={(event) =>
-                  handleModeChange(normalizeBusinessMode(event.target.value))
-                }
-                className={inputClass}
-              >
-                {businessModes.map((mode) => {
-                  const isModeLocked = !canUseBusinessModeForPlan({
-                    mode: mode.id,
-                    plan: selectedBusiness?.subscription_plan,
-                  });
+        <div className="grid gap-5">
+          {activeSection === "business" ? (
+            <EditorCard
+              icon={Store}
+              title="Business Info"
+              description="Set the public identity and basic structure of your storefront."
+            >
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Business name
+                  <input value={name} onChange={(event) => handleNameChange(event.target.value)} className={inputClass} required />
+                </label>
 
-                  return (
-                    <option key={mode.id} value={mode.id} disabled={isModeLocked}>
-                      {mode.label}
-                      {isModeLocked ? " - Pro plan" : ""}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Store slug
+                  <span className="relative">
+                    <Globe2 size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input value={slug} onChange={(event) => setSlug(slugify(event.target.value))} className={`${inputClass} w-full pl-11`} required />
+                  </span>
+                </label>
 
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Store slug
-              <span className="relative">
-                <Globe2
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-                <input
-                  value={slug}
-                  onChange={(event) => setSlug(slugify(event.target.value))}
-                  className={`${inputClass} w-full pl-11`}
-                  required
-                />
-              </span>
-            </label>
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Business mode
+                  <select value={businessMode} onChange={(event) => handleModeChange(normalizeBusinessMode(event.target.value))} className={inputClass}>
+                    {businessModes.map((mode) => {
+                      const isModeLocked = !canUseBusinessModeForPlan({
+                        mode: mode.id,
+                        plan: selectedBusiness?.subscription_plan,
+                      });
 
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Status
-              <label className="flex min-h-12 items-center justify-between gap-4 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-black text-[#241436]">
-                <span>{isPublished ? "Published" : "Draft"}</span>
-                <input
-                  type="checkbox"
-                  checked={isPublished}
-                  onChange={(event) => setIsPublished(event.target.checked)}
-                />
+                      return (
+                        <option key={mode.id} value={mode.id} disabled={isModeLocked}>
+                          {mode.label}
+                          {isModeLocked ? " - Pro plan" : ""}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Category
+                  <select value={category} onChange={(event) => setCategory(event.target.value)} className={inputClass}>
+                    {categoriesByMode[businessMode].map((item) => (
+                      <option key={item}>{item}</option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
+                  Location
+                  <span className="relative">
+                    <MapPin size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input value={location} onChange={(event) => setLocation(event.target.value)} className={`${inputClass} w-full pl-11`} />
+                  </span>
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
+                  Tagline
+                  <input value={tagline} onChange={(event) => setTagline(event.target.value)} className={inputClass} />
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
+                  Description
+                  <textarea value={description} onChange={(event) => setDescription(event.target.value)} rows={4} className={`${inputClass} py-3`} />
+                </label>
+              </div>
+            </EditorCard>
+          ) : null}
+
+          {activeSection === "branding" ? (
+            <EditorCard
+              icon={ImageIcon}
+              title="Branding"
+              description="Control the logo and banner customers see when they open your store."
+            >
+              <div className="grid gap-4 md:grid-cols-2">
+                <ImageUploadEditor label="Logo" value={logoUrl} onChange={setLogoUrl} businessId={selectedBusiness?.id || ""} imageType="logo" aspect="square" />
+                <ImageUploadEditor label="Banner image" value={coverImageUrl} onChange={setCoverImageUrl} businessId={selectedBusiness?.id || ""} imageType="cover" aspect="wide" />
+                <ComingSoonGroup title="Brand colors, accent colors, and font style" />
+              </div>
+            </EditorCard>
+          ) : null}
+
+          {activeSection === "contact" ? (
+            <EditorCard
+              icon={Phone}
+              title="Contact"
+              description="Make it easy for customers to call, message, visit, or follow your business."
+            >
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Phone
+                  <input value={phone} onChange={(event) => setPhone(event.target.value)} className={inputClass} />
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  WhatsApp
+                  <input value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} className={inputClass} />
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Email
+                  <span className="relative">
+                    <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input value={email} onChange={(event) => setEmail(event.target.value)} className={`${inputClass} w-full pl-11`} />
+                  </span>
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Instagram
+                  <span className="relative">
+                    <Instagram size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input value={instagramUrl} onChange={(event) => setInstagramUrl(event.target.value)} className={`${inputClass} w-full pl-11`} />
+                  </span>
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Address/location
+                  <span className="relative">
+                    <MapPin size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input value={location} onChange={(event) => setLocation(event.target.value)} className={`${inputClass} w-full pl-11`} />
+                  </span>
+                </label>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  Business hours
+                  <span className="relative">
+                    <Clock3 size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input value={openingHours} onChange={(event) => setOpeningHours(event.target.value)} className={`${inputClass} w-full pl-11`} />
+                  </span>
+                </label>
+              </div>
+            </EditorCard>
+          ) : null}
+
+          {activeSection === "delivery" ? (
+            <EditorCard
+              icon={Truck}
+              title="Delivery & Pickup"
+              description="Delivery areas, pickup options, and fulfillment timing will live here."
+            >
+              <ComingSoonGroup title="Delivery available, pickup available, delivery areas, notes, and estimated delivery time" />
+            </EditorCard>
+          ) : null}
+
+          {activeSection === "policies" ? (
+            <EditorCard
+              icon={FileText}
+              title="Policies"
+              description="Store policies help customers understand how orders, delivery, payment, and returns work."
+            >
+              <ComingSoonGroup title="Return policy, delivery policy, payment policy, and FAQs" />
+            </EditorCard>
+          ) : null}
+
+          {activeSection === "publish" ? (
+            <EditorCard
+              icon={Eye}
+              title="Publish Settings"
+              description="Control whether your store is live and preview what customers will see."
+            >
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="flex min-h-12 items-center justify-between gap-4 rounded-2xl border border-[#eadfff] bg-white px-4 text-sm font-black text-[#241436]">
+                  <span>{isPublished ? "Published" : "Unpublished"}</span>
+                  <input type="checkbox" checked={isPublished} onChange={(event) => setIsPublished(event.target.checked)} />
+                </label>
+
+                <a
+                  href={slug ? `/store/${slug}` : "/dashboard/onboarding"}
+                  target="_blank"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[#eadfff] bg-[#faf8ff] px-4 text-sm font-black text-[#241436]"
+                >
+                  <Eye size={16} />
+                  Preview storefront
+                </a>
+
+                <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
+                  Announcement text
+                  <input value={announcementText} onChange={(event) => setAnnouncementText(event.target.value)} className={inputClass} />
+                </label>
+
+                <ComingSoonGroup title="SEO title and SEO description" />
+              </div>
+            </EditorCard>
+          ) : null}
+
+          <EditorCard
+            icon={Landmark}
+            title="Settlement"
+            description="Payment settlement details currently used by the Paystack flow."
+          >
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="grid gap-2 text-sm font-black text-slate-700">
+                Paystack subaccount code
+                <input value={paystackSubaccountCode} onChange={(event) => setPaystackSubaccountCode(event.target.value)} className={inputClass} placeholder="ACCT_..." />
               </label>
-            </label>
 
-            <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
-              Tagline
-              <input
-                value={tagline}
-                onChange={(event) => setTagline(event.target.value)}
-                className={inputClass}
-              />
-            </label>
+              <label className="grid gap-2 text-sm font-black text-slate-700">
+                Bank code
+                <input value={settlementBankCode} onChange={(event) => setSettlementBankCode(event.target.value)} className={inputClass} />
+              </label>
 
-            <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
-              Business description
-              <textarea
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-                rows={3}
-                className={`${inputClass} py-3`}
-              />
-            </label>
+              <label className="grid gap-2 text-sm font-black text-slate-700">
+                Account number
+                <input value={settlementAccountNumber} onChange={(event) => setSettlementAccountNumber(event.target.value)} className={inputClass} />
+              </label>
 
-            <label className="grid gap-2 text-sm font-black text-slate-700 md:col-span-2">
-              Announcement text
-              <input
-                value={announcementText}
-                onChange={(event) => setAnnouncementText(event.target.value)}
-                className={inputClass}
-              />
-            </label>
-          </div>
-        </section>
-
-        <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-5">
-          <h2 className="flex items-center gap-2 text-lg font-black tracking-[-0.04em] text-slate-950">
-            <ImageIcon size={18} className="text-[#7c3aed]" />
-            Store Banner
-          </h2>
-
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-                        <div className="md:col-span-1">
-              <ImageUploadEditor
-                label="Logo"
-                value={logoUrl}
-                onChange={setLogoUrl}
-                businessId={selectedBusiness?.id || ""}
-                imageType="logo"
-                aspect="square"
-              />
+              <label className="grid gap-2 text-sm font-black text-slate-700">
+                Account name
+                <input value={settlementAccountName} onChange={(event) => setSettlementAccountName(event.target.value)} className={inputClass} />
+              </label>
             </div>
+          </EditorCard>
 
-            <div className="md:col-span-1">
-              <ImageUploadEditor
-                label="Cover image"
-                value={coverImageUrl}
-                onChange={setCoverImageUrl}
-                businessId={selectedBusiness?.id || ""}
-                imageType="cover"
-                aspect="wide"
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-5">
-          <h2 className="flex items-center gap-2 text-lg font-black tracking-[-0.04em] text-slate-950">
-            <Phone size={18} className="text-[#7c3aed]" />
-            Contact Details
-          </h2>
-
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Phone
-              <input
-                value={phone}
-                onChange={(event) => setPhone(event.target.value)}
-                className={inputClass}
-              />
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              WhatsApp
-              <input
-                value={whatsapp}
-                onChange={(event) => setWhatsapp(event.target.value)}
-                className={inputClass}
-              />
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Email
-              <span className="relative">
-                <Mail
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-                <input
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  className={`${inputClass} w-full pl-11`}
-                />
-              </span>
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Location
-              <span className="relative">
-                <MapPin
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-                <input
-                  value={location}
-                  onChange={(event) => setLocation(event.target.value)}
-                  className={`${inputClass} w-full pl-11`}
-                />
-              </span>
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Instagram URL
-              <span className="relative">
-                <Instagram
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-                <input
-                  value={instagramUrl}
-                  onChange={(event) => setInstagramUrl(event.target.value)}
-                  className={`${inputClass} w-full pl-11`}
-                />
-              </span>
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Opening hours
-              <span className="relative">
-                <Clock3
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-                <input
-                  value={openingHours}
-                  onChange={(event) => setOpeningHours(event.target.value)}
-                  className={`${inputClass} w-full pl-11`}
-                />
-              </span>
-            </label>
-          </div>
-        </section>
-
-        <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-5">
-          <h2 className="flex items-center gap-2 text-lg font-black tracking-[-0.04em] text-slate-950">
-            <Landmark size={18} className="text-[#7c3aed]" />
-            Settlement
-          </h2>
-
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Paystack subaccount code
-              <input
-                value={paystackSubaccountCode}
-                onChange={(event) =>
-                  setPaystackSubaccountCode(event.target.value)
-                }
-                className={inputClass}
-                placeholder="ACCT_..."
-              />
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Bank code
-              <input
-                value={settlementBankCode}
-                onChange={(event) => setSettlementBankCode(event.target.value)}
-                className={inputClass}
-              />
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Account number
-              <input
-                value={settlementAccountNumber}
-                onChange={(event) =>
-                  setSettlementAccountNumber(event.target.value)
-                }
-                className={inputClass}
-              />
-            </label>
-
-            <label className="grid gap-2 text-sm font-black text-slate-700">
-              Account name
-              <input
-                value={settlementAccountName}
-                onChange={(event) =>
-                  setSettlementAccountName(event.target.value)
-                }
-                className={inputClass}
-              />
-            </label>
-          </div>
-        </section>
-
-        <div className="rounded-[1.35rem] border border-[#eadfff] bg-white p-3">
+          <div className="rounded-[1.35rem] border border-[#eadfff] bg-white p-3">
           <button
             type="submit"
             disabled={isSaving || !selectedBusiness}
@@ -717,7 +736,51 @@ export default function StoreDetailsPage() {
             {isSaving ? "Saving..." : "Save store details"}
           </button>
         </div>
+        </div>
       </form>
+    </div>
+  );
+}
+
+function EditorCard({
+  icon: Icon,
+  title,
+  description,
+  children,
+}: {
+  icon: typeof Store;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-[1.35rem] border border-[#eadfff] bg-white p-5">
+      <div className="flex items-start gap-3">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
+          <Icon size={18} />
+        </span>
+        <div>
+          <h2 className="text-lg font-black tracking-[-0.04em] text-slate-950">
+            {title}
+          </h2>
+          <p className="mt-1 text-sm font-semibold leading-6 text-slate-500">
+            {description}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5">{children}</div>
+    </section>
+  );
+}
+
+function ComingSoonGroup({ title }: { title: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-[#d8c9f8] bg-[#faf8ff] p-4 md:col-span-2">
+      <p className="text-sm font-black text-[#241436]">{title}</p>
+      <p className="mt-1 text-xs font-semibold text-[#7d728b]">
+        Coming soon.
+      </p>
     </div>
   );
 }

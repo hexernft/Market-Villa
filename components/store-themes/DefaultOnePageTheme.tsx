@@ -1,9 +1,11 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import {
+  Clock,
   Mail,
   MapPin,
   MessageCircle,
@@ -12,6 +14,7 @@ import {
   ShoppingBag,
   ShoppingCart,
   Store,
+  Truck,
 } from "lucide-react";
 import { WhatsAppCheckout, type CartItem } from "@/components/WhatsAppCheckout";
 import { buildWhatsAppLink, formatCurrency } from "@/lib/utils";
@@ -19,12 +22,34 @@ import { buildWhatsAppLink, formatCurrency } from "@/lib/utils";
 type StoreProduct = {
   id: string;
   name: string;
+  description?: string | null;
+  short_description?: string | null;
   price?: number | string | null;
   category?: string | null;
   image_url?: string | null;
   image?: string | null;
   is_available?: boolean | null;
   is_published?: boolean | null;
+  is_featured?: boolean | null;
+  featured?: boolean | null;
+  status?: string | null;
+  stock_status?: string | null;
+};
+
+type ThemeSettings = {
+  announcementText?: string | null;
+  announcement_text?: string | null;
+  deliveryNote?: string | null;
+  delivery_note?: string | null;
+  paymentInfo?: string | null;
+  payment_info?: string | null;
+  pickupNote?: string | null;
+  pickup_note?: string | null;
+  toggles?: {
+    showPrices?: boolean;
+    showFooter?: boolean;
+    showMarketVillaBadge?: boolean;
+  };
 };
 
 type StoreBusiness = {
@@ -32,6 +57,7 @@ type StoreBusiness = {
   name: string;
   slug?: string | null;
   tagline?: string | null;
+  description?: string | null;
   logo_url?: string | null;
   logo_text?: string | null;
   cover_image_url?: string | null;
@@ -41,17 +67,16 @@ type StoreBusiness = {
   phone?: string | null;
   email?: string | null;
   location?: string | null;
+  address?: string | null;
   instagram_url?: string | null;
+  instagramUrl?: string | null;
   opening_hours?: string | null;
+  business_hours?: string | null;
+  delivery_note?: string | null;
+  payment_info?: string | null;
+  pickup_note?: string | null;
   products?: StoreProduct[] | null;
-  theme_settings?: {
-    announcementText?: string | null;
-    toggles?: {
-      showPrices?: boolean;
-      showFooter?: boolean;
-      showMarketVillaBadge?: boolean;
-    };
-  } | null;
+  theme_settings?: ThemeSettings | null;
 };
 
 type Props = {
@@ -61,7 +86,6 @@ type Props = {
 };
 
 const brandPurple = "#241436";
-const brandViolet = "#7c3aed";
 
 function getHeroImage(business: StoreBusiness) {
   return business.cover_image_url || business.banner_url || business.hero_image_url || "";
@@ -71,11 +95,19 @@ function isVisibleItem(item: StoreProduct) {
   return item.is_available !== false && item.is_published !== false;
 }
 
-export function DefaultOnePageTheme({
-  business,
-  products,
-  services,
-}: Props) {
+function getShortDescription(item: StoreProduct) {
+  const text = item.short_description || item.description || "";
+  return text.length > 92 ? `${text.slice(0, 89).trim()}...` : text;
+}
+
+function getItemStatus(item: StoreProduct) {
+  if (item.status) return item.status;
+  if (item.stock_status) return item.stock_status;
+  if (item.is_available === false) return "Unavailable";
+  return "Available";
+}
+
+export function DefaultOnePageTheme({ business, products, services }: Props) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -85,11 +117,30 @@ export function DefaultOnePageTheme({
   const settings = business.theme_settings || {};
   const whatsapp = business.whatsapp || business.phone || "";
   const heroImage = getHeroImage(business);
-  const showPrices = true;
-  const showFooter = true;
-  const showMarketVillaBadge = true;
+  const location = business.location || business.address || "";
+  const openingHours = business.opening_hours || business.business_hours || "";
+  const showPrices = settings.toggles?.showPrices !== false;
+  const showFooter = settings.toggles?.showFooter !== false;
+  const showMarketVillaBadge = settings.toggles?.showMarketVillaBadge !== false;
   const announcement =
-    settings.announcementText?.trim() || `Welcome to ${business.name}`;
+    settings.announcementText?.trim() ||
+    settings.announcement_text?.trim() ||
+    `Welcome to ${business.name}`;
+  const deliveryNote =
+    business.delivery_note ||
+    settings.deliveryNote ||
+    settings.delivery_note ||
+    "";
+  const paymentInfo =
+    business.payment_info ||
+    settings.paymentInfo ||
+    settings.payment_info ||
+    "";
+  const pickupNote =
+    business.pickup_note ||
+    settings.pickupNote ||
+    settings.pickup_note ||
+    "";
 
   const announcementItems = useMemo(() => {
     const items = announcement
@@ -104,9 +155,7 @@ export function DefaultOnePageTheme({
     if (announcementItems.length <= 1) return;
 
     const timer = window.setInterval(() => {
-      setAnnouncementIndex((current) => {
-        return (current + 1) % announcementItems.length;
-      });
+      setAnnouncementIndex((current) => (current + 1) % announcementItems.length);
     }, 2500);
 
     return () => window.clearInterval(timer);
@@ -115,7 +164,7 @@ export function DefaultOnePageTheme({
   const currentAnnouncement =
     announcementItems[announcementIndex % announcementItems.length] || announcement;
 
-const items = useMemo(() => {
+  const items = useMemo(() => {
     return [...(products || business.products || []), ...(services || [])].filter(
       isVisibleItem,
     );
@@ -144,8 +193,14 @@ const items = useMemo(() => {
     });
   }, [activeCategory, items, query]);
 
+  const featuredItems = useMemo(() => {
+    const explicit = items.filter((item) => item.is_featured || item.featured);
+    return (explicit.length ? explicit : items).slice(0, 4);
+  }, [items]);
+
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-function addToCart(item: StoreProduct) {
+
+  function addToCart(item: StoreProduct) {
     const price = Number(item.price || 0);
 
     setCart((current) => {
@@ -174,8 +229,7 @@ function addToCart(item: StoreProduct) {
   }
 
   return (
-    <main className="market-villa-customized-store min-h-screen bg-white text-[#17111f]">
-      
+    <main className="market-villa-customized-store min-h-screen bg-[#fffaf5] text-[#17111f]">
       <div
         className="px-4 py-2 text-[0.68rem] font-black uppercase tracking-[0.08em] text-white"
         style={{ backgroundColor: brandPurple }}
@@ -207,8 +261,9 @@ function addToCart(item: StoreProduct) {
           }
         `}</style>
       </div>
-<header className="sticky top-0 z-40 border-b border-slate-100 bg-white">
-        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-3 md:grid-cols-[auto_minmax(220px,460px)_auto] md:items-center md:px-6">
+
+      <header className="sticky top-0 z-40 border-b border-[#eadfff] bg-white/95 backdrop-blur">
+        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-3 md:grid-cols-[auto_minmax(220px,480px)_auto] md:items-center md:px-6">
           <div className="flex min-w-0 items-center justify-between gap-3">
             <Link
               href={`/store/${business.slug || ""}`}
@@ -216,7 +271,7 @@ function addToCart(item: StoreProduct) {
               aria-label={business.name}
             >
               {business.logo_url ? (
-                <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-slate-100 bg-white">
+                <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl border border-[#eadfff] bg-white">
                   <Image
                     src={business.logo_url}
                     alt={business.name}
@@ -228,7 +283,7 @@ function addToCart(item: StoreProduct) {
                 </span>
               ) : (
                 <span
-                  className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-white"
+                  className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl text-white"
                   style={{ backgroundColor: brandPurple }}
                 >
                   <Store size={20} />
@@ -236,9 +291,14 @@ function addToCart(item: StoreProduct) {
               )}
 
               <span className="min-w-0">
-                <span className="block truncate text-base font-black uppercase leading-tight text-[#17111f] md:text-lg">
+                <span className="block truncate text-base font-black leading-tight text-[#17111f] md:text-lg">
                   {business.name}
                 </span>
+                {location ? (
+                  <span className="mt-0.5 hidden max-w-52 truncate text-xs font-bold text-slate-500 sm:block">
+                    {location}
+                  </span>
+                ) : null}
               </span>
             </Link>
 
@@ -248,7 +308,7 @@ function addToCart(item: StoreProduct) {
                   href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
                   target="_blank"
                   rel="noreferrer"
-                  className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-[#241436]"
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[#eadfff] bg-white text-[#241436]"
                   aria-label="WhatsApp"
                 >
                   <MessageCircle size={19} />
@@ -258,7 +318,7 @@ function addToCart(item: StoreProduct) {
                 type="button"
                 onClick={() => setIsCartOpen(true)}
                 aria-label="Open cart"
-                className="relative grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white text-[#241436]"
+                className="relative grid h-10 w-10 place-items-center rounded-full border border-[#eadfff] bg-white text-[#241436]"
               >
                 <ShoppingCart size={20} />
                 {cartCount > 0 ? (
@@ -278,34 +338,28 @@ function addToCart(item: StoreProduct) {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              className="h-10 w-full rounded-md border border-slate-100 bg-slate-50 pl-11 pr-4 text-sm font-semibold outline-none transition focus:border-[#7c3aed] focus:bg-white"
-              placeholder="Search"
+              className="h-11 w-full rounded-2xl border border-[#eadfff] bg-[#fbf8ff] pl-11 pr-4 text-sm font-semibold outline-none transition focus:border-[#7c3aed] focus:bg-white"
+              placeholder="Search products"
             />
           </label>
 
           <div className="hidden items-center justify-end gap-3 text-sm font-bold text-slate-700 md:flex">
-            {business.location ? (
-              <span className="inline-flex max-w-40 items-center gap-2 truncate">
-                <MapPin size={16} className="text-[#7c3aed]" />
-                <span className="truncate">{business.location}</span>
-              </span>
-            ) : null}
             {whatsapp ? (
               <a
                 href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-10 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-[#241436]"
+                className="inline-flex h-10 items-center gap-2 rounded-full bg-[#241436] px-4 text-white transition hover:-translate-y-0.5"
               >
                 <MessageCircle size={16} />
-                Contact
+                WhatsApp
               </a>
             ) : null}
             <button
               type="button"
               onClick={() => setIsCartOpen(true)}
               aria-label="Open cart"
-              className="relative grid h-10 w-10 shrink-0 place-items-center rounded-full border border-slate-200 bg-white text-[#241436] transition hover:-translate-y-0.5 hover:border-[#7c3aed]"
+              className="relative grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#eadfff] bg-white text-[#241436] transition hover:-translate-y-0.5 hover:border-[#7c3aed]"
             >
               <ShoppingCart size={20} />
               {cartCount > 0 ? (
@@ -318,8 +372,8 @@ function addToCart(item: StoreProduct) {
         </div>
       </header>
 
-      <section className="bg-white">
-        <div className="relative grid min-h-[10.5rem] overflow-hidden bg-white md:min-h-[15.5rem]">
+      <section className="relative isolate overflow-hidden bg-[#1d102c]">
+        <div className="absolute inset-0">
           {heroImage ? (
             <Image
               src={heroImage}
@@ -329,213 +383,255 @@ function addToCart(item: StoreProduct) {
               sizes="100vw"
               className="object-cover"
             />
-          ) : null}
-          <div className="absolute inset-0 bg-black/10" />
+          ) : (
+            <div className="h-full w-full bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.45),transparent_32%),linear-gradient(135deg,#241436,#3f1b66_48%,#13091f)]" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#12091d]/92 via-[#241436]/72 to-[#12091d]/45" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#fffaf5] to-transparent" />
+        </div>
+
+        <div className="relative mx-auto grid min-h-[25rem] max-w-7xl content-center gap-5 px-4 py-14 md:min-h-[31rem] md:px-6">
+          <div className="max-w-2xl">
+            {business.logo_url ? (
+              <span className="mb-5 grid h-16 w-16 place-items-center overflow-hidden rounded-3xl border border-white/25 bg-white/95">
+                <Image
+                  src={business.logo_url}
+                  alt={business.name}
+                  width={64}
+                  height={64}
+                  className="h-full w-full object-contain p-1.5"
+                />
+              </span>
+            ) : null}
+
+            <h1 className="max-w-3xl text-3xl font-black leading-[1.04] tracking-[-0.04em] text-white md:text-5xl">
+              {business.name}
+            </h1>
+
+            {business.tagline || business.description ? (
+              <p className="mt-4 max-w-xl text-sm font-semibold leading-6 text-white/86 md:text-base md:leading-7">
+                {business.tagline || business.description}
+              </p>
+            ) : null}
+
+            <div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-white/88">
+              {location ? (
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 backdrop-blur">
+                  <MapPin size={14} />
+                  {location}
+                </span>
+              ) : null}
+              {openingHours ? (
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 backdrop-blur">
+                  <Clock size={14} />
+                  {openingHours}
+                </span>
+              ) : null}
+              {business.phone ? (
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-2 backdrop-blur">
+                  <Phone size={14} />
+                  {business.phone}
+                </span>
+              ) : null}
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a
+                href="#products"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-white px-5 text-sm font-black text-[#241436] transition hover:-translate-y-0.5"
+              >
+                View Products
+              </a>
+              {whatsapp ? (
+                <a
+                  href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 text-sm font-black text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/18"
+                >
+                  <MessageCircle size={16} />
+                  Order on WhatsApp
+                </a>
+              ) : null}
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="border-y border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 md:px-6">
-          {categories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              onClick={() => setActiveCategory(category)}
-              className={`shrink-0 rounded-md px-4 py-2 text-[0.68rem] font-black transition ${
-                activeCategory === category
-                  ? "text-white"
-                  : "bg-white text-slate-600"
-              }`}
-              style={
-                activeCategory === category
-                  ? { backgroundColor: brandPurple }
-                  : undefined
-              }
+      {categories.length > 1 ? (
+        <section className="border-y border-[#eadfff] bg-white">
+          <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 md:px-6">
+            {categories.map((category) => (
+              <button
+                key={category}
+                type="button"
+                onClick={() => setActiveCategory(category)}
+                className={`shrink-0 rounded-full border px-4 py-2 text-xs font-black transition ${
+                  activeCategory === category
+                    ? "border-[#241436] text-white"
+                    : "border-[#eadfff] bg-white text-slate-600 hover:border-[#7c3aed] hover:text-[#241436]"
+                }`}
+                style={
+                  activeCategory === category
+                    ? { backgroundColor: brandPurple }
+                    : undefined
+                }
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {featuredItems.length ? (
+        <section className="mx-auto max-w-7xl px-4 pt-8 md:px-6 md:pt-12">
+          <div className="mb-4 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#7c3aed]">
+                Featured
+              </p>
+              <h2 className="mt-1 text-xl font-black tracking-[-0.03em] text-[#241436] md:text-2xl">
+                Bestsellers
+              </h2>
+            </div>
+            <a
+              href="#products"
+              className="hidden rounded-full border border-[#eadfff] bg-white px-4 py-2 text-xs font-black text-[#241436] md:inline-flex"
             >
-              {category}
-            </button>
-          ))}
-        </div>
-      </section>
+              View all
+            </a>
+          </div>
 
-      <section className="mx-auto max-w-7xl bg-white px-4 py-7 md:px-6 md:py-10">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {featuredItems.map((item) => (
+              <FeaturedProductCard
+                key={item.id}
+                item={item}
+                showPrices={showPrices}
+                whatsapp={whatsapp}
+                businessName={business.name}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <section
+        id="products"
+        className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12"
+      >
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#7c3aed]">
+              Shop
+            </p>
+            <h2 className="mt-1 text-xl font-black tracking-[-0.03em] text-[#241436] md:text-2xl">
+              Products & Services
+            </h2>
+          </div>
+          <span className="rounded-full border border-[#eadfff] bg-white px-3 py-1.5 text-xs font-black text-slate-500">
+            {filteredItems.length}
+          </span>
+        </div>
+
         {filteredItems.length ? (
-          <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:gap-x-9">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {filteredItems.map((item) => (
               <ProductCard
                 key={item.id}
                 item={item}
                 showPrices={showPrices}
+                whatsapp={whatsapp}
+                businessName={business.name}
                 onAddToCart={addToCart}
               />
             ))}
           </div>
         ) : (
-          <div className="grid min-h-64 place-items-center rounded-2xl border border-slate-100 bg-slate-50">
-            <h2 className="text-lg font-black text-slate-700">Products</h2>
+          <div className="grid min-h-64 place-items-center rounded-[1.75rem] border border-[#eadfff] bg-white px-6 text-center">
+            <div>
+              <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-[#fbf8ff] text-[#7c3aed]">
+                <ShoppingBag size={26} />
+              </div>
+              <h3 className="mt-4 text-lg font-black text-[#241436]">
+                No products yet
+              </h3>
+            </div>
           </div>
         )}
       </section>
-      {showFooter ? (
-        <footer className="bg-[#1f0f35] px-4 py-4 text-white md:px-6 md:py-6">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-5 md:grid-cols-[1.25fr_auto_1fr_1fr_auto_1fr] md:items-start md:gap-6">
-              <div className="flex flex-col items-center text-center md:flex-row md:items-center md:gap-4 md:text-left">
-                {business.logo_url ? (
-                  <span className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full border border-[#d3a334] bg-white/5 md:h-[76px] md:w-[76px]">
-                    <Image
-                      src={business.logo_url}
-                      alt={business.name}
-                      width={76}
-                      height={76}
-                      className="h-full w-full object-contain p-1.5"
-                    />
-                  </span>
-                ) : (
-                  <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full border border-[#d3a334] bg-white/5 text-xs font-black text-[#f4c76b] md:h-[76px] md:w-[76px] md:text-sm">
-                    {business.name.slice(0, 2).toUpperCase()}
-                  </span>
-                )}
 
-                <div className="mt-2 md:mt-0">
-                  <h2 className="text-sm font-black text-white md:text-base">
-                    {business.name}
-                  </h2>
-                  {business.tagline ? (
-                    <p className="mt-0.5 max-w-56 text-xs font-semibold leading-4 text-white/80 md:mt-1 md:max-w-48 md:text-sm md:leading-5">
-                      {business.tagline}
-                    </p>
-                  ) : null}
-                </div>
-              </div>
+      <section className="border-y border-[#eadfff] bg-white">
+        <div className="mx-auto grid max-w-7xl gap-4 px-4 py-8 md:grid-cols-[1.2fr_0.8fr] md:px-6 md:py-10">
+          <div className="rounded-[1.75rem] border border-[#eadfff] bg-[#fffaf5] p-5 md:p-6">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#7c3aed]">
+              About
+            </p>
+            <h2 className="mt-2 text-xl font-black tracking-[-0.03em] text-[#241436]">
+              {business.name}
+            </h2>
+            {business.description ? (
+              <p className="mt-3 text-sm font-semibold leading-6 text-slate-600">
+                {business.description}
+              </p>
+            ) : null}
 
-              <div className="hidden h-[72px] w-px bg-white/35 md:block" />
-
-              <div className="grid grid-cols-2 gap-4 md:contents">
-                <div className="text-center md:text-left">
-                  <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
-                    Contact
-                  </h3>
-
-                  <div
-                    className="mt-1 flex flex-col items-center text-xs font-semibold text-white/85 md:items-start md:text-sm"
-                    style={{ gap: "8px", lineHeight: 1 }}
-                  >
-                    {business.phone ? (
-                      <a
-                        href={`tel:${business.phone}`}
-                        className="inline-flex items-center justify-center gap-1.5 md:justify-start"
-                        style={{ minHeight: "16px", lineHeight: 1 }}
-                      >
-                        <Phone size={13} />
-                        <span>{business.phone}</span>
-                      </a>
-                    ) : null}
-
-                    {whatsapp ? (
-                      <a
-                        href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center justify-center gap-1.5 md:justify-start"
-                        style={{ minHeight: "16px", lineHeight: 1 }}
-                      >
-                        <MessageCircle size={13} />
-                        <span>{whatsapp}</span>
-                      </a>
-                    ) : null}
-
-                    {business.email ? (
-                      <a
-                        href={`mailto:${business.email}`}
-                        className="inline-flex items-center justify-center gap-1.5 md:justify-start"
-                        style={{ minHeight: "16px", lineHeight: 1 }}
-                      >
-                        <Mail size={13} />
-                        <span>{business.email}</span>
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-
-                <div className="text-center md:text-left">
-                  <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
-                    Location
-                  </h3>
-                  <div className="mt-2 grid gap-1 text-xs font-semibold text-white/85 md:mt-2 md:gap-1.5 md:text-sm">
-                    {business.location ? (
-                      <span className="inline-flex items-center justify-center gap-1.5 md:justify-start">
-                        <MapPin size={14} />
-                        {business.location}
-                      </span>
-                    ) : null}
-
-                    {business.opening_hours ? (
-                      <span className="inline-flex items-center justify-center gap-1.5 md:justify-start">
-                        {business.opening_hours}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-
-              <div className="hidden h-[72px] w-px bg-white/35 md:block" />
-
-              {business.instagram_url || whatsapp ? (
-                <div className="text-center md:text-left">
-                  <h3 className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f4c76b] md:text-xs">
-                    Follow us
-                  </h3>
-                  <div className="mt-2 flex items-center justify-center gap-2 md:mt-3 md:justify-start md:gap-3">
-
-                  {business.instagram_url ? (
-                    <a
-                      href={business.instagram_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white transition hover:border-[#f4c76b] hover:bg-white/10 md:h-9 md:w-9 md:text-xs"
-                      aria-label="Instagram"
-                    >
-                      IG
-                    </a>
-                  ) : null}
-
-                  {whatsapp ? (
-                    <a
-                      href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="grid h-8 w-8 place-items-center rounded-full border border-[#f4c76b]/55 text-[0.68rem] font-black text-white transition hover:border-[#f4c76b] hover:bg-white/10 md:h-9 md:w-9 md:text-xs"
-                      aria-label="WhatsApp"
-                    >
-                      <svg
-                      viewBox="0 0 24 24"
-                      className="h-4 w-4"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M12.04 2a9.86 9.86 0 0 0-8.46 14.9L2.3 22l5.23-1.24A9.94 9.94 0 1 0 12.04 2Zm0 2a7.94 7.94 0 1 1 0 15.88 7.85 7.85 0 0 1-4.02-1.1l-.38-.23-2.32.55.56-2.25-.25-.4A7.94 7.94 0 0 1 12.04 4Zm-3.5 4.3c.17-.38.35-.39.52-.39h.45c.15 0 .38.06.58.29.2.23.76.74.76 1.8s-.78 2.09-.89 2.24c-.11.15-.15.28-.04.5.11.23.48.79 1.02 1.28.7.62 1.29.82 1.52.91.23.08.36.07.5-.08.15-.17.58-.68.74-.91.15-.23.31-.19.52-.11.21.08 1.36.64 1.59.76.23.11.39.17.45.26.06.1.06.57-.13 1.12-.19.55-1.12 1.06-1.55 1.1-.4.04-.92.06-1.48-.09-.34-.09-.78-.25-1.34-.49-2.36-1.02-3.9-3.39-4.02-3.55-.11-.15-.96-1.28-.96-2.45s.61-1.74.83-1.97c.21-.23.46-.29.61-.29h.34Z"
-                      />
-                    </svg>
-                    </a>
-                  ) : null}
-                
-                  </div>
-                </div>
+            <div className="mt-5 grid gap-3 text-sm font-bold text-slate-700 sm:grid-cols-2">
+              {location ? (
+                <InfoRow icon={<MapPin size={17} />} label="Location" value={location} />
               ) : null}
-            </div>
-
-            <div className="mt-4 border-t border-white/25 pt-2 text-center text-[0.68rem] font-semibold text-white/80 md:mt-5 md:pt-3 md:text-xs">
-              © {new Date().getFullYear()} {business.name}. All rights reserved.
-              {showMarketVillaBadge ? (
-                <span className="ml-2 text-white/45">
-                  Powered by Market Villa
-                </span>
+              {openingHours ? (
+                <InfoRow
+                  icon={<Clock size={17} />}
+                  label="Business Hours"
+                  value={openingHours}
+                />
               ) : null}
             </div>
           </div>
-        </footer>
+
+          {(deliveryNote || paymentInfo || pickupNote) ? (
+            <div className="rounded-[1.75rem] border border-[#eadfff] bg-[#fbf8ff] p-5 md:p-6">
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#7c3aed]">
+                Orders
+              </p>
+              <div className="mt-4 grid gap-3">
+                {deliveryNote ? (
+                  <InfoRow
+                    icon={<Truck size={17} />}
+                    label="Delivery"
+                    value={deliveryNote}
+                  />
+                ) : null}
+                {pickupNote ? (
+                  <InfoRow
+                    icon={<ShoppingBag size={17} />}
+                    label="Pickup"
+                    value={pickupNote}
+                  />
+                ) : null}
+                {paymentInfo ? (
+                  <InfoRow
+                    icon={<ShoppingCart size={17} />}
+                    label="Payment"
+                    value={paymentInfo}
+                  />
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {showFooter ? (
+        <Footer
+          business={business}
+          whatsapp={whatsapp}
+          location={location}
+          openingHours={openingHours}
+          showMarketVillaBadge={showMarketVillaBadge}
+        />
       ) : null}
 
       <WhatsAppCheckout
@@ -552,106 +648,309 @@ function addToCart(item: StoreProduct) {
   );
 }
 
-function ProductCard({
+function InfoRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex gap-3 rounded-2xl border border-[#eadfff] bg-white p-4">
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#f4edff] text-[#7c3aed]">
+        {icon}
+      </span>
+      <span>
+        <span className="block text-xs font-black uppercase tracking-[0.1em] text-slate-400">
+          {label}
+        </span>
+        <span className="mt-1 block text-sm font-bold leading-5 text-[#241436]">
+          {value}
+        </span>
+      </span>
+    </div>
+  );
+}
+
+function FeaturedProductCard({
   item,
   showPrices,
-  onAddToCart,
+  whatsapp,
+  businessName,
 }: {
   item: StoreProduct;
   showPrices: boolean;
-  onAddToCart: (item: StoreProduct) => void;
+  whatsapp: string;
+  businessName: string;
 }) {
-  const price = formatCurrency(Number(item.price || 0));
   const image = item.image_url || item.image || "";
+  const price = formatCurrency(Number(item.price || 0));
 
   return (
-    <article
-      className="group overflow-hidden rounded-[2rem] bg-white transition-transform duration-300 hover:-translate-y-1"
-      style={{ boxShadow: "none" }}
-    >
-      <div
-        className="relative aspect-[1.02] overflow-hidden rounded-t-[2rem] bg-[#f1f2f3]"
-        style={{ boxShadow: "none" }}
-      >
-
+    <article className="grid grid-cols-[88px_1fr] gap-3 rounded-[1.5rem] border border-[#eadfff] bg-white p-3">
+      <div className="relative aspect-square overflow-hidden rounded-[1.1rem] bg-[#f4edff]">
         {image ? (
           <Image
             src={image}
             alt={item.name}
             fill
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-            className="object-cover transition duration-300 group-hover:scale-[1.025]"
+            sizes="100px"
+            className="object-cover"
           />
         ) : (
-          <div className="grid h-full place-items-center text-slate-300">
-            <ShoppingBag size={34} />
+          <div className="grid h-full place-items-center text-[#7c3aed]">
+            <ShoppingBag size={24} />
           </div>
         )}
       </div>
-
-      <div className="px-5 pb-6 pt-5" style={{ boxShadow: "none" }}>
-        {showPrices ? (
-          <p className="mb-5 text-3xl font-black tracking-[-0.06em] text-[#dc2626] md:text-[2.15rem]">
-            {price}
-          </p>
-        ) : null}
-
-        <div className="grid grid-cols-[1fr_auto] items-center gap-3">
-          <h2 className="line-clamp-2 min-h-10 text-sm font-semibold uppercase leading-5 text-[#241436] md:text-base">
-            {item.name}
-          </h2>
-          <span className="h-1 w-1 rounded-full bg-[#dc2626]" />
-        </div>
-
+      <div className="min-w-0 py-1">
+        <h3 className="line-clamp-2 text-sm font-black leading-5 text-[#241436]">
+          {item.name}
+        </h3>
         {item.category ? (
-          <p className="mt-5 text-base font-semibold text-[#7d748f]">
+          <p className="mt-1 truncate text-xs font-bold text-slate-500">
             {item.category}
           </p>
         ) : null}
-
-        <button
-          type="button"
-          onClick={() => onAddToCart(item)}
-          className="mt-7 inline-flex min-h-14 w-full items-center justify-center rounded-[1.35rem] border border-[#241436] bg-white px-3 text-sm font-black text-[#241436] transition hover:-translate-y-0.5 hover:bg-[#241436] hover:text-white md:text-base"
-        >
-          Add to cart
-        </button>
+        {showPrices ? (
+          <p className="mt-2 text-base font-black text-[#dc2626]">{price}</p>
+        ) : null}
+        {whatsapp ? (
+          <a
+            href={buildWhatsAppLink(whatsapp, `Hello ${businessName}, I want to order ${item.name}`)}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 inline-flex rounded-full bg-[#f4edff] px-3 py-1.5 text-[0.68rem] font-black text-[#241436]"
+          >
+            WhatsApp
+          </a>
+        ) : null}
       </div>
     </article>
   );
 }
 
+function ProductCard({
+  item,
+  showPrices,
+  whatsapp,
+  businessName,
+  onAddToCart,
+}: {
+  item: StoreProduct;
+  showPrices: boolean;
+  whatsapp: string;
+  businessName: string;
+  onAddToCart: (item: StoreProduct) => void;
+}) {
+  const price = formatCurrency(Number(item.price || 0));
+  const image = item.image_url || item.image || "";
+  const description = getShortDescription(item);
+  const status = getItemStatus(item);
 
+  return (
+    <article className="group overflow-hidden rounded-[1.75rem] border border-[#eadfff] bg-white transition-transform duration-300 hover:-translate-y-1">
+      <div className="relative aspect-[1.05] overflow-hidden bg-[#f4edff]">
+        {image ? (
+          <Image
+            src={image}
+            alt={item.name}
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
+            className="object-cover transition duration-300 group-hover:scale-[1.025]"
+          />
+        ) : (
+          <div className="grid h-full place-items-center text-[#7c3aed]">
+            <ShoppingBag size={34} />
+          </div>
+        )}
+        <span className="absolute left-3 top-3 rounded-full bg-white/92 px-3 py-1 text-[0.65rem] font-black uppercase tracking-[0.08em] text-[#241436] backdrop-blur">
+          {status}
+        </span>
+      </div>
 
+      <div className="p-5">
+        {showPrices ? (
+          <p className="text-2xl font-black tracking-[-0.05em] text-[#dc2626]">
+            {price}
+          </p>
+        ) : null}
 
+        <h3 className="mt-3 line-clamp-2 text-sm font-black uppercase leading-5 text-[#241436] md:text-base">
+          {item.name}
+        </h3>
 
+        {item.category ? (
+          <p className="mt-2 text-sm font-bold text-[#7d748f]">{item.category}</p>
+        ) : null}
 
+        {description ? (
+          <p className="mt-3 line-clamp-2 text-sm font-semibold leading-5 text-slate-500">
+            {description}
+          </p>
+        ) : null}
 
+        <div className="mt-5 grid gap-2">
+          <button
+            type="button"
+            onClick={() => onAddToCart(item)}
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-[#241436] bg-white px-3 text-sm font-black text-[#241436] transition hover:-translate-y-0.5 hover:bg-[#241436] hover:text-white"
+          >
+            Add to cart
+          </button>
 
+          {whatsapp ? (
+            <a
+              href={buildWhatsAppLink(whatsapp, `Hello ${businessName}, I want to order ${item.name}`)}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#f4edff] px-3 text-sm font-black text-[#241436] transition hover:-translate-y-0.5"
+            >
+              <MessageCircle size={16} />
+              WhatsApp order
+            </a>
+          ) : null}
+        </div>
+      </div>
+    </article>
+  );
+}
 
+function Footer({
+  business,
+  whatsapp,
+  location,
+  openingHours,
+  showMarketVillaBadge,
+}: {
+  business: StoreBusiness;
+  whatsapp: string;
+  location: string;
+  openingHours: string;
+  showMarketVillaBadge: boolean;
+}) {
+  const instagram = business.instagram_url || business.instagramUrl || "";
 
+  return (
+    <footer className="bg-[#1f0f35] px-4 py-8 text-white md:px-6 md:py-10">
+      <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-[1.2fr_1fr_1fr_0.8fr]">
+        <div>
+          <div className="flex items-center gap-3">
+            {business.logo_url ? (
+              <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl border border-white/15 bg-white">
+                <Image
+                  src={business.logo_url}
+                  alt={business.name}
+                  width={56}
+                  height={56}
+                  className="h-full w-full object-contain p-1"
+                />
+              </span>
+            ) : (
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-white/15 bg-white/10 text-xs font-black">
+                {business.name.slice(0, 2).toUpperCase()}
+              </span>
+            )}
+            <div>
+              <h2 className="text-base font-black">{business.name}</h2>
+              {business.tagline ? (
+                <p className="mt-1 text-sm font-semibold text-white/65">
+                  {business.tagline}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </div>
 
+        <div>
+          <h3 className="text-xs font-black uppercase tracking-[0.14em] text-[#d9c2ff]">
+            Contact
+          </h3>
+          <div className="mt-3 grid gap-2 text-sm font-semibold text-white/78">
+            {business.phone ? (
+              <a href={`tel:${business.phone}`} className="inline-flex gap-2">
+                <Phone size={16} />
+                {business.phone}
+              </a>
+            ) : null}
+            {whatsapp ? (
+              <a
+                href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex gap-2"
+              >
+                <MessageCircle size={16} />
+                {whatsapp}
+              </a>
+            ) : null}
+            {business.email ? (
+              <a href={`mailto:${business.email}`} className="inline-flex gap-2">
+                <Mail size={16} />
+                {business.email}
+              </a>
+            ) : null}
+          </div>
+        </div>
 
+        <div>
+          <h3 className="text-xs font-black uppercase tracking-[0.14em] text-[#d9c2ff]">
+            Store
+          </h3>
+          <div className="mt-3 grid gap-2 text-sm font-semibold text-white/78">
+            {location ? (
+              <span className="inline-flex gap-2">
+                <MapPin size={16} />
+                {location}
+              </span>
+            ) : null}
+            {openingHours ? (
+              <span className="inline-flex gap-2">
+                <Clock size={16} />
+                {openingHours}
+              </span>
+            ) : null}
+          </div>
+        </div>
 
+        <div>
+          <h3 className="text-xs font-black uppercase tracking-[0.14em] text-[#d9c2ff]">
+            Social
+          </h3>
+          <div className="mt-3 flex gap-2">
+            {instagram ? (
+              <a
+                href={instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-xs font-black text-white"
+              >
+                IG
+              </a>
+            ) : null}
+            {whatsapp ? (
+              <a
+                href={buildWhatsAppLink(whatsapp, `Hello ${business.name}`)}
+                target="_blank"
+                rel="noreferrer"
+                className="grid h-10 w-10 place-items-center rounded-full border border-white/15 text-white"
+                aria-label="WhatsApp"
+              >
+                <MessageCircle size={17} />
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      <div className="mx-auto mt-8 flex max-w-7xl flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4 text-xs font-semibold text-white/55">
+        <span>
+          © {new Date().getFullYear()} {business.name}. All rights reserved.
+        </span>
+        {showMarketVillaBadge ? <span>Powered by Market Villa</span> : null}
+      </div>
+    </footer>
+  );
+}
