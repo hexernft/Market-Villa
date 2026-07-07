@@ -3,12 +3,12 @@
 import {
   MARKET_VILLA_PLANS,
   canUseBusinessModeForPlan,
-  canUseThemeForPlan,
   getBusinessModePlanMessage,
   isValidPlanAlias,
   normalizePlanId,
 } from "@/lib/plans";
 import { businessThemes } from "@/lib/themes";
+import { getThemeAccessDecision } from "@/lib/theme-access";
 import {
   BusinessMode,
   getThemeBusinessMode,
@@ -1020,6 +1020,29 @@ is_published: input.isPublished,
   return data;
 }
 
+async function getPurchasedThemeExtensionsForBusiness(businessId: string) {
+  const { data, error } = await supabase
+    .from("business_theme_extensions")
+    .select("business_id,theme_id,status,expires_at")
+    .eq("business_id", businessId);
+
+  if (error) {
+    const message = error instanceof Error ? error.message : String(error || "");
+
+    if (
+      message.includes("business_theme_extensions") ||
+      message.includes("schema cache") ||
+      message.includes("does not exist")
+    ) {
+      return [];
+    }
+
+    throw error;
+  }
+
+  return data || [];
+}
+
 export async function updateBusinessTheme({
   businessId,
   themeId,
@@ -1029,7 +1052,9 @@ export async function updateBusinessTheme({
 }) {
   const { data: business, error: businessError } = await supabase
     .from("businesses")
-    .select("id,subscription_plan,theme_settings")
+    .select(
+      "id,business_mode,subscription_plan,subscription_status,subscription_expires_at,subscription_grace_until,admin_override_active,theme_settings",
+    )
     .eq("id", businessId)
     .single();
 
@@ -1044,7 +1069,7 @@ export async function updateBusinessTheme({
   }
 
   const themeMode = getThemeBusinessMode(themeId);
-  const businessMode = "products";
+  const businessMode = normalizeBusinessMode((business as any)?.business_mode);
 
   if (themeMode !== businessMode) {
     throw new Error(
@@ -1065,13 +1090,15 @@ export async function updateBusinessTheme({
     throw new Error(getBusinessModePlanMessage(businessMode));
   }
 
-  if (
-    !canUseThemeForPlan({
-      plan: business?.subscription_plan,
-      themeIndex,
-    })
-  ) {
-    throw new Error("Upgrade your plan to use this theme.");
+  const extensions = await getPurchasedThemeExtensionsForBusiness(businessId);
+  const decision = getThemeAccessDecision({
+    theme: businessThemes[themeIndex],
+    business,
+    extensions,
+  });
+
+  if (!decision.allowed) {
+    throw new Error(decision.reason || "You do not have access to this theme.");
   }
 
   const { data, error } = await supabase

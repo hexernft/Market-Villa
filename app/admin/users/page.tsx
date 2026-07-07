@@ -1,5 +1,5 @@
-import { AdminComingSoonPage } from "../AdminComingSoonPage";
+import { AdminControlPage } from "../AdminControlPage";
 
 export default function AdminUsersPage() {
-  return <AdminComingSoonPage title="Users" />;
+  return <AdminControlPage view="users" />;
 }

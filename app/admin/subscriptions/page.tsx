@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { AdminControlPage } from "../AdminControlPage";
 
-export default function AdminSubscriptionsRedirectPage() {
-  redirect("/admin/pricing");
+export default function AdminSubscriptionsPage() {
+  return <AdminControlPage view="subscriptions" />;
 }

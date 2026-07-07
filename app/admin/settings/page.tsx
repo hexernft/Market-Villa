@@ -1,5 +1,5 @@
-import { AdminComingSoonPage } from "../AdminComingSoonPage";
+import { AdminControlPage } from "../AdminControlPage";
 
 export default function AdminSettingsPage() {
-  return <AdminComingSoonPage title="Settings" />;
+  return <AdminControlPage view="settings" />;
 }

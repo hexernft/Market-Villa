@@ -1,5 +1,5 @@
-import { AdminComingSoonPage } from "../AdminComingSoonPage";
+import { AdminControlPage } from "../AdminControlPage";
 
 export default function AdminThemesPage() {
-  return <AdminComingSoonPage title="Themes" />;
+  return <AdminControlPage view="themes" />;
 }

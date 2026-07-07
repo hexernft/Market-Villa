@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { AdminControlPage } from "../AdminControlPage";
 
-export default function AdminBusinessesRedirectPage() {
-  redirect("/admin#businesses");
+export default function AdminBusinessesPage() {
+  return <AdminControlPage view="businesses" />;
 }

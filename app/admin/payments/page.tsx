@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { AdminControlPage } from "../AdminControlPage";
 
-export default function AdminPaymentsRedirectPage() {
-  redirect("/admin/revenue");
+export default function AdminPaymentsPage() {
+  return <AdminControlPage view="payments" />;
 }

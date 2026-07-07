@@ -13,13 +13,13 @@
   --mv-lilac: #efe3ff;
   --mv-peach: #ffe4d6;
   --mv-rose: #f7d6e8;
-  --mv-card: rgba(255, 255, 255, 0.64);
-  --mv-card-strong: rgba(255, 255, 255, 0.82);
-  --mv-border: rgba(126, 88, 177, 0.16);
-  --mv-shadow: 0 24px 70px rgba(55, 31, 83, 0.12);
-  --mv-shadow-soft: 0 16px 44px rgba(55, 31, 83, 0.09);
-  --mv-radius: 1.35rem;
-  --mv-radius-lg: 2rem;
+  --mv-card: rgba(255, 255, 255, 0.78);
+  --mv-card-strong: rgba(255, 255, 255, 0.92);
+  --mv-border: rgba(126, 88, 177, 0.14);
+  --mv-shadow: 0 14px 36px rgba(55, 31, 83, 0.08);
+  --mv-shadow-soft: 0 8px 22px rgba(55, 31, 83, 0.055);
+  --mv-radius: 1.1rem;
+  --mv-radius-lg: 1.5rem;
   --font-store-heading: var(--font-store-body);
 }
 
@@ -60,20 +60,19 @@ p { line-height: 1.65; }
 .mv-dashboard-content article,
 .mv-dashboard-content aside > div,
 .mv-smart-page article,
-form,
 .card {
   border-radius: var(--mv-radius-lg) !important;
   border: 1px solid var(--mv-border) !important;
   background: var(--mv-card) !important;
-  backdrop-filter: blur(22px) saturate(1.12);
-  box-shadow: var(--mv-shadow-soft) !important;
+  backdrop-filter: blur(14px) saturate(1.05);
+  box-shadow: none !important;
 }
 .mv-dashboard-content section:hover,
 .mv-dashboard-content article:hover,
 .mv-dashboard-content aside > div:hover,
 .premium-card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--mv-shadow) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--mv-shadow-soft) !important;
   border-color: rgba(124,58,237,.22) !important;
 }
 
@@ -102,7 +101,7 @@ a[class*="inline-flex"],
 a[class*="rounded"],
 [role="button"] {
   min-height: 2.4rem;
-  border-radius: 0.95rem !important;
+  border-radius: 0.9rem !important;
   font-size: .82rem !important;
   font-weight: 700 !important;
   line-height: 1 !important;
@@ -124,7 +123,7 @@ a[href="/login"].inline-flex:hover, .market-primary-button:hover, button[type="s
 
 input, select, textarea {
   min-height: 2.55rem;
-  border-radius: 1rem !important;
+  border-radius: 0.95rem !important;
   background: rgba(255,255,255,.62) !important;
   border-color: rgba(126,88,177,.18) !important;
   font-size: .84rem !important;
@@ -191,7 +190,7 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(124,58,23
 .bg-slate-50 { background-color: rgba(249,245,255,.72) !important; }
 .bg-\[\#f7f1ff\], .bg-\[\#f3f4f6\], .bg-\[\#eef5f8\] { background: transparent !important; }
 .rounded-full { border-radius: 1rem !important; }
-.shadow-sm { box-shadow: var(--mv-shadow-soft) !important; }
+.shadow-sm { box-shadow: none !important; }
 .border-slate-200 { border-color: rgba(126,88,177,.16) !important; }
 .text-slate-950 { color: #241436 !important; }
 .text-slate-600, .text-slate-500 { color: rgba(36,20,54,.64) !important; }
@@ -210,6 +209,7 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(124,58,23
   --mv-purple-glow: #2a0f45;
   --mv-compact-button-height: 2.5rem;
   --mv-compact-button-radius: 0.95rem;
+  --mv-input-radius: 0.95rem;
 }
 
 body {

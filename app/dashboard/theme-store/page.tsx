@@ -1,14 +1,26 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, Loader2, Lock, Palette, Pencil } from "lucide-react";
-import { getMyBusinesses, updateBusinessTheme } from "@/lib/business-actions";
+import {
+  CheckCircle2,
+  Loader2,
+  Lock,
+  Palette,
+  Pencil,
+  ShieldCheck,
+} from "lucide-react";
+import { getMyBusinesses } from "@/lib/business-actions";
+import { supabase } from "@/lib/supabase";
+import { businessThemes, type BusinessTheme } from "@/lib/themes";
 import {
   BusinessThemeExtension,
-  canEditProTheme,
   getPurchasedThemeExtensions,
 } from "@/lib/theme-editor-actions";
+import {
+  getThemeAccessDecision,
+  getThemeAccessSummary,
+} from "@/lib/theme-access";
 
 type DashboardBusiness = {
   id: string;
@@ -16,37 +28,60 @@ type DashboardBusiness = {
   slug: string;
   theme_id: string;
   subscription_plan?: string | null;
+  subscription_status?: string | null;
+  subscription_expires_at?: string | null;
+  subscription_grace_until?: string | null;
+  admin_override_active?: boolean | null;
 };
 
-const defaultTheme = {
-  id: "default-one-page",
-  name: "Default One Page",
-  price: 0,
-  status: "active/free/default",
-};
+const visibleThemeIds = new Set([
+  "default-one-page",
+  "suya-spot-pro",
+  "premium-treats",
+]);
 
-const premiumTheme = {
-  id: "premium-treats",
-  name: "Premium Treats",
-  price: null,
-  status: "premium/add-ons locked until purchased",
-};
+const themeOptions = businessThemes.filter((theme) => visibleThemeIds.has(theme.id));
 
-const suyaTheme = {
-  id: "suya-spot-pro",
-  name: "Suya Spot Pro",
-  price: null,
-  status: "premium/food theme",
-};
+async function activateTheme({
+  businessId,
+  themeId,
+}: {
+  businessId: string;
+  themeId: string;
+}) {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-const themeOptions = [defaultTheme, suyaTheme, premiumTheme];
+  const token = session?.access_token;
+
+  if (!token) {
+    throw new Error("You must be logged in to activate a theme.");
+  }
+
+  const response = await fetch("/api/themes/activate", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ businessId, themeId }),
+  });
+
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(payload.error || "Unable to activate theme.");
+  }
+
+  return payload;
+}
 
 export default function ThemeStorePage() {
   const [businesses, setBusinesses] = useState<DashboardBusiness[]>([]);
   const [selectedBusinessId, setSelectedBusinessId] = useState("");
-  const [selectedThemeId, setSelectedThemeId] = useState(defaultTheme.id);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const [savingThemeId, setSavingThemeId] = useState("");
   const [message, setMessage] = useState("");
   const [extensions, setExtensions] = useState<BusinessThemeExtension[]>([]);
 
@@ -69,7 +104,6 @@ export default function ThemeStorePage() {
 
         if (items.length > 0) {
           setSelectedBusinessId(items[0].id);
-          setSelectedThemeId(items[0].theme_id || defaultTheme.id);
           setExtensions(await getPurchasedThemeExtensions(items[0].id));
         }
       } catch (error) {
@@ -90,19 +124,48 @@ export default function ThemeStorePage() {
     };
   }, []);
 
-  async function handleSaveTheme() {
+  async function handleBusinessChange(businessId: string) {
+    const business = businesses.find((item) => item.id === businessId);
+
+    setSelectedBusinessId(businessId);
+    setMessage("");
+
+    if (!business) {
+      setExtensions([]);
+      return;
+    }
+
+    try {
+      setExtensions(await getPurchasedThemeExtensions(businessId));
+    } catch {
+      setExtensions([]);
+    }
+  }
+
+  async function handleActivateTheme(theme: BusinessTheme) {
     if (!selectedBusinessId) {
       setMessage("Create a business page first before choosing a theme.");
       return;
     }
 
-    setIsSaving(true);
+    const decision = getThemeAccessDecision({
+      theme,
+      business: selectedBusiness,
+      extensions,
+    });
+
+    if (!decision.allowed) {
+      setMessage(decision.reason || "You do not have access to this theme.");
+      return;
+    }
+
+    setSavingThemeId(theme.id);
     setMessage("");
 
     try {
-      await updateBusinessTheme({
+      await activateTheme({
         businessId: selectedBusinessId,
-        themeId: selectedThemeId,
+        themeId: theme.id,
       });
 
       const updatedBusinesses = await getMyBusinesses();
@@ -114,7 +177,7 @@ export default function ThemeStorePage() {
 
       setMessage(errorMessage);
     } finally {
-      setIsSaving(false);
+      setSavingThemeId("");
     }
   }
 
@@ -147,71 +210,41 @@ export default function ThemeStorePage() {
 
   return (
     <div className="grid gap-4">
-      <section>
-        <h1 className="text-[1.8rem] font-black tracking-[-0.05em] text-[#171421]">
-          Themes
-        </h1>
+      <section className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#7c3aed]">
+            Theme Store
+          </p>
+          <h1 className="text-[1.8rem] font-black tracking-[-0.05em] text-[#171421]">
+            Themes
+          </h1>
+        </div>
+
+        <Link
+          href="/dashboard/theme-editor"
+          className="inline-flex rounded-2xl border border-[#ebe7f3] bg-white px-4 py-2 text-sm font-black text-[#241436]"
+        >
+          Theme Editor
+        </Link>
       </section>
 
       <section className="rounded-2xl border border-[#ebe7f3] bg-white p-4">
-        <div className="grid gap-3 lg:grid-cols-[1fr_0.7fr_auto] lg:items-end">
-          <label className="grid gap-2">
-            <span className="text-sm font-bold text-slate-700">
-              Apply to business
-            </span>
-            <select
-              value={selectedBusinessId}
-              onChange={(event) => {
-                const businessId = event.target.value;
-                const business = businesses.find((item) => item.id === businessId);
-
-                setSelectedBusinessId(businessId);
-                setSelectedThemeId(business?.theme_id || defaultTheme.id);
-                getPurchasedThemeExtensions(businessId)
-                  .then(setExtensions)
-                  .catch(() => setExtensions([]));
-              }}
-              className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm font-semibold text-[#241436] outline-none focus:border-[#7c3aed]"
-            >
-              {businesses.map((business) => (
-                <option key={business.id} value={business.id}>
-                  {business.name} - /store/{business.slug}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="grid gap-2">
-            <span className="text-sm font-bold text-slate-700">
-              Theme name
-            </span>
-            <select
-              value={selectedThemeId}
-              onChange={(event) => setSelectedThemeId(event.target.value)}
-              className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm font-semibold text-[#241436] outline-none focus:border-[#7c3aed]"
-            >
-              {themeOptions.map((theme) => (
-                <option key={theme.id} value={theme.id}>
-                  {theme.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <button
-            type="button"
-            onClick={handleSaveTheme}
-            disabled={isSaving || !selectedBusiness}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#241436] px-5 text-sm font-black text-white disabled:cursor-not-allowed disabled:opacity-60"
+        <label className="grid gap-2">
+          <span className="text-sm font-bold text-slate-700">
+            Apply to business
+          </span>
+          <select
+            value={selectedBusinessId}
+            onChange={(event) => handleBusinessChange(event.target.value)}
+            className="min-h-11 rounded-2xl border border-[#ebe7f3] bg-white px-4 text-sm font-semibold text-[#241436] outline-none focus:border-[#7c3aed]"
           >
-            {isSaving ? (
-              <Loader2 size={17} className="animate-spin" />
-            ) : (
-              <CheckCircle2 size={17} />
-            )}
-            {isSaving ? "Applying..." : "Apply Theme"}
-          </button>
-        </div>
+            {businesses.map((business) => (
+              <option key={business.id} value={business.id}>
+                {business.name} - /store/{business.slug}
+              </option>
+            ))}
+          </select>
+        </label>
       </section>
 
       {message ? (
@@ -220,58 +253,98 @@ export default function ThemeStorePage() {
         </div>
       ) : null}
 
-      <section className="rounded-2xl border border-[#ebe7f3] bg-white p-5">
-        <div className="flex items-center gap-3">
-          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
-            <Palette size={22} />
-          </span>
-          <div>
-            <h2 className="text-lg font-black tracking-[-0.04em] text-[#171421]">
-              {themeOptions.find((theme) => theme.id === selectedThemeId)?.name ||
-                defaultTheme.name}
-            </h2>
-            <p className="mt-1 text-sm font-bold text-emerald-700">
-              {selectedThemeId === premiumTheme.id
-                ? premiumTheme.status
-                : selectedThemeId === suyaTheme.id
-                  ? suyaTheme.status
-                : `₦${defaultTheme.price} · ${defaultTheme.status}`}
-            </p>
-          </div>
-        </div>
-        <div className="mt-5 flex flex-wrap gap-2">
-          {selectedBusiness &&
-          canEditProTheme({
-            business: selectedBusiness as any,
-            themeId: selectedThemeId,
+      <section className="grid gap-4 lg:grid-cols-3">
+        {themeOptions.map((theme) => {
+          const isActive = selectedBusiness?.theme_id === theme.id;
+          const decision = getThemeAccessDecision({
+            theme,
+            business: selectedBusiness,
             extensions,
-          }) &&
-          selectedThemeId !== defaultTheme.id ? (
-            <Link
-              href={`/dashboard/theme-editor/${selectedThemeId}?businessId=${selectedBusinessId}`}
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#241436] px-4 py-2 text-sm font-black text-white"
+          });
+          const isSaving = savingThemeId === theme.id;
+          const canActivate = decision.allowed && !isActive;
+
+          return (
+            <article
+              key={theme.id}
+              className={`rounded-3xl border bg-white p-5 ${
+                isActive ? "border-[#7c3aed]" : "border-[#ebe7f3]"
+              }`}
             >
-              <Pencil size={15} />
-              Edit Theme
-            </Link>
-          ) : selectedThemeId !== defaultTheme.id ? (
-            <Link
-              href="/dashboard/billing"
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#7c3aed] px-4 py-2 text-sm font-black text-white"
-            >
-              <Lock size={15} />
-              Purchase / Upgrade
-            </Link>
-          ) : null}
-          <Link
-            href="/dashboard/theme-editor"
-            className="inline-flex rounded-2xl border border-[#ebe7f3] bg-white px-4 py-2 text-sm font-black text-[#241436]"
-          >
-            Theme Editor
-          </Link>
-        </div>
+              <div className="flex items-start justify-between gap-3">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#f1eaff] text-[#7c3aed]">
+                  <Palette size={22} />
+                </span>
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-black ${
+                    isActive
+                      ? "bg-emerald-50 text-emerald-700"
+                      : decision.allowed
+                        ? "bg-[#f1eaff] text-[#241436]"
+                        : "bg-amber-50 text-amber-700"
+                  }`}
+                >
+                  {isActive ? "Active theme" : decision.label}
+                </span>
+              </div>
+
+              <h2 className="mt-5 text-lg font-black tracking-[-0.04em] text-[#171421]">
+                {theme.name}
+              </h2>
+              <p className="mt-2 min-h-12 text-sm font-semibold leading-6 text-slate-600">
+                {theme.bestFor || theme.description || getThemeAccessSummary(theme)}
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-3 py-1 text-xs font-black text-slate-600">
+                  <ShieldCheck size={13} />
+                  {getThemeAccessSummary(theme)}
+                </span>
+                {decision.source === "purchase" ? (
+                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+                    Purchased
+                  </span>
+                ) : null}
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {isActive ? (
+                  <Link
+                    href={`/dashboard/theme-editor/${theme.id}?businessId=${selectedBusinessId}`}
+                    className="inline-flex min-h-10 items-center gap-2 rounded-2xl bg-[#241436] px-4 text-sm font-black text-white"
+                  >
+                    <Pencil size={15} />
+                    Edit Theme
+                  </Link>
+                ) : canActivate ? (
+                  <button
+                    type="button"
+                    onClick={() => handleActivateTheme(theme)}
+                    disabled={isSaving}
+                    className="inline-flex min-h-10 items-center gap-2 rounded-2xl bg-[#241436] px-4 text-sm font-black text-white disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isSaving ? (
+                      <Loader2 size={15} className="animate-spin" />
+                    ) : (
+                      <CheckCircle2 size={15} />
+                    )}
+                    {isSaving ? "Activating..." : "Activate"}
+                  </button>
+                ) : (
+                  <Link
+                    href="/dashboard/billing"
+                    className="inline-flex min-h-10 items-center gap-2 rounded-2xl bg-[#7c3aed] px-4 text-sm font-black text-white"
+                    onClick={() => setMessage(decision.reason || "")}
+                  >
+                    <Lock size={15} />
+                    {decision.actionLabel}
+                  </Link>
+                )}
+              </div>
+            </article>
+          );
+        })}
       </section>
     </div>
   );
 }
-

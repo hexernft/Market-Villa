@@ -74,7 +74,7 @@ export default function LoginPage() {
       </div>
 
       <div className="relative mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl items-center justify-center">
-        <div className="auth-card w-full max-w-sm rounded-[26px] bg-white px-5 py-6 shadow-[0_18px_50px_rgba(15,23,42,0.10)] sm:px-4 sm:py-7">
+        <div className="auth-card w-full max-w-sm rounded-[1.5rem] border border-[#eadfff] bg-white px-5 py-6 sm:px-4 sm:py-7">
           <div className="mb-3 flex flex-col items-center text-center">
             <div className=" mb-2">
               <Image
@@ -143,7 +143,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-1 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#7c3aed] px-5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#8b5cf6] hover:shadow-[0_16px_40px_rgba(2,8,31,0.22)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-1 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#7c3aed] px-5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#8b5cf6] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? (
                 <Loader2 size={18} className="animate-spin" />

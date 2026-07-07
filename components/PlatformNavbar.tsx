@@ -256,8 +256,8 @@ export function PlatformNavbar() {
       <div
         className={`platform-navbar-surface border px-4 py-2 backdrop-blur-2xl transition-all duration-300 md:px-5 ${
           isScrolledVisual
-            ? "mx-0 w-full max-w-none rounded-none border-x-0 border-t-0 border-white/80 bg-white/92 shadow-[0_18px_58px_rgba(36,20,54,0.18)]"
-            : "mx-0 w-full max-w-none rounded-b-[1.6rem] rounded-t-none border-x-0 border-t-0 border-white/70 bg-white/72 shadow-[0_18px_50px_rgba(55,31,83,0.10)]"
+            ? "mx-0 w-full max-w-none rounded-none border-x-0 border-t-0 border-white/80 bg-white/92 shadow-[0_10px_28px_rgba(36,20,54,0.08)]"
+            : "mx-0 w-full max-w-none rounded-b-[1.35rem] rounded-t-none border-x-0 border-t-0 border-white/70 bg-white/72 shadow-[0_10px_24px_rgba(55,31,83,0.06)]"
         }`}
       >
         <div className="flex items-center justify-between gap-3">
@@ -315,7 +315,7 @@ export function PlatformNavbar() {
             </div>
 
             {isSearchFocused && query.trim() ? (
-              <div className="absolute left-0 right-0 top-[calc(100%+0.6rem)] overflow-hidden rounded-[1.25rem] border border-white/70 bg-white/94 p-2 shadow-[0_24px_70px_rgba(36,20,54,0.22)] backdrop-blur-2xl">
+              <div className="absolute left-0 right-0 top-[calc(100%+0.6rem)] overflow-hidden rounded-[1.25rem] border border-white/70 bg-white/94 p-2 shadow-[0_12px_34px_rgba(36,20,54,0.12)] backdrop-blur-2xl">
                 {isLoadingSearch ? (
                   <div className="flex items-center gap-2 px-3 py-3 text-sm font-semibold text-[#241436]/62">
                     <Loader2 size={16} className="animate-spin text-[#7c3aed]" />
@@ -432,7 +432,7 @@ export function PlatformNavbar() {
             />
 
             {isSearchFocused && query.trim() ? (
-              <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] overflow-hidden rounded-[1.25rem] border border-white/70 bg-white/96 p-2 shadow-[0_24px_70px_rgba(36,20,54,0.22)] backdrop-blur-2xl">
+              <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] overflow-hidden rounded-[1.25rem] border border-white/70 bg-white/96 p-2 shadow-[0_12px_34px_rgba(36,20,54,0.12)] backdrop-blur-2xl">
                 {searchResults.length ? (
                   <div className="grid gap-1">
                     {searchResults.slice(0, 4).map((result) => {

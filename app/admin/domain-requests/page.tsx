@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { AdminControlPage } from "../AdminControlPage";
 
-export default function AdminDomainRequestsRedirectPage() {
-  redirect("/admin#domains");
+export default function AdminDomainRequestsPage() {
+  return <AdminControlPage view="domains" />;
 }

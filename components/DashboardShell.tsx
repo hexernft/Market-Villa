@@ -89,7 +89,7 @@ const mobileNavItems = [
   {
   label: "Orders", href: "/dashboard/orders", icon: ClipboardList },
   {
-  label: "Storefront", href: "/dashboard/storefront", icon: Store },
+  label: "Store", href: "/dashboard/storefront", icon: Store },
   {
   label: "More", href: "/dashboard/settings", icon: Settings },
 ];
@@ -98,7 +98,7 @@ const mobilePrimaryRoutes = new Set([
   "/dashboard",
   "/dashboard/products",
   "/dashboard/orders",
-  "/dashboard/store-details",
+  "/dashboard/storefront",
 ]);
 
 function getInventoryIcon() {
@@ -192,7 +192,7 @@ export function DashboardShell({
               const label = item.label;
               const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
               return (
-                <Link key={item.href} href={item.href} title={label} aria-current={isActive ? "page" : undefined} className={`group flex min-h-11 items-center justify-center gap-3 rounded-2xl px-2 py-2.5 text-[13px] font-semibold transition lg:justify-start lg:px-4 ${isActive ? "bg-[#7c3aed] text-white" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
+              <Link key={item.href} href={item.href} title={label} aria-current={isActive ? "page" : undefined} className={`group flex min-h-11 items-center justify-center gap-3 rounded-xl px-2 py-2.5 text-[13px] font-semibold transition lg:justify-start lg:px-4 ${isActive ? "bg-[#7c3aed] text-white" : "text-[#241436]/68 hover:bg-[#f1eaff] hover:text-[#241436]"}`}>
                   <Icon size={17} />
                   <span className="hidden lg:inline">{label}</span>
                 </Link>
@@ -228,7 +228,7 @@ export function DashboardShell({
 
           <Link
             href="/dashboard/settings"
-            className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-[#eee9f6] bg-white text-[#7c3aed]"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-[#eee9f6] bg-white text-[#7c3aed]"
             aria-label="Open settings"
           >
             <UserRound size={22} />
@@ -254,7 +254,7 @@ export function DashboardShell({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex min-h-[4.15rem] flex-col items-center justify-center gap-1 rounded-2xl text-[11px] font-bold transition ${
+                className={`flex min-h-[4rem] flex-col items-center justify-center gap-1 rounded-xl text-[11px] font-bold transition ${
                   isActive
                     ? "bg-[#f1eaff] text-[#7c3aed]"
                     : "text-[#6f6a7a] hover:bg-[#faf7ff] hover:text-[#241436]"

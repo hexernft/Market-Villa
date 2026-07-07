@@ -42,9 +42,11 @@ type DashboardOrder = {
   customer_name: string | null;
   customer_phone: string | null;
   customer_address: string | null;
+  customer_location?: string | null;
   customer_note: string | null;
   total_amount: number;
   status: string;
+  payment_status?: string | null;
   created_at: string;
   order_items: DashboardOrderItem[];
 };
@@ -355,6 +357,9 @@ export default function OrdersPage() {
             <h2 className="text-xl font-black tracking-[-0.04em] text-[#241436]">
               No orders yet
             </h2>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#6f6580]">
+              Orders saved from storefront checkout will appear here.
+            </p>
           </div>
         ) : null}
 
@@ -371,9 +376,17 @@ export default function OrdersPage() {
               <div className="grid gap-6 xl:grid-cols-[1fr_18rem] xl:items-start">
                 <div>
                   <div className="mb-4 flex flex-wrap gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#f4edff] px-3 py-1 text-xs font-semibold text-[#7c3aed]">
+                      #{order.id.slice(0, 8)}
+                    </span>
+
                     <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
                       <StatusIcon size={14} />
                       {order.status}
+                    </span>
+
+                    <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                      Payment: {order.payment_status || "pending"}
                     </span>
 
                     <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700">
@@ -398,6 +411,12 @@ export default function OrdersPage() {
                     {order.customer_address ? (
                       <p className="text-sm text-slate-500">
                         {order.customer_address}
+                      </p>
+                    ) : null}
+
+                    {order.customer_location ? (
+                      <p className="text-sm text-slate-500">
+                        {order.customer_location}
                       </p>
                     ) : null}
                   </div>
@@ -442,6 +461,13 @@ export default function OrdersPage() {
                       {formatCurrency(Number(order.total_amount || 0))}
                     </p>
                   </div>
+
+                  <Link
+                    href={`/dashboard/orders/${order.id}`}
+                    className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-[#d8c8ff] bg-white px-5 text-sm font-bold text-[#241436] transition hover:-translate-y-0.5 hover:border-[#7c3aed] hover:bg-[#faf8ff]"
+                  >
+                    View order
+                  </Link>
 
                   <div className="rounded-2xl border border-[#eadfff] bg-[#faf8ff] p-3">
                     <div className="grid gap-2">

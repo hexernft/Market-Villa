@@ -6,7 +6,7 @@ export default function SignupSuccessPage() {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(124,58,237,0.16),transparent_34%),linear-gradient(135deg,#f8f4ff,#ffffff_45%,#f3edf8)] px-4 py-24">
       <section className="mx-auto flex min-h-[70vh] max-w-3xl items-center justify-center">
-        <div className="w-full rounded-[2rem] border border-[#7c3aed]/12 bg-white/86 p-6 text-center shadow-[0_28px_90px_rgba(36,20,54,0.14)] backdrop-blur-2xl md:p-10">
+        <div className="w-full rounded-[1.5rem] border border-[#7c3aed]/12 bg-white/86 p-6 text-center backdrop-blur-2xl md:p-10">
           <div className="mx-auto grid h-16 w-16 place-items-center rounded-[1.4rem] bg-[#f0e7ff] text-[#7c3aed] ring-1 ring-[#7c3aed]/14">
             <CheckCircle2 size={30} />
           </div>
@@ -30,7 +30,7 @@ export default function SignupSuccessPage() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/login"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-[#241436] px-5 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#160d22]"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#241436] px-5 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#160d22]"
             >
               Go to Login
               <ArrowRight size={16} />
