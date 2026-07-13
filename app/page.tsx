@@ -10,7 +10,6 @@ import {
   Paintbrush,
   ReceiptText,
   Search,
-  ShoppingBag,
   Sparkles,
   Store,
   UsersRound,
@@ -154,7 +153,7 @@ function StorefrontMockup() {
                 <Store size={18} />
               </div>
               <div>
-                <p className="text-sm font-black text-[#2a1710]">
+                <p className="text-sm font-bold text-[#2a1710]">
                   Bloom & Basket
                 </p>
                 <p className="text-xs font-semibold text-[#8a7565]">
@@ -170,13 +169,13 @@ function StorefrontMockup() {
 
           <div className="grid gap-4 p-4 md:grid-cols-[1fr_0.85fr]">
             <div className="rounded-[1.4rem] bg-gradient-to-br from-[#2a1710] via-[#4a2615] to-[#f0a629] p-5 text-white">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ffd88a]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#ffd88a]">
                 Online store
               </p>
-              <h2 className="mt-8 max-w-xs text-3xl font-black leading-tight tracking-[-0.05em]">
+              <h2 className="mt-8 max-w-xs text-3xl font-bold leading-tight tracking-[-0.05em]">
                 Fresh gifts ready for checkout.
               </h2>
-              <div className="mt-5 inline-flex rounded-full bg-white px-4 py-2 text-xs font-black text-[#2a1710]">
+              <div className="mt-5 inline-flex rounded-full bg-white px-4 py-2 text-xs font-bold text-[#2a1710]">
                 Shop products
               </div>
             </div>
@@ -193,10 +192,10 @@ function StorefrontMockup() {
                 >
                   <div className="rounded-2xl bg-[#f7ead9]" />
                   <div>
-                    <p className="text-sm font-black text-[#2a1710]">
+                    <p className="text-sm font-bold text-[#2a1710]">
                       {name}
                     </p>
-                    <p className="mt-1 text-sm font-black text-[#b33b21]">
+                    <p className="mt-1 text-sm font-bold text-[#b33b21]">
                       {price}
                     </p>
                     <button className="mt-3 rounded-full bg-[#2a1710] px-3 py-1.5 text-xs font-bold text-white">
@@ -209,7 +208,7 @@ function StorefrontMockup() {
           </div>
 
           <div className="border-t border-[#efe2d2] bg-white px-4 py-3">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-2 text-xs font-black text-emerald-700">
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
               <MessageCircle size={14} />
               WhatsApp checkout ready
             </div>
@@ -229,12 +228,12 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <MotionReveal>
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#ead9c4] bg-white px-3 py-2 text-xs font-black text-[#7c3aed]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#ead9c4] bg-white px-3 py-2 text-xs font-bold text-[#7c3aed]">
                 <Sparkles size={14} />
                 Storefront system for small businesses
               </div>
 
-              <h1 className="mt-6 max-w-2xl text-[2.65rem] font-black leading-[1.04] tracking-[-0.06em] text-[#2a1710] md:text-[4rem]">
+              <h1 className="mt-6 max-w-2xl text-[2.45rem] font-semibold leading-[1.04] tracking-[-0.055em] text-[#2a1710] md:text-[3.7rem]">
                 Launch a professional online storefront for your business.
               </h1>
 
@@ -247,14 +246,14 @@ export default function Home() {
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/signup"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#2a1710] px-6 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#4a2615]"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#2a1710] px-6 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#4a2615]"
                 >
                   Create Your Storefront
                   <ArrowRight size={17} />
                 </Link>
                 <Link
                   href="/suya-spot"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#cdb89f] bg-white px-6 text-sm font-black text-[#2a1710] transition hover:-translate-y-0.5 hover:border-[#2a1710]"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#cdb89f] bg-white px-6 text-sm font-bold text-[#2a1710] transition hover:-translate-y-0.5 hover:border-[#2a1710]"
                 >
                   View Demo Store
                   <Store size={17} />
@@ -290,7 +289,7 @@ export default function Home() {
                   <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#f4edff] text-[#7c3aed]">
                     <Icon size={21} />
                   </div>
-                  <h2 className="mt-5 text-base font-black text-[#2a1710]">
+                  <h2 className="mt-5 text-base font-bold text-[#2a1710]">
                     {pillar.title}
                   </h2>
                   <p className="mt-2 text-sm leading-6 text-[#7a6252]">
@@ -307,16 +306,16 @@ export default function Home() {
         <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#ead9c4] bg-white p-5 md:p-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#7c3aed]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7c3aed]">
                 How it works
               </p>
-              <h2 className="mt-2 text-2xl font-black tracking-[-0.05em] text-[#2a1710] md:text-3xl">
+              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.045em] text-[#2a1710] md:text-3xl">
                 From setup to selling.
               </h2>
             </div>
             <Link
               href="/signup"
-              className="inline-flex rounded-full bg-[#fff3df] px-4 py-2 text-sm font-black text-[#7a4214]"
+              className="inline-flex rounded-full bg-[#fff3df] px-4 py-2 text-sm font-bold text-[#7a4214]"
             >
               Start free
             </Link>
@@ -328,10 +327,10 @@ export default function Home() {
                 key={step}
                 className="rounded-[1.25rem] border border-[#ead9c4] bg-[#fffaf4] p-4"
               >
-                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#2a1710] text-xs font-black text-[#f6b443]">
+                <span className="grid h-8 w-8 place-items-center rounded-full bg-[#2a1710] text-xs font-bold text-[#f6b443]">
                   {index + 1}
                 </span>
-                <p className="mt-5 text-sm font-black text-[#2a1710]">
+                <p className="mt-5 text-sm font-bold text-[#2a1710]">
                   {step}
                 </p>
               </div>
@@ -344,10 +343,10 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <MotionReveal>
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#7c3aed]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7c3aed]">
                 Built for real businesses
               </p>
-              <h2 className="mt-3 text-3xl font-black tracking-[-0.05em] text-[#2a1710]">
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.045em] text-[#2a1710]">
                 Flexible enough for what you sell.
               </h2>
               <p className="mt-4 max-w-xl text-sm leading-7 text-[#7a6252]">
@@ -362,7 +361,7 @@ export default function Home() {
             {businessTypes.map((type) => (
               <div
                 key={type}
-                className="rounded-[1.25rem] border border-[#ead9c4] bg-white p-4 text-sm font-black text-[#2a1710]"
+                className="rounded-[1.25rem] border border-[#ead9c4] bg-white p-4 text-sm font-bold text-[#2a1710]"
               >
                 {type}
               </div>
@@ -374,10 +373,10 @@ export default function Home() {
       <section className="px-4 py-12 md:px-6">
         <div className="mx-auto grid max-w-7xl gap-5 rounded-[2rem] border border-[#ead9c4] bg-[#2a1710] p-5 text-white md:p-8 lg:grid-cols-[1fr_1fr] lg:items-center">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#f6b443]">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#f6b443]">
               Demo store
             </p>
-            <h2 className="mt-3 text-3xl font-black tracking-[-0.05em]">
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.045em]">
               See a real storefront experience.
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/72">
@@ -387,13 +386,13 @@ export default function Home() {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/suya-spot"
-                className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#f6b443] px-5 text-sm font-black text-[#2a1710]"
+                className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#f6b443] px-5 text-sm font-bold text-[#2a1710]"
               >
                 View Demo Store
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/25 px-5 text-sm font-black text-white"
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/25 px-5 text-sm font-bold text-white"
               >
                 Create Similar Store
               </Link>
@@ -403,8 +402,8 @@ export default function Home() {
           <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-4">
             <div className="rounded-[1.2rem] bg-[#fffaf4] p-4 text-[#2a1710]">
               <div className="flex items-center justify-between">
-                <p className="font-black">S I S Suya Spot</p>
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+                <p className="font-bold">S I S Suya Spot</p>
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
                   Live
                 </span>
               </div>
@@ -416,8 +415,8 @@ export default function Home() {
                     className="rounded-2xl border border-[#ead9c4] bg-white p-3"
                   >
                     <div className="mb-3 h-20 rounded-xl bg-[#f4e3cf]" />
-                    <p className="text-sm font-black">{item}</p>
-                    <p className="mt-1 text-sm font-black text-[#b33b21]">
+                    <p className="text-sm font-bold">{item}</p>
+                    <p className="mt-1 text-sm font-bold text-[#b33b21]">
                       ₦4,500
                     </p>
                   </div>
@@ -431,10 +430,10 @@ export default function Home() {
       <section className="px-4 py-12 md:px-6">
         <div className="mx-auto max-w-7xl">
           <div className="text-center">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#7c3aed]">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#7c3aed]">
               Pricing
             </p>
-            <h2 className="mt-3 text-3xl font-black tracking-[-0.05em] text-[#2a1710]">
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.045em] text-[#2a1710]">
               Start simple. Grow when ready.
             </h2>
           </div>
@@ -450,16 +449,16 @@ export default function Home() {
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-lg font-black text-[#2a1710]">
+                  <h3 className="text-lg font-bold text-[#2a1710]">
                     {plan.name}
                   </h3>
                   {plan.featured ? (
-                    <span className="rounded-full bg-[#f4edff] px-3 py-1 text-xs font-black text-[#7c3aed]">
+                    <span className="rounded-full bg-[#f4edff] px-3 py-1 text-xs font-bold text-[#7c3aed]">
                       Recommended
                     </span>
                   ) : null}
                 </div>
-                <p className="mt-5 text-2xl font-black tracking-[-0.04em] text-[#2a1710]">
+                <p className="mt-5 text-2xl font-bold tracking-[-0.04em] text-[#2a1710]">
                   {plan.price}
                 </p>
                 <p className="mt-3 text-sm font-bold text-[#6b4c3b]">
@@ -468,7 +467,7 @@ export default function Home() {
                 <p className="mt-2 text-sm text-[#8a7565]">{plan.after}</p>
                 <Link
                   href={plan.href}
-                  className={`mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-full text-sm font-black ${
+                  className={`mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-full text-sm font-bold ${
                     plan.featured
                       ? "bg-[#7c3aed] text-white"
                       : "border border-[#cdb89f] text-[#2a1710]"
@@ -486,7 +485,7 @@ export default function Home() {
         <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#ead9c4] bg-white p-5 md:p-7">
           <div className="flex items-center gap-2">
             <HelpCircle className="text-[#7c3aed]" size={20} />
-            <h2 className="text-2xl font-black tracking-[-0.05em] text-[#2a1710]">
+            <h2 className="text-2xl font-semibold tracking-[-0.045em] text-[#2a1710]">
               FAQ
             </h2>
           </div>
@@ -497,7 +496,7 @@ export default function Home() {
                 key={faq.question}
                 className="group rounded-2xl border border-[#ead9c4] bg-[#fffaf4] p-4"
               >
-                <summary className="cursor-pointer text-sm font-black text-[#2a1710]">
+                <summary className="cursor-pointer text-sm font-bold text-[#2a1710]">
                   {faq.question}
                 </summary>
                 <p className="mt-3 text-sm leading-6 text-[#7a6252]">
@@ -512,7 +511,7 @@ export default function Home() {
       <section className="px-4 pb-14 pt-4 md:px-6">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 rounded-[2rem] bg-[#2a1710] p-5 text-white md:flex-row md:items-center md:justify-between md:p-7">
           <div>
-            <h2 className="text-2xl font-black tracking-[-0.05em]">
+            <h2 className="text-2xl font-semibold tracking-[-0.045em]">
               Ready to run your store online?
             </h2>
             <p className="mt-2 text-sm text-white/72">
@@ -523,13 +522,13 @@ export default function Home() {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               href="/signup"
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#f6b443] px-5 text-sm font-black text-[#2a1710]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#f6b443] px-5 text-sm font-bold text-[#2a1710]"
             >
               Create Your Storefront
             </Link>
             <Link
               href="/login"
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/25 px-5 text-sm font-black text-white"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/25 px-5 text-sm font-bold text-white"
             >
               Log in
             </Link>
